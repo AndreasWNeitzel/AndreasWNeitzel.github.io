@@ -1,0 +1,71 @@
+# config_values.yml — Canonical _config.yml values
+#
+# This file lists the exact values to set in al-folio's _config.yml.
+# Apply these values to the matching keys in _config.yml. DO NOT replace
+# _config.yml with this file — only update the specific keys listed here.
+#
+# Keys NOT listed here should be left at al-folio's default values.
+
+# ─── Site identity ────────────────────────────────────────────────────
+first_name: Andreas
+middle_name: W.
+last_name: Neitzel
+
+email: andreaswneitzel@gmail.com
+description: >-
+  PhD candidate in astronomy at IA/CAUP (Porto) developing
+  machine-learning methods for Galactic archaeology.
+
+# Keywords used for SEO and searches
+keywords: >-
+  astronomy, astrophysics, machine learning, Galactic archaeology,
+  Gaia, Ariel, TESS, Kepler, asteroseismology, stellar populations,
+  manifold learning, ESA, IA/CAUP, University of Porto
+
+# Site URL (no trailing slash)
+url: https://andreaswneitzel.github.io
+baseurl: ""
+
+# ─── Profile block (appears on About page) ────────────────────────────
+# al-folio expects this under `profile:` — adapt to the existing structure
+profile:
+  align: right
+  image: prof_pic.jpg
+  image_circular: false
+  more_info: >
+    <p>IA/CAUP &amp; FCUP</p>
+    <p>University of Porto</p>
+    <p>Porto, Portugal</p>
+
+# ─── Social / academic profiles ───────────────────────────────────────
+# al-folio reads these to generate footer icons
+orcid_id: 0000-0001-6283-907X
+linkedin_username: andreaswneitzel
+github_username: AndreasWNeitzel
+
+# Leave these blank or remove if not used:
+# twitter_username:
+# google_scholar_id:
+# scholar_userid:
+# research_gate_profile:
+# mastodon_username:
+# bluesky_url:
+
+# ─── Display toggles ──────────────────────────────────────────────────
+# Hide sections we don't want. al-folio uses various flag names across
+# versions; check the existing _config.yml for the correct key names.
+
+display_news: false        # Hide news / announcements
+display_social: true       # Keep social footer icons
+display_email: true        # Show email in footer
+
+# ─── Navigation (verify key names against template version) ──────────
+# The navigation is typically controlled by per-page `nav: true/false`
+# in front matter, NOT here. Only set global flags here.
+
+# ─── Theme ────────────────────────────────────────────────────────────
+# Leave theme at default. Do NOT change accent colors without asking.
+
+# ─── Footer ──────────────────────────────────────────────────────────
+# Leave at default (copyright auto-generates). Add a one-line credit
+# only if the template requires it.

@@ -1,11 +1,3 @@
----
-layout: page
-permalink: /cv/
-title: cv
-nav: true
-nav_order: 5
----
-
 A complete curriculum vitae is available as a PDF.
 
 [**Download CV (PDF)**](/assets/pdf/CV_Neitzel_Academic_Public.pdf)

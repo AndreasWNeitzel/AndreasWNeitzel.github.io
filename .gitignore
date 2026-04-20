@@ -13,3 +13,8 @@ assets/rendercv/rendercv_output/*.typ
 Gemfile.lock
 node_modules/
 vendor
+
+# Local tooling and editor artifacts
+.claude/
+.gemini/
+CLAUDE.local.md
