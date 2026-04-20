@@ -57,7 +57,7 @@ Three peer-reviewed papers in _Astronomy & Astrophysics_ (one first-author). One
 
 - **Neitzel, A. W.**, Campante, T. L., Bossini, D., Miglio, A. (2025). "Dissecting stellar populations with manifold learning I. Validation of the method on a synthetic Milky Way-like galaxy." _A&A_ 695, A243. [doi:10.1051/0004-6361/202451718](https://doi.org/10.1051/0004-6361/202451718)
 - Campante, T. L., Kjeldsen, H., Li, Y., Lund, M. N., et al. including **Neitzel, A. W.** (2024). "Expanding the frontiers of cool-dwarf asteroseismology with ESPRESSO." _A&A_ 683, L16. [doi:10.1051/0004-6361/202449197](https://doi.org/10.1051/0004-6361/202449197)
-- Magrini, L., Danielski, C., Bossini, D., et al. including **Neitzel, A. W.** (2022). "Ariel stellar characterisation I. Homogeneous stellar parameters of 187 FGK planet host stars." _A&A_ 663, A161. [doi:10.1051/0004-6361/202142956](https://doi.org/10.1051/0004-6361/202142956)
+- Magrini, L., Danielski, C., Bossini, D., et al. including **Neitzel, A. W.** (2022). "Ariel stellar characterisation I. Homogeneous stellar parameters of 187 FGK planet host stars." _A&A_ 663, A161. [doi:10.1051/0004-6361/202243405](https://doi.org/10.1051/0004-6361/202243405)
 
 ## Grants & awards
 
