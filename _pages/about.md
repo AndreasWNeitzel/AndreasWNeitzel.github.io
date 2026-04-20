@@ -1,6 +1,6 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
 subtitle: PhD candidate in astronomy at <a href='https://www.iastro.pt/'>IA/CAUP</a>, University of Porto.
 
