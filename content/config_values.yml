@@ -55,9 +55,10 @@ github_username: AndreasWNeitzel
 # Hide sections we don't want. al-folio uses various flag names across
 # versions; check the existing _config.yml for the correct key names.
 
-display_news: false        # Hide news / announcements
-display_social: true       # Keep social footer icons
-display_email: true        # Show email in footer
+display_news: false # Hide news / announcements
+display_social: true # Keep social footer icons
+display_email: true # Show email in footer
+
 
 # ─── Navigation (verify key names against template version) ──────────
 # The navigation is typically controlled by per-page `nav: true/false`

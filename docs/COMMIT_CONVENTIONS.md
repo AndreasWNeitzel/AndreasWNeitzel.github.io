@@ -16,7 +16,8 @@ All commits in this repository follow these conventions. This keeps the git hist
 
 ## Imperative mood examples
 
-Good (imperative, describes what the commit *does*):
+Good (imperative, describes what the commit _does_):
+
 - `Configure _config.yml with Neitzel identity`
 - `Add three publications to papers.bib`
 - `Hide Blog and News from navigation`
@@ -24,6 +25,7 @@ Good (imperative, describes what the commit *does*):
 - `Update About page with canonical prose`
 
 Bad:
+
 - `Configured config file` (past tense)
 - `Configuring config` (gerund)
 - `config update` (not a sentence)
@@ -34,15 +36,18 @@ Bad:
 Group commits by logical scope, not by file. Examples:
 
 **Good:** One commit per concern
+
 - `Configure site identity and social links`
 - `Populate publications from BibTeX`
 - `Hide unused pages (Blog, News, Teaching, Projects)`
 - `Replace About page content`
 
 **Bad:** One commit for everything
+
 - `Initial Neitzel site setup` (too broad — hides what changed)
 
 **Bad:** One commit per file when files are related
+
 - `Edit blog.md`, `Edit news.md`, `Edit teaching.md`, `Edit projects.md` (should be one commit: "Hide unused pages")
 
 ## When in doubt
@@ -52,6 +57,7 @@ If unsure whether two changes should be one commit or two: ask "does the commit 
 ## What not to commit
 
 Never commit:
+
 - Draft content that hasn't been reviewed
 - Files in `_site/` or `.jekyll-cache/` (these are build outputs)
 - Personal files (`.DS_Store`, editor backups, etc.)
