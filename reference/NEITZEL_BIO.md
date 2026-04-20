@@ -32,8 +32,9 @@
 
 **Advisors:**
 
-- **Tiago L. Campante** (primary) — IA/CAUP faculty, asteroseismology expert, PI of ArqueoGal
-- **Diego Bossini** (co-advisor) — IA/CAUP, Gaia DPAC affiliate, stellar populations expert
+- **Tiago L. Campante** (primary, IA/CAUP Porto) — asteroseismology expert, PI of ArqueoGal
+- **Diego Bossini** (co-advisor, IA/CAUP Porto) — Gaia DPAC affiliate, stellar populations expert
+- **Andrea Miglio** (co-advisor, INAF-OAS Bologna) — Andreas completed a six-month secondment at his group in Bologna
 
 **Funding:** Competitive FCT Doctoral Fellowship 2025.01843.BD (Sep 2025 – Sep 2026). **Not renewable.**
 

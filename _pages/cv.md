@@ -23,7 +23,7 @@ Luso-German citizen (EU).
 ## Education
 
 **PhD in Astronomy**, University of Porto (FCUP) & IA/CAUP · 2022–2027 (expected)
-Thesis: "Machine Learning Applied to Galactic Archaeology". Advisors: Tiago L. Campante, Diego Bossini. FCT Doctoral Fellowship 2025.01843.BD (Sep 2025 – Sep 2026).
+Thesis: "Machine Learning Applied to Galactic Archaeology". Advisors: Tiago L. Campante, Diego Bossini, Andrea Miglio (INAF-OAS Bologna). FCT Doctoral Fellowship 2025.01843.BD (Sep 2025 – Sep 2026).
 
 **MSc in Astronomy & Astrophysics**, University of Porto (FCUP) · 2020–2022 · 16/20
 Thesis: "Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog". Best Master's Student in Astronomy & Astrophysics, FCUP (2023).
@@ -34,7 +34,7 @@ Thesis: "Determination of Age and Mass for Seismic Stars in the Ariel Input Cata
 
 **Visiting PhD Student / Associate**, INAF Osservatorio di Astrofisica e Scienza dello Spazio, Bologna · 2025–2026
 
-- Six-month secondment with A. Miglio to develop simulation pipelines for the proposed _HAYDN_ mission; built Python dashboards for noise estimation and synthetic stellar catalogue generation (TRILEGAL, King-profile spatial sampling) across globular and open clusters (47 Tuc, M67, Omega Cen, h+χ Per).
+- Six-month secondment at co-supervisor A. Miglio's group to develop simulation pipelines for the proposed _HAYDN_ mission; built Python dashboards for noise estimation and synthetic stellar catalogue generation (TRILEGAL, King-profile spatial sampling) across globular and open clusters (47 Tuc, M67, Omega Cen, h+χ Per).
 - Team member on FCT HPCvLAB project 2025.00007 on Deucalion (Portugal's EuroHPC petascale supercomputer, TOP500 #219); ran _HAYDN_ Noise Estimator workloads on the ARM A64FX (500k core-hours allocated) and x86 (100k core-hours) partitions. Additional use of the Matrix HPC and BladeRunner data-analysis clusters (UniBo / INAF-OAS Bologna Open Physics Hub, SLURM-scheduled).
 
 **PhD Researcher**, IA/CAUP, Stellar Astrophysics Group, Porto · 2022–present
