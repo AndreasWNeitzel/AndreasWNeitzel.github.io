@@ -27,7 +27,7 @@ latest_posts:
   limit: 3
 ---
 
-I am a fourth-year PhD candidate in astronomy at the [Instituto de Astrofísica e Ciências do Espaço](https://www.iastro.pt/) (IA/CAUP) and the Faculty of Sciences of the University of Porto, co-advised by Tiago L. Campante and Diego Bossini.
+I am a fourth-year PhD candidate in astronomy at the [Instituto de Astrofísica e Ciências do Espaço](https://www.iastro.pt/) (IA/CAUP) and the Faculty of Sciences of the University of Porto, co-advised by Tiago L. Campante, Diego Bossini, and Andrea Miglio.
 
 My research develops **machine-learning methods for Galactic archaeology** — the reconstruction of the Milky Way's assembly history from the present-day properties of its stars. My first-author 2025 paper in _Astronomy & Astrophysics_ introduced a manifold-learning framework (UMAP, HDBSCAN) for disentangling thin-disk, thick-disk, halo, and accreted stellar populations in chrono-chemo-kinematic space. This work is the cited prototype for the ML tool being developed within the FCT Exploratory Project [ArqueoGal](https://github.com/AndreasWNeitzel/ArqueoGal) (2024.15303.PEX), on which I serve as Co-Investigator.
 
