@@ -6,7 +6,7 @@ subtitle: PhD candidate in astronomy at <a href='https://www.iastro.pt/'>IA/CAUP
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: LinkedIn_square.jpg
   image_circular: false
   more_info: >
     <p>IA/CAUP &amp; FCUP</p>
