@@ -7,6 +7,7 @@ This document maps the al-folio template's file structure. Read this before navi
 ## Files you WILL edit
 
 ### `_config.yml` (root)
+
 Site-wide configuration: name, email, URL, social links, navigation, theme. The most important file in the repo. Changes here propagate everywhere.
 
 **What to change:** identity fields (name, email, description), social handles (ORCID, LinkedIn, GitHub), URL.
@@ -15,6 +16,7 @@ Site-wide configuration: name, email, URL, social links, navigation, theme. The 
 Apply changes per `content/config_values.yml`.
 
 ### `_pages/about.md`
+
 The landing/home page. Contains front matter (YAML block between `---` lines) and markdown prose below.
 
 **What to change:** the prose below the front matter.
@@ -23,21 +25,25 @@ The landing/home page. Contains front matter (YAML block between `---` lines) an
 Content source: `content/about.md`.
 
 ### `_pages/cv.md`
+
 The CV page. al-folio's default generates a CV from `_data/cv.yml` (a structured YAML file). Andreas prefers a simpler approach: a single link to a downloadable PDF, so there is only one canonical CV (the PDF) and no version drift.
 
 **What to change:** replace the auto-generated CV layout with the content from `content/cv.md`.
 
 ### `_pages/publications.md`
+
 The publications page. al-folio auto-renders publications from BibTeX files in `_bibliography/`. The page itself is typically minimal — it just tells Jekyll to display the bibliography.
 
 **What to change:** usually nothing beyond front matter. The actual publication list lives in `_bibliography/papers.bib`.
 
 ### `_bibliography/papers.bib`
+
 BibTeX entries for all publications. al-folio reads this file and renders formatted citations on the publications page.
 
 **What to change:** replace the template's default entries with the three entries from `content/publications.bib`.
 
 ### Pages to hide (set `nav: false`)
+
 - `_pages/blog.md` (or `_posts/` index)
 - `_pages/news.md`
 - `_pages/teaching.md`
@@ -51,6 +57,7 @@ For each: open the file, find the `nav: true` line in front matter, change to `n
 ## Files you will NOT edit
 
 ### `_config.yml` sections you should NOT touch
+
 - `plugins:` — controlled by al-folio, editing breaks the build
 - `collections:` — controlled by al-folio
 - `sass:` — styling internals
@@ -60,6 +67,7 @@ For each: open the file, find the `nav: true` line in front matter, change to `n
 If a config change seems to require editing one of these sections, stop and ask Andreas.
 
 ### Template internals (do not edit)
+
 - `_includes/` — reusable HTML fragments used across pages
 - `_layouts/` — page layout templates
 - `_sass/` — stylesheet sources
@@ -71,6 +79,7 @@ If a config change seems to require editing one of these sections, stop and ask 
 Exception: if a GitHub Actions build fails with a clear error pointing to a specific config line, you may edit the minimum necessary to fix the build. Ask before making structural workflow changes.
 
 ### Assets (user uploads — do not create, do not replace with fake content)
+
 - `assets/img/prof_pic.jpg` — Andreas will upload his headshot manually
 - `assets/pdf/CV_Neitzel_Academic_Public.pdf` — Andreas will upload his CV PDF manually
 
@@ -131,6 +140,7 @@ Understanding the rendering chain helps debugging:
 6. **The footer** is generated from `_includes/footer.html` which reads social fields from `_config.yml`
 
 If a change doesn't appear on the site after a build, the most common causes:
+
 - Front matter `nav:` or `permalink:` field is wrong
 - The BibTeX entry is malformed (missing comma, bad field name)
 - The page references a layout that doesn't exist
