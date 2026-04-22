@@ -14,3 +14,6 @@ _data/citations.yml
 # Auto-generated TOC in CUSTOMIZE.md conflicts with prettier's markdown escaping rules;
 # skip to avoid a perpetual fight between update-tocs.yml and prettier.yml
 CUSTOMIZE.md
+# Self-contained Stellar Explorer app with inlined third-party JS libraries;
+# reformatting would re-wrap that code and break the app.
+stellar-explorer/app.html
