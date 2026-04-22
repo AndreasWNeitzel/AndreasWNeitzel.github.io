@@ -514,15 +514,18 @@ function loadModel(idx) {
   const freq_arr = ggrd('freq_uHz');
   const E_arr    = ggrd('E_norm');
   const nModes   = l_arr.length;
-  const modes    = [];
+  // N2 and x are now stored once at model level (not per mode)
+  const N2_shared  = Array.from(H5FILE.get(`gyre/${idx}/N2_profile`).value);
+  const x_shared   = Array.from(H5FILE.get(`gyre/${idx}/x_profile`).value);
+  const modes = [];
   for (let j = 0; j < nModes; j++) {
     const mg = H5FILE.get(`gyre/${idx}/modes/${j}`);
     modes.push({
-      x:    Array.from(mg.get('x').value),
+      x:    x_shared,
       xi_r: Array.from(mg.get('xi_r').value),
-      xi_h: Array.from(mg.get('xi_h').value),
-      N2:   Array.from(mg.get('N2').value),
-      Sl2:  Array.from(mg.get('Sl2').value),
+      xi_h: x_shared.map(() => 0),   // unused, zero placeholder
+      N2:   N2_shared,
+      Sl2:  N2_shared.map(() => 0),  // unused
     });
   }
   const gyre = { l: l_arr, n_pg: n_pg_arr, freq: freq_arr, E_norm: E_arr, modes };
@@ -1801,6 +1804,7 @@ async function initApp(buffer) {
 // Auto-fetch stellar data on page load
 // HDF5 hosted at: https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_mist.h5
 const DATA_URL = 'https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_mist.h5';
+// File size: ~24 MB (optimised from 152 MB)
 
 async function autoLoad() {
   setMsg('Fetching stellar data…');
