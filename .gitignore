@@ -18,3 +18,10 @@ vendor
 .claude/
 .gemini/
 CLAUDE.local.md
+
+# Stellar Explorer data file lives in the separate stellar-explorer-data repo;
+# never commit the 152 MB HDF5 to the site repo.
+*.h5
+
+# Windows NTFS alternate-data-stream artifacts (appear when copying from Windows)
+*:Zone.Identifier
