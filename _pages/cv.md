@@ -39,10 +39,10 @@ Thesis: "Determination of Age and Mass for Seismic Stars in the Ariel Input Cata
 
 **PhD Researcher**, IA/CAUP, Stellar Astrophysics Group, Porto · 2022–present
 
-- Co-Investigator on FCT Exploratory Project ArqueoGal (2024.15303.PEX, 2026–2027), PI: T. L. Campante. €60k, 16% success-rate call. Named participant with substantial allocations on Task 5 (Stellar Population Classification, 4.4 PM) and Task 6 (Galactic Modeling, 6 PM); my first-author _A&A_ 2025 paper is the cited prototype for the ML tool to be released on GitHub (deliverable D5.1).
+- **Lead developer** of the ML pipelines for FCT Exploratory Project ArqueoGal (2024.15303.PEX, 2026–2027), PI: T. L. Campante. €60k, 16% success-rate call; Co-Investigator with substantial allocations on Task 5 (Stellar Population Classification, 4.4 PM) and Task 6 (Galactic Modeling, 6 PM). Architected and built two production pipelines: **xp_abundances** (semi-supervised multi-task regression with contrastive pretraining; predicts six stellar parameters from _Gaia_ DR3 XP coefficients calibrated against APOGEE DR19, with block-Cholesky covariant uncertainties and OOD/release-tier quality flags) and **Starfold** (the open-source ML classifier shipping as deliverable D5.1 in Dec 2026, extending the Neitzel+2025 _A&A_ manifold-learning methodology to real _Gaia_ DR3 stars — the first application of the method to observed data).
 - First-author _A&A_ (2025) applying manifold learning (UMAP + HDBSCAN) to _Gaia_ DR3-like synthetic samples from FIRE-2 cosmological simulations; validated the ability to disentangle thin/thick disk, halo, and accreted stellar populations, including populations shaped by radial migration and past accretion events, in the chrono-chemo-kinematic parameter space.
-- Developing contrastive self-supervised learning (TriGroupEncoder) on _Gaia_ XP spectral coefficients for prediction of [M/H] and [α/M] chemical abundances (PyTorch; paper in preparation).
-- Built seismic and spectroscopic characterisation pipelines cross-matching _Gaia_ DR3, GSP-Spec, _TESS_, _Kepler_/K2, and 2MASS; integrated orbital actions, PARAM Bayesian ages, MWDUST extinction, and bolometric corrections to produce target-star samples for Galactic archaeology.
+- Built production ML infrastructure for chemical-abundance prediction from _Gaia_ XP spectra: multi-task regression targeting [M/H], [α/M], [Fe/H], [Mg/H], T_eff, and log g; PyTorch on CUDA (WSL2, RAPIDS 25.10); calibrated uncertainties via block-Cholesky decomposition; paper in preparation.
+- Built seismic and spectroscopic characterisation pipelines cross-matching _Gaia_ DR3, GSP-Spec, _TESS_, _Kepler_/K2, and 2MASS; integrated PARAM Bayesian ages, MWDUST extinction, and bolometric corrections for Galactic archaeology targets.
 - Co-author on the first asteroseismic detection of solar-like oscillations in a K5 dwarf (ε Indi A; _A&A_ 2024 letter, L16); on-site observer with ESPRESSO at ESO's VLT, Paranal (May 2024).
 - Member of the ESA _Ariel_ Science Consortium (Stellar Characterisation WG, Age/Mass/Radius sub-WG) since MSc; co-author on the working group's homogeneous stellar-parameter paper (Magrini et al. 2022). Also affiliated with _TESS_ Asteroseismic Science Operations Centre (TASOC) and _Kepler_ (KASOC), Red-Giant Oscillations WG.
 - Supervised 5 BSc/MSc students at IA Summer Programmes (2024, 2025) on "Hands-on Galactic Archaeology and Machine Learning using Synthetic Data".
@@ -52,8 +52,6 @@ Thesis: "Determination of Age and Mass for Seismic Stars in the Ariel Input Cata
 - Implemented a routine in the Bayesian stellar characterisation code PARAM to compute the small frequency separation from acoustic stellar oscillation modes, improving constraints on red-giant modelling.
 
 ## Publications
-
-Three peer-reviewed papers in _Astronomy & Astrophysics_ (one first-author). One first-author paper on ML chemical prediction from _Gaia_ XP spectra, and one first-author paper on the proposed _HAYDN_ mission's noise modelling, are currently in preparation.
 
 - **Neitzel, A. W.**, Campante, T. L., Bossini, D., Miglio, A. (2025). "Dissecting stellar populations with manifold learning I. Validation of the method on a synthetic Milky Way-like galaxy." _A&A_ 695, A243. [doi:10.1051/0004-6361/202451718](https://doi.org/10.1051/0004-6361/202451718)
 - Campante, T. L., Kjeldsen, H., Li, Y., Lund, M. N., et al. including **Neitzel, A. W.** (2024). "Expanding the frontiers of cool-dwarf asteroseismology with ESPRESSO." _A&A_ 683, L16. [doi:10.1051/0004-6361/202449197](https://doi.org/10.1051/0004-6361/202449197)
@@ -65,6 +63,12 @@ Three peer-reviewed papers in _Astronomy & Astrophysics_ (one first-author). One
 - **FCT Doctoral Fellowship** (2025.01843.BD), Fundação para a Ciência e a Tecnologia. 2025–2026.
 - **Best Master's Student in Astronomy & Astrophysics**, FCUP, University of Porto. 2023.
 - **FCT MSc Research Grant** (CIAAUP-08/2021-BI-M), BreakStarS project. 2021–2022.
+
+## Software & open-source
+
+- **[ArqueoGal](https://github.com/AndreasWNeitzel/ArqueoGal)** — _Gaia_ XP → APOGEE DR19 stellar-abundance prediction pipeline (Python 3.12, PyTorch 2.10, RAPIDS 25.10 on CUDA). Lead developer; OSI-licensed release scheduled for deliverable D5.1 (Dec 2026).
+- **[Starfold](https://github.com/AndreasWNeitzel/Starfold)** — ML stellar-population classifier building on the Neitzel+2025 _A&A_ manifold-learning methodology, augmented and extended for first application to real _Gaia_ DR3 observations (the original paper validated the method on synthetic data only); downstream consumer of ArqueoGal abundance predictions; OSI-licensed release targeted for D5.1.
+- **[Stellar Explorer](/stellar-explorer/)** — Interactive client-side web app for MIST v1.2 stellar evolution tracks with GYRE oscillation spectra; live HR diagram, real-time interior cross-section with pulsation/convection animations driven by GYRE eigenfunctions, interior profiles, PSD/échelle/Schwarzschild views.
 
 ## Selected talks & conferences
 
@@ -80,9 +84,6 @@ Three peer-reviewed papers in _Astronomy & Astrophysics_ (one first-author). One
 
 ## Technical skills
 
-- **Programming**: Python (expert), R, SQL, Bash, LaTeX, Git.
-- **Machine learning**: scikit-learn, PyTorch, TensorFlow/Keras; manifold learning (UMAP, t-SNE, PCA), clustering (HDBSCAN, k-means, GMM), deep learning, contrastive self-supervised learning, gradient boosting (XGBoost), Bayesian inference, MCMC.
-- **Astronomy software**: astropy, galpy, TOPCAT, ADQL; PARAM, MESA, MWDUST, BCCode/YBC, TRILEGAL; IRAF, DS9.
-- **Spectroscopic & photometric surveys**: _Gaia_ DR3 (astrometry, radial velocities, XP spectra, GSP-Spec), APOGEE, LAMOST, GALAH, 2MASS, _TESS_, _Kepler_/K2 (via KASOC/TASOC), ESPRESSO.
-- **HPC & environment**: Linux, WSL2, Bash, SLURM/SSH; Deucalion EuroHPC (ARM, x86); UniBo Matrix / BladeRunner; CUDA / NVIDIA GPUs.
-- **Languages**: Portuguese (native), English (C2), German (A2), French (A2).
+- **Programming & ML**: Python (expert), R, SQL, Bash, LaTeX, Git. scikit-learn, PyTorch, TensorFlow/Keras; manifold learning (UMAP, t-SNE, PCA), clustering (HDBSCAN, k-means, GMM), deep learning, contrastive self-supervised learning, gradient boosting (XGBoost), Bayesian inference, MCMC.
+- **Astronomy software & surveys**: astropy, galpy, TOPCAT, ADQL; PARAM, MESA, MWDUST, BCCode/YBC, TRILEGAL; IRAF, DS9. _Gaia_ DR3 (astrometry, radial velocities, XP spectra, GSP-Spec), APOGEE, LAMOST, GALAH, 2MASS, _TESS_, _Kepler_/K2 (via KASOC/TASOC), ESPRESSO.
+- **Visualization, HPC & languages**: matplotlib, Plotly, seaborn; interactive web apps (Canvas2D, HTML5, Plotly.js); Manim animations. Linux, WSL2, SLURM/SSH; Deucalion EuroHPC (ARM, x86); UniBo Matrix / BladeRunner; CUDA / NVIDIA GPUs. Portuguese (native), English (C2), German (A2), French (A2).
