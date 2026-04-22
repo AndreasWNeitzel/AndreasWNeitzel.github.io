@@ -16,6 +16,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/publications/";
           },
+        },{id: "nav-stellar-explorer",
+          title: "Stellar Explorer",
+          description: "Interactive browser-based visualiser for a MIST v1.2 stellar evolutionary track.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/stellar-explorer/";
+          },
         },{id: "nav-cv",
           title: "CV",
           description: "",
