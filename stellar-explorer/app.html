@@ -846,12 +846,12 @@ function drawCS(idx, profile) {
   // ── Phase HUD (right side) ──────────────────────────────────────
   {
     const phaseHUD = {
-      PMS:     ['Pre-Main Sequence','Gravitational contraction (no fusion).','Hayashi track: fully convective.','Henyey track: radiative core forms.'],
+      PMS:     ['Pre-Main Sequence','KH contraction dominates; D-burning & trace pp negligible.','Hayashi track: fully convective.','Henyey track: radiative core begins forming near ZAMS.'],
       ZAMS:    ['Zero-Age Main Sequence','H-burning ignites in core.','Radiative core, conv. envelope.','~10 Gyr MS lifetime begins.'],
       MS:      ['Main Sequence','Steady H→He fusion in core.','pp-chain dominates at 1 M☉.','Core shrinks, envelope expands slowly.'],
       SGB:     ['Subgiant Branch','H exhausted in core.','H-burning shell ignites.','Envelope expands and cools rapidly.'],
       RGB:     ['Red Giant Branch','Deep convective envelope.','H shell burns outward.','First dredge-up mixes envelope.'],
-      HeFlash: ['Helium Flash','Degenerate He core ignites.','Runaway He fusion (~10¹⁰ L☉).','Brief, non-observable transient.'],
+      HeFlash: ['Helium Flash','Degenerate He core ignites.','Core He fusion ~10¹⁰ L☉ — absorbed by envelope, not observable.','Brief, non-observable transient.'],
       RC:      ['Red Clump','Stable He → C, O in core.','Simultaneous H-shell burning.','Low-luminosity, long-lived phase.'],
       EAGB:    ['Early Asymptotic Giant','He shell + H shell burning.','Thermal pulses begin.','2nd dredge-up mixes envelope.'],
       HB:      ['Horizontal Branch','Core He burning.','Luminosity depends on mass loss.','Evolved from RGB tip.'],
@@ -1775,6 +1775,7 @@ async function initApp(buffer) {
       cno:      try_('track/cno'),
       tri_alfa: try_('track/tri_alfa'),
     };
+    TRACK.phase.forEach((p, i) => { if (p === 'SGB' && TRACK.log_L[i] > 0.5) TRACK.phase[i] = 'RGB'; });
     step(`Step 5: Track loaded — ${n} models, phases: ${[...new Set(TRACK.phase)].join(', ')}`);
 
     step('Step 6: Hiding overlay…');
