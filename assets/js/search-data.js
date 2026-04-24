@@ -74,6 +74,13 @@ ninja.data = [{
           window.open("https://orcid.org/0000-0001-6283-907X", "_blank");
         },
       },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=7Pt74F0AAAAJ", "_blank");
+        },
+      },{
         id: 'social-linkedin',
         title: 'LinkedIn',
         section: 'Socials',
