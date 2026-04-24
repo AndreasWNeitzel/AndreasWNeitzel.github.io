@@ -5,7 +5,7 @@
 ## Research
 
 - [Publications](https://andreaswneitzel.github.io/publications/): full list with DOI and ADS links
-- [Neitzel et al. 2025, A&A 695, A243](https://doi.org/10.1051/0004-6361/202451718): first-author paper introducing manifold learning (UMAP + HDBSCAN) for chemodynamic stellar-population separation on a synthetic Milky Way-like galaxy
+- [Neitzel et al. 2025, A&A 695, A243](https://doi.org/10.1051/0004-6361/202451718) ([arXiv:2501.16294](https://arxiv.org/abs/2501.16294)): first-author paper introducing manifold learning (UMAP + HDBSCAN) for chemodynamic stellar-population separation on a synthetic Milky Way-like galaxy
 - [Campante et al. 2024, A&A 683, L16](https://doi.org/10.1051/0004-6361/202449197): co-author; expanding cool-dwarf asteroseismology with ESPRESSO
 - [Magrini et al. 2022, A&A 663, A161](https://doi.org/10.1051/0004-6361/202243405): co-author; *Ariel* stellar characterisation of 187 FGK planet hosts
 
