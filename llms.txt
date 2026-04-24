@@ -1,0 +1,33 @@
+# Andreas W. Neitzel
+
+> PhD candidate in astronomy at IA/CAUP (Instituto de Astrofísica e Ciências do Espaço), University of Porto. Develops machine-learning methods for Galactic archaeology, focused on disentangling Milky Way stellar populations using *Gaia* BP/RP spectra and asteroseismic age priors. First author on Neitzel et al. 2025 (A&A 695, A243), which introduces a manifold-learning pipeline (UMAP + HDBSCAN) for chemodynamic separation of stellar populations on a synthetic Milky Way-like galaxy. Co-Investigator and lead developer of the ML pipelines for the FCT Exploratory Project ArqueoGal (2024.15303.PEX), which is extending the Neitzel 2025 method to real *Gaia* DR3 observations. Publications span manifold-learning methods, cool-dwarf asteroseismology with ESPRESSO, and stellar characterisation for the ESA *Ariel* mission.
+
+## Research
+
+- [Publications](https://andreaswneitzel.github.io/publications/): full list with DOI and ADS links
+- [Neitzel et al. 2025, A&A 695, A243](https://doi.org/10.1051/0004-6361/202451718): first-author paper introducing manifold learning (UMAP + HDBSCAN) for chemodynamic stellar-population separation on a synthetic Milky Way-like galaxy
+- [Campante et al. 2024, A&A 683, L16](https://doi.org/10.1051/0004-6361/202449197): co-author; expanding cool-dwarf asteroseismology with ESPRESSO
+- [Magrini et al. 2022, A&A 663, A161](https://doi.org/10.1051/0004-6361/202243405): co-author; *Ariel* stellar characterisation of 187 FGK planet hosts
+
+## Software
+
+- [ArqueoGal](https://github.com/AndreasWNeitzel/ArqueoGal): FCT Exploratory Project 2024.15303.PEX. Extends the Neitzel 2025 method to real *Gaia* DR3 observations; open-source release scheduled December 2026
+- [Stellar Explorer](https://andreaswneitzel.github.io/stellar-explorer/): browser-based interactive exploration of the stellar populations analysed in Neitzel 2025
+
+## Identity
+
+- [ORCID](https://orcid.org/0000-0001-6283-907X)
+- [Google Scholar](https://scholar.google.com/citations?user=7Pt74F0AAAAJ)
+- [NASA ADS author search](https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&sort=date%20desc)
+- [GitHub](https://github.com/AndreasWNeitzel)
+- [LinkedIn](https://www.linkedin.com/in/andreaswneitzel)
+
+## About
+
+- [About page](https://andreaswneitzel.github.io/)
+- [CV (PDF)](https://andreaswneitzel.github.io/assets/pdf/CV_Neitzel_Academic_Public.pdf)
+- Contact: andreaswneitzel@gmail.com
+
+## Keywords
+
+Galactic archaeology; Milky Way; stellar populations; manifold learning; UMAP; HDBSCAN; *Gaia* BP/RP spectra; *Gaia* DR3; chemodynamics; chrono-chemo-kinematic analysis; asteroseismology; cool dwarfs; ESPRESSO; ESA *Ariel*; machine learning; PyTorch; RAPIDS.
