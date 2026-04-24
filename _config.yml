@@ -73,6 +73,10 @@ max_width: 930px
 serve_og_meta: true # Include Open Graph meta tags in the HTML head
 serve_schema_org: true # Include Schema.org in the HTML head
 og_image: /assets/img/LinkedIn_square.jpg # The site-wide (default for all links) Open Graph preview image
+og_image_alt: Andreas W. Neitzel # alt text for accessibility; Facebook warns if inferred from filename
+og_image_width: 903
+og_image_height: 903
+og_image_type: image/jpeg
 
 # -----------------------------------------------------------------------------
 # Analytics and search engine verification
