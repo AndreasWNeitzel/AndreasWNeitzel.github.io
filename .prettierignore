@@ -17,3 +17,6 @@ CUSTOMIZE.md
 # Self-contained Stellar Explorer app with inlined third-party JS libraries;
 # reformatting would re-wrap that code and break the app.
 stellar-explorer/app.html
+# Search-console / webmaster verification files must be served byte-exact;
+# prettier would reformat the body and risk breaking verification.
+verifications/
