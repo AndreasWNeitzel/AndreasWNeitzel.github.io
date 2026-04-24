@@ -20,3 +20,8 @@ stellar-explorer/app.html
 # Search-console / webmaster verification files must be served byte-exact;
 # prettier would reformat the body and risk breaking verification.
 google*.html
+# llms.txt follows the llmstxt.org convention (markdown body, .txt extension);
+# prettier's markdown rules would rewrite list formatting and heading spacing
+# in ways that are harmless on normal docs but noisy in a file intended to be
+# parsed by LLM crawlers.
+llms*.txt

@@ -248,6 +248,10 @@ defaults:
       path: "google*.html"
     values:
       sitemap: false
+  - scope:
+      path: "llms*.txt"
+    values:
+      sitemap: false
 
 sass:
   style: compressed
@@ -258,7 +262,7 @@ sass:
 
 jekyll-minifier:
   compress_javascript: false # set to false since we are using terser as the js minifier
-  exclude: ["robots.txt", "assets/js/search/*.js", "stellar-explorer/app.html", "google*.html"]
+  exclude: ["robots.txt", "llms*.txt", "assets/js/search/*.js", "stellar-explorer/app.html", "google*.html"]
 
 # -----------------------------------------------------------------------------
 # Terser
