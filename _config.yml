@@ -244,6 +244,10 @@ defaults:
       path: "assets"
     values:
       sitemap: false
+  - scope:
+      path: "google*.html"
+    values:
+      sitemap: false
 
 sass:
   style: compressed
