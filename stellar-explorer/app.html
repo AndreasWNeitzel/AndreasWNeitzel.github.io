@@ -1038,6 +1038,7 @@
           <button class="tab-btn" id="tab-gyre">Oscillation Spectrum</button>
           <div class="pcontrols" id="prof-controls">
             <button class="pbtn on" data-p="T">T</button>
+            <button class="pbtn" data-p="P">P</button>
             <button class="pbtn" data-p="rho">ρ</button>
             <button class="pbtn" data-p="eps">ε<sub>nuc</sub></button>
             <button class="pbtn" data-p="N2">N²</button>
@@ -1047,6 +1048,7 @@
             <button class="pbtn on" data-g="psd">PSD</button>
             <button class="pbtn" data-g="echelle">Échelle</button>
             <button class="pbtn" data-g="prop">Schwarzschild</button>
+            <button class="pbtn" data-g="ledoux">Ledoux</button>
           </div>
         </div>
         <div class="pbody" id="prof-panel"></div>
@@ -1161,6 +1163,10 @@
         mixing_type: grd('mixing_type'),
         gradr_sub_grada: grd('gradr_sub_grada'),
         brunt_N2: grd('brunt_N2'),
+        // brunt_A (structural) and brunt_B (composition) are present in v3
+        // schema; v1 (MIST) omits them. try_g returns null on absence.
+        brunt_A: try_('profiles/' + idx + '/brunt_A'),
+        brunt_B: try_('profiles/' + idx + '/brunt_B'),
         opacity: grd('opacity'),
         h1: grd('h1'),
         he4: grd('he4'),
@@ -1960,12 +1966,42 @@
     function drawProfile(idx, profile) {
       const x = profile.x;
       let yData, yTitle, logY;
+      // T, P, eps_nuc span many orders of magnitude across the radius;
+      // they are displayed on a log Y axis with values in their natural
+      // physical units. P is reconstructed from logP since the schema
+      // stores it in log form.
       switch (PROF_MODE) {
-        case 'T': yData = profile.logT.map(v => 10 ** v); yTitle = 'T (K)'; logY = false; break;
-        case 'rho': yData = profile.logRho.map(v => 10 ** v); yTitle = 'ρ (g cm⁻³)'; logY = false; break;
-        case 'eps': yData = profile.eps_nuc; yTitle = 'ε_nuc (erg/g/s)'; logY = false; break;
-        case 'N2': yData = profile.brunt_N2; yTitle = 'N² (s⁻²)'; logY = false; break;
-        case 'kap': yData = profile.opacity; yTitle = 'κ (cm² g⁻¹)'; logY = false; break;
+        case 'T':
+          yData = profile.logT.map(v => 10 ** v);
+          yTitle = 'T (K)';
+          logY = true;
+          break;
+        case 'P':
+          yData = profile.logP.map(v => 10 ** v);
+          yTitle = 'P (dyn cm⁻²)';
+          logY = true;
+          break;
+        case 'rho':
+          yData = profile.logRho.map(v => 10 ** v);
+          yTitle = 'ρ (g cm⁻³)';
+          logY = true;
+          break;
+        case 'eps':
+          // Floor near machine epsilon so log axis can render zeros.
+          yData = profile.eps_nuc.map(v => v > 1e-30 ? v : 1e-30);
+          yTitle = 'ε_nuc (erg g⁻¹ s⁻¹)';
+          logY = true;
+          break;
+        case 'N2':
+          yData = profile.brunt_N2;
+          yTitle = 'N² (s⁻²)';
+          logY = false;
+          break;
+        case 'kap':
+          yData = profile.opacity;
+          yTitle = 'κ (cm² g⁻¹)';
+          logY = false;
+          break;
       }
 
       // Convective zone bands
@@ -2005,7 +2041,7 @@
         },
         yaxis: {
           title: { text: yTitle, font: { size: 20 } },
-          type: 'linear',
+          type: logY ? 'log' : 'linear',
           gridcolor: 'rgba(160,160,190,0.15)',
           zerolinecolor: 'rgba(160,160,190,0.15)', tickfont: { size: 11, color: '#9090aa' }, color: '#9090aa',
         },
@@ -2034,7 +2070,8 @@
       }
       if (GYRE_MODE === 'psd') drawGyrePSD(idx, gdat, el);
       else if (GYRE_MODE === 'echelle') drawGyreEchelle(idx, gdat, el);
-      else drawGyreProp(idx, gdat, el);
+      else if (GYRE_MODE === 'ledoux') drawGyreProp(idx, gdat, el, 'ledoux');
+      else drawGyreProp(idx, gdat, el, 'schwarzschild');
     }
 
     function drawGyrePSD(idx, gdat, el) {
@@ -2191,6 +2228,22 @@
         });
       });
 
+      // Detect mixed-mode-rich phases and add an explanatory caption. In RGB
+      // and beyond, the ℓ=1 ridge spreads vertically because every ℓ=1 mode
+      // has both p- and g-character (Beck+ 2011, Mosser+ 2012). The visual
+      // 'chaos' is real physics, not an artefact.
+      const phase = (TRACK.phase[idx] || '').trim();
+      const isMixedPhase = ['RGB','RC','EAGB','postAGB'].includes(phase);
+      const annotations = [];
+      if (isMixedPhase && gdat.mode_type) {
+        annotations.push({
+          text: 'Vertical ℓ=1 spread = mixed-mode forest (real physics, not noise)',
+          xref: 'paper', yref: 'paper', x: 0.5, y: 1.04,
+          xanchor: 'center', yanchor: 'bottom',
+          showarrow: false,
+          font: { size: 11, color: '#fbbf24' },
+        });
+      }
       Plotly.react(el, traces, {
         ...PLY_BASE,
         xaxis: {
@@ -2206,15 +2259,25 @@
         },
         legend: { font: { size: 16, color: '#9090aa' }, bgcolor: 'rgba(0,0,0,0)', x: 0.01, y: 0.99 },
         showlegend: true,
+        annotations,
       }, PLY_CFG);
     }
 
-    function drawGyreProp(idx, gdat, el) {
-      // Schwarzschild (instability) criterion: ∇_rad - ∇_ad = gradr_sub_grada
-      // > 0  → convectively unstable   < 0  → stable (radiative)
+    function drawGyreProp(idx, gdat, el, criterion) {
+      // Schwarzschild discriminator : ∇_rad − ∇_ad
+      //   > 0  ⇒ convectively unstable    < 0  ⇒ stable
+      // Ledoux discriminator       : ∇_rad − ∇_ad − brunt_B
+      //   accounts for the composition gradient (μ-stratification). In a
+      //   chemically uniform region (brunt_B = 0) the two reduce to the
+      //   same thing; they differ inside H/He-burning shells where heavier
+      //   elements settle below lighter ones.
       const { profile } = loadModel(idx);
       const x = profile.x;
-      const gsa = profile.gradr_sub_grada;
+      const useLedoux = criterion === 'ledoux';
+      const bB = profile.brunt_B || profile.gradr_sub_grada.map(() => 0);
+      const gsa = useLedoux
+        ? profile.gradr_sub_grada.map((v, i) => v - (bB[i] || 0))
+        : profile.gradr_sub_grada;
 
       const gsa_pos = gsa.map(v => v > 0 ? v : 0);
       const gsa_neg = gsa.map(v => v < 0 ? v : 0);
@@ -2237,14 +2300,16 @@
         y0: 0, y1: 1, fillcolor: 'rgba(157,127,255,0.08)', line: { width: 0 }, layer: 'below'
       });
 
+      const labelExpr = useLedoux ? '∇_rad − ∇_ad − B' : '∇_rad − ∇_ad';
+      const labelTitle = useLedoux ? 'Ledoux criterion' : 'Schwarzschild criterion';
       Plotly.react(el, [
         {
-          x, y: gsa_pos, mode: 'lines', name: '∇_rad − ∇_ad > 0  (convective)',
+          x, y: gsa_pos, mode: 'lines', name: labelExpr + ' > 0  (convective)',
           line: { color: '#a78bfa', width: 2.5 }, fill: 'tozeroy',
           fillcolor: 'rgba(157,127,255,0.20)'
         },
         {
-          x, y: gsa_neg, mode: 'lines', name: '∇_rad − ∇_ad < 0  (radiative)',
+          x, y: gsa_neg, mode: 'lines', name: labelExpr + ' < 0  (radiative)',
           line: { color: '#67e8f9', width: 2.5 }, fill: 'tozeroy',
           fillcolor: 'rgba(103,232,249,0.12)'
         },
@@ -2256,7 +2321,7 @@
           tickfont: { size: 11, color: '#9090aa' }, color: '#9090aa',
         },
         yaxis: {
-          title: { text: '∇_rad − ∇_ad  (Schwarzschild criterion)', font: { size: 17, color: '#9090aa' } },
+          title: { text: labelExpr + '  (' + labelTitle + ')', font: { size: 17, color: '#9090aa' } },
           range: [-yMax, yMax], gridcolor: 'rgba(160,160,190,0.15)',
           zeroline: true, zerolinecolor: 'rgba(255,255,255,0.35)', zerolinewidth: 1.5,
           tickfont: { size: 11, color: '#9090aa' }, color: '#9090aa',
