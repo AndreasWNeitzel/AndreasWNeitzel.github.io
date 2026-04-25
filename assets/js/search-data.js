@@ -18,7 +18,7 @@ ninja.data = [{
           },
         },{id: "nav-stellar-explorer",
           title: "Stellar Explorer",
-          description: "Interactive browser-based visualiser for a MIST v1.2 stellar evolutionary track.",
+          description: "Interactive browser-based visualiser for a MESA r24.08.1 + GYRE 1 M☉ stellar evolutionary track.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/stellar-explorer/";
