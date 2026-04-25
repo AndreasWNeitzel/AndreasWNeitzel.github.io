@@ -25,3 +25,8 @@ CLAUDE.local.md
 
 # Windows NTFS alternate-data-stream artifacts (appear when copying from Windows)
 *:Zone.Identifier
+
+# Local-only offline dev build of the Stellar Explorer app. Loads .h5 files
+# from disk via a file picker / drag-drop instead of fetching from
+# raw.githubusercontent. Should never be deployed.
+stellar-explorer/app.local.html
