@@ -936,7 +936,7 @@
 
   <div id="overlay">
     <div class="ov-logo"><strong>Stellar</strong> Explorer</div>
-    <div class="ov-sub">Solar-type Stellar Evolution · MIST v1.2</div>
+    <div class="ov-sub" id="ov-sub">Solar-type Stellar Evolution</div>
     <div class="spin-ring" id="spinner"></div>
     <div id="ov-msg">Loading stellar data…</div>
   </div>
@@ -944,13 +944,23 @@
   <div id="app">
     <div id="header">
       <div class="logo"><strong>Stellar</strong> Explorer</div>
-      <div class="header-tag">Solar-type Stellar Evolution · MIST v1.2 · Click HR track to explore</div>
-      <div id="madeby" style="margin-left:auto;font-family:var(--font-mono);font-size:11px;
+      <div class="header-tag" id="header-tag">Solar-type Stellar Evolution · Click HR track to explore</div>
+      <a id="data-toggle"
+         style="margin-left:auto;font-family:var(--font-mono);font-size:10px;padding:3px 10px;
+                border:1px solid var(--line3);color:var(--t2);text-decoration:none;
+                letter-spacing:0.1em;cursor:pointer;border-radius:2px;
+                transition:all 0.15s;white-space:nowrap"
+         onmouseover="this.style.color='var(--ice)';this.style.borderColor='var(--ice2)'"
+         onmouseout="this.style.color='var(--t2)';this.style.borderColor='var(--line3)'"
+         title="Switch between synthetic (fast) and real MESA+GYRE data">
+        Switch Dataset
+      </a>
+      <div id="madeby" style="font-family:var(--font-mono);font-size:11px;
                 color:var(--t2);letter-spacing:0.12em;opacity:0.7;
-                padding-right:8px;white-space:nowrap;">
+                padding:0 8px;white-space:nowrap;">
         Made by Andreas W. Neitzel
       </div>
-      <div style="margin-left:auto; position:relative;">
+      <div style="position:relative;">
         <div id="progress-bar"></div>
       </div>
     </div>
@@ -1160,6 +1170,20 @@
       const n_pg_arr = ggrd('n_pg');
       const freq_arr = ggrd('freq_uHz');
       const E_arr = ggrd('E_norm');
+      // Optional v3 (real MESA+GYRE) fields. Fall back to defaults for v1.
+      const try_g = p => { try { return Array.from(H5FILE.get(p).value); } catch (e) { return null; } };
+      const n_g_arr = try_g(`gyre/${idx}/n_g`);
+      const n_p_arr = try_g(`gyre/${idx}/n_p`);
+      // mode_type ships as bytes per row (e.g. 'p', 'g', 'mp', 'mg'). Decode.
+      let mode_type_arr = null;
+      try {
+        const raw = H5FILE.get(`gyre/${idx}/mode_type`).value;
+        mode_type_arr = Array.from(raw).map(v => {
+          if (typeof v === 'string') return v;
+          if (v && v.length !== undefined) return Array.from(v).map(c => String.fromCharCode(c)).join('').replace(/\0/g, '').trim();
+          return String(v);
+        });
+      } catch (e) { mode_type_arr = null; }
       const nModes = l_arr.length;
       // N2 and x are now stored once at model level (not per mode)
       const N2_shared = Array.from(H5FILE.get(`gyre/${idx}/N2_profile`).value);
@@ -1175,7 +1199,8 @@
           Sl2: N2_shared.map(() => 0),  // unused
         });
       }
-      const gyre = { l: l_arr, n_pg: n_pg_arr, freq: freq_arr, E_norm: E_arr, modes };
+      const gyre = { l: l_arr, n_pg: n_pg_arr, freq: freq_arr, E_norm: E_arr, modes,
+                     n_g: n_g_arr, n_p: n_p_arr, mode_type: mode_type_arr };
 
       const entry = { profile, gyre };
       CACHE[idx] = entry;
@@ -2129,22 +2154,42 @@
         ? dnSorted[Math.floor(dnSorted.length / 2)]
         : (TRACK.delta_nu?.[idx] || 100);
 
+      // Per-l base colors; mixed modes are dimmed to surface hint of trapping.
       const LC = { 0: '#e0f4ff', 1: '#a78bfa', 2: '#00ffcc' };
       const SYM = { 0: 'circle', 1: 'square', 2: 'diamond' };
-      const traces = [0, 1, 2].map(ell => {
-        const fv = gdat.freq.filter((_, j) => gdat.l[j] === ell);
-        if (!fv.length) return null;
-        const xv = fv.map(f => ((f % dn) + dn) % dn);
-        return {
-          x: xv, y: fv, mode: 'markers',
-          marker: {
-            color: LC[ell], size: 11, symbol: SYM[ell],
-            line: { color: 'rgba(255,255,255,0.3)', width: 1 }
-          },
-          name: `ℓ = ${ell}`,
-          hovertemplate: `ℓ=${ell}<br>ν = %{y:.2f} μHz<br>ν mod Δν = %{x:.2f}<extra></extra>`,
-        };
-      }).filter(Boolean);
+      // Color modulation by mode type (when v3 data is loaded):
+      //   p  -> base color (surface-trapped, observable)
+      //   mp -> base color, slightly dimmed (p-dominated mixed)
+      //   mg -> orange tint (g-dominated mixed)
+      //   g  -> deep gold (pure g-mode)
+      const TYPE_TINT = { p: null, mp: '#c8a872', mg: '#fb923c', g: '#facc15' };
+      const traces = [];
+      [0, 1, 2].forEach(ell => {
+        const idxs = gdat.freq.map((_, j) => j).filter(j => gdat.l[j] === ell);
+        if (!idxs.length) return;
+        // Group by mode type if available
+        const byType = {};
+        idxs.forEach(j => {
+          const t = gdat.mode_type ? (gdat.mode_type[j] || 'p') : 'p';
+          (byType[t] = byType[t] || []).push(j);
+        });
+        Object.keys(byType).forEach(t => {
+          const js = byType[t];
+          const fv = js.map(j => gdat.freq[j]);
+          const xv = fv.map(f => ((f % dn) + dn) % dn);
+          const tint = TYPE_TINT[t];
+          const color = tint || LC[ell];
+          traces.push({
+            x: xv, y: fv, mode: 'markers',
+            marker: {
+              color: color, size: 11, symbol: SYM[ell],
+              line: { color: 'rgba(255,255,255,0.3)', width: 1 }
+            },
+            name: `ℓ=${ell}` + (gdat.mode_type ? ` ${t}` : ''),
+            hovertemplate: `ℓ=${ell} (${t})<br>ν=%{y:.2f} μHz<br>ν mod Δν=%{x:.2f}<extra></extra>`,
+          });
+        });
+      });
 
       Plotly.react(el, traces, {
         ...PLY_BASE,
@@ -2481,10 +2526,39 @@
       }
     }
 
-    // Auto-fetch stellar data on page load
-    // HDF5 hosted at: https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_mist.h5
-    const DATA_URL = 'https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_mist.h5';
-    // File size: ~24 MB (optimised from 152 MB)
+    // Auto-fetch stellar data on page load.
+    // Synthetic MIST default; ?data=real loads the MESA+GYRE track.
+    const params = new URLSearchParams(window.location.search);
+    const DATA_KEY = params.get('data') === 'real' ? 'real' : 'synthetic';
+    const DATA_URLS = {
+      synthetic: 'https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_mist.h5',
+      real:      'https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_real.h5',
+    };
+    const DATA_URL = DATA_URLS[DATA_KEY];
+
+    // Reflect current dataset in the chrome and wire the toggle link.
+    (function setupDatasetUI() {
+      const tag = document.getElementById('header-tag');
+      const sub = document.getElementById('ov-sub');
+      const isReal = DATA_KEY === 'real';
+      const tagText = isReal
+        ? 'Solar-type Stellar Evolution · MESA r24.08.1 + GYRE · Click HR track to explore'
+        : 'Solar-type Stellar Evolution · MIST v1.2 · Click HR track to explore';
+      const subText = isReal
+        ? 'Solar-type Stellar Evolution · MESA r24.08.1 + GYRE'
+        : 'Solar-type Stellar Evolution · MIST v1.2';
+      if (tag) tag.textContent = tagText;
+      if (sub) sub.textContent = subText;
+
+      const toggle = document.getElementById('data-toggle');
+      if (toggle) {
+        toggle.textContent = isReal ? 'Switch to MIST' : 'Switch to MESA';
+        const url = new URL(window.location.href);
+        if (isReal) url.searchParams.delete('data');
+        else url.searchParams.set('data', 'real');
+        toggle.href = url.toString();
+      }
+    })();
 
     async function autoLoad() {
       setMsg('Fetching stellar data…');
