@@ -936,7 +936,7 @@
 
   <div id="overlay">
     <div class="ov-logo"><strong>Stellar</strong> Explorer</div>
-    <div class="ov-sub" id="ov-sub">Solar-type Stellar Evolution</div>
+    <div class="ov-sub" id="ov-sub">Solar-type Stellar Evolution · MESA r24.08.1 + GYRE</div>
     <div class="spin-ring" id="spinner"></div>
     <div id="ov-msg">Loading stellar data…</div>
   </div>
@@ -944,18 +944,8 @@
   <div id="app">
     <div id="header">
       <div class="logo"><strong>Stellar</strong> Explorer</div>
-      <div class="header-tag" id="header-tag">Solar-type Stellar Evolution · Click HR track to explore</div>
-      <a id="data-toggle"
-         style="margin-left:auto;font-family:var(--font-mono);font-size:10px;padding:3px 10px;
-                border:1px solid var(--line3);color:var(--t2);text-decoration:none;
-                letter-spacing:0.1em;cursor:pointer;border-radius:2px;
-                transition:all 0.15s;white-space:nowrap"
-         onmouseover="this.style.color='var(--ice)';this.style.borderColor='var(--ice2)'"
-         onmouseout="this.style.color='var(--t2)';this.style.borderColor='var(--line3)'"
-         title="Switch between synthetic (fast) and real MESA+GYRE data">
-        Switch Dataset
-      </a>
-      <div id="madeby" style="font-family:var(--font-mono);font-size:11px;
+      <div class="header-tag" id="header-tag">Solar-type Stellar Evolution · MESA r24.08.1 + GYRE · Click HR track to explore</div>
+      <div id="madeby" style="margin-left:auto;font-family:var(--font-mono);font-size:11px;
                 color:var(--t2);letter-spacing:0.12em;opacity:0.7;
                 padding:0 8px;white-space:nowrap;">
         Made by Andreas W. Neitzel
@@ -1163,8 +1153,8 @@
         mixing_type: grd('mixing_type'),
         gradr_sub_grada: grd('gradr_sub_grada'),
         brunt_N2: grd('brunt_N2'),
-        // brunt_A (structural) and brunt_B (composition) are present in v3
-        // schema; v1 (MIST) omits them. try_g returns null on absence.
+        // brunt_A (structural) and brunt_B (composition) used by the
+        // Schwarzschild/Ledoux toggle in the propagation panel.
         brunt_A: try_('profiles/' + idx + '/brunt_A'),
         brunt_B: try_('profiles/' + idx + '/brunt_B'),
         opacity: grd('opacity'),
@@ -2193,7 +2183,7 @@
 
 
     function drawGyreEchelle(idx, gdat, el) {
-      // Compute Δν from actual ℓ=0 mode spacings (more accurate than MIST scalar)
+      // Δν from the actual ℓ=0 mode spacings (real GYRE eigenfrequencies)
       const f0sorted = gdat.freq
         .filter((_, j) => gdat.l[j] === 0)
         .sort((a, b) => a - b);
@@ -2610,39 +2600,10 @@
       }
     }
 
-    // Auto-fetch stellar data on page load.
-    // Synthetic MIST default; ?data=real loads the MESA+GYRE track.
-    const params = new URLSearchParams(window.location.search);
-    const DATA_KEY = params.get('data') === 'real' ? 'real' : 'synthetic';
-    const DATA_URLS = {
-      synthetic: 'https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_mist.h5',
-      real:      'https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_real.h5',
-    };
-    const DATA_URL = DATA_URLS[DATA_KEY];
-
-    // Reflect current dataset in the chrome and wire the toggle link.
-    (function setupDatasetUI() {
-      const tag = document.getElementById('header-tag');
-      const sub = document.getElementById('ov-sub');
-      const isReal = DATA_KEY === 'real';
-      const tagText = isReal
-        ? 'Solar-type Stellar Evolution · MESA r24.08.1 + GYRE · Click HR track to explore'
-        : 'Solar-type Stellar Evolution · MIST v1.2 · Click HR track to explore';
-      const subText = isReal
-        ? 'Solar-type Stellar Evolution · MESA r24.08.1 + GYRE'
-        : 'Solar-type Stellar Evolution · MIST v1.2';
-      if (tag) tag.textContent = tagText;
-      if (sub) sub.textContent = subText;
-
-      const toggle = document.getElementById('data-toggle');
-      if (toggle) {
-        toggle.textContent = isReal ? 'Switch to MIST' : 'Switch to MESA';
-        const url = new URL(window.location.href);
-        if (isReal) url.searchParams.delete('data');
-        else url.searchParams.set('data', 'real');
-        toggle.href = url.toString();
-      }
-    })();
+    // Auto-fetch stellar data on page load. Single dataset: the MESA r24.08.1
+    // + GYRE 1 M_sun, [Fe/H]=0 track from the companion stellar-explorer-data
+    // repo. The earlier synthetic MIST baseline has been retired.
+    const DATA_URL = 'https://raw.githubusercontent.com/AndreasWNeitzel/stellar-explorer-data/main/stellar_data_real.h5';
 
     async function autoLoad() {
       setMsg('Fetching stellar data…');
