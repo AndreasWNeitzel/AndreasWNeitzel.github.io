@@ -1112,8 +1112,9 @@
       MS: '#67e8f9',   // sky cyan — main sequence
       SGB: '#fde68a',   // pale yellow-amber — subgiant branch
       RGB: '#ef4444',   // clear red — red giant ascent
-      HeFlash: '#ffffff',   // pure white — extreme event
-      RC: '#facc15',   // bright yellow — red clump (CHeB)
+      HeFlash: '#ffffff',   // pure white — extreme event at RGB tip
+      HeCB: '#fb7185',   // coral pink — post-flash descent toward RC
+      RC: '#facc15',   // bright yellow — stable Red Clump (CHeB)
       AGB: '#fb923c',   // warm orange — asymptotic giant branch
       postAGB: '#f1f5f9',   // near-white — post-AGB descent
       WD: '#94a3b8',   // cool blue-grey — WD cooling track
@@ -1483,7 +1484,7 @@
         const R_cur = Math.pow(10, logR_cur);
         const ph = TRACK.phase[idx] || '';
         // SGB excluded: star is still close to 1 R☉ and ball overlaps
-        const rgbPlus = ['RGB', 'HeFlash', 'RC', 'AGB', 'postAGB'].includes(ph);
+        const rgbPlus = ['RGB', 'HeFlash', 'HeCB', 'RC', 'AGB', 'postAGB'].includes(ph);
         if (rgbPlus && R_cur > 1.2) {
           const sunR_px = maxR / R_cur;          // 1 R☉ scaled to canvas
           const mob = isMobile();
@@ -1526,8 +1527,9 @@
           MS: ['Main Sequence', 'Steady H→He fusion in core.', 'pp-chain dominates at 1 M☉.', 'Core shrinks, envelope expands slowly.'],
           SGB: ['Subgiant Branch', 'H exhausted in core.', 'H-burning shell ignites.', 'Envelope expands and cools rapidly.'],
           RGB: ['Red Giant Branch', 'Deep convective envelope.', 'H shell burns outward.', 'First dredge-up mixes envelope.'],
-          HeFlash: ['Helium Flash', 'Degenerate He core ignites.', 'Core He fusion ~10¹⁰ L☉ — absorbed by envelope, not observable.', 'Brief, non-observable transient.'],
-          RC: ['Red Clump', 'Stable He → C, O in core.', 'Simultaneous H-shell burning.', 'Low-luminosity, long-lived phase.'],
+          HeFlash: ['Helium Flash', 'Degenerate He core ignites at RGB tip.', 'Core He fusion ~10¹⁰ L☉ — absorbed by envelope, not observable.', 'Brief, non-observable transient.'],
+          HeCB: ['He Core Burning (descent)', 'Post-flash settling onto the clump.', 'Envelope contracts; log L drops from RGB-tip toward ~1.7.', 'Y_c ~ 0.98 (He fusion just begun).'],
+          RC: ['Red Clump', 'Stable core He → C, O in burning.', 'Simultaneous H-shell burning.', 'Long-lived (~70 Myr); Y_c depletes here.'],
           AGB: ['Asymptotic Giant Branch', 'He shell + H shell burning.', 'Inert C/O core, deep convective envelope.', 'Strong stellar wind drives mass loss.'],
           postAGB: ['Post-AGB', 'Envelope nearly ejected.', 'Star contracts, T_eff rises rapidly.', 'Briefly ionises ejecta as a planetary nebula.'],
           WD: ['White Dwarf', 'Degenerate C/O core, no nuclear burning.', 'Cools at fixed radius along Mestel relation.', 'Crystallisation begins below ~10 000 K.'],
@@ -2245,7 +2247,7 @@
       // has both p- and g-character (Beck+ 2011, Mosser+ 2012). The visual
       // 'chaos' is real physics, not an artefact.
       const phase = (TRACK.phase[idx] || '').trim();
-      const isMixedPhase = ['RGB','RC','AGB','postAGB'].includes(phase);
+      const isMixedPhase = ['RGB','HeCB','RC','AGB','postAGB'].includes(phase);
       const annotations = [];
       if (isMixedPhase && gdat.mode_type) {
         annotations.push({
