@@ -1015,7 +1015,6 @@
               <input type="range" id="gran" min="30" max="200" value="100" step="5">
               <span class="rval" id="gran-val">100</span>
             </div>
-            <button class="pbtn on" id="btn-puls">Pulsate</button>
             <button class="pbtn on" id="btn-conv">Convect</button>
             <button class="pbtn on" id="btn-cor">Corona</button>
           </div>
@@ -1098,7 +1097,7 @@
     let ACTIVE_TAB = 'prof';   // 'prof' | 'gyre'
     let SEL_MODE = 0;     // selected gyre mode index
     let GRAN = 100;
-    let DO_PULS = true;
+    let DO_PULS = false;  // Pulsate UI removed; animation path disabled.
     let DO_CONV = true;
     let DO_COR = true;
 
@@ -1108,16 +1107,16 @@
     let DEBOUNCE = null;  // click debounce timer
 
     const PHASE_COLORS = {
-      PMS: '#c084fc',   // soft violet
-      ZAMS: '#e0f4ff',   // ice white
-      MS: '#67e8f9',   // sky cyan
-      SGB: '#fde68a',   // pale yellow-amber
-      RGB: '#ef4444',   // clear red
+      PMS: '#c084fc',   // soft violet — pre-main-sequence contraction
+      ZAMS: '#e0f4ff',   // ice white — single transition marker
+      MS: '#67e8f9',   // sky cyan — main sequence
+      SGB: '#fde68a',   // pale yellow-amber — subgiant branch
+      RGB: '#ef4444',   // clear red — red giant ascent
       HeFlash: '#ffffff',   // pure white — extreme event
-      RC: '#facc15',   // bright yellow — unmistakably distinct
-      EAGB: '#fb923c',   // warm orange — clearly between red and yellow
-      HB: '#a78bfa',   // violet
-      postAGB: '#f1f5f9',   // near-white
+      RC: '#facc15',   // bright yellow — red clump (CHeB)
+      AGB: '#fb923c',   // warm orange — asymptotic giant branch
+      postAGB: '#f1f5f9',   // near-white — post-AGB descent
+      WD: '#94a3b8',   // cool blue-grey — WD cooling track
     };
 
     // Plotly shared style
@@ -1484,7 +1483,7 @@
         const R_cur = Math.pow(10, logR_cur);
         const ph = TRACK.phase[idx] || '';
         // SGB excluded: star is still close to 1 R☉ and ball overlaps
-        const rgbPlus = ['RGB', 'HeFlash', 'RC', 'EAGB', 'HB'].includes(ph);
+        const rgbPlus = ['RGB', 'HeFlash', 'RC', 'AGB', 'postAGB'].includes(ph);
         if (rgbPlus && R_cur > 1.2) {
           const sunR_px = maxR / R_cur;          // 1 R☉ scaled to canvas
           const mob = isMobile();
@@ -1523,16 +1522,17 @@
       {
         const phaseHUD = {
           PMS: ['Pre-Main Sequence', 'KH contraction dominates; D-burning & trace pp negligible.', 'Hayashi track: fully convective.', 'Henyey track: radiative core begins forming near ZAMS.'],
-          ZAMS: ['Zero-Age Main Sequence', 'H-burning ignites in core.', 'Radiative core, conv. envelope.', '~10 Gyr MS lifetime begins.'],
+          ZAMS: ['Zero-Age Main Sequence', 'H-burning ignites in core.', 'Radiative core, convective envelope.', '~10 Gyr MS lifetime begins.'],
           MS: ['Main Sequence', 'Steady H→He fusion in core.', 'pp-chain dominates at 1 M☉.', 'Core shrinks, envelope expands slowly.'],
           SGB: ['Subgiant Branch', 'H exhausted in core.', 'H-burning shell ignites.', 'Envelope expands and cools rapidly.'],
           RGB: ['Red Giant Branch', 'Deep convective envelope.', 'H shell burns outward.', 'First dredge-up mixes envelope.'],
           HeFlash: ['Helium Flash', 'Degenerate He core ignites.', 'Core He fusion ~10¹⁰ L☉ — absorbed by envelope, not observable.', 'Brief, non-observable transient.'],
           RC: ['Red Clump', 'Stable He → C, O in core.', 'Simultaneous H-shell burning.', 'Low-luminosity, long-lived phase.'],
-          EAGB: ['Early Asymptotic Giant', 'He shell + H shell burning.', 'Thermal pulses begin.', '2nd dredge-up mixes envelope.'],
-          HB: ['Horizontal Branch', 'Core He burning.', 'Luminosity depends on mass loss.', 'Evolved from RGB tip.'],
+          AGB: ['Asymptotic Giant Branch', 'He shell + H shell burning.', 'Inert C/O core, deep convective envelope.', 'Strong stellar wind drives mass loss.'],
+          postAGB: ['Post-AGB', 'Envelope nearly ejected.', 'Star contracts, T_eff rises rapidly.', 'Briefly ionises ejecta as a planetary nebula.'],
+          WD: ['White Dwarf', 'Degenerate C/O core, no nuclear burning.', 'Cools at fixed radius along Mestel relation.', 'Crystallisation begins below ~10 000 K.'],
         };
-        const phase = TRACK.phase[idx] || 'MS';
+        const phase = (TRACK.phase[idx] || '').trim() || 'MS';
         const lines = phaseHUD[phase] || phaseHUD['MS'];
         const mob = isMobile();
         // On mobile: push text fully into the corner (no padding), slightly smaller font
@@ -2022,9 +2022,16 @@
         fillcolor: 'rgba(0,212,255,0.06)', line: { width: 0 }, layer: 'below'
       });
 
+      // For log Y: cap dynamic range to ~MAX_DECADES below the peak so the
+      // Plotly tick generator doesn't fan out across too many orders of
+      // magnitude (any decades below the cap are truncated visually).
+      const MAX_DECADES = 8;
       const posY = yData.filter(v => v > 0);
       const yMax = posY.length ? Math.max(...posY) : 1;
-      const yMin = posY.length ? Math.max(Math.min(...posY), yMax * 1e-6, 1e-3) : 1e-3;
+      const yMinNatural = posY.length ? Math.min(...posY) : yMax * 1e-30;
+      const yMin = logY
+        ? Math.max(yMinNatural, yMax * Math.pow(10, -MAX_DECADES))
+        : Math.max(yMinNatural, yMax * 1e-6, 1e-3);
 
       const trace = {
         x, y: yData, mode: 'lines',
@@ -2042,6 +2049,11 @@
         yaxis: {
           title: { text: yTitle, font: { size: 20 } },
           type: logY ? 'log' : 'linear',
+          // Plotly log axes take ranges in log10(y) units. The cap above
+          // restricts the visible dynamic range to MAX_DECADES.
+          range: logY
+            ? [Math.log10(yMin), Math.log10(yMax) + 0.05]
+            : undefined,
           gridcolor: 'rgba(160,160,190,0.15)',
           zerolinecolor: 'rgba(160,160,190,0.15)', tickfont: { size: 11, color: '#9090aa' }, color: '#9090aa',
         },
@@ -2233,7 +2245,7 @@
       // has both p- and g-character (Beck+ 2011, Mosser+ 2012). The visual
       // 'chaos' is real physics, not an artefact.
       const phase = (TRACK.phase[idx] || '').trim();
-      const isMixedPhase = ['RGB','RC','EAGB','postAGB'].includes(phase);
+      const isMixedPhase = ['RGB','RC','AGB','postAGB'].includes(phase);
       const annotations = [];
       if (isMixedPhase && gdat.mode_type) {
         annotations.push({
@@ -2264,20 +2276,30 @@
     }
 
     function drawGyreProp(idx, gdat, el, criterion) {
-      // Schwarzschild discriminator : ∇_rad − ∇_ad
-      //   > 0  ⇒ convectively unstable    < 0  ⇒ stable
-      // Ledoux discriminator       : ∇_rad − ∇_ad − brunt_B
-      //   accounts for the composition gradient (μ-stratification). In a
-      //   chemically uniform region (brunt_B = 0) the two reduce to the
-      //   same thing; they differ inside H/He-burning shells where heavier
-      //   elements settle below lighter ones.
+      // Schwarzschild plot : ∇_rad − ∇_ad (gradr_sub_grada).
+      //   > 0 ⇒ convectively unstable.
+      // Ledoux plot        : −brunt_N²  (signed so the same sign convention
+      //   holds: > 0 ⇒ convectively unstable). MESA's brunt_N² is the full
+      //   Ledoux Brunt frequency (it already includes the composition term),
+      //   so this is the canonical Ledoux discriminator. Differences from
+      //   Schwarzschild appear in H/He-burning shells where ∇_μ stabilises
+      //   regions that pure Schwarzschild would mark convective.
       const { profile } = loadModel(idx);
       const x = profile.x;
       const useLedoux = criterion === 'ledoux';
-      const bB = profile.brunt_B || profile.gradr_sub_grada.map(() => 0);
-      const gsa = useLedoux
-        ? profile.gradr_sub_grada.map((v, i) => v - (bB[i] || 0))
-        : profile.gradr_sub_grada;
+      let gsa;
+      let yLabel;
+      if (useLedoux && profile.brunt_N2) {
+        // − N² so that positive ⇒ convective, matching the Schwarzschild
+        // convention. Scaled to dimensionless ∇-difference range by clipping
+        // visually-extreme values (the absolute scale of N² spans many
+        // orders of magnitude and would dominate the plot).
+        gsa = profile.brunt_N2.map(v => -v);
+        yLabel = '−N²  (Ledoux criterion, s⁻²)';
+      } else {
+        gsa = profile.gradr_sub_grada;
+        yLabel = '∇_rad − ∇_ad  (Schwarzschild criterion)';
+      }
 
       const gsa_pos = gsa.map(v => v > 0 ? v : 0);
       const gsa_neg = gsa.map(v => v < 0 ? v : 0);
@@ -2300,16 +2322,14 @@
         y0: 0, y1: 1, fillcolor: 'rgba(157,127,255,0.08)', line: { width: 0 }, layer: 'below'
       });
 
-      const labelExpr = useLedoux ? '∇_rad − ∇_ad − B' : '∇_rad − ∇_ad';
-      const labelTitle = useLedoux ? 'Ledoux criterion' : 'Schwarzschild criterion';
       Plotly.react(el, [
         {
-          x, y: gsa_pos, mode: 'lines', name: labelExpr + ' > 0  (convective)',
+          x, y: gsa_pos, mode: 'lines', name: 'convective',
           line: { color: '#a78bfa', width: 2.5 }, fill: 'tozeroy',
           fillcolor: 'rgba(157,127,255,0.20)'
         },
         {
-          x, y: gsa_neg, mode: 'lines', name: labelExpr + ' < 0  (radiative)',
+          x, y: gsa_neg, mode: 'lines', name: 'stable (radiative)',
           line: { color: '#67e8f9', width: 2.5 }, fill: 'tozeroy',
           fillcolor: 'rgba(103,232,249,0.12)'
         },
@@ -2321,7 +2341,7 @@
           tickfont: { size: 11, color: '#9090aa' }, color: '#9090aa',
         },
         yaxis: {
-          title: { text: labelExpr + '  (' + labelTitle + ')', font: { size: 17, color: '#9090aa' } },
+          title: { text: yLabel, font: { size: 17, color: '#9090aa' } },
           range: [-yMax, yMax], gridcolor: 'rgba(160,160,190,0.15)',
           zeroline: true, zerolinecolor: 'rgba(255,255,255,0.35)', zerolinewidth: 1.5,
           tickfont: { size: 11, color: '#9090aa' }, color: '#9090aa',
@@ -2431,13 +2451,10 @@
         startAnim(CUR, gyre);
       });
 
-      // Toggle buttons
-      document.getElementById('btn-puls').addEventListener('click', function () {
-        DO_PULS = !DO_PULS;
-        this.classList.toggle('on', DO_PULS);
-        if (!DO_PULS) { stopAnim(); const { profile, gyre } = loadModel(CUR); drawCS(CUR, profile); startAnim(CUR, gyre); }
-        else { const { gyre } = loadModel(CUR); stopAnim(); startAnim(CUR, gyre); }
-      });
+      // Toggle buttons (Pulsate removed -- the JWKB animation was unreliable
+      // for evolved phases; the underlying data is still shipped so a future
+      // version can reintroduce it once the cavity-aware reconstruction is
+      // numerically stabilised.)
       document.getElementById('btn-conv').addEventListener('click', function () {
         DO_CONV = !DO_CONV;
         this.classList.toggle('on', DO_CONV);
