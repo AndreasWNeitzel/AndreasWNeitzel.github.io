@@ -14,10 +14,17 @@ Gemfile.lock
 node_modules/
 vendor
 
-# Local tooling and editor artifacts
+# AI assistant tooling and editor artifacts. Local-only; kept out of the
+# published repo so the public surface carries no AI-tool scaffolding.
 .claude/
 .gemini/
+CLAUDE.md
 CLAUDE.local.md
+AGENTS.md
+.github/copilot-instructions.md
+.github/agents/
+.github/instructions/
+.github/workflows/copilot-setup-steps.yml
 
 # Stellar Explorer data file lives in the separate stellar-explorer-data repo;
 # never commit the 152 MB HDF5 to the site repo.
