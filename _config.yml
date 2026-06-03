@@ -133,7 +133,7 @@ disqus_shortname: al-folio # put your disqus shortname
 # External sources.
 # The external-posts plugin fetches these feeds at build time and injects them
 # as synthetic posts into the blog and /feed.xml. The al-folio demo entries (its
-# own Medium feed and a Google Gemini blog post) were removed: they are not ours
+# own Medium feed and a third-party AI blog post) were removed: they are not ours
 # and were the only content the RSS feed served. Add a real feed (e.g. a
 # Substack) here if there is ever something to syndicate.
 # external_sources:
@@ -189,14 +189,11 @@ include: ["_pages", "_scripts"]
 exclude:
   - bin/
   - CONTRIBUTING.md
-  - CUSTOMIZE.md
   - Dockerfile
   - docker-compose.yml
   - docker-compose-slim.yml
-  - FAQ.md
   - Gemfile
   - Gemfile.lock
-  - INSTALL.md
   - LICENSE
   - lighthouse_results/
   - package.json
