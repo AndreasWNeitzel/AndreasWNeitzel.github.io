@@ -1,0 +1,11 @@
+<svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path class="bp-thin" d="M40 70 C56 34 120 36 130 70 C140 104 96 122 66 112 C42 104 30 90 40 70 Z" stroke-dasharray="4 4"/>
+  <path class="bp-thin" d="M170 40 C196 18 262 26 270 56 C278 88 236 104 204 96 C176 90 156 66 170 40 Z" stroke-dasharray="4 4"/>
+  <path class="bp-thin" d="M120 150 C146 124 222 130 236 162 C246 188 194 208 154 200 C122 194 104 172 120 150 Z" stroke-dasharray="4 4"/>
+  <path class="bp-thin" d="M300 120 C318 100 372 104 380 130 C388 156 352 172 326 166 C300 160 288 140 300 120 Z" stroke-dasharray="4 4"/>
+  <g style="fill:var(--cat-0)"><circle cx="62" cy="70" r="4"/><circle cx="76" cy="60" r="4"/><circle cx="88" cy="78" r="4"/><circle cx="102" cy="66" r="4"/><circle cx="112" cy="84" r="4"/><circle cx="70" cy="92" r="4"/><circle cx="94" cy="96" r="4"/></g>
+  <g style="fill:var(--cat-1)"><circle cx="190" cy="50" r="4"/><circle cx="206" cy="40" r="4"/><circle cx="220" cy="58" r="4"/><circle cx="236" cy="46" r="4"/><circle cx="248" cy="66" r="4"/><circle cx="212" cy="76" r="4"/></g>
+  <g style="fill:var(--cat-4)"><circle cx="140" cy="160" r="4"/><circle cx="158" cy="172" r="4"/><circle cx="176" cy="156" r="4"/><circle cx="194" cy="176" r="4"/><circle cx="210" cy="164" r="4"/><circle cx="170" cy="188" r="4"/><circle cx="198" cy="190" r="4"/></g>
+  <g style="fill:var(--cat-9)"><circle cx="320" cy="130" r="4"/><circle cx="336" cy="122" r="4"/><circle cx="350" cy="138" r="4"/><circle cx="362" cy="128" r="4"/><circle cx="342" cy="152" r="4"/></g>
+  <g class="bp-thin"><circle cx="150" cy="110" r="4.5"/><circle cx="280" cy="96" r="4.5"/><circle cx="260" cy="190" r="4.5"/><circle cx="390" cy="80" r="4.5"/></g>
+</svg>

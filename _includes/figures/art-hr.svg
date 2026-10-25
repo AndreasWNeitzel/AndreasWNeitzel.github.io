@@ -1,0 +1,11 @@
+<svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path class="bp-thin" d="M40 20 L40 196 L400 196"/>
+  <text class="bp-sub" x="300" y="214">temperature, falling</text>
+  <text class="bp-sub" x="46" y="30">luminosity</text>
+  <path class="bp" d="M300 150 C 288 146 270 140 262 132 C 254 124 246 106 238 92 C 226 74 214 56 206 44 C 220 82 246 96 268 100 C 254 92 232 70 212 36 C 190 60 150 100 120 160 C 110 176 104 184 96 188" fill="none"/>
+  <circle cx="300" cy="150" r="5" style="fill:var(--accent-2)"/>
+  <circle class="bp-fill" cx="206" cy="44" r="3"/><circle class="bp-fill" cx="268" cy="100" r="3"/><circle class="bp-fill" cx="96" cy="188" r="3"/>
+  <text class="bp-sub" x="306" y="146">main sequence</text>
+  <text class="bp-sub" x="214" y="50">red giant</text>
+  <text class="bp-sub" x="102" y="182">white dwarf</text>
+</svg>

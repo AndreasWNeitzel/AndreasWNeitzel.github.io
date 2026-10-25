@@ -1,0 +1,8 @@
+<svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path class="bp-thin" d="M210 20 L210 24"/>
+  <path class="bp" d="M210 22 L170 96 L246 150"/>
+  <circle class="bp-fill" cx="210" cy="22" r="3"/><circle cx="170" cy="96" r="7" style="fill:var(--surface);stroke:currentColor;stroke-width:1.5"/><circle cx="246" cy="150" r="7" style="fill:var(--accent-2)"/>
+  <path class="bp-thin" d="M246 150 C 290 120 320 170 280 190 C 240 210 200 160 236 132 C 272 104 330 130 300 170 C 270 210 180 200 170 160 C 160 120 230 100 260 140 C 290 180 230 210 200 186 C 170 162 190 120 226 124" stroke-dasharray="2 3"/>
+  <path class="bp-thin" d="M90 60 a40 40 0 1 0 0.1 0" stroke-dasharray="2 4"/><circle class="bp-fill" cx="90" cy="100" r="5"/><circle class="bp-fill" cx="130" cy="100" r="2.5"/>
+  <path class="bp-thin" d="M340 50 a26 26 0 1 1 -0.1 0"/><circle class="bp-fill" cx="340" cy="76" r="4"/>
+</svg>

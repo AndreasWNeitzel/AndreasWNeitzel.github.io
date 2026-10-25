@@ -1,0 +1,19 @@
+{%- assign rows = site.data.ledger | timeline -%}
+{%- assign counts = rows | timeline_counts -%}
+{%- assign filters = "paper:Papers,talk:Talks and posters,grant:Funding,hpc:HPC,observing:Observing,software:Software,position:Positions,service:Service and teaching,award:Awards" | split: "," -%}
+<div class="filters no-print" role="group" aria-label="Filter by type">
+  <button type="button" data-filter="all" aria-pressed="true">All <span class="n">{{ rows.size }}</span></button>
+  {%- for f in filters %}{% assign kv = f | split: ":" %}{% assign key = kv[0] %}{% assign n = counts[key] %}{% if n and n > 0 %}
+  <button type="button" data-filter="{{ kv[0] }}" aria-pressed="false">{{ kv[1] }} <span class="n">{{ n }}</span></button>
+  {%- endif %}{% endfor %}
+</div>
+<ol class="timeline" data-timeline>
+  {%- for r in rows %}
+  <li class="tl-row" data-kind="{{ r.kind }}">
+    <span class="tl-date">{{ r.when }}</span>
+    <span><span class="tag tag--{{ r.tag }}">{{ r.label }}</span></span>
+    <span class="tl-title">{{ r.title | missions }}{% if r.meta != "" %}<small>{{ r.meta | missions }}</small>{% endif %}</span>
+    <span class="tl-links">{% if r.url %}<a href="{{ r.url | relative_url }}">{{ r.link }}</a>{% endif %}</span>
+  </li>
+  {%- endfor %}
+</ol>

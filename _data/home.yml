@@ -1,0 +1,177 @@
+# Curated home-page content. Every fact here restates an entry of the public ledger export
+# (_data/ledger.yml) or a public record linked from it; the ledger id is given for each item.
+
+profile:
+  role: PhD researcher in astrophysics and machine learning
+  institute: IA and University of Porto
+  nouns: [Astronomer, Machine learning, Neural networks, Galactic archaeology, Gaia, Asteroseismology, HPC]
+  descriptor: >-
+    I build neural networks and unsupervised methods that read stellar chemistry, ages and
+    populations from <i>Gaia</i> spectra and asteroseismic data, and I run them on European
+    supercomputers.
+  facts:
+    - Porto, Portugal
+    - EU citizen (Portugal, Germany)
+    - Portuguese, English (C2), German (A2), Spanish (A2)
+
+glance:
+  - {n: "4", label: refereed papers}
+  - {n: "16", label: talks and posters}
+  - {n: "1.1 M", label: core-hours approved}
+  - {n: "5", label: fellowships and allocations}
+
+highlights:
+  - tag: paper
+    label: Paper
+    title: First-author paper in A&A
+    text: A manifold-learning method that separates the Milky Way's stellar populations, tested on a simulated galaxy.
+    when: "2025"
+    url: /papers/neitzel-2025-manifold-learning/
+    ledger: pub-2025-neitzel-manifold-learning
+  - tag: hpc
+    label: HPC
+    title: 1.1 million core-hours approved
+    text: Responsible investigator on two FCT computing projects, on MareNostrum 5 and Deucalion, with 2,500 GPU-hours.
+    when: "2026"
+    url: /guide/supercomputers/
+    ledger: [fund-2026-10-cpca-a2-marenostrum, fund-2026-10-cpca-a1-deucalion]
+  - tag: observing
+    label: Observing
+    title: ESO Very Large Telescope
+    text: Visiting astronomer at Paranal for the ESPRESSO campaign on GJ 570 A, now in A&A (accepted).
+    when: "2024"
+    url: /observing/paranal/
+    thumb: /assets/img/photos/vlt-golden-hour.webp
+    ledger: ev-2024-05-paranal-espresso-observing-run
+  - tag: grant
+    label: Funding
+    title: Three fellowships won
+    text: FCT doctoral fellowship, ArqueoGal PhD fellowship and an FCT MSc grant; co-investigator on the FCT project ArqueoGal.
+    when: 2021 to 2027
+    url: /cv/#funding
+    ledger: [fund-2025-09-fct-doctoral-fellowship, fund-2026-09-arqueogal-bi-d-fellowship, fund-2021-fct-msc-research-grant, fund-2026-arqueogal-pex-participant]
+  - tag: position
+    label: Abroad
+    title: INAF Bologna secondment
+    text: Six months building noise simulations for the proposed <i>HAYDN</i> mission, with visits to INAF Padova.
+    when: 2025/26
+    url: /guide/inaf/
+    ledger: pos-2025-visiting-inaf-bologna
+  - tag: talk
+    label: Talks
+    title: Four international talks
+    text: TASC10/KASC17 in Aarhus (talk and poster), IMAS13 and IMAS11 in Spain, TASC8/KASC15 in Porto.
+    when: 2024 to 2026
+    url: /talks/
+    ledger: [pres-2026-07-tasc10-oral-janus, pres-2026-07-tasc10-poster-haydnsim, pres-2026-10-imas13-oral-janus, pres-2024-11-imas11-oral, pres-2024-07-tasc8-oral]
+
+evidence:
+  - src: /assets/img/photos/vlt-golden-hour.webp
+    alt: Andreas in a hard hat on the Very Large Telescope platform at Paranal at sunset, with the Unit Telescope enclosures behind him.
+    caption: VLT platform, Paranal, May 2024
+    url: /observing/paranal/
+  - src: /assets/img/photos/ut-dome-interior.webp
+    alt: Andreas standing beneath the mirror cell of an 8.2-metre Unit Telescope inside its dome.
+    caption: Inside a Unit Telescope dome
+    url: /observing/paranal/
+  - src: /assets/img/photos/dfa-week-2026-talk.webp
+    alt: Andreas presenting his talk on photometric simulations of dense star clusters for HAYDN at DFA Week 2026.
+    caption: Talk on HAYDN simulations, Porto 2026
+    url: /talks/
+  - src: /assets/img/photos/paranal-milky-way.webp
+    alt: The Milky Way over the Atacama desert, photographed from Paranal before dawn.
+    caption: The Milky Way from Paranal
+    url: /observing/paranal/
+
+now: Building JANUS, a neural network for the chemistry of oscillating red giants from <i>Gaia</i> spectra, for the FCT project ArqueoGal. Thesis due in 2027.
+
+record:
+  - id: funding
+    title: Funding won
+    count: "5"
+    unit: awards
+    colour: --t-grant
+    items:
+      - "<strong>FCT doctoral fellowship</strong>, 2025.01843.BD, 2025 to 2026"
+      - "<strong>ArqueoGal PhD fellowship</strong>, FCT project 2024.15303.PEX, 2026 to 2027"
+      - "<strong>FCT MSc research grant</strong>, BreakStarS project, 2021 to 2022"
+      - "<strong>MareNostrum 5</strong>: 1,002,400 core-hours and 1,000 H100 GPU-hours, as responsible investigator, approved 2026"
+      - "<strong>Deucalion</strong>: 99,840 core-hours and 1,500 A100 GPU-hours, as responsible investigator, approved 2026"
+  - id: leadership
+    title: Leadership
+    count: "3"
+    unit: lead roles
+    colour: --t-paper
+    items:
+      - "<strong>First author</strong>, <a href=\"/papers/neitzel-2025-manifold-learning/\">A&amp;A 695, A243</a> (2025)"
+      - "<strong>Responsible investigator</strong>, two FCT advanced-computing projects (2026)"
+      - "<strong>Co-investigator</strong>, FCT project ArqueoGal; developer of its machine-learning pipelines"
+      - "<strong>Sole developer</strong> of <a href=\"/software/\">Starfold, Stellar Explorer and Tellurion</a>"
+      - "<strong>Chair</strong>, IA Stars Day organising committee (2023); <strong>supervisor</strong>, IA Summer Programme (2024, 2025)"
+  - id: international
+    title: International
+    count: "4"
+    unit: countries abroad
+    colour: --t-observing
+    items:
+      - "<strong>INAF-OAS Bologna</strong>, six-month secondment (2025 to 2026), with visits to INAF Padova"
+      - "<strong>ESO Very Large Telescope</strong>, visiting astronomer (2024)"
+      - "<strong>ESA Ariel Science Consortium</strong> member since 2021; KASOC and TASOC"
+      - "<strong>Talks</strong> at TASC10/KASC17 (Aarhus), IMAS13 and IMAS11 (Spain), TASC8/KASC15 (Porto)"
+      - "<strong>Organising committee</strong>, TASC8/KASC15 international workshop (2024)"
+  - id: recognition
+    title: Record
+    count: "4"
+    unit: papers
+    colour: --t-award
+    items:
+      - "<strong>Best Master's Student</strong> in Astronomy and Astrophysics, University of Porto (2023)"
+      - "<strong>4 refereed papers</strong> in A&amp;A, one first-author, one accepted in 2026"
+      - "<strong>16 talks and posters</strong> since 2022, six of them international"
+      - "<strong>Open source</strong>: Starfold 0.2.0 (MIT, 294 tests); Tellurion, nearly 400 physics simulations"
+
+explore:
+  - title: Train a neural network on Gaia spectra
+    text: A small network learns stellar metallicity from real Gaia XP spectra, live in your browser.
+    tag: software
+    label: Playground
+    url: /playground/neural-network/
+    art: nn
+    size: wide
+  - title: Observing at the Very Large Telescope
+    text: Five nights on a K dwarf with ESPRESSO, and what the data showed.
+    tag: observing
+    label: Story
+    url: /observing/paranal/
+    img: /assets/img/photos/ut-mirror-cell.webp
+  - title: My papers, explained
+    text: What each paper found and what I did in it, without the jargon.
+    tag: paper
+    label: Explainers
+    url: /publications/#explainers
+    img: /assets/img/papers/neitzel-2025-manifold-learning.webp
+    light: true
+  - title: Field guide to the field
+    text: Galactic archaeology, asteroseismology, Gaia, ESO, INAF, HAYDN and the supercomputers, each in a minute.
+    tag: data
+    label: Guide
+    url: /guide/
+    img: /assets/img/guide/gaia.webp
+  - title: HAYDN crowded-field simulations
+    text: Forecasting photometric noise in 47 Tucanae and other dense clusters for a proposed ESA mission.
+    tag: poster
+    label: Poster
+    url: /guide/haydn/
+    img: /assets/img/guide/haydn.webp
+  - title: Starfold
+    text: Open-source grouping with recurrence and 17 named warnings, benchmarked on ten tables.
+    tag: software
+    label: Software
+    url: /software/starfold-demo/
+    art: clusters
+  - title: Supercomputers I run on
+    text: Deucalion in Guimarães and MareNostrum 5 in Barcelona, and what the allocations buy.
+    tag: hpc
+    label: HPC
+    url: /guide/supercomputers/
+    img: /assets/img/guide/supercomputers.webp

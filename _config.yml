@@ -1,17 +1,16 @@
 # Site
 title: Andreas W. Neitzel
 description: >-
-  PhD candidate in astronomy at IA/CAUP, University of Porto. Machine-learning methods for
-  Galactic archaeology with Gaia spectra and asteroseismic data.
+  PhD researcher in astrophysics and machine learning at IA and the University of Porto: neural
+  networks for Gaia spectra, asteroseismology, Galactic archaeology and HPC.
 url: https://andreaswneitzel.github.io
 baseurl: ""
 lang: en
 author:
   name: Andreas W. Neitzel
   email: andreaswneitzel@gmail.com
-og_image: /assets/img/portrait_square.jpg
-og_image_width: 903
-og_image_height: 903
+og_image: /assets/img/og-vlt.jpg
+og_image_alt: Andreas W. Neitzel on the platform of ESO's Very Large Telescope at Paranal at sunset
 
 # Build
 markdown: kramdown
@@ -54,6 +53,12 @@ collections:
   notes:
     output: true
     permalink: /notes/:title/
+  guide:
+    output: true
+    permalink: /guide/:name/
+  papers:
+    output: true
+    permalink: /papers/:name/
 
 defaults:
   - scope:
@@ -65,6 +70,16 @@ defaults:
       type: notes
     values:
       layout: note
+  - scope:
+      path: ""
+      type: guide
+    values:
+      layout: guide
+  - scope:
+      path: ""
+      type: papers
+    values:
+      layout: paper
 
 feed:
   collections:

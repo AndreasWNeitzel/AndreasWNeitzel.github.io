@@ -1,0 +1,17 @@
+<svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g class="bp-thin">
+    <path d="M60 40 L180 30 M60 40 L180 80 M60 40 L180 130 M60 80 L180 30 M60 80 L180 130 M60 80 L180 180 M60 120 L180 80 M60 120 L180 180 M60 160 L180 30 M60 160 L180 130 M60 200 L180 80 M60 200 L180 180"/>
+    <path d="M180 30 L300 55 M180 30 L300 105 M180 80 L300 55 M180 80 L300 155 M180 130 L300 105 M180 130 L300 155 M180 180 L300 105 M180 180 L300 155"/>
+    <path d="M300 55 L420 105 M300 105 L420 105 M300 155 L420 105"/>
+  </g>
+  <path class="bp nn-edge" d="M60 80 L180 80 L300 105 L420 105 M60 160 L180 130 L300 155 L420 105"/>
+  <g class="nn-nodes">
+    <circle cx="60" cy="40" r="7"/><circle cx="60" cy="80" r="7"/><circle cx="60" cy="120" r="7"/><circle cx="60" cy="160" r="7"/><circle cx="60" cy="200" r="7"/>
+    <circle cx="180" cy="30" r="7"/><circle cx="180" cy="80" r="7"/><circle cx="180" cy="130" r="7"/><circle cx="180" cy="180" r="7"/>
+    <circle cx="300" cy="55" r="7"/><circle cx="300" cy="105" r="7"/><circle cx="300" cy="155" r="7"/>
+    <circle cx="420" cy="105" r="9"/>
+  </g>
+  <text class="bp-sub" x="40" y="218">XP coefficients</text>
+  <text class="bp-sub" x="402" y="134">[M/H]</text>
+  <path class="bp-thin" d="M440 105 C470 105 470 60 500 60" stroke-dasharray="3 4"/>
+</svg>

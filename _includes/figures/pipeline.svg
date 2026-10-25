@@ -1,0 +1,166 @@
+<svg class="fig1-svg" viewBox="0 0 680 524" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Schematic of the research pipeline: Gaia spectra, the JANUS neural networks, labels with reliability, Starfold groups, Milky Way populations, on two supercomputers">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <clipPath id="spec-clip"><rect x="244" y="74" width="160" height="118"/></clipPath>
+  </defs>
+
+  <!-- ===================== A. Gaia ===================== -->
+  <g class="stage" data-stage="gaia" tabindex="0" role="button" aria-label="Stage 1, Gaia">
+    <rect class="hit" x="12" y="56" width="168" height="196" rx="6"/>
+    <!-- star field the satellite scans -->
+    <g class="bp-thin">
+      <path d="M24 70 l4 0 M26 68 l0 4"/><path d="M150 76 l4 0 M152 74 l0 4"/><path d="M44 104 l3 0 M45.5 102.5 l0 3"/><path d="M160 112 l3 0 M161.5 110.5 l0 3"/>
+    </g>
+    <g class="bp-fill" opacity=".7"><circle cx="34" cy="88" r="1.2"/><circle cx="136" cy="64" r="1"/><circle cx="168" cy="92" r="1.3"/><circle cx="22" cy="122" r="1"/><circle cx="62" cy="68" r="0.9"/><circle cx="118" cy="90" r="1"/></g>
+    <!-- scanning lines of sight from the two telescopes -->
+    <path class="bp-thin flow" d="M84 118 L40 78 M108 118 L148 70"/>
+    <!-- payload module (thermal tent) -->
+    <path class="bp" d="M78 118 L80 150 M114 118 L112 150"/>
+    <ellipse class="bp" cx="96" cy="118" rx="18" ry="5"/>
+    <rect class="bp-soft" x="78" y="118" width="36" height="32"/>
+    <path class="bp" d="M86 128 h8 v8 h-8 z M100 128 h8 v8 h-8 z"/>
+    <!-- service module -->
+    <path class="bp" d="M80 150 L74 170 L118 170 L112 150"/>
+    <!-- sunshield, 10 m deployed, with its segments -->
+    <ellipse class="bp" cx="96" cy="176" rx="70" ry="13"/>
+    <ellipse class="bp-thin" cx="96" cy="176" rx="46" ry="8.5"/>
+    <path class="bp-thin" d="M96 163 L96 167.5 M96 189 L96 184.5 M26 176 L50 176 M142 176 L166 176 M47 167 L63 170 M145 167 L129 170 M47 185 L63 182 M145 185 L129 182"/>
+    <text class="bp-title" x="20" y="226">GAIA</text>
+    <text class="bp-sub" x="20" y="241">ESA astrometry satellite</text>
+  </g>
+
+  <path class="link flow" d="M184 136 L226 136" marker-end="url(#ah)"/>
+
+  <!-- ===================== B. XP spectrum ===================== -->
+  <g class="stage" data-stage="xp" tabindex="0" role="button" aria-label="Stage 2, XP spectra">
+    <rect class="hit" x="230" y="56" width="186" height="196" rx="6"/>
+    <path class="bp" d="M244 74 L244 192 L404 192"/>
+    <path class="bp-thin" d="M244 192 l0 4 M297 192 l0 4 M350 192 l0 4 M403 192 l0 4"/>
+    <text class="bp-tick" x="240" y="206">360</text><text class="bp-tick" x="340" y="206">800</text><text class="bp-tick" x="380" y="206">990 nm</text>
+    <!-- BP | RP division -->
+    <path class="bp-thin" d="M306 80 L306 192" stroke-dasharray="3 3"/>
+    <text class="bp-tick" x="268" y="86">BP</text><text class="bp-tick" x="318" y="86">RP</text>
+    <!-- a red-giant-like XP spectrum: flux rising to the red, with H-alpha and the calcium triplet -->
+    <g clip-path="url(#spec-clip)">
+      <path class="bp-soft" d="M246 188 C262 184 270 172 282 160 C294 148 300 140 304 138 L305 143 L307 136 C318 124 332 114 344 110 C352 108 356 108 360 110 L362 116 L364 110 L367 117 L369 111 C378 112 390 122 404 134 L404 192 L246 192 Z"/>
+      <path class="bp spec" d="M246 188 C262 184 270 172 282 160 C294 148 300 140 304 138 L305 143 L307 136 C318 124 332 114 344 110 C352 108 356 108 360 110 L362 116 L364 110 L367 117 L369 111 C378 112 390 122 404 134"/>
+    </g>
+    <text class="bp-ann" x="292" y="132">Hα</text><text class="bp-ann" x="354" y="102">Ca II</text>
+    <text class="bp-title" x="238" y="226">XP SPECTRUM</text>
+    <text class="bp-sub" x="238" y="241">per star, 360 to 990 nm</text>
+  </g>
+
+  <path class="link flow" d="M420 136 L452 136" marker-end="url(#ah)"/>
+
+  <!-- seismology input above JANUS -->
+  <g class="stage" data-stage="seismo" tabindex="0" role="button" aria-label="Asteroseismology input">
+    <rect class="hit" x="456" y="2" width="212" height="46" rx="6"/>
+    <path class="bp-thin" d="M462 40 L548 40"/>
+    <path class="bp-thin" d="M466 38 C486 38 490 14 505 12 C520 14 524 38 544 38" stroke-dasharray="2 3"/>
+    <path class="bp" d="M478 40 v-8 M486 40 v-14 M494 40 v-22 M502 40 v-27 M510 40 v-24 M518 40 v-16 M526 40 v-9 M534 40 v-4 M482 40 v-4 M498 40 v-9 M514 40 v-8"/>
+    <text class="bp-title small" x="556" y="20">TESS · KEPLER</text>
+    <text class="bp-sub" x="556" y="34">seismic red giants</text>
+  </g>
+  <path class="link flow" d="M505 50 L505 66" marker-end="url(#ah)"/>
+
+  <!-- ===================== C. JANUS ===================== -->
+  <g class="stage" data-stage="janus" tabindex="0" role="button" aria-label="Stage 3, JANUS neural networks">
+    <rect class="hit" x="456" y="56" width="212" height="196" rx="6"/>
+    <!-- the ensemble: eight networks, two drawn behind -->
+    <rect class="bp-thin" x="472" y="62" width="192" height="134" rx="5" opacity=".35"/>
+    <rect class="bp-thin" x="466" y="67" width="192" height="134" rx="5" opacity=".6"/>
+    <rect class="bp" x="460" y="72" width="192" height="134" rx="5"/>
+    <text class="bp-ann" x="626" y="84">×8</text>
+    <g class="edges">
+      <path class="nn-e" d="M478 92 L520 98 M478 92 L520 120 M478 92 L520 142 M478 113 L520 98 M478 113 L520 142 M478 113 L520 164 M478 134 L520 120 M478 134 L520 164 M478 134 L520 186 M478 162 L520 98 M478 162 L520 142 M478 162 L520 186 M478 184 L520 120 M478 184 L520 164 M478 184 L520 186"/>
+      <path class="nn-e" d="M520 98 L562 98 M520 98 L562 142 M520 120 L562 120 M520 120 L562 164 M520 142 L562 98 M520 142 L562 186 M520 164 L562 120 M520 164 L562 164 M520 186 L562 142 M520 186 L562 186"/>
+      <path class="nn-e hot" d="M478 113 L520 120 L562 142 L590 139 M478 162 L520 164 L562 164 L590 139"/>
+      <path class="nn-e" d="M562 98 L590 128 M562 120 L590 132 M562 142 L590 139 M562 164 L590 146 M562 186 L590 150"/>
+      <path class="nn-e" d="M614 139 L636 90 M614 139 L636 110 M614 139 L636 130 M614 139 L636 150 M614 139 L636 170 M614 139 L636 190"/>
+    </g>
+    <g class="nodes">
+      <circle cx="478" cy="92" r="4.5"/><circle cx="478" cy="113" r="4.5"/><circle cx="478" cy="134" r="4.5"/><circle cx="478" cy="162" r="4.5"/><circle cx="478" cy="184" r="4.5"/>
+      <circle cx="520" cy="98" r="4.5"/><circle cx="520" cy="120" r="4.5"/><circle cx="520" cy="142" r="4.5"/><circle cx="520" cy="164" r="4.5"/><circle cx="520" cy="186" r="4.5"/>
+      <circle cx="562" cy="98" r="4.5"/><circle cx="562" cy="120" r="4.5"/><circle cx="562" cy="142" r="4.5"/><circle cx="562" cy="164" r="4.5"/><circle cx="562" cy="186" r="4.5"/>
+      <circle cx="636" cy="90" r="4"/><circle cx="636" cy="110" r="4"/><circle cx="636" cy="130" r="4"/><circle cx="636" cy="150" r="4"/><circle cx="636" cy="170" r="4"/><circle cx="636" cy="190" r="4"/>
+    </g>
+    <text class="bp-ann" x="472" y="150" text-anchor="middle">⋮</text>
+    <!-- conditional flow: a Gaussian bent into a skewed posterior -->
+    <rect class="bp flowbox" x="590" y="110" width="24" height="58" rx="3"/>
+    <path class="bp-thin" d="M593 160 C597 160 598 130 602 130 C606 130 607 160 611 160"/>
+    <path class="bp" d="M593 126 C598 126 600 116 603 116 C605 116 608 124 611 126" opacity=".9"/>
+    <text class="bp-tick" x="466" y="200">110 in</text>
+    <text class="bp-tick" x="600" y="200">6 out</text>
+    <text class="bp-title" x="460" y="226">JANUS</text>
+    <text class="bp-sub" x="460" y="241">8 normalising-flow networks</text>
+  </g>
+
+  <path class="link flow" d="M560 256 C560 272 560 278 560 290" marker-end="url(#ah)"/>
+
+  <!-- ===================== D. Labels and reliability ===================== -->
+  <g class="stage" data-stage="labels" tabindex="0" role="button" aria-label="Stage 4, stellar labels with reliability">
+    <rect class="hit" x="456" y="294" width="212" height="190" rx="6"/>
+    <g class="post">
+      <text class="bp-tick" x="462" y="318">Teff</text><path class="bp-thin" d="M506 315 h60"/><path class="bp" d="M528 315 h18"/><circle class="bp-dot" cx="537" cy="315" r="2.6"/>
+      <text class="bp-tick" x="462" y="336">log g</text><path class="bp-thin" d="M506 333 h60"/><path class="bp" d="M524 333 h22"/><circle class="bp-dot" cx="535" cy="333" r="2.6"/>
+      <text class="bp-tick" x="462" y="354">[M/H]</text><path class="bp-thin" d="M506 351 h60"/><path class="bp" d="M532 351 h14"/><circle class="bp-dot" cx="539" cy="351" r="2.6"/>
+      <text class="bp-tick" x="462" y="372">[α/M]</text><path class="bp-thin" d="M506 369 h60"/><path class="bp" d="M520 369 h30"/><circle class="bp-dot" cx="533" cy="369" r="2.6"/>
+      <text class="bp-tick" x="462" y="390">[Fe/H]</text><path class="bp-thin" d="M506 387 h60"/><path class="bp" d="M531 387 h15"/><circle class="bp-dot" cx="538" cy="387" r="2.6"/>
+      <text class="bp-tick" x="462" y="408">[Mg/H]</text><path class="bp-thin" d="M506 405 h60"/><path class="bp" d="M527 405 h22"/><circle class="bp-dot" cx="537" cy="405" r="2.6"/>
+    </g>
+    <!-- reliability gauge -->
+    <path class="bp" d="M584 404 A36 36 0 0 1 656 404"/>
+    <path class="bp-thin" d="M584 404 L656 404"/>
+    <path class="bp needle" d="M620 404 L640 378"/>
+    <circle class="bp-dot" cx="620" cy="404" r="2.6"/>
+    <text class="bp-tick" x="603" y="360">P(miss)</text>
+    <text class="bp-tick" x="580" y="418">0</text><text class="bp-tick" x="652" y="418">1</text>
+    <text class="bp-title" x="460" y="448">LABELS + RELIABILITY</text>
+    <text class="bp-sub" x="460" y="463">per-star spread and miss probability</text>
+  </g>
+
+  <path class="link flow" d="M452 380 L418 380" marker-end="url(#ah)"/>
+
+  <!-- ===================== E. Starfold ===================== -->
+  <g class="stage" data-stage="starfold" tabindex="0" role="button" aria-label="Stage 5, Starfold">
+    <rect class="hit" x="230" y="294" width="186" height="190" rx="6"/>
+    <path class="bp-thin hull" d="M252 330 C262 312 296 314 302 332 C308 350 284 362 266 356 C252 352 246 342 252 330 Z"/>
+    <path class="bp-thin hull" d="M320 316 C334 304 368 308 374 324 C380 342 358 352 340 348 C324 344 312 330 320 316 Z"/>
+    <path class="bp-thin hull" d="M286 378 C300 364 342 368 350 386 C356 402 326 414 304 408 C286 404 276 392 286 378 Z"/>
+    <g class="bp-fill c1"><circle cx="262" cy="334" r="2.2"/><circle cx="270" cy="328" r="2.2"/><circle cx="276" cy="340" r="2.2"/><circle cx="284" cy="332" r="2.2"/><circle cx="290" cy="342" r="2.2"/><circle cx="266" cy="346" r="2.2"/><circle cx="280" cy="350" r="2.2"/><circle cx="294" cy="328" r="2.2"/></g>
+    <g class="bp-fill c2"><circle cx="330" cy="322" r="2.2"/><circle cx="340" cy="316" r="2.2"/><circle cx="348" cy="328" r="2.2"/><circle cx="356" cy="320" r="2.2"/><circle cx="364" cy="332" r="2.2"/><circle cx="338" cy="336" r="2.2"/><circle cx="352" cy="340" r="2.2"/></g>
+    <g class="bp-fill c3"><circle cx="296" cy="384" r="2.2"/><circle cx="306" cy="392" r="2.2"/><circle cx="318" cy="380" r="2.2"/><circle cx="326" cy="394" r="2.2"/><circle cx="336" cy="386" r="2.2"/><circle cx="312" cy="402" r="2.2"/><circle cx="330" cy="404" r="2.2"/><circle cx="342" cy="396" r="2.2"/></g>
+    <g class="bp-thin"><circle cx="246" cy="372" r="2.4"/><circle cx="388" cy="368" r="2.4"/><circle cx="362" cy="408" r="2.4"/></g>
+    <text class="bp-tick" x="372" y="420">32 refits</text>
+    <text class="bp-title" x="238" y="448">STARFOLD</text>
+    <text class="bp-sub" x="238" y="463">UMAP + HDBSCAN, recurrence</text>
+  </g>
+
+  <path class="link flow" d="M226 380 L192 380" marker-end="url(#ah)"/>
+
+  <!-- ===================== F. Milky Way ===================== -->
+  <g class="stage" data-stage="galaxy" tabindex="0" role="button" aria-label="Stage 6, Milky Way populations">
+    <rect class="hit" x="12" y="294" width="176" height="190" rx="6"/>
+    <circle class="bp-thin" cx="98" cy="372" r="64" stroke-dasharray="3 4"/>
+    <ellipse class="bp-soft" cx="98" cy="372" rx="70" ry="13"/>
+    <ellipse class="bp" cx="98" cy="372" rx="72" ry="13"/>
+    <ellipse class="bp" cx="98" cy="372" rx="68" ry="5"/>
+    <ellipse class="bp-fill" cx="98" cy="372" rx="13" ry="9" opacity=".8"/>
+    <path class="bp warm" d="M40 330 C60 312 120 306 150 326 C170 340 168 360 156 366" stroke-dasharray="4 3"/>
+    <text class="bp-tick" x="104" y="318">halo</text>
+    <text class="bp-tick" x="150" y="342">accreted</text>
+    <text class="bp-tick" x="22" y="398">thick disc</text>
+    <text class="bp-tick" x="118" y="398">thin disc</text>
+    <text class="bp-title" x="20" y="448">MILKY WAY</text>
+    <text class="bp-sub" x="20" y="463">its populations and history</text>
+  </g>
+
+  <!-- ===================== compute rail ===================== -->
+  <g class="stage" data-stage="hpc" tabindex="0" role="button" aria-label="Compute: Deucalion and MareNostrum 5">
+    <rect class="hit" x="12" y="486" width="656" height="34" rx="6"/>
+    <rect class="bp rail" x="14" y="490" width="652" height="28" rx="5" stroke-dasharray="5 4"/>
+    <g class="bp-thin"><rect x="24" y="496" width="10" height="16" rx="1"/><path d="M26 500 h6 M26 504 h6 M26 508 h6"/><rect x="38" y="496" width="10" height="16" rx="1"/><path d="M40 500 h6 M40 504 h6 M40 508 h6"/></g>
+    <text class="bp-title small" x="58" y="508">RUNS ON</text>
+    <text class="bp-sub" x="128" y="508">Deucalion · MareNostrum 5 · Slurm · CUDA · RAPIDS · 1.1 M core-h approved</text>
+  </g>
+</svg>

@@ -1,47 +1,147 @@
 ---
 layout: default
+body_class: home
 ---
 {%- assign p = site.data.person -%}
 {%- assign L = site.data.ledger -%}
-<div class="row intro">
-  <figure class="portrait aside">
-    <img src="{{ '/assets/img/portrait_square.jpg' | relative_url }}" width="903" height="903" alt="Portrait of {{ p.name }}" decoding="async">
-    <figcaption>{{ p.name | initials }}</figcaption>
+{%- assign H = site.data.home -%}
+<div class="wrap">
+
+<section class="first" aria-label="Introduction">
+  <!-- zone 1: profile card -->
+  <div class="profile card">
+    <div class="profile-top">
+      <img class="avatar" src="{{ '/assets/img/photos/portrait-2026.webp' | relative_url }}" width="112" height="112" alt="Portrait of {{ p.name }}" fetchpriority="high">
+      <div>
+        <h1 class="name">{{ p.name | initials }}</h1>
+        <p class="role">{{ H.profile.role }}</p>
+        <p class="inst">{{ H.profile.institute }}</p>
+      </div>
+    </div>
+    <p class="nouns">{% for n in H.profile.nouns %}<span>{{ n | missions }}</span>{% endfor %}</p>
+    <p class="descriptor">{{ H.profile.descriptor }}</p>
+    <nav class="contacts" aria-label="Contact and profiles">
+      <a href="mailto:{{ p.emails.personal }}"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
+      <a href="https://orcid.org/{{ p.identifiers.orcid }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</a>
+      <a href="https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-scholar"/></svg>Scholar</a>
+      <a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc"><svg class="i" aria-hidden="true"><use href="#i-ads"/></svg>ADS</a>
+      <a href="https://github.com/{{ p.identifiers.github }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+      <a href="https://www.linkedin.com/in/{{ p.identifiers.linkedin }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+    </nav>
+    <p class="cta">
+      <a class="btn btn--primary" href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Academic CV (PDF)</a>
+      <a class="btn" href="{{ '/cv/' | relative_url }}">Full record</a>
+    </p>
+    <div class="glance" aria-label="At a glance">{% for g in H.glance %}<div><b>{{ g.n }}</b><span>{{ g.label }}</span></div>{% endfor %}</div>
+    <ul class="facts-line">{% for f in H.profile.facts %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+
+  <!-- zone 2: hero figure -->
+  <figure class="fig1 panel" id="fig1">
+    <div class="fig1-head"><span class="figno">FIG 1</span><span>Research pipeline, from <i>Gaia</i> spectra to the Milky Way's history</span><span class="fig1-hint">hover a stage</span><span class="fig1-swipe">swipe to see all six stages</span></div>
+    <div class="fig1-scroll">{% include figures/pipeline.svg %}</div>
+    <figcaption class="fig1-cap" aria-live="polite"><b data-cap-title>How the pieces fit.</b> <span data-cap-text><i>Gaia</i>'s low-resolution spectra go into JANUS, an ensemble of neural networks that returns stellar parameters and chemistry with a per-star reliability score. Starfold then groups the stars into the populations that record how the Milky Way was assembled. Asteroseismology from <i>TESS</i> and <i>Kepler</i> anchors the ages, and the whole chain runs on Deucalion and MareNostrum 5.</span></figcaption>
   </figure>
-  <h1>{{ p.name | initials }}</h1>
-  <p class="lede">{{ page.lede }}</p>
-  <p>{{ page.intro | missions }}</p>
-</div>
-{%- if page.figure %}
-<figure class="row figure">
-  {%- if page.figure.svg %}
-  <div class="fig-wrap" role="img" aria-label="{{ page.figure.alt }}">{% include figures/{{ page.figure.svg }}.svg %}</div>
-  {%- else %}
-  <picture>
-    {%- if page.figure.webp %}
-    <source srcset="{{ page.figure.webp | relative_url }}" type="image/webp">
-    {%- endif %}
-    <img src="{{ page.figure.src | relative_url }}" width="{{ page.figure.width }}" height="{{ page.figure.height }}" alt="{{ page.figure.alt }}" loading="lazy" decoding="async">
-  </picture>
-  {%- endif %}
-  <figcaption>{{ page.figure.caption | missions }}{% if page.figure.doi %} <a href="https://doi.org/{{ page.figure.doi }}">doi:{{ page.figure.doi }}</a>.{% endif %}{% if page.figure.link %} <a href="{{ page.figure.link | relative_url }}">{{ page.figure.link_label }}</a>.{% endif %}</figcaption>
-</figure>
-{%- endif %}
-<section class="row" aria-labelledby="recent">
-  <h2 id="recent">Recent work</h2>
-  <ol class="entries">
-    {%- for r in page.recent %}
-      {%- assign pool = L[r.category] -%}
-      {%- assign e = pool | where: "id", r.id | first -%}
-      {%- if e %}
-      {%- include ledger_entry.html e=e category=r.category label=r.label when=r.date compact=true extra=r.extra %}
-      {%- endif %}
-    {%- endfor %}
-  </ol>
-</section>
-<section class="row" aria-labelledby="about">
-  <h2 id="about">About</h2>
-  <div class="prose">
-  {{ content }}
+
+  <!-- zone 3: typed highlights -->
+  <section class="highlights card" aria-labelledby="hl-title">
+    <h2 id="hl-title" class="zone-title">Highlights</h2>
+    <ol class="hl-list">
+      {%- for h in H.highlights %}
+      <li class="hl">
+        <a href="{{ h.url | relative_url }}">
+          <span class="hl-meta"><span class="tag tag--{{ h.tag }}">{{ h.label }}</span><span class="hl-when">{{ h.when }}</span></span>
+          <span class="hl-title">{{ h.title }}</span>
+          <span class="hl-text">{{ h.text }}</span>
+        </a>
+        {%- if h.thumb %}<img class="hl-thumb" src="{{ h.thumb | relative_url }}" alt="" role="presentation" width="96" height="64" loading="lazy">{% endif %}
+      </li>
+      {%- endfor %}
+    </ol>
+  </section>
+
+  <!-- strip: photographic evidence and the current line -->
+  <div class="strip">
+    <ul class="evidence" aria-label="Photographs">
+      {%- for ph in H.evidence %}
+      <li><a href="{{ ph.url | relative_url }}"><img src="{{ ph.src | relative_url }}" alt="{{ ph.alt }}" loading="lazy" decoding="async"><span>{{ ph.caption }}</span></a></li>
+      {%- endfor %}
+    </ul>
+    <p class="now"><span class="tag tag--software">Now</span><span>{{ H.now }}</span></p>
   </div>
 </section>
+
+<section class="section" id="record" aria-labelledby="record-title">
+  <div class="section-head">
+    <h2 id="record-title">Track record</h2>
+    <p>Funding won, projects led and international work, each linked to its record.</p>
+  </div>
+  <div class="record">
+    {%- for col in H.record %}
+    <article class="record-col card" style="--dot: var({{ col.colour }})" id="rec-{{ col.id }}">
+      <header><h3>{{ col.title }}</h3><span class="big">{{ col.count }} <small>{{ col.unit }}</small></span></header>
+      <ul>{% for it in col.items %}<li>{{ it }}</li>{% endfor %}</ul>
+    </article>
+    {%- endfor %}
+  </div>
+</section>
+
+<section class="section" id="map" aria-labelledby="map-title">
+  <div class="section-head">
+    <h2 id="map-title">Where the work took me</h2>
+    <p>Distances are true from Porto. Hover or tap a place to see what happened there.</p>
+  </div>
+  {% include travel-map.html %}
+</section>
+
+<section class="section" id="explore" aria-labelledby="explore-title">
+  <div class="section-head">
+    <h2 id="explore-title">Explore</h2>
+    <p>Demos, explainers and the stories behind the record.</p>
+  </div>
+  <div class="mosaic">
+    {%- for c in H.explore %}
+    <a class="card{% if c.size %} {{ c.size }}{% endif %}" href="{{ c.url | relative_url }}" data-spotlight>
+      {%- if c.img %}
+      <div class="media{% if c.light %} light{% endif %}"><img src="{{ c.img | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
+      {%- elsif c.art %}
+      <div class="media art">{% include figures/art-{{ c.art }}.svg %}</div>
+      {%- endif %}
+      <div class="card-body">
+        <span class="tag tag--{{ c.tag }}">{{ c.label }}</span>
+        <h3>{{ c.title | missions }}</h3>
+        <p>{{ c.text | missions }}</p>
+        <span class="go">Open</span>
+      </div>
+    </a>
+    {%- endfor %}
+  </div>
+</section>
+
+<section class="section" id="skills" aria-labelledby="skills-title">
+  <div class="section-head">
+    <h2 id="skills-title">What I work with</h2>
+    <p>Each skill points to the work that shows it.</p>
+  </div>
+  <div class="skills">
+    {%- assign icons = "skill-2026-ml-probabilistic-deep-learning:i-nn,skill-2026-uncertainty-calibration:i-gauge,skill-2026-data-engineering-at-scale:i-db,skill-2026-hpc:i-cpu,skill-2026-python-engineering:i-code,skill-2026-astronomy-data:i-telescope,skill-2026-web-visualisation:i-chart" | split: "," -%}
+    {%- for s in L.skills %}
+      {%- assign icon = "i-star" -%}
+      {%- for pair in icons %}{% assign kv = pair | split: ":" %}{% if kv[0] == s.id %}{% assign icon = kv[1] %}{% endif %}{% endfor -%}
+    <article class="skill card">
+      <h3><svg class="i" aria-hidden="true"><use href="#{{ icon }}"/></svg>{{ s.title }}</h3>
+      <p>{{ s.summary | default: s.tagline | missions }}</p>
+    </article>
+    {%- endfor %}
+  </div>
+</section>
+
+<section class="section" id="all" aria-labelledby="all-title">
+  <div class="section-head">
+    <h2 id="all-title">Everything, by date</h2>
+    <p>Papers, talks, funding, computing, observing, software and service from the public record.</p>
+  </div>
+  {% include timeline.html %}
+</section>
+
+</div>
