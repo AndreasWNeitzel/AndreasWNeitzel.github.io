@@ -6,6 +6,7 @@ description: Research software by Andreas W. Neitzel, with status, licence, vers
 lede: Research software I write and maintain, with status, licence and version where they are recorded.
 extra_links:
   sw-2026-starfold:
+    - {label: Interactive demo, url: /software/starfold-demo/}
     - {label: Held-out benchmark, url: /software/starfold-benchmark/}
 ---
 {%- assign L = site.data.ledger -%}
@@ -19,3 +20,20 @@ extra_links:
     {%- endfor %}
   </ol>
 </section>
+
+{%- assign sf = L.software | where: "id", "sw-2026-starfold" | first %}
+{%- if sf %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Starfold",
+  "codeRepository": "{{ sf.identifiers.repo }}",
+  "programmingLanguage": "Python",
+  "license": "https://opensource.org/licenses/MIT",
+  "version": "{{ sf.version }}",
+  "author": {"@id": "{{ site.url }}/#person"},
+  "url": "{{ site.url }}/software/"
+}
+</script>
+{%- endif %}

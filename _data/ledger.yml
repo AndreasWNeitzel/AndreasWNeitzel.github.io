@@ -168,6 +168,7 @@ publications:
   audiences:
   - academic
   - industry-ai
+  contribution: Bayes-factor test for the presence of a power excess against a model without one (Appendix D).
 - id: pub-2022-msc-thesis
   title: Determination of age and mass for seismic stars in the Ariel input catalog
   kind: thesis

@@ -26,23 +26,36 @@
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="{{ '/assets/js/theme.js' | relative_url }}" defer></script>
 {%- if page.url == "/" %}
+{%- assign p = site.data.person %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "{{ site.data.person.name }}",
-  "givenName": "{{ site.data.person.given_names }}",
-  "familyName": "{{ site.data.person.family_name }}",
-  "url": "{{ site.url }}",
-  "email": "mailto:{{ site.data.person.emails.personal }}",
-  "jobTitle": "PhD candidate in astronomy",
-  "affiliation": {"@type": "Organization", "name": "{{ site.data.person.affiliations[0].name }}"},
-  "sameAs": [
-    "https://orcid.org/{{ site.data.person.identifiers.orcid }}",
-    "https://scholar.google.com/citations?user={{ site.data.person.identifiers.google_scholar }}",
-    "https://github.com/{{ site.data.person.identifiers.github }}",
-    "https://www.linkedin.com/in/{{ site.data.person.identifiers.linkedin }}"
-  ]
+  "@type": "ProfilePage",
+  "url": "{{ site.url }}/",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": "{{ site.url }}/#person",
+    "name": "{{ p.name }}",
+    "alternateName": ["Andreas Neitzel", "A. W. Neitzel"],
+    "givenName": "Andreas",
+    "familyName": "{{ p.family_name }}",
+    "url": "{{ site.url }}/",
+    "email": "mailto:{{ p.emails.personal }}",
+    "jobTitle": "PhD candidate in astronomy",
+    "identifier": {"@type": "PropertyValue", "propertyID": "ORCID", "value": "{{ p.identifiers.orcid }}"},
+    "affiliation": [
+      {"@type": "Organization", "name": "Instituto de Astrofísica e Ciências do Espaço"},
+      {"@type": "CollegeOrUniversity", "name": "Universidade do Porto", "sameAs": "https://ror.org/043pwc612"}
+    ],
+    "knowsAbout": ["Galactic archaeology", "machine learning", "asteroseismology", "Gaia XP spectra"],
+    "sameAs": [
+      "https://orcid.org/{{ p.identifiers.orcid }}",
+      "https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}",
+      "https://github.com/{{ p.identifiers.github }}",
+      "https://www.linkedin.com/in/{{ p.identifiers.linkedin }}",
+      "https://openalex.org/A5076337148"
+    ]
+  }
 }
 </script>
 {%- endif %}

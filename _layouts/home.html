@@ -20,7 +20,7 @@ layout: default
     {%- endif %}
     <img src="{{ page.figure.src | relative_url }}" width="{{ page.figure.width }}" height="{{ page.figure.height }}" alt="{{ page.figure.alt }}" loading="lazy" decoding="async">
   </picture>
-  <figcaption>{{ page.figure.caption | missions }}{% if page.figure.doi %} <a href="https://doi.org/{{ page.figure.doi }}">doi:{{ page.figure.doi }}</a>.{% endif %}</figcaption>
+  <figcaption>{{ page.figure.caption | missions }}{% if page.figure.doi %} <a href="https://doi.org/{{ page.figure.doi }}">doi:{{ page.figure.doi }}</a>.{% endif %}{% if page.figure.link %} <a href="{{ page.figure.link | relative_url }}">{{ page.figure.link_label }}</a>.{% endif %}</figcaption>
 </figure>
 {%- endif %}
 <section class="row" aria-labelledby="recent">
@@ -30,7 +30,7 @@ layout: default
       {%- assign pool = L[r.category] -%}
       {%- assign e = pool | where: "id", r.id | first -%}
       {%- if e %}
-      {%- include ledger_entry.html e=e category=r.category label=r.label when=r.date compact=true %}
+      {%- include ledger_entry.html e=e category=r.category label=r.label when=r.date compact=true extra=r.extra %}
       {%- endif %}
     {%- endfor %}
   </ol>
