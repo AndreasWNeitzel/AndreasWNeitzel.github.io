@@ -4,7 +4,7 @@
 Usage: python3 scripts/site_check.py _site [--source .]
 
 Fails (exit 1) on: em or en dashes in rendered text, exclamation marks in prose,
-banned words, internal links or asset references that do not resolve, images
+banned phrases (plus any listed in _local/banned-words.txt), internal links or asset references that do not resolve, images
 without alt text, a generator meta tag, and leftover template placeholders.
 Only the standard library is used so the check runs anywhere.
 """
@@ -21,7 +21,7 @@ BANNED = [
     "seamless", "leverage", "unleash", "elevate", "top-tier", "lorem ipsum", "al-folio", "your name",
     "16% success", "MIST v1.2", "APOGEE-quality",
 ]
-TOOL_WORDS = re.compile(r"\b(claude|anthropic|copilot|chatgpt|openai|codex|gemini|an ai assistant|language model)\b", re.I)
+LOCAL_WORDS = Path(__file__).resolve().parent.parent / "_local" / "banned-words.txt"
 DASHES = re.compile("[–—]")
 SKIP_DIRS = {"stellar-explorer"}  # self-contained app with its own conventions
 
@@ -78,6 +78,9 @@ def main(argv: list[str]) -> int:
         print(__doc__)
         return 2
     site = Path(argv[1]).resolve()
+    banned = list(BANNED)
+    if LOCAL_WORDS.exists():
+        banned += [w.strip() for w in LOCAL_WORDS.read_text().splitlines() if w.strip() and not w.startswith("#")]
     findings: list[str] = []
     pages = [p for p in site.rglob("*.html") if not any(part in SKIP_DIRS for part in p.relative_to(site).parts)]
     for page in pages:
@@ -90,11 +93,9 @@ def main(argv: list[str]) -> int:
         if "!" in re.sub(r"\s+", " ", text):
             findings.append(f"{rel}: exclamation mark in text")
         low = text.lower()
-        for w in BANNED:
+        for w in banned:
             if w.lower() in low:
                 findings.append(f"{rel}: banned phrase {w!r}")
-        if TOOL_WORDS.search(text):
-            findings.append(f"{rel}: tool or vendor name in text")
         if parser.generator:
             findings.append(f"{rel}: generator meta tag present")
         if parser.images_without_alt:
