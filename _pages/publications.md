@@ -47,7 +47,7 @@ lede: Refereed papers, first-author first. Each entry links to the journal recor
     "isPartOf": {"@type": "Periodical", "name": "Astronomy and Astrophysics"},
     "author": [
       {%- for a in e.people %}
-      {% if a contains "Neitzel" and a contains "et al." == false %}{"@id": "{{ site.url }}/#person"}{% else %}{"@type": "Person", "name": {{ a | jsonify }}}{% endif %}{% unless forloop.last %},{% endunless %}
+      {% assign self = false %}{% if a contains "Neitzel" %}{% unless a contains "et al." %}{% assign self = true %}{% endunless %}{% endif %}{% if self %}{"@id": "{{ site.url }}/#person"}{% else %}{"@type": "Person", "name": {{ a | jsonify }}}{% endif %}{% unless forloop.last %},{% endunless %}
       {%- endfor %}
     ]
   }{% unless forloop.last %},{% endunless %}

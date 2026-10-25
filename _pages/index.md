@@ -8,8 +8,8 @@ intro: I build machine-learning tools that sort the stars measured by ESA's Gaia
 figure:
   src: /assets/figures/starfold/digits_groups.png
   webp: /assets/figures/starfold/digits_groups.webp
-  width: 1600
-  height: 928
+  width: 1645
+  height: 795
   alt: Map of 1,797 handwritten digits in ten coloured groups, each group labelled with one of its own handwritten digits.
   caption: "1,797 handwritten digits sorted into ten groups by Starfold without being told what any digit was; each group is labelled with one of its own digits, and points fade where the result is less certain. Exact: recorded run of Starfold 0.2.0 on the scikit-learn digits table, 10 groups found, 30 rows left unassigned, fade by the share of 32 refits in which a point kept its group."
   link: /software/starfold-demo/
