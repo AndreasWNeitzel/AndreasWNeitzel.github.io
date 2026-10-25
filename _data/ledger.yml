@@ -29,7 +29,7 @@ education:
   end_date: 2022-12
   identifiers:
     handle: 10216/147245
-  weight: 4
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -46,7 +46,7 @@ education:
   location: Porto, Portugal
   date: '2017'
   end_date: '2020'
-  weight: 3
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -62,11 +62,11 @@ positions:
   location: Bologna, Italy
   date: 2025-09
   end_date: 2026-03
-  summary: Six-month secondment in A. Miglio's group building simulation pipelines for the proposed HAYDN mission.
+  summary: Six-month secondment in A. Miglio's group building simulation pipelines for the proposed HAYDN mission, with regular visits to INAF Osservatorio Astronomico di Padova.
   details:
   - Built the noise-estimation and synthetic-catalogue tools (TRILEGAL, King-profile sampling) for globular and open clusters.
   - Ran the noise simulations on the Deucalion supercomputer and the University of Bologna clusters.
-  weight: 4
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -80,9 +80,10 @@ positions:
   end_date: present
   summary: Doctoral research on machine-learning methods for Galactic archaeology with Gaia, APOGEE and asteroseismic data.
   details:
+  - Developing JANUS, a neural network that predicts APOGEE-like stellar parameters and abundances from Gaia XP spectra, with a reliability score for each star.
+  - Released Starfold, an open-source package that finds stellar populations without labels and measures how often each one recurs.
   - Developer of the machine-learning pipelines of the FCT exploratory project ArqueoGal (2024.15303.PEX), PI T. L. Campante.
   - Built a characterisation pipeline that combines Gaia DR3, TESS, Kepler/K2 and 2MASS data with PARAM to estimate stellar ages.
-  - Co-author of the detection of solar-like oscillations in the K5 dwarf epsilon Indi, and observer with ESPRESSO at the VLT, Paranal, in May 2024.
   weight: 5
   audiences:
   - academic
@@ -98,13 +99,35 @@ positions:
   end_date: '2022'
   identifiers:
     reference: CIAAUP-08/2021-BI-M
-  summary: Implemented the small-frequency-separation routine in the Bayesian stellar characterisation code PARAM.
-  weight: 3
+  summary: Implemented the small-frequency-separation routine in the stellar characterisation code PARAM.
+  weight: 5
   audiences:
   - academic
   - industry-ai
   - industry-tech
 publications:
+- id: pub-2026-campante-gj570-gj783
+  title: EPRV asteroseismology of the K dwarfs GJ 570 A and GJ 783 A with ESPRESSO. Empirical mode-amplitude scaling in tension with 3D convection simulations
+  tagline: Oscillations measured in two nearby K dwarfs, at amplitudes that disagree with 3D convection models.
+  kind: article
+  role: co-author
+  venue: Astronomy and Astrophysics (accepted)
+  date: '2026-10-14'
+  people:
+  - T. L. Campante
+  - Y. Zhou
+  - Y. Li
+  - H. Kjeldsen
+  - R. R. Costa
+  - A. W. Neitzel
+  - et al.
+  identifiers:
+    arxiv: '2610.20985'
+    url: https://arxiv.org/abs/2610.20985
+  weight: 5
+  audiences:
+  - academic
+  contribution: Carried out the GJ 570 A ESPRESSO observations at Paranal (visitor mode, May 2024).
 - id: pub-2025-neitzel-manifold-learning
   title: Dissecting stellar populations with manifold learning. I. Validation of the method on a synthetic Milky Way-like galaxy
   tagline: A method for separating the Milky Way's stellar populations, tested on a synthetic galaxy.
@@ -167,7 +190,7 @@ publications:
   identifiers:
     doi: 10.1051/0004-6361/202449197
   summary: Detection of solar-like oscillations in the K5 dwarf epsilon Indi with the ESPRESSO spectrograph.
-  weight: 4
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -199,7 +222,7 @@ publications:
   identifiers:
     doi: 10.1051/0004-6361/202243405
   summary: Homogeneous stellar parameters for the Ariel target list, from the consortium's Stellar Characterisation working group.
-  weight: 4
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -222,7 +245,7 @@ presentations:
   - asteroseismology
   - gaia
   - tess
-  weight: 4
+  weight: 5
   audiences:
   - academic
 - id: pres-2026-09-enaa36-poster-janus
@@ -238,7 +261,7 @@ presentations:
   tags:
   - poster
   - enaa
-  weight: 2
+  weight: 3
   audiences:
   - academic
 - id: pres-2026-09-enaa36-pitch-janus
@@ -276,8 +299,9 @@ presentations:
   identifiers:
     doi: 10.5281/zenodo.23263454
     zenodo: '23263454'
+    url: https://conferences.au.dk/tasc10-kasc17
   summary: Poster deposited on Zenodo under CC BY 4.0.
-  weight: 4
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -287,12 +311,12 @@ presentations:
   tagline: Learning the chemistry of oscillating red giants from Gaia's low-resolution spectra.
   kind: oral
   role: oral
-  venue: TASC10/KASC17 workshop
+  venue: TASC10/KASC17, 10th TESS and 17th Kepler Asteroseismic Science Consortium Workshop
   location: Aarhus, Denmark
   date: 2026-07
   identifiers:
     doi: 10.5281/zenodo.23262691
-    url: https://doi.org/10.5281/zenodo.23262691
+    url: https://conferences.au.dk/tasc10-kasc17
   summary: Contributed talk. The slides are on Zenodo under CC BY 4.0.
   tags:
   - talk
@@ -300,7 +324,40 @@ presentations:
   - gaia
   - tess
   - zenodo
-  weight: 4
+  weight: 5
+  audiences:
+  - academic
+- id: pres-2026-05-stars-day-janus
+  title: JANUS presentation, Stars Day
+  kind: seminar
+  role: oral
+  venue: IA Stars Day 2026, Instituto de Astrofísica e Ciências do Espaço
+  location: Porto, Portugal
+  date: '2026-05-05'
+  summary: Talk on JANUS at the institute meeting of the IA Stellar Astrophysics group.
+  weight: 2
+  audiences:
+  - academic
+- id: pres-2026-04-dfa-week-haydn
+  title: Simulação fotométrica de enxames estelares densos para o HAYDN
+  tagline: Photometric simulation of dense star clusters for the HAYDN mission (in Portuguese).
+  kind: seminar
+  role: oral
+  venue: DFA Week 2026, Departamento de Física e Astronomia, FCUP
+  location: Porto, Portugal
+  date: '2026-04-27'
+  weight: 2
+  audiences:
+  - academic
+- id: pres-2025-enaa35-oral
+  title: Novel Approaches to Galactic Archaeology with Machine Learning
+  tagline: New machine-learning approaches to reconstructing the Milky Way's history.
+  kind: oral
+  role: oral
+  venue: ENAA XXXV, National Meeting of Astronomy and Astrophysics
+  location: Lisbon, Portugal
+  date: 2025-09
+  weight: 3
   audiences:
   - academic
 - id: pres-2024-11-imas11-oral
@@ -313,7 +370,7 @@ presentations:
   date: '2024-11-26'
   identifiers:
     url: https://www.granadacongresos.com/ima
-  weight: 3
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -345,7 +402,7 @@ presentations:
   identifiers:
     doi: 10.5281/zenodo.13376136
     zenodo: '13376136'
-  weight: 1
+  weight: 2
   audiences:
   - academic
 - id: pres-2024-07-tasc8-oral
@@ -365,7 +422,7 @@ presentations:
     doi: 10.5281/zenodo.12920468
     zenodo: '12920468'
     ads: 2024tkas.confE..96N
-  weight: 4
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -416,6 +473,67 @@ presentations:
   audiences:
   - academic
 funding:
+- id: fund-2026-10-cpca-a1-deucalion
+  title: 'FCT Advanced Computing Project 2026.08382.CPCA.A1: JANUS on Deucalion, Gaia DR3'
+  tagline: National computing allocation to run JANUS on 220 million Gaia DR3 spectra on Deucalion.
+  kind: computing
+  role: responsible investigator
+  venue: Deucalion (Minho Advanced Computing Centre)
+  date: 2026-10
+  people:
+  - T. L. Campante (co-responsible investigator)
+  identifiers:
+    reference: 2026.08382.CPCA.A1
+  summary: 'Approved national computing allocation to apply JANUS to the Gaia DR3 XP spectra of about 220 million stars: 99,840 core-hours on the ARM partition, 1,500 A100 GPU-hours and 10 TB for 12 months.'
+  details:
+  - Approved under call FCT/CPCA/2025/01.
+  tags:
+  - hpc
+  - deucalion
+  - gaia-dr3
+  - fct
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  funder: FCT I.P.
+  pi: Andreas W. Neitzel (responsible investigator); Tiago L. Campante (co-responsible investigator)
+  numbers:
+    core_hours: 99840
+    gpu_hours: 1500
+    stars_millions: 220
+    months: 12
+- id: fund-2026-10-cpca-a2-marenostrum
+  title: 'FCT Advanced Computing Project 2026.08362.CPCA.A2: JANUS on MareNostrum 5, Gaia DR4'
+  tagline: National computing allocation to run JANUS on Gaia DR4 spectra on MareNostrum 5.
+  kind: computing
+  role: responsible investigator
+  venue: MareNostrum 5 (Barcelona Supercomputing Center)
+  date: 2026-10
+  people:
+  - T. L. Campante (co-responsible investigator)
+  identifiers:
+    reference: 2026.08362.CPCA.A2
+  summary: 'Approved national computing allocation to apply JANUS to the Gaia DR4 XP spectra of about 1.8 billion stars: 1,002,400 core-hours on the general-purpose partition, 1,000 H100 GPU-hours and 25 TB for 12 months.'
+  details:
+  - Approved under call FCT/CPCA/2025/01.
+  tags:
+  - hpc
+  - marenostrum
+  - gaia-dr4
+  - fct
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  funder: FCT I.P.
+  pi: Andreas W. Neitzel (responsible investigator); Tiago L. Campante (co-responsible investigator)
+  numbers:
+    core_hours: 1002400
+    gpu_hours: 1000
+    months: 12
 - id: fund-2026-09-arqueogal-bi-d-fellowship
   title: PhD research fellowship under the FCT project ArqueoGal
   tagline: Twelve-month PhD research fellowship paid by the ArqueoGal project.
@@ -425,7 +543,7 @@ funding:
   end_date: '2027-08-31'
   identifiers:
     reference: CIAAUP-17/2026-BI-D
-  weight: 4
+  weight: 5
   audiences:
   - academic
   funder: FCT, through project 2024.15303.PEX, hosted at IA
@@ -434,13 +552,13 @@ funding:
   title: 'FCT Exploratory Research Project ArqueoGal: Unraveling the evolutionary history of the Milky Way with Galactic Archaeology'
   tagline: FCT exploratory project on the Milky Way's history. Developer of its machine-learning pipelines.
   kind: grant
-  role: participant
+  role: Co-Investigator (team member)
   date: '2026-02-16'
   end_date: '2027-08-15'
   identifiers:
     reference: 2024.15303.PEX
     doi: 10.54499/2024.15303.PEX
-  summary: Named participant and developer of the project's machine-learning pipelines, with allocations on the Stellar Population Classification and Galactic Modeling tasks.
+  summary: Co-Investigator (team member) and developer of the project's machine-learning pipelines, with allocations on the Stellar Population Classification and Galactic Modeling tasks. PI T. L. Campante.
   weight: 5
   audiences:
   - academic
@@ -450,7 +568,7 @@ funding:
   funder: Fundação para a Ciência e a Tecnologia
   pi: Tiago L. Campante
 - id: fund-2025-hpcvlab-deucalion-team-member
-  title: Deucalion development access under the University of Porto HPCvLAB project 2025.00007.HPCVLAB.UPORTO
+  title: Deucalion development access, University of Porto HPCvLAB
   tagline: Access to Deucalion, Portugal's national supercomputer, for model training and noise simulations.
   kind: computing
   role: team-member
@@ -500,7 +618,7 @@ funding:
   end_date: '2022'
   identifiers:
     reference: CIAAUP-08/2021-BI-M
-  weight: 3
+  weight: 5
   audiences:
   - academic
   funder: Fundação para a Ciência e a Tecnologia, through IA/CAUP
@@ -512,7 +630,7 @@ awards:
   institution: Faculdade de Ciências da Universidade do Porto
   location: Porto, Portugal
   date: '2023'
-  weight: 4
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -535,7 +653,7 @@ software:
   - documentation
   - sphinx
   - technical-writing
-  weight: 3
+  weight: 2
   audiences:
   - academic
   - industry-tech
@@ -667,7 +785,7 @@ service:
   end_date: '2024-07-19'
   identifiers:
     url: https://www.iastro.pt/research/conferences/tasc8-kasc15/
-  weight: 3
+  weight: 4
   audiences:
   - academic
   - industry-tech
@@ -703,7 +821,7 @@ teaching:
   identifiers:
     url: https://e-fisica.fc.up.pt
   summary: One-week summer school for secondary-school students.
-  weight: 2
+  weight: 3
   audiences:
   - academic
 - id: teach-2025-06-ia-summer-programme
@@ -716,7 +834,7 @@ teaching:
   identifiers:
     url: https://divulgacao.iastro.pt/en/summerprogram2025-en/
   summary: Three-week supervision of university students on Galactic archaeology and machine learning with synthetic data.
-  weight: 3
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -731,7 +849,7 @@ teaching:
   identifiers:
     url: https://e-fisica.fc.up.pt/edicoes/19a-edicao.1.html
   summary: One-week summer school for secondary-school students.
-  weight: 2
+  weight: 3
   audiences:
   - academic
 - id: teach-2024-07-ia-summer-programme
@@ -744,7 +862,7 @@ teaching:
   identifiers:
     url: https://divulgacao.iastro.pt/pt/ia-summer-program-2024-projects-list/
   summary: Three-week supervision of university students on Galactic archaeology and machine learning with synthetic data.
-  weight: 3
+  weight: 5
   audiences:
   - academic
   - industry-ai
@@ -759,7 +877,7 @@ teaching:
   identifiers:
     url: https://e-fisica.fc.up.pt/index.html
   summary: One-week summer school for secondary-school students.
-  weight: 2
+  weight: 3
   audiences:
   - academic
 outreach:
@@ -781,7 +899,7 @@ memberships:
   role: member
   date: '2022'
   end_date: present
-  weight: 2
+  weight: 3
   audiences:
   - academic
 - id: mem-2022-kasoc
@@ -790,7 +908,7 @@ memberships:
   role: member
   date: '2022'
   end_date: present
-  weight: 2
+  weight: 3
   audiences:
   - academic
 - id: mem-2021-ariel-science-consortium
@@ -799,7 +917,7 @@ memberships:
   role: member
   date: '2021'
   end_date: present
-  weight: 3
+  weight: 5
   audiences:
   - academic
 events:
@@ -827,60 +945,82 @@ events:
   audiences:
   - academic
 - id: ev-2024-05-paranal-espresso-observing-run
-  title: Observing run with ESPRESSO at the VLT, ESO Paranal Observatory
+  title: Visiting astronomer, ESPRESSO at the VLT, ESO Paranal Observatory
+  tagline: Six visitor-mode nights with ESPRESSO at the VLT, observing GJ 570 A for PI T. L. Campante.
   kind: observing-run
-  role: observer
+  role: visiting astronomer
   location: Paranal, Chile
-  date: '2024-05-02'
-  summary: On-site observer for a cool-dwarf asteroseismology programme.
-  weight: 3
-  audiences:
-  - academic
-skills:
-- id: skill-2026-python-engineering
-  title: Python engineering for research software
-  kind: programming
-  date: '2026'
-  summary: Typed Python packages with tests, continuous integration, locked environments, provenance stamps, Sphinx documentation.
+  date: '2024-05-04'
+  end_date: '2024-05-12'
+  identifiers:
+    reference: ESO 113.26FX.002
+    url: https://arxiv.org/abs/2610.20985
+  summary: Visitor-mode run 113.26FX.002, six nights from 6 to 12 May 2024, on the K dwarf GJ 570 A for PI T. L. Campante.
   weight: 5
   audiences:
+  - academic
+  - industry-tech
+skills:
+- id: skill-2026-python-engineering
+  title: Software engineering
+  tagline: Typed, tested Python packages with continuous integration, locked environments and Sphinx manuals.
+  kind: programming
+  date: '2026'
+  summary: Typed, tested Python packages with continuous integration, locked environments and Sphinx manuals.
+  weight: 5
+  audiences:
+  - academic
   - industry-ai
   - industry-tech
   - quant
-  - academic
   evidence:
   - sw-2026-starfold
   - sw-2026-janus-p15
+- id: skill-2026-web-visualisation
+  title: Visualisation and web
+  tagline: matplotlib and Plotly, and interactive browser applications in WebGL, Canvas2D and SVG.
+  kind: web
+  date: '2026'
+  summary: matplotlib and Plotly figures, and interactive browser applications in WebGL, Canvas2D and SVG.
+  weight: 5
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+  evidence:
+  - sw-2026-stellar-explorer
 - id: skill-2026-ml-probabilistic-deep-learning
-  title: 'Probabilistic deep learning: conditional normalising flows, ensembles, mixture uncertainties'
+  title: Machine learning
+  tagline: Normalising-flow ensembles in PyTorch, gradient boosting, UMAP, HDBSCAN and Optuna search.
   kind: ml
   date: '2026'
-  summary: An ensemble of flow-based neural networks that returns, for each star, a joint distribution over 25 stellar labels and how much the networks disagree.
+  summary: Normalising-flow ensembles in PyTorch, gradient boosting, manifold learning (UMAP) and density-based clustering (HDBSCAN), with Optuna search.
   tags:
   - pytorch
   - zuko
   - normalising-flows
   weight: 5
   audiences:
+  - academic
   - industry-ai
   - industry-tech
   - quant
-  - academic
   evidence:
   - JANUS_P15/p15/train/flow_head.py
   - JANUS_P15/p15/train/run_flow.py
-  numbers:
-    labels: 25
 - id: skill-2026-uncertainty-calibration
-  title: 'Uncertainty calibration and reliability: isotonic calibration, gradient boosting, selection tests, coverage'
+  title: Uncertainty and reliability
+  tagline: Isotonic calibration, coverage and selection tests, nearest-neighbour novelty, covariance propagation.
   kind: ml
   date: '2026'
-  summary: A calibrated per-star probability that a prediction is wrong (cross-fitted gradient boosting with isotonic calibration), checked with interval-coverage and selection tests.
+  summary: Isotonic calibration of per-star error probabilities, interval-coverage and selection tests, nearest-neighbour novelty for out-of-distribution stars, and covariance propagation through wavelet projections.
   tags:
   - calibration
   - scikit-learn
   weight: 5
   audiences:
+  - academic
   - industry-ai
   - industry-tech
   - quant
@@ -888,29 +1028,19 @@ skills:
   - JANUS_P15/p15/trust/
   - JANUS_P15/scripts/home_stretch/v15_1_ph_frozen.py
   - JANUS_P15/scripts/home_stretch/v3_rank_calibration.py
-- id: skill-2026-out-of-distribution-detection
-  title: 'Out-of-distribution detection: nearest-neighbour novelty in a Gaussianised input space'
-  kind: ml
-  date: '2026'
-  summary: A per-star novelty score from the distance to the training set, tested on survey samples outside the training selection.
-  weight: 4
-  audiences:
-  - industry-ai
-  - industry-tech
-  - quant
-  evidence:
-  - JANUS_P15/p15/trust/novelty.py
 - id: skill-2026-data-engineering-at-scale
-  title: 'Data engineering at scale: archive ingestion, Parquet pipelines, a manifest-driven data store with provenance'
+  title: Data at scale
+  tagline: Whole-release Gaia ingestion into Parquet, manifest-resolved datasets, provenance on every product.
   kind: data
   date: '2026'
-  summary: Ingestion of whole Gaia releases into a columnar data store, with manifest-resolved datasets, duplicate checks and provenance on every product.
+  summary: Ingestion of whole Gaia releases into Parquet shards, with manifest-resolved datasets, duplicate checks and provenance on every product.
   tags:
   - pyarrow
   - parquet
   - tap
-  weight: 4
+  weight: 5
   audiences:
+  - academic
   - industry-ai
   - industry-tech
   - quant
@@ -919,66 +1049,31 @@ skills:
   - JANUS_P15/docs/DATA_STORE_SPEC.md
   - JANUS_P15/p15/ingest/
   - JANUS_P15/scripts/fetch/
-- id: skill-2026-web-visualisation
-  title: Scientific visualisation and browser applications
-  kind: web
-  date: '2026'
-  summary: matplotlib and Plotly figures, and browser applications in Canvas2D with HDF5 data read in the browser.
-  weight: 3
-  audiences:
-  - industry-tech
-  - industry-ai
-  - academic
-  evidence:
-  - sw-2026-stellar-explorer
-- id: skill-2026-signal-processing-noise-propagation
-  title: 'Signal processing: wavelet bases, linear noise propagation, covariance handling'
-  kind: data
-  date: '2026'
-  summary: Spectra projected on a fixed wavelet basis, with the measurement covariance carried through the same linear map and one code path for training and inference.
-  weight: 3
-  audiences:
-  - industry-ai
-  - industry-tech
-  - quant
-  evidence:
-  - JANUS_P15/p15/preprocess/chain.py
-  - JANUS_P15/p15/features/build_bases.py
-- id: skill-2026-unsupervised-learning
-  title: Unsupervised learning and manifold methods
-  kind: ml
-  date: '2025'
-  summary: UMAP, HDBSCAN, Optuna search, stability and recurrence measurement, matched-null calibration.
-  weight: 5
-  audiences:
-  - industry-ai
-  - industry-tech
-  - quant
-  - academic
-  evidence:
-  - pub-2025-neitzel-manifold-learning
-  - sw-2026-starfold
 - id: skill-2026-hpc
   title: High-performance computing
+  tagline: Slurm on ARM, x86 and GPU partitions (Deucalion, University of Bologna clusters), CUDA and RAPIDS.
   kind: hpc
   date: '2025'
-  summary: Slurm jobs on the ARM, x86 and GPU partitions of Deucalion and on the University of Bologna clusters, for neural-network training, catalogue-scale scoring and photometric-noise simulations. CUDA and RAPIDS on GPUs.
-  weight: 4
+  summary: Slurm on the ARM, x86 and GPU partitions of Deucalion and the University of Bologna clusters, with CUDA and RAPIDS.
+  weight: 5
   audiences:
+  - academic
   - industry-ai
   - industry-tech
   - quant
-  - academic
   evidence:
   - fund-2025-hpcvlab-deucalion-team-member
   - fund-2026-10-cpca-a1-deucalion
   - fund-2026-10-cpca-a2-marenostrum
 - id: skill-2026-astronomy-data
-  title: Survey data and stellar modelling tools
+  title: Astronomy data and models
+  tagline: Gaia, APOGEE, GALAH, LAMOST, TESS and Kepler with PARAM, MESA, GYRE, TRILEGAL, galpy, astropy.
   kind: astronomy
   date: '2022'
-  summary: 'Gaia DR3 (astrometry, RVS, XP spectra, GSP-Spec), APOGEE, LAMOST, GALAH, 2MASS, and TESS and Kepler/K2 asteroseismology. Tools: astropy, galpy, TOPCAT, ADQL, PARAM, MESA, TRILEGAL, MWDUST.'
-  weight: 4
+  summary: Gaia, APOGEE, GALAH, LAMOST, TESS and Kepler data with PARAM, MESA, GYRE, TRILEGAL, galpy and astropy.
+  weight: 5
   audiences:
   - academic
   - industry-ai
+  - industry-tech
+  - quant

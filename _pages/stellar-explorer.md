@@ -6,11 +6,12 @@ nav_section: Software
 description: A browser app that shows one stellar evolutionary track computed with MESA and GYRE.
 lede: Stellar Explorer follows one star of the Sun's mass through its life, using a MESA r24.08.1 track with non-radial oscillation modes from GYRE.
 ---
-<div class="row">
+<div class="row se-panel">
   <div class="prose">
     <p>The track is a solar-metallicity, 1 solar-mass run from pre-main-sequence contraction to white-dwarf cooling. On first load the app fetches the track, an HDF5 file of about 33 MB, from a companion repository and decodes it in the browser. It needs no server or installation and uploads nothing.</p>
     <p class="no-print"><a class="button" href="{{ '/stellar-explorer/app.html' | relative_url }}">Open Stellar Explorer (about 33 MB)</a></p>
   </div>
+  <figure class="panel">{% include figures/art-hr.svg %}<figcaption class="credit">Schematic of the track the app follows, from the main sequence through the red-giant branch to the white dwarf.</figcaption></figure>
 </div>
 <section class="row" aria-labelledby="shows">
   <h2 id="shows">What it shows</h2>

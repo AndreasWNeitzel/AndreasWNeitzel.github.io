@@ -2,33 +2,43 @@
 layout: page
 permalink: /publications/
 title: Publications
-description: Refereed papers by Andreas W. Neitzel, with DOI and arXiv links.
-lede: Refereed papers, first-author papers first, each linked to its journal record by DOI and to arXiv where a preprint exists.
+description: Refereed papers by Andreas W. Neitzel, with DOI and arXiv links, his contribution to each, and plain-language explainers.
+lede: Four refereed papers in Astronomy and Astrophysics, one as first author, each with my contribution stated and a plain-language explainer.
 ---
 {%- assign L = site.data.ledger -%}
-<section class="row" aria-labelledby="refereed">
-  <h2 id="refereed">Refereed papers</h2>
-  {% bibliography %}
+<section class="section" aria-labelledby="first">
+  <div class="section-head"><h2 id="first">First author</h2></div>
+  <div class="bib-list">{% bibliography --query @*[lead=first] %}</div>
 </section>
-{%- assign prep = L.publications | where: "kind", "in-preparation" -%}
-{%- if prep.size > 0 %}
-<section class="row" aria-labelledby="inprep">
-  <h2 id="inprep">In preparation</h2>
-  <ol class="entries">
-    {%- for e in prep %}
-    {%- include ledger_entry.html e=e category="publications" label="in preparation" %}
-    {%- endfor %}
-  </ol>
+<section class="section" aria-labelledby="co">
+  <div class="section-head"><h2 id="co">Co-author</h2><p>Each entry states what I did in the paper.</p></div>
+  <div class="bib-list">{% bibliography --query @*[lead=co] %}</div>
 </section>
-{%- endif %}
-{%- assign theses = L.publications | where: "kind", "thesis" -%}
-{%- if theses.size > 0 %}
-<section class="row" aria-labelledby="thesis">
-  <h2 id="thesis">Thesis</h2>
-  <ol class="entries">
-    {%- for e in theses %}
-    {%- include ledger_entry.html e=e category="publications" %}
+
+<section class="section" id="explainers" aria-labelledby="explainers-title">
+  <div class="section-head"><h2 id="explainers-title">Explainers</h2><p>What each paper found and what I did, for readers outside astronomy.</p></div>
+  <div class="mosaic">
+    {%- assign ps = site.papers | sort: "order" -%}
+    {%- for x in ps %}
+    <a class="card{% if forloop.first %} wide{% endif %}" href="{{ x.url | relative_url }}" data-spotlight>
+      {%- if x.figure %}<div class="media light"><img src="{{ x.figure | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-clusters.svg %}</div>{% endif %}
+      <div class="card-body">
+        <span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>
+        <h3>{{ x.headline | missions }}</h3>
+        <p>{{ x.title | missions | truncate: 120 }}</p>
+        <span class="go">Read the explainer</span>
+      </div>
+    </a>
     {%- endfor %}
+  </div>
+</section>
+
+{%- assign other = L.publications | where_exp: "e", "e.kind == 'data' or e.kind == 'thesis'" -%}
+{%- if other.size > 0 %}
+<section class="section" aria-labelledby="other">
+  <div class="section-head"><h2 id="other">Thesis and data</h2></div>
+  <ol class="entries">
+    {%- for e in other %}{% include ledger_entry.html e=e category="publications" %}{% endfor %}
   </ol>
 </section>
 {%- endif %}
@@ -40,8 +50,12 @@ lede: Refereed papers, first-author papers first, each linked to its journal rec
   {
     "@context": "https://schema.org",
     "@type": "ScholarlyArticle",
+    {%- if e.identifiers.doi %}
     "@id": "https://doi.org/{{ e.identifiers.doi }}",
     "sameAs": ["https://doi.org/{{ e.identifiers.doi }}"{% if e.identifiers.arxiv %}, "https://arxiv.org/abs/{{ e.identifiers.arxiv }}"{% endif %}],
+    {%- else %}
+    "@id": "https://arxiv.org/abs/{{ e.identifiers.arxiv }}",
+    {%- endif %}
     "headline": {{ e.title | jsonify }},
     "datePublished": "{{ e.date | slice: 0, 4 }}",
     "isPartOf": {"@type": "Periodical", "name": "Astronomy and Astrophysics"},

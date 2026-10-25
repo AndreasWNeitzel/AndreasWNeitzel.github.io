@@ -1,103 +1,62 @@
 {%- assign e = include.e -%}
 {%- assign cat = include.category -%}
 {%- assign ids = e.identifiers -%}
-{%- capture label -%}
-  {%- if include.label -%}{{ include.label }}
-  {%- elsif cat == "presentations" -%}
-    {%- case e.kind -%}
-      {%- when "oral" -%}talk{%- when "invited" -%}invited talk{%- when "poster" -%}poster{%- when "pitch" -%}poster pitch{%- when "seminar" -%}seminar{%- when "splinter" -%}splinter talk{%- else -%}{{ e.kind }}
-    {%- endcase -%}
-    {%- if e.role == "co-author" %}, co-author{% endif -%}
-  {%- elsif cat == "software" -%}
-    {%- if e.status -%}{{ e.status }}{%- elsif e.kind == "package" and e.version -%}released{%- elsif e.kind == "pipeline" -%}public repository{%- elsif e.kind == "app" -%}available{%- else -%}in development{%- endif -%}
-  {%- elsif cat == "publications" -%}
-    {%- if e.kind == "thesis" -%}MSc thesis{%- elsif e.kind == "data" -%}data{%- elsif e.role == "first-author" -%}first author{%- else -%}co-author{%- endif -%}
-  {%- elsif cat == "funding" -%}
-    {%- if e.kind -%}{{ e.kind }}{%- endif -%}
-  {%- endif -%}
-{%- endcapture -%}
-{%- assign label = label | strip -%}
-{%- capture status -%}
-  {%- if e.status -%}{{ e.status }}{%- elsif e.kind == "package" and e.version -%}released{%- elsif e.kind == "pipeline" -%}public repository{%- elsif e.kind == "app" -%}available{%- else -%}in development{%- endif -%}
-{%- endcapture -%}
-{%- assign status = status | strip -%}
-{%- if include.when -%}{%- assign when = include.when -%}{%- else -%}{%- assign when = e | span -%}{%- endif -%}
-<li>
-  <p class="when"><span>{{ when }}</span>{% if label != "" %}<span>{{ label }}</span>{% endif %}</p>
-  {%- if cat == "software" %}
-  <h3 class="title">{{ e.title | missions }}</h3>
-  {%- else %}
+{%- assign k = e.kind | default: "" -%}
+{%- case cat -%}
+  {%- when "presentations" -%}{%- if k == "poster" or k == "pitch" -%}{%- assign tg = "poster" -%}{%- assign lb = k | replace: "pitch", "poster pitch" -%}{%- elsif k == "seminar" -%}{%- assign tg = "talk" -%}{%- assign lb = "seminar" -%}{%- else -%}{%- assign tg = "talk" -%}{%- assign lb = "talk" -%}{%- endif -%}{%- if e.role == "co-author" -%}{%- assign lb = lb | append: " · co-author" -%}{%- endif -%}
+  {%- when "publications" -%}{%- assign tg = "paper" -%}{%- if k == "thesis" -%}{%- assign lb = "MSc thesis" -%}{%- elsif k == "data" -%}{%- assign tg = "data" -%}{%- assign lb = "data" -%}{%- elsif e.role == "first-author" -%}{%- assign lb = "first author" -%}{%- else -%}{%- assign lb = "co-author" -%}{%- endif -%}
+  {%- when "funding" -%}{%- if k == "computing" -%}{%- assign tg = "hpc" -%}{%- assign lb = "HPC" -%}{%- elsif k == "grant" -%}{%- assign tg = "grant" -%}{%- assign lb = "project" -%}{%- else -%}{%- assign tg = "grant" -%}{%- assign lb = "fellowship" -%}{%- endif -%}
+  {%- when "software" -%}{%- assign tg = "software" -%}{%- if e.status -%}{%- assign lb = e.status -%}{%- elsif k == "package" and e.version -%}{%- assign lb = "released" -%}{%- elsif k == "app" -%}{%- assign lb = "live" -%}{%- elsif k == "docs" -%}{%- assign lb = "manual" -%}{%- else -%}{%- assign lb = "in development" -%}{%- endif -%}
+  {%- when "events" -%}{%- if k == "observing-run" -%}{%- assign tg = "observing" -%}{%- assign lb = "observing" -%}{%- else -%}{%- assign tg = "event" -%}{%- assign lb = k -%}{%- endif -%}
+  {%- when "awards" -%}{%- assign tg = "award" -%}{%- assign lb = "award" -%}
+  {%- when "positions" -%}{%- assign tg = "position" -%}{%- assign lb = "position" -%}{%- if k == "visiting" -%}{%- assign lb = "abroad" -%}{%- endif -%}
+  {%- when "education" -%}{%- assign tg = "position" -%}{%- assign lb = "degree" -%}
+  {%- when "memberships" -%}{%- assign tg = "membership" -%}{%- assign lb = "consortium" -%}
+  {%- when "teaching" -%}{%- assign tg = "teaching" -%}{%- assign lb = "teaching" -%}
+  {%- when "service" -%}{%- assign tg = "service" -%}{%- if e.role == "chair" -%}{%- assign lb = "chair" -%}{%- else -%}{%- assign lb = "organiser" -%}{%- endif -%}
+  {%- else -%}{%- assign tg = "service" -%}{%- assign lb = cat -%}
+{%- endcase -%}
+{%- if include.label %}{% assign lb = include.label %}{% endif -%}
+{%- if include.when -%}{%- assign when = include.when -%}{%- else -%}{%- assign d0 = e.date | month_year -%}{%- if e.end_date -%}{%- assign d1 = e.end_date | month_year -%}{%- if d1 == d0 -%}{%- assign when = d0 -%}{%- else -%}{%- assign when = d0 | append: " to " | append: d1 -%}{%- endif -%}{%- else -%}{%- assign when = d0 -%}{%- endif -%}{%- endif -%}
+<li class="entry" id="{{ e.id }}">
+  <div class="when"><span>{{ when }}</span><span class="tag tag--{{ tg }}">{{ lb }}</span></div>
   <p class="title">{{ e.title | missions }}</p>
-  {%- endif %}
   {%- capture meta -%}
     {%- if cat == "presentations" -%}
-      {%- if e.people and e.people.size > 1 -%}
-        {%- if e.role == "co-author" -%}{{ e.people | join: ", " | initials }}. {% else -%}With {{ e.people | slice: 1, 999 | join: ", " | initials }}. {% endif -%}
-      {%- endif -%}
-      {{ e.venue }}{% if e.location %}. {{ e.location }}{% endif %}.
-    {%- elsif cat == "publications" -%}
-      {%- if e.people -%}{{ e.people | join: ", " | initials }}. {% endif -%}
-      {%- if e.venue -%}<i>{{ e.venue | split: ", " | first }}</i>{% assign rest = e.venue | split: ", " | slice: 1, 999 | join: ", " %}{% if rest != "" %}, {{ rest }}{% endif %}.{% endif -%}
-      {%- if e.summary %} {{ e.summary }}{% endif -%}
+      {%- if e.people and e.people.size > 1 -%}{%- if e.role == "co-author" -%}{{ e.people | join: ", " | initials }}. {% else -%}With {{ e.people | slice: 1, 999 | join: ", " | initials }}. {% endif -%}{%- endif -%}
+      {{ e.venue }}{% if e.location %} · {{ e.location }}{% endif %}
     {%- elsif cat == "funding" -%}
-      {%- if ids.reference -%}{{ ids.reference }}. {% endif -%}
-      {%- if e.funder -%}{{ e.funder }}. {% endif -%}
-      {%- if e.pi -%}PI {{ e.pi | initials }}. {% endif -%}
-      {%- if e.role and e.role != "fellow" -%}{{ e.role | replace: "-", " " | capitalize }}. {% endif -%}
-      {{ e.summary }}
+      {%- if ids.reference -%}{{ ids.reference }} · {% endif -%}{%- if e.funder -%}{{ e.funder }}{% endif -%}{%- if e.role and e.role != "fellow" %} · {{ e.role | replace: "team-member", "team member" }}{% endif -%}{%- if e.pi and k != "computing" %} · PI {{ e.pi | initials }}{% elsif e.pi %} · co-responsible investigator T.&nbsp;L.&nbsp;Campante{% endif -%}
     {%- elsif cat == "education" -%}
-      {{ e.institution }}{% if e.location %}, {{ e.location }}{% endif %}.
-      {%- if e.grade %} Final grade {{ e.grade }}.{% endif -%}
-      {%- if e.thesis %} Thesis: {{ e.thesis | missions }}.{% endif -%}
-      {%- if e.advisors %} Advisors: {{ e.advisors | join: ", " | initials }}.{% endif -%}
-      {%- if e.summary and e.thesis == nil %} {{ e.summary }}{% endif -%}
+      {{ e.institution }}{% if e.location %} · {{ e.location }}{% endif %}{%- if e.grade %} · final grade {{ e.grade }}{% endif -%}
     {%- elsif cat == "software" -%}
     {%- else -%}
-      {%- assign where = e.institution | default: e.venue -%}
-      {%- if where -%}{{ where | missions }}{% if e.location %}, {{ e.location }}{% endif %}.{% endif -%}
-      {%- if ids.reference %} {{ ids.reference }}.{% endif -%}
-      {%- if e.summary %} {{ e.summary | missions }}{% endif -%}
+      {%- assign where = e.institution | default: e.venue -%}{%- if where -%}{{ where | missions }}{% endif -%}{%- if e.location %}{% if where %} · {% endif %}{{ e.location }}{% endif -%}
     {%- endif -%}
   {%- endcapture -%}
   {%- assign meta = meta | strip -%}
-  {%- if cat == "software" %}
-  <p class="meta">{% if include.compact and e.tagline %}{{ e.tagline | missions }}{% else %}{{ e.summary | missions }}{% endif %}</p>
+  {%- if meta != "" %}<p class="meta">{{ meta }}</p>{% endif %}
+  {%- if include.compact and e.tagline %}
+  <p class="note">{{ e.tagline | missions }}</p>
+  {%- elsif e.summary %}
+  <p class="note">{{ e.summary | missions }}</p>
+  {%- endif %}
+  {%- if cat == "education" and e.thesis %}<p class="note">Thesis: {{ e.thesis | missions }}.{% if e.advisors %} Advisors: {{ e.advisors | join: ", " | initials }}.{% endif %}</p>{% endif %}
   {%- if e.details and include.compact != true %}
-  <ul class="note">
-    {%- for d in e.details %}
-    <li>{{ d | missions }}</li>
-    {%- endfor %}
-  </ul>
+  <ul class="note">{% for d in e.details %}<li>{{ d | missions }}</li>{% endfor %}</ul>
   {%- endif %}
-  {%- if include.compact != true %}
-  <dl class="facts">
-    <dt>Status</dt><dd>{{ status }}</dd>
-    {%- if e.version %}<dt>Version</dt><dd>{{ e.version }}</dd>{% endif %}
-    {%- if e.licence %}<dt>Licence</dt><dd>{{ e.licence }}</dd>{% endif %}
-  </dl>
-  {%- endif %}
-  {%- elsif include.compact and e.tagline %}
-  <p class="meta">{{ e.tagline | missions }}</p>
-  {%- elsif meta != "" %}
-  <p class="meta">{{ meta }}</p>
-  {%- endif %}
-  {%- if cat != "software" and e.details and include.details %}
-  <ul class="note">
-    {%- for d in e.details %}
-    <li>{{ d | missions }}</li>
-    {%- endfor %}
-  </ul>
+  {%- if e.contribution %}<p class="contribution">Contribution: {{ e.contribution }}</p>{% endif %}
+  {%- if cat == "software" and include.compact != true %}
+  <dl class="facts">{% if e.version %}<div><dt>version</dt><dd>{{ e.version }}</dd></div>{% endif %}{% if e.licence %}<div><dt>licence</dt><dd>{{ e.licence }}</dd></div>{% endif %}{% if e.role %}<div><dt>role</dt><dd>{{ e.role | replace: "-", " " }}</dd></div>{% endif %}</dl>
   {%- endif %}
   {%- capture links -%}
-    {%- if ids.doi -%}<a href="https://doi.org/{{ ids.doi }}">{% if cat == "presentations" and e.kind == "poster" %}Poster, {% elsif cat == "presentations" %}Slides, {% endif %}doi:{{ ids.doi }}</a>{%- endif -%}
+    {%- if ids.doi -%}<a href="https://doi.org/{{ ids.doi }}">{% if cat == "presentations" and k == "poster" %}Poster · {% elsif cat == "presentations" %}Slides · {% endif %}doi:{{ ids.doi }}</a>{%- endif -%}
     {%- if ids.arxiv -%}<a href="https://arxiv.org/abs/{{ ids.arxiv }}">arXiv:{{ ids.arxiv }}</a>{%- endif -%}
-    {%- if ids.ads -%}<a href="https://ui.adsabs.harvard.edu/abs/{{ ids.ads }}/abstract">ADS {{ ids.ads }}</a>{%- endif -%}
+    {%- if ids.ads -%}<a href="https://ui.adsabs.harvard.edu/abs/{{ ids.ads }}/abstract">ADS</a>{%- endif -%}
     {%- if ids.handle -%}<a href="https://hdl.handle.net/{{ ids.handle }}">hdl:{{ ids.handle }}</a>{%- endif -%}
-    {%- if ids.url -%}<a href="{{ ids.url }}">{% if cat == "software" %}{% if e.kind == "app" %}Open the app{% else %}Documentation{% endif %}{% elsif cat == "presentations" or cat == "events" or cat == "service" or cat == "teaching" %}Meeting page{% else %}Web page{% endif %}</a>{%- endif -%}
+    {%- if ids.url -%}{%- unless ids.url contains "doi.org" or ids.url contains "arxiv.org" -%}<a href="{{ ids.url }}">{% if cat == "software" %}{% if k == "app" %}Open the app{% else %}Documentation{% endif %}{% elsif cat == "presentations" or cat == "events" or cat == "service" or cat == "teaching" %}Meeting page{% else %}Web page{% endif %}</a>{%- endunless -%}{%- endif -%}
     {%- if ids.repo -%}<a href="{{ ids.repo }}">{% if ids.repo contains "-data" %}Data repository{% else %}Source code{% endif %}</a>{%- endif -%}
     {%- for x in include.extra -%}<a href="{{ x.url | relative_url }}">{{ x.label }}</a>{%- endfor -%}
   {%- endcapture -%}
-  {%- if links != "" %}
-  <p class="links">{{ links }}</p>
-  {%- endif %}
+  {%- if links != "" %}<p class="links">{{ links }}</p>{% endif %}
 </li>
