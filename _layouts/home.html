@@ -1,0 +1,43 @@
+---
+layout: default
+---
+{%- assign p = site.data.person -%}
+{%- assign L = site.data.ledger -%}
+<div class="row intro">
+  <figure class="portrait aside">
+    <img src="{{ '/assets/img/portrait_square.jpg' | relative_url }}" width="903" height="903" alt="Portrait of {{ p.name }}" decoding="async">
+    <figcaption>{{ p.name | initials }}</figcaption>
+  </figure>
+  <h1>{{ p.name | initials }}</h1>
+  <p class="lede">{{ page.lede }}</p>
+  <p>{{ page.intro | missions }}</p>
+</div>
+{%- if page.figure %}
+<figure class="row figure">
+  <picture>
+    {%- if page.figure.webp %}
+    <source srcset="{{ page.figure.webp | relative_url }}" type="image/webp">
+    {%- endif %}
+    <img src="{{ page.figure.src | relative_url }}" width="{{ page.figure.width }}" height="{{ page.figure.height }}" alt="{{ page.figure.alt }}" loading="lazy" decoding="async">
+  </picture>
+  <figcaption>{{ page.figure.caption | missions }}{% if page.figure.doi %} <a href="https://doi.org/{{ page.figure.doi }}">doi:{{ page.figure.doi }}</a>.{% endif %}</figcaption>
+</figure>
+{%- endif %}
+<section class="row" aria-labelledby="recent">
+  <h2 id="recent">Recent work</h2>
+  <ol class="entries">
+    {%- for r in page.recent %}
+      {%- assign pool = L[r.category] -%}
+      {%- assign e = pool | where: "id", r.id | first -%}
+      {%- if e %}
+      {%- include ledger_entry.html e=e category=r.category label=r.label %}
+      {%- endif %}
+    {%- endfor %}
+  </ol>
+</section>
+<section class="row" aria-labelledby="about">
+  <h2 id="about">About</h2>
+  <div class="prose">
+  {{ content }}
+  </div>
+</section>

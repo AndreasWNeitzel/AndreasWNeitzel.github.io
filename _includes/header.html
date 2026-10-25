@@ -1,0 +1,12 @@
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <p class="site-id"><a href="{{ '/' | relative_url }}">{{ site.data.person.name | initials }}</a></p>
+  <nav aria-label="Main">
+    <ul>
+      {%- for item in site.data.nav %}
+      <li><a href="{{ item.url | relative_url }}"{% if page.url == item.url or page.nav_section == item.title %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+      {%- endfor %}
+    </ul>
+  </nav>
+  <button class="theme" type="button" hidden>Dark theme</button>
+</header>

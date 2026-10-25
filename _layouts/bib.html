@@ -1,0 +1,31 @@
+---
+---
+{%- assign authors = entry.author | split: " and " -%}
+{%- assign n = authors | size -%}
+{%- assign names = "" | split: "" -%}
+{%- assign position = 0 -%}
+{%- for a in authors -%}
+  {%- assign parts = a | strip | split: ", " -%}
+  {%- if parts.size > 1 -%}{%- assign name = parts[1] | append: " " | append: parts[0] -%}{%- else -%}{%- assign name = a | strip -%}{%- endif -%}
+  {%- assign names = names | push: name -%}
+  {%- if a contains "Neitzel" -%}{%- assign position = forloop.index -%}{%- endif -%}
+{%- endfor -%}
+<p class="when"><span>{{ entry.year }}</span><span>{% if position == 1 %}first author{% else %}co-author{% endif %}</span></p>
+<p class="title">{{ entry.title | missions }}</p>
+<p class="meta">
+  {%- if n > 4 -%}
+    {{ names | slice: 0, 4 | join: ", " | initials }}, et al.; A.&nbsp;W.&nbsp;Neitzel is author {{ position }} of {{ n }}.
+  {%- else -%}
+    {{ names | join: ", " | initials }}.
+  {%- endif %}
+  <i>{{ entry.journal }}</i>{% if entry.volume %}, {{ entry.volume }}{% endif %}{% if entry.pages %}, {{ entry.pages }}{% endif %} ({{ entry.year }}){% if entry.note %}, {{ entry.note }}{% endif %}.
+</p>
+{%- if entry.contribution %}
+<p class="note">Contribution: {{ entry.contribution }}</p>
+{%- endif %}
+<p class="links">
+  {%- if entry.doi %}<a href="https://doi.org/{{ entry.doi }}">doi:{{ entry.doi }}</a>{% endif -%}
+  {%- if entry.arxiv %}<a href="https://arxiv.org/abs/{{ entry.arxiv }}">arXiv:{{ entry.arxiv }}</a>{% endif -%}
+  {%- if entry.ads %}<a href="https://ui.adsabs.harvard.edu/abs/{{ entry.ads }}/abstract">ADS {{ entry.ads }}</a>{% endif -%}
+  {%- if entry.appendix %}<a href="https://doi.org/{{ entry.appendix }}">Appendix, doi:{{ entry.appendix }}</a>{% endif -%}
+</p>

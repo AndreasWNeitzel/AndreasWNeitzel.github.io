@@ -1,0 +1,13 @@
+{%- assign p = site.data.person -%}
+<footer class="site-footer">
+  <ul>
+    <li><a href="mailto:{{ p.emails.personal }}">Email</a></li>
+    <li><a href="https://orcid.org/{{ p.identifiers.orcid }}">ORCID</a></li>
+    <li><a href="https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}">Google Scholar</a></li>
+    <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&sort=date%20desc">ADS</a></li>
+    <li><a href="https://github.com/{{ p.identifiers.github }}">GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/{{ p.identifiers.linkedin }}">LinkedIn</a></li>
+    <li><a href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}">CV (PDF)</a></li>
+  </ul>
+  <p>{{ p.location }}. Last updated <time datetime="{{ site.time | date: '%Y-%m-%d' }}">{{ site.time | date: '%Y-%m-%d' }}</time>.</p>
+</footer>
