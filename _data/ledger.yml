@@ -437,14 +437,6 @@ funding:
   - quant
   funder: Fundação para a Ciência e a Tecnologia
   pi: Tiago L. Campante
-  numbers:
-    budget_eur: 59935.98
-    success_rate: 16%
-    task5_pm: 4.4
-    task6_pm: 6
-    task3_pm: 1
-    accepted: 2529
-    submitted: 2547
 - id: fund-2025-hpcvlab-deucalion-team-member
   title: Deucalion development access under the University of Porto HPCvLAB project 2025.00007.HPCVLAB.UPORTO
   kind: computing
@@ -580,9 +572,6 @@ software:
     tests: 294
     benchmark_matched_or_beat: 8 of 10
     heldout_matched_or_beat: 2 of 4
-    heldout_mean_recovery: 0.239 against 0.291 for the defaults
-    src_lines: about 5,500
-    test_lines: about 4,500
 - id: sw-2026-stellar-explorer
   title: Stellar Explorer
   kind: app
