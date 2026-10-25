@@ -1,13 +1,32 @@
 {%- assign p = site.data.person -%}
 <footer class="site-footer">
-  <ul>
-    <li><a href="mailto:{{ p.emails.personal }}">Email</a></li>
-    <li><a href="https://orcid.org/{{ p.identifiers.orcid }}" rel="me">ORCID</a></li>
-    <li><a href="https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}" rel="me">Google Scholar</a></li>
-    <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&sort=date%20desc">ADS</a></li>
-    <li><a href="https://github.com/{{ p.identifiers.github }}" rel="me">GitHub</a></li>
-    <li><a href="https://www.linkedin.com/in/{{ p.identifiers.linkedin }}" rel="me">LinkedIn</a></li>
-    <li><a href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}">CV (PDF)</a></li>
-  </ul>
-  <p>{{ p.location }}. Last updated <time datetime="{{ site.time | date: '%Y-%m-%d' }}">{{ site.time | date: '%Y-%m-%d' }}</time>.</p>
+  <div class="wrap">
+    <div class="footer-id">
+      <a class="brand" href="{{ '/' | relative_url }}"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>{{ p.name | initials }}</span></a>
+      <p>PhD researcher in astrophysics and machine learning at IA and the University of Porto. Gaia, asteroseismology, neural networks, HPC.</p>
+    </div>
+    <nav aria-label="Contact">
+      <h2>Contact and profiles</h2>
+      <ul>
+        <li><a href="mailto:{{ p.emails.personal }}">Email</a></li>
+        <li><a href="https://orcid.org/{{ p.identifiers.orcid }}" rel="me">ORCID</a></li>
+        <li><a href="https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}" rel="me">Google Scholar</a></li>
+        <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc">NASA ADS</a></li>
+        <li><a href="https://github.com/{{ p.identifiers.github }}" rel="me">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/{{ p.identifiers.linkedin }}" rel="me">LinkedIn</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Site">
+      <h2>On this site</h2>
+      <ul>
+        <li><a href="{{ '/publications/' | relative_url }}">Publications and explainers</a></li>
+        <li><a href="{{ '/software/' | relative_url }}">Software and demos</a></li>
+        <li><a href="{{ '/playground/neural-network/' | relative_url }}">Neural-network playground</a></li>
+        <li><a href="{{ '/guide/' | relative_url }}">Field guide</a></li>
+        <li><a href="{{ '/observing/paranal/' | relative_url }}">Observing at Paranal</a></li>
+        <li><a href="{{ '/cv/' | relative_url }}">CV</a> · <a href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}">PDF</a></li>
+      </ul>
+    </nav>
+    <p class="colophon"><span>{{ p.location }} · Last updated <time datetime="{{ site.time | date: '%Y-%m-%d' }}">{{ site.time | date: '%Y-%m-%d' }}</time></span><span>Hand-written HTML, CSS and JavaScript. No trackers. Map data Natural Earth.</span></p>
+  </div>
 </footer>

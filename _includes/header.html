@@ -1,12 +1,15 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  <p class="site-id"><a href="{{ '/' | relative_url }}">{{ site.data.person.name | initials }}</a></p>
-  <nav aria-label="Main">
-    <ul>
+  <div class="wrap">
+    <a class="brand" href="{{ '/' | relative_url }}" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>{{ site.data.person.name | initials }}</span></a>
+    <nav class="nav" aria-label="Main">
       {%- for item in site.data.nav %}
-      <li><a href="{{ item.url | relative_url }}"{% if page.url == item.url or page.nav_section == item.title %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+      <a href="{{ item.url | relative_url }}"{% if page.url == item.url or page.nav_section == item.title %} aria-current="page"{% endif %}>{{ item.title }}</a>
       {%- endfor %}
-    </ul>
-  </nav>
-  <button class="theme" type="button" hidden>Dark theme</button>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <a class="btn btn--primary btn--sm" href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+    </div>
+  </div>
 </header>
