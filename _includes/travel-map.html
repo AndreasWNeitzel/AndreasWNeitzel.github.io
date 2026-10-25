@@ -1,0 +1,73 @@
+{%- assign PL = site.data.places -%}
+{%- assign L = site.data.ledger -%}
+{%- assign cats = "presentations,events,positions,service,teaching,awards,outreach" | split: "," -%}
+<div class="tmap card" data-travel-map data-script="{{ '/assets/js/travel-map.js' | relative_url }}" data-basemap="{{ '/assets/img/map/world_map.svg' | relative_url }}">
+  <div class="tmap-stage">
+    <div class="tmap-canvas"></div>
+    <div class="tmap-ui">
+      <div class="seg" role="group" aria-label="Map view">
+        <button type="button" data-view="portugal" aria-pressed="false">Portugal</button>
+        <button type="button" data-view="europe" aria-pressed="false">Europe</button>
+        <button type="button" data-view="world" aria-pressed="true">World</button>
+      </div>
+      <button class="btn btn--sm tmap-replay" type="button">Replay</button>
+    </div>
+    <div class="tmap-card" role="dialog" aria-live="polite" hidden></div>
+    <p class="tmap-legend"><span><i class="home"></i>Porto, home</span><span><i></i>Trip from Porto</span><span><i class="country"></i>Country I worked in</span><span>Rings: 100 to 10,000 km from Porto</span></p>
+    <noscript><p class="tmap-noscript">The interactive map needs JavaScript. Every place and what happened there is listed alongside.</p></noscript>
+  </div>
+  <aside class="tmap-side" aria-label="Places">
+    <header>
+      <div class="tmap-stats"><span><b>5</b>countries</span><span><b data-n-places>11</b>places</span><span><b>9,700 km</b>farthest</span></div>
+    </header>
+    <ol class="tmap-list">
+      {%- for pl in PL.places %}
+      {%- if pl.role == "waypoint" %}{% continue %}{% endif %}
+      {%- assign n = 0 -%}
+      {%- capture what -%}
+        {%- for c in cats -%}{%- assign pool = L[c] -%}{%- for e in pool -%}{%- if e.location == pl.location -%}{%- assign n = n | plus: 1 -%}{%- if n <= 2 -%}{{ e.title | split: ":" | first | truncate: 70 }}. {% endif -%}{%- endif -%}{%- endfor -%}{%- endfor -%}
+        {%- for x in pl.extra -%}{%- assign n = n | plus: 1 -%}{{ x.title }}. {% endfor -%}
+      {%- endcapture -%}
+      <li><button type="button" data-place="{{ pl.id }}"><span class="nm">{{ pl.name }}</span><span class="ct">{{ pl.country }}</span><span class="what">{% if pl.blurb %}{{ pl.blurb | missions }} {% endif %}{% if n > 0 %}<span class="n">{{ n }} item{% if n > 1 %}s{% endif %}</span>{% endif %}</span></button></li>
+      {%- endfor %}
+    </ol>
+  </aside>
+  <script type="application/json" class="tmap-data">
+  {
+    "home": {{ PL.home | jsonify }},
+    "views": {{ PL.views | jsonify }},
+    "routes": {{ PL.routes | jsonify }},
+    "places": [
+      {%- for pl in PL.places %}
+      {
+        "id": {{ pl.id | jsonify }}, "name": {{ pl.name | jsonify }}, "country": {{ pl.country | jsonify }},
+        "lat": {{ pl.lat }}, "lon": {{ pl.lon }}, "role": {{ pl.role | default: "visit" | jsonify }},
+        "blurb": {{ pl.blurb | default: "" | missions | jsonify }},
+        "photo": {% if pl.photo %}{{ pl.photo | relative_url | jsonify }}{% else %}null{% endif %},
+        "photo_alt": {{ pl.photo_alt | default: "" | jsonify }}, "photo_credit": {{ pl.photo_credit | default: "" | jsonify }},
+        "items": [
+          {%- assign first = true -%}
+          {%- for c in cats -%}{%- assign pool = L[c] -%}{%- for e in pool -%}{%- if pl.location and e.location == pl.location -%}
+            {%- case c -%}
+              {%- when "presentations" -%}{%- if e.kind == "poster" or e.kind == "pitch" -%}{%- assign tg = "poster" -%}{%- else -%}{%- assign tg = "talk" -%}{%- endif -%}{%- assign lb = e.kind | default: "talk" -%}{%- if e.role == "co-author" -%}{%- assign lb = lb | append: ", co-author" -%}{%- endif -%}
+              {%- when "events" -%}{%- if e.kind == "observing-run" -%}{%- assign tg = "observing" -%}{%- assign lb = "observing" -%}{%- else -%}{%- assign tg = "event" -%}{%- assign lb = e.kind -%}{%- endif -%}
+              {%- when "positions" -%}{%- assign tg = "position" -%}{%- assign lb = "position" -%}
+              {%- when "service" -%}{%- assign tg = "service" -%}{%- assign lb = "organiser" -%}
+              {%- when "teaching" -%}{%- assign tg = "teaching" -%}{%- assign lb = "teaching" -%}
+              {%- when "awards" -%}{%- assign tg = "award" -%}{%- assign lb = "award" -%}
+              {%- else -%}{%- assign tg = "service" -%}{%- assign lb = "outreach" -%}
+            {%- endcase -%}
+            {%- if e.kind == "oral" -%}{%- assign lb = "talk" -%}{%- endif -%}
+            {%- unless first %},{% endunless %}{%- assign first = false %}
+          {"tag": {{ tg | jsonify }}, "label": {{ lb | jsonify }}, "title": {{ e.title | missions | jsonify }}, "when": {{ e.date | slice: 0, 7 | jsonify }}, "venue": {{ e.venue | default: "" | jsonify }}}
+          {%- endif -%}{%- endfor -%}{%- endfor -%}
+          {%- for x in pl.extra -%}{%- unless first %},{% endunless %}{%- assign first = false %}
+          {"tag": {{ x.tag | jsonify }}, "label": {{ x.label | jsonify }}, "title": {{ x.title | jsonify }}, "when": {{ x.when | jsonify }}, "venue": ""}
+          {%- endfor %}
+        ]
+      }{% unless forloop.last %},{% endunless %}
+      {%- endfor %}
+    ]
+  }
+  </script>
+</div>

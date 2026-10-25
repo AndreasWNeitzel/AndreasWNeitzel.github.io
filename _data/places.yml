@@ -1,0 +1,116 @@
+# Places on the travel map. Coordinates are public city or site coordinates (WGS84).
+# `location` matches the ledger export's location strings; the map lists every public ledger
+# entry with that location. `extra` adds facts the ledger holds in another form (see notes).
+
+home: porto
+
+places:
+  - id: porto
+    name: Porto
+    country: Portugal
+    location: Porto, Portugal
+    lat: 41.1496
+    lon: -8.6110
+    role: home
+    blurb: Home base since 2017. IA and the University of Porto; BSc, MSc and PhD.
+    photo: /assets/img/photos/dfa-week-2026-talk.webp
+    photo_alt: Andreas presenting HAYDN cluster simulations at DFA Week 2026, Porto.
+  - id: vila-do-conde
+    name: Vila do Conde
+    country: Portugal
+    location: Vila do Conde, Portugal
+    lat: 41.3517
+    lon: -8.7479
+  - id: guimaraes
+    name: Guimarães
+    country: Portugal
+    location: Guimarães, Portugal
+    lat: 41.4425
+    lon: -8.2918
+    blurb: Also home to Deucalion, the national supercomputer I run on.
+  - id: coimbra
+    name: Coimbra
+    country: Portugal
+    location: Coimbra, Portugal
+    lat: 40.2033
+    lon: -8.4103
+  - id: lisbon
+    name: Lisbon
+    country: Portugal
+    location: Lisbon, Portugal
+    lat: 38.7223
+    lon: -9.1393
+  - id: cadiar
+    name: Cádiar
+    country: Spain
+    location: Cádiar (Granada), Spain
+    lat: 36.9466
+    lon: -3.1802
+    blurb: IMAS13 at the Alquería de Morayma, Granada.
+  - id: lluc
+    name: Lluc
+    country: Spain
+    location: Lluc, Balearic Islands, Spain
+    lat: 39.8227
+    lon: 2.8848
+    blurb: IMAS11 at the Lluc sanctuary, Mallorca.
+  - id: bologna
+    name: Bologna
+    country: Italy
+    location: Bologna, Italy
+    lat: 44.5240
+    lon: 11.3386
+    blurb: Six-month secondment at INAF-OAS, in A. Miglio's group.
+  - id: padova
+    name: Padova
+    country: Italy
+    location: Padova, Italy
+    lat: 45.4023
+    lon: 11.8687
+    blurb: INAF Osservatorio Astronomico di Padova, visited from Bologna during the secondment.
+    photo: /assets/img/guide/inaf.webp
+    photo_alt: La Specola, the old observatory tower of Padova, reflected in the river.
+    photo_credit: Memi26, Wikimedia Commons, CC BY-SA 4.0
+    extra:
+      - {tag: position, label: visits, title: "Regular visits to INAF Osservatorio Astronomico di Padova", when: "2025 to 2026", ledger: pos-2025-visiting-inaf-bologna}
+  - id: aarhus
+    name: Aarhus
+    country: Denmark
+    location: Aarhus, Denmark
+    lat: 56.1690
+    lon: 10.2030
+    blurb: TASC10/KASC17, the joint TESS and Kepler asteroseismology workshop.
+  - id: santiago
+    name: Santiago
+    country: Chile
+    lat: -33.4489
+    lon: -70.6693
+    role: waypoint
+    blurb: Transit to Paranal.
+  - id: paranal
+    name: Cerro Paranal
+    country: Chile
+    location: Paranal, Chile
+    lat: -24.6275
+    lon: -70.4044
+    blurb: ESO's Very Large Telescope, 2,635 m up in the Atacama desert.
+    photo: /assets/img/photos/vlt-golden-hour.webp
+    photo_alt: Andreas on the VLT platform at sunset.
+
+routes:
+  - [porto, vila-do-conde]
+  - [porto, guimaraes]
+  - [porto, coimbra]
+  - [porto, lisbon]
+  - [porto, cadiar]
+  - [porto, lluc]
+  - [porto, bologna]
+  - [bologna, padova, commute]
+  - [porto, aarhus]
+  - [porto, santiago]
+  - [santiago, paranal]
+
+views:
+  portugal: [porto, vila-do-conde, guimaraes, coimbra, lisbon]
+  europe: [porto, lisbon, cadiar, lluc, bologna, padova, aarhus]
+  world: [porto, aarhus, bologna, santiago, paranal]
