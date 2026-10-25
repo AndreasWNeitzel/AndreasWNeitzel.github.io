@@ -14,6 +14,7 @@ lede: Talks and posters since 2022, international meetings first, with slides an
 </figure>
 <section class="section" aria-labelledby="intl">
   <div class="section-head"><h2 id="intl">International</h2><p>TESS and Kepler asteroseismology workshops (TASC/KASC) and the Iberian Meetings on Asteroseismology (IMAS).</p></div>
+  <figure class="figure" style="margin-block-end:12px"><img src="{{ '/assets/img/photos/tasc8-kasc15-talk.webp' | relative_url }}" alt="Andreas presenting with a microphone in a Faculty of Sciences auditorium, with the Portuguese and EU flags behind him." style="max-block-size:380px;object-fit:cover;object-position:60% 40%" loading="lazy"><figcaption>Presenting at the TASC8/KASC15 workshop, Faculty of Sciences, University of Porto, July 2024.</figcaption></figure>
   <ol class="entries">
     {%- for e in L.presentations %}{% if intl_ids contains e.id %}{% include ledger_entry.html e=e category="presentations" %}{% endif %}{% endfor %}
   </ol>
