@@ -30,7 +30,7 @@ layout: default
       {%- assign pool = L[r.category] -%}
       {%- assign e = pool | where: "id", r.id | first -%}
       {%- if e %}
-      {%- include ledger_entry.html e=e category=r.category label=r.label %}
+      {%- include ledger_entry.html e=e category=r.category label=r.label when=r.date compact=true %}
       {%- endif %}
     {%- endfor %}
   </ol>

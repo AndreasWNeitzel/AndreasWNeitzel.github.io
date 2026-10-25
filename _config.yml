@@ -80,7 +80,6 @@ scholar:
   sort_by: year,month
   order: descending
   group_by: none
-  use_raw_bibtex_entry: true
   bibtex_filters:
     - latex
     - smallcaps

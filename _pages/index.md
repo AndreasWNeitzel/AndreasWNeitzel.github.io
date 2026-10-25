@@ -14,13 +14,13 @@ figure:
   caption: "Second-run UMAP embeddings of the two major stellar components in four synthetic Gaia DR3-like samples, coloured by the subcomponents that HDBSCAN identifies. Figure from Neitzel et al. 2025, Astronomy and Astrophysics, 695, A243."
   doi: 10.1051/0004-6361/202451718
 recent:
-  - {category: software, id: sw-2026-starfold, label: software}
-  - {category: presentations, id: pres-2026-07-tasc10-oral-janus, label: talk}
-  - {category: software, id: sw-2026-stellar-explorer, label: demo}
-  - {category: funding, id: fund-2025-09-fct-doctoral-fellowship, label: funding}
-  - {category: publications, id: pub-2025-neitzel-manifold-learning, label: paper}
+  - {category: software, id: sw-2026-starfold, label: software, date: "2026-10-19"}
+  - {category: presentations, id: pres-2026-07-tasc10-oral-janus, label: talk, date: "2026-07"}
+  - {category: software, id: sw-2026-stellar-explorer, label: demo, date: "2026-04"}
+  - {category: funding, id: fund-2025-09-fct-doctoral-fellowship, label: funding, date: "2025-09"}
+  - {category: publications, id: pub-2025-neitzel-manifold-learning, label: paper, date: "2025-03"}
 ---
-My thesis, Machine Learning Applied to Galactic Archaeology, is co-advised by Tiago L. Campante, Diego Bossini and Andrea Miglio, with the defence expected at the end of 2027. The 2025 paper in *Astronomy and Astrophysics* introduced a manifold-learning method (UMAP and HDBSCAN) that separates thin-disc, thick-disc, halo and accreted populations, validated on synthetic *Gaia* DR3-like samples.
+My thesis, Machine Learning Applied to Galactic Archaeology, is co-advised by Tiago L. Campante, Diego Bossini and Andrea Miglio. The 2025 paper in *Astronomy and Astrophysics* introduced a manifold-learning method (UMAP and HDBSCAN) that separates thin-disc, thick-disc, halo and accreted populations, validated on synthetic *Gaia* DR3-like samples.
 
 I develop the machine-learning pipelines of the FCT exploratory project ArqueoGal (2024.15303.PEX, PI T. L. Campante). In 2025 to 2026 I spent six months at INAF-OAS Bologna building simulation pipelines for the proposed *HAYDN* mission.
 

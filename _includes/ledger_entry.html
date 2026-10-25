@@ -9,7 +9,7 @@
     {%- endcase -%}
     {%- if e.role == "co-author" %}, co-author{% endif -%}
   {%- elsif cat == "software" -%}
-    {%- if e.status -%}{{ e.status }}{%- elsif e.version -%}released{%- else -%}in development{%- endif -%}
+    {%- if e.status -%}{{ e.status }}{%- elsif e.kind == "package" and e.version -%}released{%- elsif e.kind == "pipeline" -%}public repository{%- elsif e.kind == "app" -%}available{%- else -%}in development{%- endif -%}
   {%- elsif cat == "publications" -%}
     {%- if e.kind == "thesis" -%}MSc thesis{%- elsif e.kind == "data" -%}data{%- elsif e.role == "first-author" -%}first author{%- else -%}co-author{%- endif -%}
   {%- elsif cat == "funding" -%}
@@ -17,8 +17,13 @@
   {%- endif -%}
 {%- endcapture -%}
 {%- assign label = label | strip -%}
+{%- capture status -%}
+  {%- if e.status -%}{{ e.status }}{%- elsif e.kind == "package" and e.version -%}released{%- elsif e.kind == "pipeline" -%}public repository{%- elsif e.kind == "app" -%}available{%- else -%}in development{%- endif -%}
+{%- endcapture -%}
+{%- assign status = status | strip -%}
+{%- if include.when -%}{%- assign when = include.when -%}{%- else -%}{%- assign when = e | span -%}{%- endif -%}
 <li>
-  <p class="when"><span>{{ e | span }}</span>{% if label != "" %}<span>{{ label }}</span>{% endif %}</p>
+  <p class="when"><span>{{ when }}</span>{% if label != "" %}<span>{{ label }}</span>{% endif %}</p>
   {%- if cat == "software" %}
   <h3 class="title">{{ e.title | missions }}</h3>
   {%- else %}
@@ -45,7 +50,7 @@
       {%- if e.grade %} Final grade {{ e.grade }}.{% endif -%}
       {%- if e.thesis %} Thesis: {{ e.thesis | missions }}.{% endif -%}
       {%- if e.advisors %} Advisors: {{ e.advisors | join: ", " | initials }}.{% endif -%}
-      {%- if e.summary %} {{ e.summary }}{% endif -%}
+      {%- if e.summary and e.thesis == nil %} {{ e.summary }}{% endif -%}
     {%- elsif cat == "software" -%}
     {%- else -%}
       {%- assign where = e.institution | default: e.venue -%}
@@ -56,15 +61,21 @@
   {%- endcapture -%}
   {%- assign meta = meta | strip -%}
   {%- if cat == "software" %}
-  <p>{{ e.summary | missions }}</p>
-  {%- for d in e.details %}
-  <p>{{ d | missions }}</p>
-  {%- endfor %}
+  <p class="meta">{{ e.summary | missions }}</p>
+  {%- if e.details and include.compact != true %}
+  <ul class="note">
+    {%- for d in e.details %}
+    <li>{{ d | missions }}</li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+  {%- if include.compact != true %}
   <dl class="facts">
-    <dt>Status</dt><dd>{{ label }}</dd>
-    {%- if e.version %}<dt>Version</dt><dd>{{ e.version }}{% if e.kind == "package" %}, {{ e.date }}{% endif %}</dd>{% endif %}
+    <dt>Status</dt><dd>{{ status }}</dd>
+    {%- if e.version %}<dt>Version</dt><dd>{{ e.version }}</dd>{% endif %}
     {%- if e.licence %}<dt>Licence</dt><dd>{{ e.licence }}</dd>{% endif %}
   </dl>
+  {%- endif %}
   {%- elsif meta != "" %}
   <p class="meta">{{ meta }}</p>
   {%- endif %}
@@ -80,7 +91,7 @@
     {%- if ids.arxiv -%}<a href="https://arxiv.org/abs/{{ ids.arxiv }}">arXiv:{{ ids.arxiv }}</a>{%- endif -%}
     {%- if ids.ads -%}<a href="https://ui.adsabs.harvard.edu/abs/{{ ids.ads }}/abstract">ADS {{ ids.ads }}</a>{%- endif -%}
     {%- if ids.handle -%}<a href="https://hdl.handle.net/{{ ids.handle }}">hdl:{{ ids.handle }}</a>{%- endif -%}
-    {%- if ids.url -%}<a href="{{ ids.url }}">{% if cat == "software" %}{% if ids.url contains "github.io" %}Documentation{% else %}Open the app{% endif %}{% elsif cat == "presentations" or cat == "events" or cat == "service" or cat == "teaching" %}Meeting page{% else %}Web page{% endif %}</a>{%- endif -%}
+    {%- if ids.url -%}<a href="{{ ids.url }}">{% if cat == "software" %}{% if e.kind == "app" %}Open the app{% else %}Documentation{% endif %}{% elsif cat == "presentations" or cat == "events" or cat == "service" or cat == "teaching" %}Meeting page{% else %}Web page{% endif %}</a>{%- endif -%}
     {%- if ids.repo -%}<a href="{{ ids.repo }}">{% if ids.repo contains "-data" %}Data repository{% else %}Source code{% endif %}</a>{%- endif -%}
     {%- for x in include.extra -%}<a href="{{ x.url | relative_url }}">{{ x.label }}</a>{%- endfor -%}
   {%- endcapture -%}

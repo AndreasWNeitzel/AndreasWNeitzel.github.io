@@ -7,7 +7,6 @@ education:
   location: Porto, Portugal
   date: 2022-09
   end_date: present
-  summary: Thesis on machine-learning methods for Galactic archaeology; defence expected at the end of 2027.
   weight: 5
   audiences:
   - academic
@@ -30,7 +29,6 @@ education:
   end_date: 2022-12
   identifiers:
     handle: 10216/147245
-  summary: Final grade 16/20. Thesis on ages and masses of seismic stars in the Ariel input catalogue.
   weight: 4
   audiences:
   - academic
@@ -41,8 +39,6 @@ education:
   field: Astronomy and Astrophysics
   grade: 16/20
   thesis: Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog
-  numbers:
-    grade: 16/20
 - id: edu-2017-bsc-physics
   title: BSc in Physics
   kind: bachelor
@@ -203,6 +199,7 @@ publications:
   - industry-ai
   numbers:
     hosts: 187
+  contribution: Bayesian stellar characterisation runs with PARAM for a subset of the sample.
 presentations:
 - id: pres-2026-10-imas13-oral-janus
   title: 'JANUS: a neural network for APOGEE-like chemistry of the TESS asteroseismic red giants from Gaia XP spectra, with per-star reliability'
@@ -528,6 +525,32 @@ software:
   - academic
   - industry-tech
   - industry-ai
+- id: sw-2026-05-tellurion
+  title: 'Tellurion: a laboratory of interactive physics simulations'
+  kind: app
+  role: sole-developer
+  date: '2026-05-13'
+  end_date: present
+  identifiers:
+    url: https://tellurion.dev/
+    repo: https://github.com/AndreasWNeitzel/tellurion
+  summary: Free website of interactive physics and astronomy simulations across mechanics, electromagnetism, optics, quantum mechanics, relativity, statistical mechanics, fluid dynamics, condensed matter and astrophysics, built during the PhD as an educational resource.
+  details:
+  - Plain JavaScript modules without a framework; Canvas2D, SVG and WebGL2; shared numerical engines with symplectic integrators and Markov chain Monte Carlo samplers.
+  - Every simulation ships invariant tests against thresholds in its specification; browser end-to-end and pixel-regression tests.
+  - Optional course routes informed by FCUP programmes, with no claim to replace or match those courses. Public beta.
+  tags:
+  - education
+  - javascript
+  - simulation
+  - webgl
+  - open-source
+  weight: 3
+  audiences:
+  - academic
+  - industry-tech
+  licence: MIT
+  version: 0.1.2
 - id: sw-2026-starfold
   title: Starfold
   kind: package
@@ -541,12 +564,10 @@ software:
     url: https://andreaswneitzel.github.io/Starfold/
   summary: 'Python package that finds groups in a numeric table without labels, using UMAP, HDBSCAN and Optuna, and reports how far to trust them: recurrence across refits, named reliability flags and an optional Monte Carlo calibration test; extends Neitzel et al. 2025.'
   details:
-  - Optuna searches UMAP and HDBSCAN settings with the library defaults as the first trial; each setting is scored without labels against a structureless copy of the table.
-  - The selected setting is refit on 32 random subsets of 80 percent of the rows to measure how often each row and group recurs; unsupported claims come back as 17 named flags.
-  - Optional calibration test against structureless copies of the table, costing up to 1,938 fits at the default settings.
-  - GPU path through RAPIDS cuML with a CPU fallback; strict mypy typing; 294 tests; checksummed JSON and NumPy result files without pickles.
-  - 'Benchmark reported openly: it matched or beat the library defaults on 8 of 10 tables but on only 2 of 4 held-out tables, and lost on COIL-20 and Isolet.'
-  - Release 0.2.0 on 2026-10-19 replaced the earlier 0.0.1 code base with a new API.
+  - Optuna searches UMAP and HDBSCAN settings from the library defaults; each setting is scored without labels against a structureless copy of the table, then refit on 32 random subsets to measure how often each group recurs, with unsupported claims returned as 17 named flags.
+  - GPU path through RAPIDS cuML with a CPU fallback; strict typing and 294 tests; results saved as checksummed JSON and NumPy files.
+  - 'Benchmark reported openly: it matched or beat the library defaults on 8 of 10 tables but on only 2 of 4 held-out tables.'
+  - Release 0.2.0 (19 October 2026), MIT licence, with a Sphinx manual.
   tags:
   - python
   - umap
@@ -567,8 +588,6 @@ software:
   numbers:
     refits: 32
     flags: 17
-    null_test_fits: 1,938
-    subset_fraction: 80
     tests: 294
     benchmark_matched_or_beat: 8 of 10
     heldout_matched_or_beat: 2 of 4
@@ -601,12 +620,9 @@ software:
   end_date: present
   identifiers:
     repo: https://github.com/AndreasWNeitzel/ArqueoGal
-  summary: Public personal repository for the data preparation, external-tool orchestration and catalogue governance behind Andreas's contribution to the ArqueoGal project. It is his to list. It is not the project team's repository and does not contain the JANUS model or the Starfold classifier, which are separate repositories.
+  summary: Observational data preparation, provenance and integration layer for a personal contribution to the FCT ArqueoGal project; the stellar-label model (JANUS) and the population classifier (Starfold) are separate repositories.
   details:
-  - 'GitHub visibility PUBLIC; description: Codebase for my contribution to the ArqueoGal PEX project; last push 2026-06-05.'
-  - Owns observational acquisition and mandatory Gaia corrections (Lindegren+2021 parallax zero point, Riello+2021 G correction), APOGEE DR19 preparation with Mészáros+2025 label corrections, extinction and distance assembly, galpy kinematics, selection functions, and per-file provenance sidecars.
-  - 'State on 2026-10-25: the published HEAD (2026-06-05) still contains the pre-extraction monolith; a large uncommitted restructuring that removed the in-tree JANUS ancestor is pending Andreas''s review. Do not describe the public repository''s contents from the working tree until that lands.'
-  - 'Not a release product of the project: no catalogue has been published from it.'
+  - Applies the standard Gaia corrections (Lindegren et al. 2021 parallax zero point, Riello et al. 2021 G-band correction) and the Mészáros et al. 2025 APOGEE DR19 label corrections; assembles extinction, distances and galpy kinematics, with a provenance sidecar per file.
   tags:
   - python
   - gaia
