@@ -27,12 +27,12 @@
   {%- capture meta -%}
     {%- if cat == "presentations" -%}
       {%- if e.people and e.people.size > 1 -%}
-        {%- if e.role == "co-author" -%}{{ e.people | join: ", " | initials }}. {% else -%}With {{ e.people | shift | join: ", " | initials }}. {% endif -%}
+        {%- if e.role == "co-author" -%}{{ e.people | join: ", " | initials }}. {% else -%}With {{ e.people | slice: 1, 999 | join: ", " | initials }}. {% endif -%}
       {%- endif -%}
       {{ e.venue }}{% if e.location %}. {{ e.location }}{% endif %}.
     {%- elsif cat == "publications" -%}
       {%- if e.people -%}{{ e.people | join: ", " | initials }}. {% endif -%}
-      {%- if e.venue -%}<i>{{ e.venue | split: ", " | first }}</i>{% assign rest = e.venue | split: ", " | shift | join: ", " %}{% if rest != "" %}, {{ rest }}{% endif %}.{% endif -%}
+      {%- if e.venue -%}<i>{{ e.venue | split: ", " | first }}</i>{% assign rest = e.venue | split: ", " | slice: 1, 999 | join: ", " %}{% if rest != "" %}, {{ rest }}{% endif %}.{% endif -%}
       {%- if e.summary %} {{ e.summary }}{% endif -%}
     {%- elsif cat == "funding" -%}
       {%- if ids.reference -%}{{ ids.reference }}. {% endif -%}

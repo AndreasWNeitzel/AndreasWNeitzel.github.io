@@ -40,6 +40,7 @@ exclude:
   - .pre-commit-config.yaml
   - .lycheeignore
 include:
+  - _pages
   - llms.txt
 keep_files:
   - .nojekyll
@@ -79,7 +80,7 @@ scholar:
   sort_by: year,month
   order: descending
   group_by: none
-  use_raw_bibtex_entry: false
+  use_raw_bibtex_entry: true
   bibtex_filters:
     - latex
     - smallcaps
