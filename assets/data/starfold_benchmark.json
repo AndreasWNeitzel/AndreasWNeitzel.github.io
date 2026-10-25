@@ -1,0 +1,19 @@
+{
+  "description": "Ten-table Starfold benchmark behind docs/limits.md ('The ten-table benchmark'), one row per table.",
+  "repository": "https://github.com/AndreasWNeitzel/starfold",
+  "commit": "f93dea03aa0f29a2e538b7221970a35898ea3c90",
+  "tag": "v0.2.0",
+  "results_file": "bench/results/summary.json",
+  "results_file_sha256": "23ae1e8dab6994e3a301570305f4220ee706e0ca9c020548b29708091e07e336",
+  "results_file_last_commit": "bc89297ba02d697928e8af3914d21bdde01d2b58",
+  "per_table_records": "bench/results/<key>.json",
+  "columns": {
+    "starfold_recovery": "adjusted Rand index (floored at 0) against the true classes on the assigned rows, times the share of rows assigned, for the selected setting",
+    "defaults_recovery": "median of the same quantity for the UMAP and HDBSCAN library defaults over 8 seeds",
+    "gain": "starfold_recovery minus defaults_recovery",
+    "result": "'starfold' or 'defaults' when the gain exceeds 0.02 in magnitude, otherwise 'match within 0.02'",
+    "set": "development tables informed rules and defaults; held-out tables were not looked at while setting them (called 'sealed' in summary.json)"
+  },
+  "summary_from_docs_limits_md": "Matched or beat the defaults on 6 of 6 development tables (mean 0.469 against 0.315), 2 of 4 held-out tables (0.239 against 0.291), 8 of 10 overall (0.377 against 0.306). Lost on COIL-20 and Isolet.",
+  "licence": "Results: MIT, as the starfold repository. The underlying tables keep their own licences (UCI datasets CC BY 4.0; OpenML entries per their pages); only derived scores are exported here."
+}

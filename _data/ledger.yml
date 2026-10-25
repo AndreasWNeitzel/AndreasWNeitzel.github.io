@@ -1,0 +1,959 @@
+# Generated from the achievements ledger. Do not edit by hand.
+education:
+- id: edu-2022-phd-astronomy
+  title: PhD in Astronomy
+  kind: doctorate
+  institution: Faculdade de Ciências da Universidade do Porto and IA/CAUP
+  location: Porto, Portugal
+  date: 2022-09
+  end_date: present
+  summary: Thesis on machine-learning methods for Galactic archaeology; defence expected at the end of 2027.
+  weight: 5
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+  degree: PhD
+  field: Astronomy
+  thesis: Machine Learning Applied to Galactic Archaeology
+  advisors:
+  - Tiago L. Campante
+  - Diego Bossini
+  - Andrea Miglio
+- id: edu-2020-msc-astronomy
+  title: MSc in Astronomy and Astrophysics
+  kind: master
+  institution: Faculdade de Ciências da Universidade do Porto
+  location: Porto, Portugal
+  date: 2020-09
+  end_date: 2022-12
+  identifiers:
+    handle: 10216/147245
+  summary: Final grade 16/20. Thesis on ages and masses of seismic stars in the Ariel input catalogue.
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+  degree: MSc
+  field: Astronomy and Astrophysics
+  grade: 16/20
+  thesis: Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog
+  numbers:
+    grade: 16/20
+- id: edu-2017-bsc-physics
+  title: BSc in Physics
+  kind: bachelor
+  institution: Faculdade de Ciências da Universidade do Porto
+  location: Porto, Portugal
+  date: '2017'
+  end_date: '2020'
+  weight: 3
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+  degree: BSc
+  field: Physics
+positions:
+- id: pos-2025-visiting-inaf-bologna
+  title: Visiting PhD Student, INAF Osservatorio di Astrofisica e Scienza dello Spazio
+  kind: visiting
+  institution: INAF-OAS Bologna
+  location: Bologna, Italy
+  date: 2025-09
+  end_date: 2026-03
+  summary: Six-month secondment in A. Miglio's group building simulation pipelines for the proposed HAYDN mission.
+  details:
+  - Built Python tooling for photometric-noise estimation and synthetic stellar catalogue generation (TRILEGAL, King-profile spatial sampling) for globular and open clusters.
+  - Ran HAYDN noise-estimator workloads on the EuroHPC Deucalion supercomputer (FCT HPCvLAB project 2025.00007) and on the UniBo Matrix and BladeRunner clusters.
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+- id: pos-2022-phd-researcher-iacaup
+  title: PhD Researcher, Stellar Astrophysics Group
+  kind: research
+  institution: IA/CAUP
+  location: Porto, Portugal
+  date: 2022-09
+  end_date: present
+  summary: Doctoral research on machine-learning methods for Galactic archaeology with Gaia, APOGEE and asteroseismic data.
+  details:
+  - Developer of the machine-learning pipelines of the FCT exploratory project ArqueoGal (2024.15303.PEX), PI T. L. Campante.
+  - Built the seismic and spectroscopic characterisation pipeline cross-matching Gaia DR3, GSP-Spec, TESS, Kepler/K2 and 2MASS, with PARAM Bayesian ages, MWDUST extinction and bolometric corrections.
+  - Co-author on the asteroseismic detection of solar-like oscillations in the K5 dwarf epsilon Indi A; on-site observer with ESPRESSO at the VLT, Paranal, May 2024.
+  weight: 5
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+- id: pos-2021-msc-research-fellow
+  title: MSc Research Fellow, BreakStarS project
+  kind: research
+  institution: IA/CAUP
+  location: Porto, Portugal
+  date: '2021'
+  end_date: '2022'
+  identifiers:
+    reference: CIAAUP-08/2021-BI-M
+  summary: Implemented the small-frequency-separation routine in the Bayesian stellar characterisation code PARAM.
+  weight: 3
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+publications:
+- id: pub-2025-neitzel-manifold-learning
+  title: Dissecting stellar populations with manifold learning. I. Validation of the method on a synthetic Milky Way-like galaxy
+  kind: article
+  role: first-author
+  venue: Astronomy and Astrophysics, 695, A243
+  date: 2025-03
+  people:
+  - A. W. Neitzel
+  - T. L. Campante
+  - D. Bossini
+  - A. Miglio
+  identifiers:
+    doi: 10.1051/0004-6361/202451718
+    arxiv: '2501.16294'
+  summary: Manifold learning (UMAP and HDBSCAN) separates thin-disc, thick-disc, halo and accreted populations in chrono-chemo-kinematic space, validated on FIRE-2 synthetic Gaia DR3-like samples.
+  tags:
+  - galactic-archaeology
+  - umap
+  - hdbscan
+  - unsupervised
+  weight: 5
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+- id: pub-2025-neitzel-appendix-data
+  title: 'Appendix: Dissecting stellar populations with manifold learning I. Validation of the method on a synthetic Milky Way-like galaxy'
+  kind: data
+  role: first-author
+  venue: Zenodo
+  date: '2025-01-27'
+  people:
+  - A. W. Neitzel
+  - T. L. Campante
+  - D. Bossini
+  - A. Miglio
+  identifiers:
+    doi: 10.5281/zenodo.14749285
+    zenodo: '14749285'
+  summary: Supplementary appendix of the A&A 2025 paper, deposited on Zenodo.
+  weight: 2
+  audiences:
+  - academic
+- id: pub-2024-campante-espresso
+  title: 'Expanding the frontiers of cool-dwarf asteroseismology with ESPRESSO: detection of solar-like oscillations in the K5 dwarf epsilon Indi'
+  kind: letter
+  role: co-author
+  venue: Astronomy and Astrophysics, 683, L16
+  date: 2024-03
+  people:
+  - T. L. Campante
+  - H. Kjeldsen
+  - Y. Li
+  - M. N. Lund
+  - et al. including A. W. Neitzel
+  identifiers:
+    doi: 10.1051/0004-6361/202449197
+  summary: First asteroseismic detection of solar-like oscillations in a K5 dwarf.
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+- id: pub-2022-msc-thesis
+  title: Determination of age and mass for seismic stars in the Ariel input catalog
+  kind: thesis
+  role: first-author
+  venue: Universidade do Porto, Faculdade de Ciências
+  date: 2022-12
+  identifiers:
+    handle: 10216/147245
+  weight: 2
+  audiences:
+  - academic
+- id: pub-2022-magrini-ariel
+  title: 'Ariel stellar characterisation. I. Homogeneous stellar parameters of 187 FGK planet host stars: description and validation of the method'
+  kind: article
+  role: co-author
+  venue: Astronomy and Astrophysics, 663, A161
+  date: 2022-07
+  people:
+  - L. Magrini
+  - C. Danielski
+  - D. Bossini
+  - et al. including A. W. Neitzel
+  identifiers:
+    doi: 10.1051/0004-6361/202243405
+  summary: Homogeneous stellar parameters for the Ariel target list, from the consortium's Stellar Characterisation working group.
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+  numbers:
+    hosts: 187
+presentations:
+- id: pres-2026-10-imas13-oral-janus
+  title: 'JANUS: a neural network for APOGEE-like chemistry of the TESS asteroseismic red giants from Gaia XP spectra, with per-star reliability'
+  kind: oral
+  role: oral
+  venue: IMAS13, 13th Iberian Meeting on Asteroseismology
+  location: Cádiar (Granada), Spain
+  date: '2026-10-21'
+  end_date: '2026-10-23'
+  summary: Contributed talk of 12 minutes at the 13th Iberian Meeting on Asteroseismology, Alquería de Morayma, Cádiar.
+  details:
+  - The abstract is public through the meeting; the slide deck carries unpublished results and is not public.
+  tags:
+  - talk
+  - asteroseismology
+  - gaia
+  - tess
+  weight: 4
+  audiences:
+  - academic
+- id: pres-2026-09-enaa36-poster-janus
+  title: JANUS poster at ENAA XXXVI, the National Meeting of Astronomy and Astrophysics
+  kind: poster
+  role: poster
+  venue: ENAA XXXVI
+  location: Porto, Portugal
+  date: '2026-09-09'
+  end_date: '2026-09-12'
+  summary: Poster on JANUS at the Portuguese national astronomy meeting, with a poster pitch.
+  tags:
+  - poster
+  - enaa
+  weight: 2
+  audiences:
+  - academic
+- id: pres-2026-09-enaa36-pitch-janus
+  title: JANUS poster pitch at ENAA XXXVI
+  kind: pitch
+  role: oral
+  venue: ENAA XXXVI
+  location: Porto, Portugal
+  date: '2026-09-09'
+  end_date: '2026-09-12'
+  summary: Short oral pitch of the JANUS poster at ENAA XXXVI.
+  tags:
+  - pitch
+  - enaa
+  weight: 1
+  audiences:
+  - academic
+- id: pres-2026-07-tasc10-poster-haydnsim
+  title: 'HAYDNsim: Forecasting photometric noise in the crowded fields that defeat current missions'
+  kind: poster
+  role: poster
+  venue: TASC10/KASC17, 10th TESS and 17th Kepler Asteroseismic Science Consortium Workshop
+  location: Aarhus, Denmark
+  date: '2026-07-06'
+  end_date: '2026-07-10'
+  people:
+  - A. W. Neitzel
+  - A. Miglio
+  - L. Girardi
+  - R. Samadi
+  - B. Mosser
+  - T. L. Campante
+  - D. Bossini
+  identifiers:
+    doi: 10.5281/zenodo.23263454
+    zenodo: '23263454'
+  summary: Poster deposited on Zenodo under CC BY 4.0.
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+- id: pres-2026-07-tasc10-oral-janus
+  title: Contrastive deep learning for structure-preserving chemistry of TESS asteroseismic red giants from Gaia XP spectra
+  kind: oral
+  role: oral
+  venue: TASC10/KASC17 workshop
+  location: Aarhus, Denmark
+  date: 2026-07
+  identifiers:
+    doi: 10.5281/zenodo.23262691
+    url: https://doi.org/10.5281/zenodo.23262691
+  summary: Contributed talk at the TESS and Kepler asteroseismic science consortia workshop; the slides are deposited on Zenodo under CC BY 4.0.
+  details:
+  - Abstract accepted on 30 April 2026 (confirmation e-mail from tasc10@au.dk); slides deposited on Zenodo on 2026-10-09 with the funding acknowledgements.
+  tags:
+  - talk
+  - asteroseismology
+  - gaia
+  - tess
+  - zenodo
+  weight: 4
+  audiences:
+  - academic
+- id: pres-2024-11-imas11-oral
+  title: Intelligent Identification of Stellar Populations with Manifold Learning
+  kind: oral
+  role: oral
+  venue: 11th Iberian Meeting on Asteroseismology (IMAS11)
+  location: Lluc, Balearic Islands, Spain
+  date: '2024-11-26'
+  identifiers:
+    url: https://www.granadacongresos.com/ima
+  weight: 3
+  audiences:
+  - academic
+  - industry-ai
+- id: pres-2024-09-enaa34-oral
+  title: Dissecting Stellar Populations with Manifold Learning
+  kind: oral
+  role: oral
+  venue: ENAA XXXIV, National Meeting of Astronomy and Astrophysics
+  location: Guimarães, Portugal
+  date: '2024-09-12'
+  identifiers:
+    url: https://enaa-xxxiv.github.io/index
+  weight: 2
+  audiences:
+  - academic
+- id: pres-2024-07-tasc8-poster-ferreira-coauthor
+  title: 'Small separations in red-giant stars: quest for late evolution signatures using asteroseismology'
+  kind: poster
+  role: co-author
+  venue: TASC8/KASC15, 8th TESS and 15th Kepler Asteroseismic Science Consortium Workshop
+  location: Porto, Portugal
+  date: '2024-07-18'
+  people:
+  - M. I. Ferreira
+  - D. Bossini
+  - A. W. Neitzel
+  identifiers:
+    doi: 10.5281/zenodo.13376136
+    zenodo: '13376136'
+  weight: 1
+  audiences:
+  - academic
+- id: pres-2024-07-tasc8-oral
+  title: Identification of stellar populations through latent space projection
+  kind: oral
+  role: oral
+  venue: TASC8/KASC15, 8th TESS and 15th Kepler Asteroseismic Science Consortium Workshop
+  location: Porto, Portugal
+  date: '2024-07-16'
+  people:
+  - A. W. Neitzel
+  - T. L. Campante
+  - D. Bossini
+  - A. Miglio
+  identifiers:
+    doi: 10.5281/zenodo.12920468
+    zenodo: '12920468'
+    ads: 2024tkas.confE..96N
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+- id: pres-2023-09-enaa33-oral
+  title: Machine Learning Applied to Galactic Archaeology
+  kind: oral
+  role: oral
+  venue: ENAA XXXIII, National Meeting of Astronomy and Astrophysics
+  location: Coimbra, Portugal
+  date: '2023-09-07'
+  identifiers:
+    url: https://www.uc.pt/events/enaa2023/
+  weight: 2
+  audiences:
+  - academic
+- id: pres-2022-09-fisica2022-oral-ariel
+  title: Stellar Characterization for the ARIEL Space Mission
+  kind: oral
+  role: oral
+  venue: FÍSICA 2022, 23rd National Physics Conference (Sociedade Portuguesa de Física)
+  location: Porto, Portugal
+  date: '2022-09-09'
+  weight: 1
+  audiences:
+  - academic
+- id: pres-2022-09-enaa32-poster-ariel
+  title: Homogeneous Stellar Characterization for the Ariel Space Mission
+  kind: poster
+  role: poster
+  venue: ENAA XXXII, National Meeting of Astronomy and Astrophysics
+  location: Lisbon, Portugal
+  date: 2022-09
+  weight: 2
+  audiences:
+  - academic
+- id: pres-2022-04-dfa-week-oral
+  title: Determinação da idade e da massa de estrelas sísmicas no catálogo Ariel
+  kind: seminar
+  role: oral
+  venue: DFA Week, Departamento de Física e Astronomia, FCUP
+  location: Porto, Portugal
+  date: 2022-04
+  weight: 1
+  audiences:
+  - academic
+funding:
+- id: fund-2026-09-arqueogal-bi-d-fellowship
+  title: PhD research fellowship under the FCT project ArqueoGal
+  kind: fellowship
+  role: fellow
+  date: '2026-09-01'
+  end_date: '2027-08-31'
+  identifiers:
+    reference: CIAAUP-17/2026-BI-D
+  summary: Twelve-month PhD research fellowship funded by the ArqueoGal project.
+  weight: 4
+  audiences:
+  - academic
+  funder: FCT, through project 2024.15303.PEX, hosted at IA
+  pi: Tiago L. Campante
+- id: fund-2026-arqueogal-pex-participant
+  title: 'FCT Exploratory Research Project ArqueoGal: Unraveling the evolutionary history of the Milky Way with Galactic Archaeology'
+  kind: grant
+  role: participant
+  date: '2026-02-16'
+  end_date: '2027-08-15'
+  identifiers:
+    reference: 2024.15303.PEX
+    doi: 10.54499/2024.15303.PEX
+  summary: Named participant and developer of the project's machine-learning pipelines, with allocations on the Stellar Population Classification and Galactic Modeling tasks.
+  weight: 5
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+  funder: Fundação para a Ciência e a Tecnologia
+  pi: Tiago L. Campante
+  numbers:
+    budget_eur: 59935.98
+    success_rate: 16%
+    task5_pm: 4.4
+    task6_pm: 6
+    task3_pm: 1
+    accepted: 2529
+    submitted: 2547
+- id: fund-2025-hpcvlab-deucalion-team-member
+  title: Deucalion development access under the University of Porto HPCvLAB project 2025.00007.HPCVLAB.UPORTO
+  kind: computing
+  role: team-member
+  venue: Deucalion (Minho Advanced Computing Centre)
+  date: 2025-12
+  end_date: 2026-09
+  identifiers:
+    reference: 2025.00007.HPCVLAB.UPORTO
+  summary: 'Development use of the Portuguese national supercomputer on its ARM, x86 and A100 partitions for JANUS and for HAYDN proposal tests: 94,001 core-hours in about 250 jobs.'
+  details:
+  - Also used for the HAYDNsim stellar-field and photometric-noise runs (HAYDN and PLATO).
+  tags:
+  - hpc
+  - deucalion
+  weight: 2
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  funder: FCT I.P., High Performance Computing Virtual Laboratory
+  numbers:
+    core_hours: 94001
+    jobs: 250
+  status: ended
+- id: fund-2025-09-fct-doctoral-fellowship
+  title: FCT Doctoral Fellowship
+  kind: fellowship
+  role: fellow
+  date: '2025-09-01'
+  end_date: '2026-08-31'
+  identifiers:
+    reference: 2025.01843.BD
+    doi: 10.54499/2025.01843.BD
+  summary: Competitive national doctoral fellowship, held for twelve months.
+  weight: 5
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+  funder: Fundação para a Ciência e a Tecnologia
+  status: ended
+- id: fund-2021-fct-msc-research-grant
+  title: FCT MSc Research Grant, BreakStarS project
+  kind: scholarship
+  role: fellow
+  date: '2021'
+  end_date: '2022'
+  identifiers:
+    reference: CIAAUP-08/2021-BI-M
+  weight: 3
+  audiences:
+  - academic
+  funder: Fundação para a Ciência e a Tecnologia, through IA/CAUP
+  status: ended
+awards:
+- id: award-2023-best-msc-student-astronomy
+  title: Best Master's Student in Astronomy and Astrophysics
+  kind: prize
+  institution: Faculdade de Ciências da Universidade do Porto
+  location: Porto, Portugal
+  date: '2023'
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+software:
+- id: sw-2026-10-starfold-manual
+  title: Starfold manual
+  kind: docs
+  role: sole-developer
+  date: '2026-10-19'
+  identifiers:
+    url: https://andreaswneitzel.github.io/Starfold/
+    repo: https://github.com/AndreasWNeitzel/starfold
+  summary: Sphinx documentation site for Starfold with tutorials, one page per metric, how-to guides, a flag reference, a glossary and an index, written for readers with one statistics course.
+  details:
+  - 'Three executed notebooks on real data: the scikit-learn digits dataset, the APOGEE DR19 example table, and a tour of the result object.'
+  - Custom theme with light and dark modes, built and deployed by GitHub Actions to GitHub Pages.
+  tags:
+  - documentation
+  - sphinx
+  - technical-writing
+  weight: 3
+  audiences:
+  - academic
+  - industry-tech
+  - industry-ai
+- id: sw-2026-starfold
+  title: Starfold
+  kind: package
+  role: sole-developer
+  date: '2026-04-20'
+  end_date: present
+  people:
+  - A. W. Neitzel
+  identifiers:
+    repo: https://github.com/AndreasWNeitzel/starfold
+    url: https://andreaswneitzel.github.io/Starfold/
+  summary: 'Python package that finds groups in a numeric table without labels, using UMAP, HDBSCAN and Optuna, and reports how far to trust them: recurrence across refits, named reliability flags and an optional Monte Carlo calibration test; extends Neitzel et al. 2025.'
+  details:
+  - Optuna searches UMAP and HDBSCAN settings with the library defaults as the first trial; each setting is scored without labels against a structureless copy of the table.
+  - The selected setting is refit on 32 random subsets of 80 percent of the rows to measure how often each row and group recurs; unsupported claims come back as 17 named flags.
+  - Optional calibration test against structureless copies of the table, costing up to 1,938 fits at the default settings.
+  - GPU path through RAPIDS cuML with a CPU fallback; strict mypy typing; 294 tests; checksummed JSON and NumPy result files without pickles.
+  - 'Benchmark reported openly: it matched or beat the library defaults on 8 of 10 tables but on only 2 of 4 held-out tables, and lost on COIL-20 and Isolet.'
+  - Release 0.2.0 on 2026-10-19 replaced the earlier 0.0.1 code base with a new API.
+  tags:
+  - python
+  - umap
+  - hdbscan
+  - optuna
+  - unsupervised-learning
+  - gpu
+  - rapids
+  - open-source
+  weight: 5
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  - quant
+  licence: MIT
+  version: 0.2.0
+  numbers:
+    refits: 32
+    flags: 17
+    null_test_fits: 1,938
+    subset_fraction: 80
+    tests: 294
+    benchmark_matched_or_beat: 8 of 10
+    heldout_matched_or_beat: 2 of 4
+    heldout_mean_recovery: 0.239 against 0.291 for the defaults
+    src_lines: about 5,500
+    test_lines: about 4,500
+- id: sw-2026-stellar-explorer
+  title: Stellar Explorer
+  kind: app
+  role: sole-developer
+  date: 2026-04
+  end_date: present
+  identifiers:
+    url: https://andreaswneitzel.github.io/stellar-explorer/
+    repo: https://github.com/AndreasWNeitzel/stellar-explorer-data
+  summary: Client-side browser app exploring a MESA r24.08.1 plus GYRE 1 solar-mass evolutionary track, with an HR diagram, animated interior, profile panels and an asteroseismic spectrum from GYRE modes.
+  tags:
+  - javascript
+  - canvas
+  - hdf5
+  - mesa
+  - gyre
+  weight: 3
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+- id: sw-2026-arqueogal-repo
+  title: ArqueoGal integration repository
+  kind: software
+  role: sole author and maintainer
+  date: 2026-04
+  end_date: present
+  identifiers:
+    repo: https://github.com/AndreasWNeitzel/ArqueoGal
+  summary: Public personal repository for the data preparation, external-tool orchestration and catalogue governance behind Andreas's contribution to the ArqueoGal project. It is his to list. It is not the project team's repository and does not contain the JANUS model or the Starfold classifier, which are separate repositories.
+  details:
+  - 'GitHub visibility PUBLIC; description: Codebase for my contribution to the ArqueoGal PEX project; last push 2026-06-05.'
+  - Owns observational acquisition and mandatory Gaia corrections (Lindegren+2021 parallax zero point, Riello+2021 G correction), APOGEE DR19 preparation with Mészáros+2025 label corrections, extinction and distance assembly, galpy kinematics, selection functions, and per-file provenance sidecars.
+  - 'State on 2026-10-25: the published HEAD (2026-06-05) still contains the pre-extraction monolith; a large uncommitted restructuring that removed the in-tree JANUS ancestor is pending Andreas''s review. Do not describe the public repository''s contents from the working tree until that lands.'
+  - 'Not a release product of the project: no catalogue has been published from it.'
+  tags:
+  - python
+  - gaia
+  - apogee
+  - data-engineering
+  - provenance
+  weight: 2
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+  licence: MIT
+  version: 0.1.0
+service:
+- id: serv-2024-07-tasc8-loc
+  title: Local Organising Committee member, TASC8/KASC15 workshop
+  kind: organisation
+  role: LOC
+  venue: TASC8/KASC15, 8th TESS and 15th Kepler Asteroseismic Science Consortium Workshop
+  location: Porto, Portugal
+  date: '2024-07-15'
+  end_date: '2024-07-19'
+  identifiers:
+    url: https://www.iastro.pt/research/conferences/tasc8-kasc15/
+  weight: 3
+  audiences:
+  - academic
+  - industry-tech
+- id: serv-2023-12-stars-day-chair
+  title: Chair of the Local Organising Committee, IA Stars Day
+  kind: chair
+  role: chair
+  venue: IA Stars Day
+  location: Porto, Portugal
+  date: '2023-12-04'
+  weight: 3
+  audiences:
+  - academic
+  - industry-tech
+- id: serv-2022-stars-day-loc
+  title: Local Organising Committee member, IA Stars Day
+  kind: organisation
+  role: LOC
+  venue: IA Stars Day
+  location: Porto, Portugal
+  date: '2022'
+  weight: 2
+  audiences:
+  - academic
+teaching:
+- id: teach-2025-08-evf-tutor
+  title: Tutor, Escola de Verão de Física 2025
+  kind: tutor
+  role: tutor
+  institution: Faculdade de Ciências da Universidade do Porto
+  location: Porto, Portugal
+  date: '2025-08-24'
+  identifiers:
+    url: https://e-fisica.fc.up.pt
+  summary: One-week summer school for secondary-school students.
+  weight: 2
+  audiences:
+  - academic
+- id: teach-2025-06-ia-summer-programme
+  title: Supervisor, IA Summer Programme 2025
+  kind: supervisor
+  role: supervisor
+  institution: IA/CAUP
+  location: Porto, Portugal
+  date: '2025-06-30'
+  identifiers:
+    url: https://divulgacao.iastro.pt/en/summerprogram2025-en/
+  summary: Three-week supervision of university students on hands-on Galactic archaeology and machine learning with synthetic data.
+  weight: 3
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+- id: teach-2024-08-evf-tutor
+  title: Tutor, Escola de Verão de Física 2024
+  kind: tutor
+  role: tutor
+  institution: Faculdade de Ciências da Universidade do Porto
+  location: Porto, Portugal
+  date: '2024-08-25'
+  identifiers:
+    url: https://e-fisica.fc.up.pt/edicoes/19a-edicao.1.html
+  summary: One-week summer school for secondary-school students.
+  weight: 2
+  audiences:
+  - academic
+- id: teach-2024-07-ia-summer-programme
+  title: Supervisor, IA Summer Programme 2024
+  kind: supervisor
+  role: supervisor
+  institution: IA/CAUP
+  location: Porto, Portugal
+  date: '2024-07-08'
+  identifiers:
+    url: https://divulgacao.iastro.pt/pt/ia-summer-program-2024-projects-list/
+  summary: Three-week supervision of university students on hands-on Galactic archaeology and machine learning with synthetic data.
+  weight: 3
+  audiences:
+  - academic
+  - industry-ai
+  - industry-tech
+- id: teach-2023-08-evf-tutor
+  title: Tutor, Escola de Verão de Física 2023 (The Colours of the Sun)
+  kind: tutor
+  role: tutor
+  institution: Faculdade de Ciências da Universidade do Porto
+  location: Porto, Portugal
+  date: '2023-08-27'
+  identifiers:
+    url: https://e-fisica.fc.up.pt/index.html
+  summary: One-week summer school for secondary-school students.
+  weight: 2
+  audiences:
+  - academic
+outreach:
+- id: out-2023-02-physics-demonstrations-monitor
+  title: Physics-demonstrations monitor for visiting school groups
+  kind: demonstration
+  role: monitor
+  institution: Faculdade de Ciências da Universidade do Porto
+  location: Porto, Portugal
+  date: 2023-02
+  end_date: present
+  weight: 2
+  audiences:
+  - academic
+memberships:
+- id: mem-2022-tasoc
+  title: Affiliate, TESS Asteroseismic Science Operations Centre (TASOC)
+  kind: consortium
+  role: member
+  date: '2022'
+  end_date: present
+  weight: 2
+  audiences:
+  - academic
+- id: mem-2022-kasoc
+  title: Member, Kepler Asteroseismic Science Consortium (KASOC), Red-Giant Oscillations working group
+  kind: consortium
+  role: member
+  date: '2022'
+  end_date: present
+  weight: 2
+  audiences:
+  - academic
+- id: mem-2021-ariel-science-consortium
+  title: Member, ESA Ariel Science Consortium, Stellar Characterisation working group (Age, Mass and Radius sub-group)
+  kind: consortium
+  role: member
+  date: '2021'
+  end_date: present
+  weight: 3
+  audiences:
+  - academic
+events:
+- id: ev-2024-07-porto-summer-school-asteroseismology
+  title: Porto Summer School on Asteroseismology, From Pixels to Stellar Ages
+  kind: school
+  role: participant
+  location: Vila do Conde, Portugal
+  date: '2024-07-21'
+  identifiers:
+    url: https://estrelas.iastro.pt/en/evento/porto-summer-school-on-asteroseismology-from-pixels-to-stellar-ages/
+  weight: 2
+  audiences:
+  - academic
+- id: ev-2025-05-milky-way-assembly-tale
+  title: The Milky Way Assembly Tale conference (remote attendance)
+  kind: conference
+  role: participant
+  location: Remote
+  date: '2024-05-27'
+  end_date: '2024-05-31'
+  identifiers:
+    url: https://indico.ict.inaf.it/event/2600/
+  weight: 1
+  audiences:
+  - academic
+- id: ev-2024-05-paranal-espresso-observing-run
+  title: Observing run with ESPRESSO at the VLT, ESO Paranal Observatory
+  kind: observing-run
+  role: observer
+  location: Paranal, Chile
+  date: '2024-05-02'
+  summary: On-site observer for a cool-dwarf asteroseismology programme.
+  weight: 3
+  audiences:
+  - academic
+skills:
+- id: skill-2026-python-engineering
+  title: Python engineering for research software
+  kind: programming
+  date: '2026'
+  summary: Typed Python packages with tests, continuous integration, locked environments, provenance stamps, Sphinx documentation.
+  weight: 5
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  - academic
+  evidence:
+  - sw-2026-starfold
+  - sw-2026-janus-p15
+- id: skill-2026-ml-probabilistic-deep-learning
+  title: 'Probabilistic deep learning: conditional normalising flows, ensembles, mixture uncertainties'
+  kind: ml
+  date: '2026'
+  summary: Designed and trained an ensemble of flow-based networks that returns a joint posterior over 25 stellar labels per star, with the uncertainty of each value and the disagreement between networks.
+  tags:
+  - pytorch
+  - zuko
+  - normalising-flows
+  weight: 5
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  - academic
+  evidence:
+  - JANUS_P15/p15/train/flow_head.py
+  - JANUS_P15/p15/train/run_flow.py
+  numbers:
+    labels: 25
+- id: skill-2026-uncertainty-calibration
+  title: 'Uncertainty calibration and reliability: isotonic calibration, gradient boosting, selection tests, coverage'
+  kind: ml
+  date: '2026'
+  summary: 'Built the per-star reliability layer of JANUS: a calibrated probability that a prediction is wrong (gradient boosting with isotonic calibration, cross-fitted), Poisson-binomial selection tests, and PIT-based interval coverage checks.'
+  tags:
+  - calibration
+  - scikit-learn
+  weight: 5
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  evidence:
+  - JANUS_P15/p15/trust/
+  - JANUS_P15/scripts/home_stretch/v15_1_ph_frozen.py
+  - JANUS_P15/scripts/home_stretch/v3_rank_calibration.py
+- id: skill-2026-out-of-distribution-detection
+  title: 'Out-of-distribution detection: nearest-neighbour novelty in a Gaussianised input space'
+  kind: ml
+  date: '2026'
+  summary: A novelty score per star from the distance to the training set in the rank-transformed input space, validated on survey samples outside the training selection.
+  weight: 4
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  evidence:
+  - JANUS_P15/p15/trust/novelty.py
+- id: skill-2026-data-engineering-at-scale
+  title: 'Data engineering at scale: archive ingestion, Parquet pipelines, a manifest-driven data store with provenance'
+  kind: data
+  date: '2026'
+  summary: Designed the central data store and the ingestion of whole Gaia releases (archive queries and bulk files to columnar shards) with manifest-resolved datasets, anti-duplication rules and provenance on every product.
+  tags:
+  - pyarrow
+  - parquet
+  - tap
+  weight: 4
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  evidence:
+  - JANUS_P15/p15/store.py
+  - JANUS_P15/docs/DATA_STORE_SPEC.md
+  - JANUS_P15/p15/ingest/
+  - JANUS_P15/scripts/fetch/
+- id: skill-2026-web-visualisation
+  title: Scientific visualisation and browser applications
+  kind: web
+  date: '2026'
+  summary: matplotlib, Plotly, Canvas2D and HDF5-in-browser applications; Manim animations.
+  weight: 3
+  audiences:
+  - industry-tech
+  - industry-ai
+  - academic
+  evidence:
+  - sw-2026-stellar-explorer
+- id: skill-2026-signal-processing-noise-propagation
+  title: 'Signal processing: wavelet bases, linear noise propagation, covariance handling'
+  kind: data
+  date: '2026'
+  summary: 'Built the deterministic input chain of JANUS: projection of calibrated spectra on a fixed wavelet basis with the measurement covariance propagated through the same linear map, one code path for training and inference.'
+  weight: 3
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  evidence:
+  - JANUS_P15/p15/preprocess/chain.py
+  - JANUS_P15/p15/features/build_bases.py
+- id: skill-2026-unsupervised-learning
+  title: Unsupervised learning and manifold methods
+  kind: ml
+  date: '2025'
+  summary: UMAP, HDBSCAN, Optuna search, stability and recurrence measurement, matched-null calibration.
+  weight: 5
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  - academic
+  evidence:
+  - pub-2025-neitzel-manifold-learning
+  - sw-2026-starfold
+- id: skill-2026-hpc
+  title: High-performance computing
+  kind: hpc
+  date: '2025'
+  summary: 'Slurm on ARM, x86 and GPU partitions of the Deucalion supercomputer and the UniBo clusters: JANUS training and production scoring, HAYDN and PLATO photometric-noise runs, memory-bounded process fan-out, submission gates and per-job cost ledgers; CUDA and RAPIDS workflows.'
+  weight: 4
+  audiences:
+  - industry-ai
+  - industry-tech
+  - quant
+  - academic
+  evidence:
+  - fund-2025-hpcvlab-deucalion-team-member
+  - fund-2026-10-cpca-a1-deucalion
+  - fund-2026-10-cpca-a2-marenostrum
+- id: skill-2026-astronomy-data
+  title: Survey data and stellar modelling tools
+  kind: astronomy
+  date: '2022'
+  summary: Gaia DR3 (astrometry, RVS, XP spectra, GSP-Spec), APOGEE, LAMOST, GALAH, 2MASS, TESS and Kepler/K2 asteroseismology; astropy, galpy, TOPCAT, ADQL, PARAM, MESA, TRILEGAL, MWDUST.
+  weight: 4
+  audiences:
+  - academic
+  - industry-ai

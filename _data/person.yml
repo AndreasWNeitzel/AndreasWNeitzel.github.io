@@ -1,0 +1,36 @@
+# Generated from the achievements ledger. Do not edit by hand.
+name: Andreas W. Neitzel
+given_names: Andreas W.
+family_name: Neitzel
+headline: PhD candidate in astronomy, machine learning for Galactic archaeology
+location: Porto, Portugal
+emails:
+  personal: andreaswneitzel@gmail.com
+  academic: andreaswneitzel@astro.up.pt
+identifiers:
+  orcid: 0000-0001-6283-907X
+  google_scholar: 7Pt74F0AAAAJ
+  github: AndreasWNeitzel
+  linkedin: andreaswneitzel
+  cienciavitae: 4311-223B-4AA2
+  ads_author: Neitzel, A. W.
+websites:
+  personal: https://andreaswneitzel.github.io
+affiliations:
+- name: Instituto de Astrofísica e Ciências do Espaço, Universidade do Porto
+  short: IA/CAUP
+  address: Rua das Estrelas, 4150-762 Porto, Portugal
+  from: '2021'
+- name: Departamento de Física e Astronomia, Faculdade de Ciências da Universidade do Porto
+  short: DFA/FCUP
+  address: Rua do Campo Alegre s/n, 4169-007 Porto, Portugal
+  from: '2017'
+languages:
+- language: Portuguese
+  level: native
+- language: English
+  level: C2
+- language: German
+  level: A2
+- language: French
+  level: A2

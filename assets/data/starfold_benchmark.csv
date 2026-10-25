@@ -1,0 +1,11 @@
+table,key,set,source,n_rows,n_features,n_classes,starfold_recovery,defaults_recovery,gain,result
+Rice,rice,development,"UCI Rice Cammeo and Osmancik, doi:10.24432/C5MW4Z",3810,7,2,0.292,0.008,0.283,starfold
+Dry Bean,dry_bean,development,"UCI Dry Bean, doi:10.24432/C50S4B",13611,16,7,0.5,0.445,0.055,starfold
+Landsat,landsat,development,OpenML 182,6430,36,6,0.354,0.048,0.305,starfold
+Digits,digits,development,scikit-learn load_digits (UCI handwritten digits test set),1797,64,10,0.74,0.637,0.102,starfold
+PenDigits,pendigits,development,OpenML 32,10992,16,10,0.819,0.753,0.066,starfold
+Waveform,waveform,development,OpenML 60,5000,40,3,0.111,0.0,0.111,starfold
+COIL-20,coil20,held-out,OpenML 46783,1440,1024,20,0.518,0.581,-0.063,defaults
+Isolet,isolet,held-out,OpenML 300,7797,617,26,0.198,0.453,-0.255,defaults
+Gas drift,gas_drift,held-out,OpenML 1476,13910,128,6,0.038,0.023,0.015,match within 0.02
+Letter,letter,held-out,OpenML 6,20000,16,26,0.203,0.108,0.095,starfold
