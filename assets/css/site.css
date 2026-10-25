@@ -44,6 +44,7 @@
   body { margin: 0; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   img, picture, svg { display: block; max-inline-size: 100%; block-size: auto; }
   button { font: inherit; }
+  [hidden] { display: none !important; }
 }
 
 @layer base {
@@ -55,6 +56,18 @@
     --rule: light-dark(#dededa, #2d2e31);
     --accent: light-dark(#1f4e79, #8db5e3);
     --accent-visited: light-dark(#4b3f72, #b7a9de);
+
+    --cat-0: #3f90da;
+    --cat-1: #ffa90e;
+    --cat-2: light-dark(#bd1f01, #c4280d);
+    --cat-3: #94a4a2;
+    --cat-4: light-dark(#832db6, #923fc7);
+    --cat-5: #a96b59;
+    --cat-6: #e76300;
+    --cat-7: #b9ac70;
+    --cat-8: #717581;
+    --cat-9: #92dadd;
+    --context: #8a8a87;
 
     --serif: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
     --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -175,6 +188,9 @@
 
   .figure { margin: calc(var(--u) * 3) 0; }
   .figure img { inline-size: 100%; background: var(--surface); border-radius: var(--radius); }
+  .fig-wrap { padding: calc(var(--u) * 2) calc(var(--u) * 1.5); background: var(--surface); border-radius: var(--radius); }
+  .figure svg.fig { display: block; inline-size: 100%; block-size: auto; color: var(--ink); overflow: visible; }
+  .figure svg.fig text { font-variant-numeric: tabular-nums; }
   .figure figcaption { font-size: 0.9375rem; color: var(--muted); margin-block-start: var(--u); max-inline-size: var(--measure); }
   .list { list-style: disc; padding-inline-start: 1.2em; }
   .list li { margin-block-end: var(--u); }

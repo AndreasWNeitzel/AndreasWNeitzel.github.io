@@ -14,13 +14,15 @@
   const tipCanvas = tip.querySelector("canvas");
   const tipText = tip.querySelector("p");
   const groupsBody = root.querySelector(".sf-groups tbody");
-  const palette = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"];
+  const T = window.siteTokens;
+  let palette = T.categorical();
+  let grey = T.colour("--context");
   const fragments = Array.from({ length: 51 }, (_, i) => `hsl(${(i * 137.508) % 360} 55% 48%)`);
-  const grey = "#b8b8b8";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let D = null, pts = null, bounds = null, mode = "starfold", refit = 0, timer = null, hover = -1, maps = [], cells = null, cellSize = 0;
 
-  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const css = (name) => T.colour(name);
+  T.onThemeChange(() => { palette = T.categorical(); grey = T.colour("--context"); if (D) { fillGroups(); draw(); } });
 
   async function load() {
     loadBtn.disabled = true;
@@ -36,7 +38,7 @@
     prepare();
     loadBtn.hidden = true;
     controls.hidden = false;
-    status.textContent = `${D.n.toLocaleString("en-GB")} digits. Starfold found ${D.n_groups_starfold} groups; one run of the library defaults found ${D.n_groups_defaults}.`;
+    status.hidden = true;
     fillGroups();
     resize();
   }
@@ -98,19 +100,20 @@
     if (!pts) return;
     const dpr = window.devicePixelRatio || 1;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = css("--surface") || "#f6f6f4";
+    ctx.fillStyle = css("--surface");
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     const r = 2.6;
     for (let i = 0; i < pts.length; i++) {
       const c = colour(i);
       if (!c) continue;
       ctx.globalAlpha = c[1];
-      ctx.fillStyle = c[0];
-      ctx.beginPath(); ctx.arc(pts[i][0], pts[i][1], r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(pts[i][0], pts[i][1], r, 0, Math.PI * 2);
+      if (c[0] === grey) { ctx.strokeStyle = grey; ctx.lineWidth = 1; ctx.stroke(); }
+      else { ctx.fillStyle = c[0]; ctx.fill(); }
     }
     ctx.globalAlpha = 1;
     if (hover >= 0) {
-      ctx.strokeStyle = css("--ink") || "#1b1b1b"; ctx.lineWidth = 1.5;
+      ctx.strokeStyle = css("--ink"); ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(pts[hover][0], pts[hover][1], r + 3, 0, Math.PI * 2); ctx.stroke();
     }
   }

@@ -64,8 +64,8 @@ positions:
   end_date: 2026-03
   summary: Six-month secondment in A. Miglio's group building simulation pipelines for the proposed HAYDN mission.
   details:
-  - Built Python tooling for photometric-noise estimation and synthetic stellar catalogue generation (TRILEGAL, King-profile spatial sampling) for globular and open clusters.
-  - Ran HAYDN noise-estimator workloads on the EuroHPC Deucalion supercomputer (FCT HPCvLAB project 2025.00007) and on the UniBo Matrix and BladeRunner clusters.
+  - Built the noise-estimation and synthetic-catalogue tools (TRILEGAL, King-profile sampling) for globular and open clusters.
+  - Ran the noise simulations on the Deucalion supercomputer and the University of Bologna clusters.
   weight: 4
   audiences:
   - academic
@@ -81,8 +81,8 @@ positions:
   summary: Doctoral research on machine-learning methods for Galactic archaeology with Gaia, APOGEE and asteroseismic data.
   details:
   - Developer of the machine-learning pipelines of the FCT exploratory project ArqueoGal (2024.15303.PEX), PI T. L. Campante.
-  - Built the seismic and spectroscopic characterisation pipeline cross-matching Gaia DR3, GSP-Spec, TESS, Kepler/K2 and 2MASS, with PARAM Bayesian ages, MWDUST extinction and bolometric corrections.
-  - Co-author on the asteroseismic detection of solar-like oscillations in the K5 dwarf epsilon Indi A; on-site observer with ESPRESSO at the VLT, Paranal, May 2024.
+  - Built a characterisation pipeline that combines Gaia DR3, TESS, Kepler/K2 and 2MASS data with PARAM to estimate stellar ages.
+  - Co-author of the detection of solar-like oscillations in the K5 dwarf epsilon Indi, and observer with ESPRESSO at the VLT, Paranal, in May 2024.
   weight: 5
   audiences:
   - academic
@@ -107,6 +107,7 @@ positions:
 publications:
 - id: pub-2025-neitzel-manifold-learning
   title: Dissecting stellar populations with manifold learning. I. Validation of the method on a synthetic Milky Way-like galaxy
+  tagline: A method for separating the Milky Way's stellar populations, tested on a synthetic galaxy.
   kind: article
   role: first-author
   venue: Astronomy and Astrophysics, 695, A243
@@ -119,7 +120,7 @@ publications:
   identifiers:
     doi: 10.1051/0004-6361/202451718
     arxiv: '2501.16294'
-  summary: Manifold learning (UMAP and HDBSCAN) separates thin-disc, thick-disc, halo and accreted populations in chrono-chemo-kinematic space, validated on FIRE-2 synthetic Gaia DR3-like samples.
+  summary: Uses UMAP and HDBSCAN to separate thin-disc, thick-disc, halo and accreted stars by age, chemistry and motion, tested on synthetic Gaia samples built from the FIRE-2 simulations.
   tags:
   - galactic-archaeology
   - umap
@@ -133,6 +134,7 @@ publications:
   - quant
 - id: pub-2025-neitzel-appendix-data
   title: 'Appendix: Dissecting stellar populations with manifold learning I. Validation of the method on a synthetic Milky Way-like galaxy'
+  tagline: Supplementary appendix to the 2025 manifold-learning paper.
   kind: data
   role: first-author
   venue: Zenodo
@@ -151,6 +153,7 @@ publications:
   - academic
 - id: pub-2024-campante-espresso
   title: 'Expanding the frontiers of cool-dwarf asteroseismology with ESPRESSO: detection of solar-like oscillations in the K5 dwarf epsilon Indi'
+  tagline: Solar-like oscillations detected in the nearby K dwarf epsilon Indi.
   kind: letter
   role: co-author
   venue: Astronomy and Astrophysics, 683, L16
@@ -163,7 +166,7 @@ publications:
   - et al. including A. W. Neitzel
   identifiers:
     doi: 10.1051/0004-6361/202449197
-  summary: First asteroseismic detection of solar-like oscillations in a K5 dwarf.
+  summary: Detection of solar-like oscillations in the K5 dwarf epsilon Indi with the ESPRESSO spectrograph.
   weight: 4
   audiences:
   - academic
@@ -171,6 +174,7 @@ publications:
   contribution: Bayes-factor test for the presence of a power excess against a model without one (Appendix D).
 - id: pub-2022-msc-thesis
   title: Determination of age and mass for seismic stars in the Ariel input catalog
+  tagline: Ages and masses of oscillating stars in the Ariel target catalogue.
   kind: thesis
   role: first-author
   venue: Universidade do Porto, Faculdade de Ciências
@@ -182,6 +186,7 @@ publications:
   - academic
 - id: pub-2022-magrini-ariel
   title: 'Ariel stellar characterisation. I. Homogeneous stellar parameters of 187 FGK planet host stars: description and validation of the method'
+  tagline: Consistent parameters for 187 planet-host stars targeted by ESA's Ariel mission.
   kind: article
   role: co-author
   venue: Astronomy and Astrophysics, 663, A161
@@ -204,15 +209,14 @@ publications:
 presentations:
 - id: pres-2026-10-imas13-oral-janus
   title: 'JANUS: a neural network for APOGEE-like chemistry of the TESS asteroseismic red giants from Gaia XP spectra, with per-star reliability'
+  tagline: A neural network that reads stellar chemistry from Gaia's low-resolution spectra.
   kind: oral
   role: oral
   venue: IMAS13, 13th Iberian Meeting on Asteroseismology
   location: Cádiar (Granada), Spain
   date: '2026-10-21'
   end_date: '2026-10-23'
-  summary: Contributed talk of 12 minutes at the 13th Iberian Meeting on Asteroseismology, Alquería de Morayma, Cádiar.
-  details:
-  - The abstract is public through the meeting; the slide deck carries unpublished results and is not public.
+  summary: Contributed 12-minute talk.
   tags:
   - talk
   - asteroseismology
@@ -222,14 +226,15 @@ presentations:
   audiences:
   - academic
 - id: pres-2026-09-enaa36-poster-janus
-  title: JANUS poster at ENAA XXXVI, the National Meeting of Astronomy and Astrophysics
+  title: 'JANUS: a machine-learning-based Gaia XP chemistry catalogue for the full TESS asteroseismic red-giant sample'
+  tagline: A Gaia-based chemistry catalogue for the oscillating red giants observed by TESS.
   kind: poster
   role: poster
   venue: ENAA XXXVI
   location: Porto, Portugal
   date: '2026-09-09'
   end_date: '2026-09-12'
-  summary: Poster on JANUS at the Portuguese national astronomy meeting, with a poster pitch.
+  summary: Poster with a short spoken pitch.
   tags:
   - poster
   - enaa
@@ -238,13 +243,13 @@ presentations:
   - academic
 - id: pres-2026-09-enaa36-pitch-janus
   title: JANUS poster pitch at ENAA XXXVI
+  tagline: Short spoken introduction to the JANUS poster.
   kind: pitch
   role: oral
   venue: ENAA XXXVI
   location: Porto, Portugal
   date: '2026-09-09'
   end_date: '2026-09-12'
-  summary: Short oral pitch of the JANUS poster at ENAA XXXVI.
   tags:
   - pitch
   - enaa
@@ -253,6 +258,7 @@ presentations:
   - academic
 - id: pres-2026-07-tasc10-poster-haydnsim
   title: 'HAYDNsim: Forecasting photometric noise in the crowded fields that defeat current missions'
+  tagline: Forecasting photometric noise in crowded star fields for the proposed HAYDN mission.
   kind: poster
   role: poster
   venue: TASC10/KASC17, 10th TESS and 17th Kepler Asteroseismic Science Consortium Workshop
@@ -278,6 +284,7 @@ presentations:
   - industry-tech
 - id: pres-2026-07-tasc10-oral-janus
   title: Contrastive deep learning for structure-preserving chemistry of TESS asteroseismic red giants from Gaia XP spectra
+  tagline: Learning the chemistry of oscillating red giants from Gaia's low-resolution spectra.
   kind: oral
   role: oral
   venue: TASC10/KASC17 workshop
@@ -286,9 +293,7 @@ presentations:
   identifiers:
     doi: 10.5281/zenodo.23262691
     url: https://doi.org/10.5281/zenodo.23262691
-  summary: Contributed talk at the TESS and Kepler asteroseismic science consortia workshop; the slides are deposited on Zenodo under CC BY 4.0.
-  details:
-  - Abstract accepted on 30 April 2026 (confirmation e-mail from tasc10@au.dk); slides deposited on Zenodo on 2026-10-09 with the funding acknowledgements.
+  summary: Contributed talk. The slides are on Zenodo under CC BY 4.0.
   tags:
   - talk
   - asteroseismology
@@ -300,6 +305,7 @@ presentations:
   - academic
 - id: pres-2024-11-imas11-oral
   title: Intelligent Identification of Stellar Populations with Manifold Learning
+  tagline: Identifying the Milky Way's stellar populations with manifold learning.
   kind: oral
   role: oral
   venue: 11th Iberian Meeting on Asteroseismology (IMAS11)
@@ -313,6 +319,7 @@ presentations:
   - industry-ai
 - id: pres-2024-09-enaa34-oral
   title: Dissecting Stellar Populations with Manifold Learning
+  tagline: Separating stellar populations with manifold learning.
   kind: oral
   role: oral
   venue: ENAA XXXIV, National Meeting of Astronomy and Astrophysics
@@ -325,6 +332,7 @@ presentations:
   - academic
 - id: pres-2024-07-tasc8-poster-ferreira-coauthor
   title: 'Small separations in red-giant stars: quest for late evolution signatures using asteroseismology'
+  tagline: Small frequency separations as markers of late red-giant evolution.
   kind: poster
   role: co-author
   venue: TASC8/KASC15, 8th TESS and 15th Kepler Asteroseismic Science Consortium Workshop
@@ -342,6 +350,7 @@ presentations:
   - academic
 - id: pres-2024-07-tasc8-oral
   title: Identification of stellar populations through latent space projection
+  tagline: Identifying stellar populations in a learned low-dimensional space.
   kind: oral
   role: oral
   venue: TASC8/KASC15, 8th TESS and 15th Kepler Asteroseismic Science Consortium Workshop
@@ -362,6 +371,7 @@ presentations:
   - industry-ai
 - id: pres-2023-09-enaa33-oral
   title: Machine Learning Applied to Galactic Archaeology
+  tagline: Machine learning applied to Galactic archaeology.
   kind: oral
   role: oral
   venue: ENAA XXXIII, National Meeting of Astronomy and Astrophysics
@@ -374,6 +384,7 @@ presentations:
   - academic
 - id: pres-2022-09-fisica2022-oral-ariel
   title: Stellar Characterization for the ARIEL Space Mission
+  tagline: Stellar characterisation for the Ariel space mission.
   kind: oral
   role: oral
   venue: FÍSICA 2022, 23rd National Physics Conference (Sociedade Portuguesa de Física)
@@ -384,6 +395,7 @@ presentations:
   - academic
 - id: pres-2022-09-enaa32-poster-ariel
   title: Homogeneous Stellar Characterization for the Ariel Space Mission
+  tagline: Homogeneous stellar characterisation for the Ariel space mission.
   kind: poster
   role: poster
   venue: ENAA XXXII, National Meeting of Astronomy and Astrophysics
@@ -394,6 +406,7 @@ presentations:
   - academic
 - id: pres-2022-04-dfa-week-oral
   title: Determinação da idade e da massa de estrelas sísmicas no catálogo Ariel
+  tagline: Ages and masses of oscillating stars in the Ariel catalogue (in Portuguese).
   kind: seminar
   role: oral
   venue: DFA Week, Departamento de Física e Astronomia, FCUP
@@ -405,13 +418,13 @@ presentations:
 funding:
 - id: fund-2026-09-arqueogal-bi-d-fellowship
   title: PhD research fellowship under the FCT project ArqueoGal
+  tagline: Twelve-month PhD research fellowship paid by the ArqueoGal project.
   kind: fellowship
   role: fellow
   date: '2026-09-01'
   end_date: '2027-08-31'
   identifiers:
     reference: CIAAUP-17/2026-BI-D
-  summary: Twelve-month PhD research fellowship funded by the ArqueoGal project.
   weight: 4
   audiences:
   - academic
@@ -419,6 +432,7 @@ funding:
   pi: Tiago L. Campante
 - id: fund-2026-arqueogal-pex-participant
   title: 'FCT Exploratory Research Project ArqueoGal: Unraveling the evolutionary history of the Milky Way with Galactic Archaeology'
+  tagline: FCT exploratory project on the Milky Way's history. Developer of its machine-learning pipelines.
   kind: grant
   role: participant
   date: '2026-02-16'
@@ -437,6 +451,7 @@ funding:
   pi: Tiago L. Campante
 - id: fund-2025-hpcvlab-deucalion-team-member
   title: Deucalion development access under the University of Porto HPCvLAB project 2025.00007.HPCVLAB.UPORTO
+  tagline: Access to Deucalion, Portugal's national supercomputer, for model training and noise simulations.
   kind: computing
   role: team-member
   venue: Deucalion (Minho Advanced Computing Centre)
@@ -444,9 +459,7 @@ funding:
   end_date: 2026-09
   identifiers:
     reference: 2025.00007.HPCVLAB.UPORTO
-  summary: 'Development use of the Portuguese national supercomputer on its ARM, x86 and A100 partitions for JANUS and for HAYDN proposal tests: 94,001 core-hours in about 250 jobs.'
-  details:
-  - Also used for the HAYDNsim stellar-field and photometric-noise runs (HAYDN and PLATO).
+  summary: 'Development work on the ARM, x86 and A100 partitions for JANUS, the HAYDN proposal tests and the HAYDNsim noise runs: 94,001 core-hours in about 250 jobs.'
   tags:
   - hpc
   - deucalion
@@ -462,6 +475,7 @@ funding:
   status: ended
 - id: fund-2025-09-fct-doctoral-fellowship
   title: FCT Doctoral Fellowship
+  tagline: Doctoral fellowship from FCT, Portugal's national science funding agency.
   kind: fellowship
   role: fellow
   date: '2025-09-01'
@@ -469,7 +483,6 @@ funding:
   identifiers:
     reference: 2025.01843.BD
     doi: 10.54499/2025.01843.BD
-  summary: Competitive national doctoral fellowship, held for twelve months.
   weight: 5
   audiences:
   - academic
@@ -480,6 +493,7 @@ funding:
   status: ended
 - id: fund-2021-fct-msc-research-grant
   title: FCT MSc Research Grant, BreakStarS project
+  tagline: FCT-funded MSc research grant on the BreakStarS stellar-evolution project.
   kind: scholarship
   role: fellow
   date: '2021'
@@ -507,16 +521,16 @@ awards:
 software:
 - id: sw-2026-10-starfold-manual
   title: Starfold manual
+  tagline: Tutorials, how-to guides and one page for every metric of the Starfold package.
   kind: docs
   role: sole-developer
   date: '2026-10-19'
   identifiers:
     url: https://andreaswneitzel.github.io/Starfold/
     repo: https://github.com/AndreasWNeitzel/starfold
-  summary: Sphinx documentation site for Starfold with tutorials, one page per metric, how-to guides, a flag reference, a glossary and an index, written for readers with one statistics course.
+  summary: Sphinx manual with tutorials, how-to guides, one page per metric, a flag reference and a glossary, written for readers with one statistics course.
   details:
-  - 'Three executed notebooks on real data: the scikit-learn digits dataset, the APOGEE DR19 example table, and a tour of the result object.'
-  - Custom theme with light and dark modes, built and deployed by GitHub Actions to GitHub Pages.
+  - 'Three executed notebooks on real data: the scikit-learn digits, the APOGEE DR19 example table and a tour of the result object.'
   tags:
   - documentation
   - sphinx
@@ -528,6 +542,7 @@ software:
   - industry-ai
 - id: sw-2026-05-tellurion
   title: 'Tellurion: a laboratory of interactive physics simulations'
+  tagline: Free website of interactive physics and astronomy simulations.
   kind: app
   role: sole-developer
   date: '2026-05-13'
@@ -535,11 +550,11 @@ software:
   identifiers:
     url: https://tellurion.dev/
     repo: https://github.com/AndreasWNeitzel/tellurion
-  summary: Free website of interactive physics and astronomy simulations across mechanics, electromagnetism, optics, quantum mechanics, relativity, statistical mechanics, fluid dynamics, condensed matter and astrophysics, built during the PhD as an educational resource.
+  summary: Covers mechanics, electromagnetism, optics, quantum mechanics, relativity, statistical mechanics, fluid dynamics, condensed matter and astrophysics. Built during the PhD as a teaching resource.
   details:
-  - Plain JavaScript modules without a framework; Canvas2D, SVG and WebGL2; shared numerical engines with symplectic integrators and Markov chain Monte Carlo samplers.
-  - Every simulation ships invariant tests against thresholds in its specification; browser end-to-end and pixel-regression tests.
-  - Optional course routes informed by FCUP programmes, with no claim to replace or match those courses. Public beta.
+  - Plain JavaScript modules without a framework, drawn in Canvas2D, SVG and WebGL2, on shared numerical engines with symplectic integrators and Markov chain Monte Carlo samplers.
+  - Each simulation has invariant tests against thresholds in its specification, plus browser end-to-end and pixel-regression tests.
+  - Optional course routes follow FCUP programmes. Public beta.
   tags:
   - education
   - javascript
@@ -554,6 +569,7 @@ software:
   version: 0.1.2
 - id: sw-2026-starfold
   title: Starfold
+  tagline: Finds groups in a table of measurements and reports how often each group recurs across 32 refits.
   kind: package
   role: sole-developer
   date: '2026-04-20'
@@ -563,12 +579,12 @@ software:
   identifiers:
     repo: https://github.com/AndreasWNeitzel/starfold
     url: https://andreaswneitzel.github.io/Starfold/
-  summary: 'Python package that finds groups in a numeric table without labels, using UMAP, HDBSCAN and Optuna, and reports how far to trust them: recurrence across refits, named reliability flags and an optional Monte Carlo calibration test; extends Neitzel et al. 2025.'
+  summary: Python package that finds groups in a table of measurements without labels, using UMAP, HDBSCAN and Optuna. It extends Neitzel et al. 2025.
   details:
-  - Optuna searches UMAP and HDBSCAN settings from the library defaults; each setting is scored without labels against a structureless copy of the table, then refit on 32 random subsets to measure how often each group recurs, with unsupported claims returned as 17 named flags.
-  - GPU path through RAPIDS cuML with a CPU fallback; strict typing and 294 tests; results saved as checksummed JSON and NumPy files.
-  - 'Benchmark reported openly: it matched or beat the library defaults on 8 of 10 tables but on only 2 of 4 held-out tables.'
-  - Release 0.2.0 (19 October 2026), MIT licence, with a Sphinx manual.
+  - Searches UMAP and HDBSCAN settings from the library defaults and scores each one without labels against a structureless copy of the table.
+  - Refits the chosen setting on 32 random subsets to measure how often each group recurs, and returns 17 named flags for claims the evidence does not support.
+  - GPU path through RAPIDS cuML with a CPU fallback, strict typing and 294 tests.
+  - Matched or beat the library defaults on 8 of 10 benchmark tables, but on only 2 of 4 held-out tables.
   tags:
   - python
   - umap
@@ -594,6 +610,7 @@ software:
     heldout_matched_or_beat: 2 of 4
 - id: sw-2026-stellar-explorer
   title: Stellar Explorer
+  tagline: Browser app showing the HR-diagram track and oscillation spectrum of a one-solar-mass star.
   kind: app
   role: sole-developer
   date: 2026-04
@@ -601,7 +618,7 @@ software:
   identifiers:
     url: https://andreaswneitzel.github.io/stellar-explorer/
     repo: https://github.com/AndreasWNeitzel/stellar-explorer-data
-  summary: Client-side browser app exploring a MESA r24.08.1 plus GYRE 1 solar-mass evolutionary track, with an HR diagram, animated interior, profile panels and an asteroseismic spectrum from GYRE modes.
+  summary: Browser app built on a MESA r24.08.1 and GYRE track of a one-solar-mass star, with an HR diagram, an animated interior, profile panels and an oscillation spectrum.
   tags:
   - javascript
   - canvas
@@ -615,15 +632,17 @@ software:
   - industry-tech
 - id: sw-2026-arqueogal-repo
   title: ArqueoGal integration repository
+  tagline: Prepares Gaia DR3 and APOGEE DR19 data for the ArqueoGal project's models.
   kind: software
   role: sole author and maintainer
   date: 2026-04
   end_date: present
   identifiers:
     repo: https://github.com/AndreasWNeitzel/ArqueoGal
-  summary: Observational data preparation, provenance and integration layer for a personal contribution to the FCT ArqueoGal project; the stellar-label model (JANUS) and the population classifier (Starfold) are separate repositories.
+  summary: Prepares Gaia DR3 and APOGEE DR19 data, with provenance, for the models of the FCT ArqueoGal project. The stellar-label model (JANUS) and the population classifier (Starfold) are separate repositories.
   details:
-  - Applies the standard Gaia corrections (Lindegren et al. 2021 parallax zero point, Riello et al. 2021 G-band correction) and the Mészáros et al. 2025 APOGEE DR19 label corrections; assembles extinction, distances and galpy kinematics, with a provenance sidecar per file.
+  - Applies the Lindegren et al. 2021 parallax zero point, the Riello et al. 2021 G-band correction and the Mészáros et al. 2025 APOGEE DR19 label corrections.
+  - Assembles extinction, distances and galpy kinematics, with a provenance file next to each product.
   tags:
   - python
   - gaia
@@ -696,7 +715,7 @@ teaching:
   date: '2025-06-30'
   identifiers:
     url: https://divulgacao.iastro.pt/en/summerprogram2025-en/
-  summary: Three-week supervision of university students on hands-on Galactic archaeology and machine learning with synthetic data.
+  summary: Three-week supervision of university students on Galactic archaeology and machine learning with synthetic data.
   weight: 3
   audiences:
   - academic
@@ -724,7 +743,7 @@ teaching:
   date: '2024-07-08'
   identifiers:
     url: https://divulgacao.iastro.pt/pt/ia-summer-program-2024-projects-list/
-  summary: Three-week supervision of university students on hands-on Galactic archaeology and machine learning with synthetic data.
+  summary: Three-week supervision of university students on Galactic archaeology and machine learning with synthetic data.
   weight: 3
   audiences:
   - academic
@@ -836,7 +855,7 @@ skills:
   title: 'Probabilistic deep learning: conditional normalising flows, ensembles, mixture uncertainties'
   kind: ml
   date: '2026'
-  summary: Designed and trained an ensemble of flow-based networks that returns a joint posterior over 25 stellar labels per star, with the uncertainty of each value and the disagreement between networks.
+  summary: An ensemble of flow-based neural networks that returns, for each star, a joint distribution over 25 stellar labels and how much the networks disagree.
   tags:
   - pytorch
   - zuko
@@ -856,7 +875,7 @@ skills:
   title: 'Uncertainty calibration and reliability: isotonic calibration, gradient boosting, selection tests, coverage'
   kind: ml
   date: '2026'
-  summary: 'Built the per-star reliability layer of JANUS: a calibrated probability that a prediction is wrong (gradient boosting with isotonic calibration, cross-fitted), Poisson-binomial selection tests, and PIT-based interval coverage checks.'
+  summary: A calibrated per-star probability that a prediction is wrong (cross-fitted gradient boosting with isotonic calibration), checked with interval-coverage and selection tests.
   tags:
   - calibration
   - scikit-learn
@@ -873,7 +892,7 @@ skills:
   title: 'Out-of-distribution detection: nearest-neighbour novelty in a Gaussianised input space'
   kind: ml
   date: '2026'
-  summary: A novelty score per star from the distance to the training set in the rank-transformed input space, validated on survey samples outside the training selection.
+  summary: A per-star novelty score from the distance to the training set, tested on survey samples outside the training selection.
   weight: 4
   audiences:
   - industry-ai
@@ -885,7 +904,7 @@ skills:
   title: 'Data engineering at scale: archive ingestion, Parquet pipelines, a manifest-driven data store with provenance'
   kind: data
   date: '2026'
-  summary: Designed the central data store and the ingestion of whole Gaia releases (archive queries and bulk files to columnar shards) with manifest-resolved datasets, anti-duplication rules and provenance on every product.
+  summary: Ingestion of whole Gaia releases into a columnar data store, with manifest-resolved datasets, duplicate checks and provenance on every product.
   tags:
   - pyarrow
   - parquet
@@ -904,7 +923,7 @@ skills:
   title: Scientific visualisation and browser applications
   kind: web
   date: '2026'
-  summary: matplotlib, Plotly, Canvas2D and HDF5-in-browser applications; Manim animations.
+  summary: matplotlib and Plotly figures, and browser applications in Canvas2D with HDF5 data read in the browser.
   weight: 3
   audiences:
   - industry-tech
@@ -916,7 +935,7 @@ skills:
   title: 'Signal processing: wavelet bases, linear noise propagation, covariance handling'
   kind: data
   date: '2026'
-  summary: 'Built the deterministic input chain of JANUS: projection of calibrated spectra on a fixed wavelet basis with the measurement covariance propagated through the same linear map, one code path for training and inference.'
+  summary: Spectra projected on a fixed wavelet basis, with the measurement covariance carried through the same linear map and one code path for training and inference.
   weight: 3
   audiences:
   - industry-ai
@@ -943,7 +962,7 @@ skills:
   title: High-performance computing
   kind: hpc
   date: '2025'
-  summary: 'Slurm on ARM, x86 and GPU partitions of the Deucalion supercomputer and the UniBo clusters: JANUS training and production scoring, HAYDN and PLATO photometric-noise runs, memory-bounded process fan-out, submission gates and per-job cost ledgers; CUDA and RAPIDS workflows.'
+  summary: Slurm jobs on the ARM, x86 and GPU partitions of Deucalion and on the University of Bologna clusters, for neural-network training, catalogue-scale scoring and photometric-noise simulations. CUDA and RAPIDS on GPUs.
   weight: 4
   audiences:
   - industry-ai
@@ -958,7 +977,7 @@ skills:
   title: Survey data and stellar modelling tools
   kind: astronomy
   date: '2022'
-  summary: Gaia DR3 (astrometry, RVS, XP spectra, GSP-Spec), APOGEE, LAMOST, GALAH, 2MASS, TESS and Kepler/K2 asteroseismology; astropy, galpy, TOPCAT, ADQL, PARAM, MESA, TRILEGAL, MWDUST.
+  summary: 'Gaia DR3 (astrometry, RVS, XP spectra, GSP-Spec), APOGEE, LAMOST, GALAH, 2MASS, and TESS and Kepler/K2 asteroseismology. Tools: astropy, galpy, TOPCAT, ADQL, PARAM, MESA, TRILEGAL, MWDUST.'
   weight: 4
   audiences:
   - academic

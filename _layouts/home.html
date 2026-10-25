@@ -14,12 +14,16 @@ layout: default
 </div>
 {%- if page.figure %}
 <figure class="row figure">
+  {%- if page.figure.svg %}
+  <div class="fig-wrap" role="img" aria-label="{{ page.figure.alt }}">{% include figures/{{ page.figure.svg }}.svg %}</div>
+  {%- else %}
   <picture>
     {%- if page.figure.webp %}
     <source srcset="{{ page.figure.webp | relative_url }}" type="image/webp">
     {%- endif %}
     <img src="{{ page.figure.src | relative_url }}" width="{{ page.figure.width }}" height="{{ page.figure.height }}" alt="{{ page.figure.alt }}" loading="lazy" decoding="async">
   </picture>
+  {%- endif %}
   <figcaption>{{ page.figure.caption | missions }}{% if page.figure.doi %} <a href="https://doi.org/{{ page.figure.doi }}">doi:{{ page.figure.doi }}</a>.{% endif %}{% if page.figure.link %} <a href="{{ page.figure.link | relative_url }}">{{ page.figure.link_label }}</a>.{% endif %}</figcaption>
 </figure>
 {%- endif %}

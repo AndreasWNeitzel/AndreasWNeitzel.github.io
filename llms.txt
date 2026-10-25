@@ -1,10 +1,10 @@
 # Andreas W. Neitzel
 
-> PhD candidate in astronomy at IA/CAUP (Instituto de Astrofísica e Ciências do Espaço), University of Porto. Develops machine-learning methods for Galactic archaeology: manifold learning that separates the stellar populations of the Milky Way in chrono-chemo-kinematic data, and neural networks that infer stellar chemistry from *Gaia* XP spectra. First author of Neitzel et al. 2025 (A&A 695, A243), which validates a UMAP and HDBSCAN method on a synthetic Milky Way-like galaxy. Developer of the machine-learning pipelines of the FCT exploratory project ArqueoGal (2024.15303.PEX). Author of Starfold, an open-source Python package for label-free group recovery with reliability flags.
+> PhD candidate in astronomy at IA/CAUP (Instituto de Astrofísica e Ciências do Espaço), University of Porto. Develops machine-learning methods for Galactic archaeology, including manifold learning that separates the stellar populations of the Milky Way in chrono-chemo-kinematic data and neural networks that infer stellar chemistry from *Gaia* XP spectra. First author of Neitzel et al. 2025 (A&A 695, A243), which validates a UMAP and HDBSCAN method on a synthetic Milky Way-like galaxy. Developer of the machine-learning pipelines of the FCT exploratory project ArqueoGal (2024.15303.PEX). Author of Starfold, an open-source Python package for label-free group recovery with reliability flags.
 
 ## Pages
 
-- [Research](https://andreaswneitzel.github.io/): who, what, and the five most recent artefacts
+- [Research](https://andreaswneitzel.github.io/): profile, short biography and the five most recent items
 - [Publications](https://andreaswneitzel.github.io/publications/): refereed papers with DOI and arXiv links
 - [Software](https://andreaswneitzel.github.io/software/): Starfold, Stellar Explorer and other research software, with status and licence
 - [Starfold held-out benchmark](https://andreaswneitzel.github.io/software/starfold-benchmark/): the ten-table benchmark, including the two held-out tables it lost

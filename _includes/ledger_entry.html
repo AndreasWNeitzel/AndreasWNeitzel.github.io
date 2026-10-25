@@ -61,7 +61,7 @@
   {%- endcapture -%}
   {%- assign meta = meta | strip -%}
   {%- if cat == "software" %}
-  <p class="meta">{{ e.summary | missions }}</p>
+  <p class="meta">{% if include.compact and e.tagline %}{{ e.tagline | missions }}{% else %}{{ e.summary | missions }}{% endif %}</p>
   {%- if e.details and include.compact != true %}
   <ul class="note">
     {%- for d in e.details %}
@@ -76,6 +76,8 @@
     {%- if e.licence %}<dt>Licence</dt><dd>{{ e.licence }}</dd>{% endif %}
   </dl>
   {%- endif %}
+  {%- elsif include.compact and e.tagline %}
+  <p class="meta">{{ e.tagline | missions }}</p>
   {%- elsif meta != "" %}
   <p class="meta">{{ meta }}</p>
   {%- endif %}

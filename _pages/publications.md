@@ -3,7 +3,7 @@ layout: page
 permalink: /publications/
 title: Publications
 description: Refereed papers by Andreas W. Neitzel, with DOI and arXiv links.
-lede: Refereed papers, first-author first. Each entry links to the journal record by DOI and to arXiv where a preprint exists.
+lede: Refereed papers, first-author papers first, each linked to its journal record by DOI and to arXiv where a preprint exists.
 ---
 {%- assign L = site.data.ledger -%}
 <section class="row" aria-labelledby="refereed">

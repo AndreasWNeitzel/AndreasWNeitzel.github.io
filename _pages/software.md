@@ -2,8 +2,8 @@
 layout: page
 permalink: /software/
 title: Software
-description: Research software by Andreas W. Neitzel, with status, licence, version and an honest benchmark.
-lede: Research software I write and maintain, with status, licence and version where they are recorded.
+description: Research software by Andreas W. Neitzel, with status, licence and version, and the Starfold benchmark.
+lede: Research software I write and maintain, with status, licence and version where recorded.
 extra_links:
   sw-2026-starfold:
     - {label: Interactive demo, url: /software/starfold-demo/}

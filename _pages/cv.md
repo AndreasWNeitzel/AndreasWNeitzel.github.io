@@ -7,7 +7,7 @@ description: Education, positions, funding, awards, service and teaching of Andr
 {%- assign L = site.data.ledger -%}
 <div class="row">
   <p class="no-print"><a class="button" href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}">Download the academic CV (PDF)</a></p>
-  <p class="prose no-print">The sections below carry the same record for reading on screen.</p>
+  <p class="prose no-print">The sections below give the same record.</p>
 </div>
 {%- assign sections = "education:Education,positions:Positions,funding:Funding,awards:Awards,service:Service,teaching:Teaching and supervision,outreach:Outreach,memberships:Memberships" | split: "," -%}
 {%- for s in sections %}

@@ -1,0 +1,87 @@
+# site.mplstyle: figures for andreaswneitzel.github.io
+# Geometry assumes figsize in inches = CSS px / 96, so 1 pt renders as 4/3 CSS px.
+# Ink, muted and rule are sentinel colours; figstyle.save() rewrites them to
+# currentColor and CSS custom properties in SVG output. Never use these three
+# hex values for data.
+
+## Fonts (registered by figstyle.use_site_style)
+font.family:          serif
+font.serif:           Source Serif 4, Source Serif Pro, DejaVu Serif
+font.monospace:       IBM Plex Mono, DejaVu Sans Mono
+font.size:            11.25          # 15 px
+axes.labelsize:       11.25          # 15 px, axis labels in serif
+axes.titlesize:       11.25
+xtick.labelsize:      9.75           # 13 px; mono set per-axis by figstyle.mono_ticks()
+ytick.labelsize:      9.75
+legend.fontsize:      9.75
+figure.titlesize:     11.25
+mathtext.fontset:     custom
+mathtext.rm:          Source Serif 4
+mathtext.it:          Source Serif 4:italic
+mathtext.bf:          Source Serif 4:bold
+axes.unicode_minus:   True
+svg.fonttype:         none           # live text, styled by page fonts
+pdf.fonttype:         42
+
+## Sentinel colours: ink #010101, muted #020202, rule #030303
+text.color:           010101
+axes.labelcolor:      010101
+axes.edgecolor:       020202
+xtick.color:          020202
+ytick.color:          020202
+xtick.labelcolor:     010101
+ytick.labelcolor:     010101
+grid.color:           030303
+legend.labelcolor:    010101
+
+## Surfaces: transparent so the page decides
+figure.facecolor:     none
+axes.facecolor:       none
+savefig.facecolor:    none
+savefig.edgecolor:    none
+savefig.transparent:  True
+savefig.bbox:         standard       # keep the exact pixel slot; no tight crop
+savefig.pad_inches:   0
+savefig.dpi:          192            # 2x for 96 px per inch
+
+## Lines and marks (1 pt = 1.33 CSS px)
+axes.linewidth:       0.75           # 1 CSS px
+lines.linewidth:      1.5            # 2 CSS px
+lines.markersize:     4.5            # 6 CSS px
+scatter.marker:       o
+scatter.edgecolors:   none
+patch.linewidth:      0
+errorbar.capsize:     0
+
+## Spines, ticks, grid
+axes.spines.top:      False
+axes.spines.right:    False
+axes.grid:            False
+grid.linewidth:       0.75
+xtick.direction:      out
+ytick.direction:      out
+xtick.major.size:     3
+ytick.major.size:     3
+xtick.major.width:    0.75
+ytick.major.width:    0.75
+xtick.minor.visible:  False
+ytick.minor.visible:  False
+axes.labelpad:        6
+axes.titlelocation:   left
+axes.titlepad:        12
+
+## Colour
+axes.prop_cycle:      cycler('color', ['3f90da', 'ffa90e', 'bd1f01', '94a4a2', '832db6', 'a96b59', 'e76300', 'b9ac70', '717581', '92dadd'])
+image.cmap:           cividis
+image.interpolation:  nearest
+
+## Legend: no frame, inherits text colour
+legend.frameon:       False
+legend.handlelength:  1.2
+legend.borderaxespad: 0.5
+
+## Layout on the 8 px grid
+figure.figsize:       7.0833, 4.4167  # 680 x 424 px
+figure.constrained_layout.use: True
+figure.constrained_layout.h_pad: 0.0833   # 8 px
+figure.constrained_layout.w_pad: 0.0833
