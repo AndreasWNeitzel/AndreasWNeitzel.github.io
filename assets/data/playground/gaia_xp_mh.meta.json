@@ -1,0 +1,88 @@
+{
+  "description": "Gaia DR3 stars with a best-quality GSP-Spec metallicity, with the first 24 BP and 24 RP Hermite coefficients of their XP mean spectra, for a teaching demo that trains a small network in the browser.",
+  "built_utc": "2026-10-25T19:50:41Z",
+  "script": "figures/playground/build_gaia_xp_mh.py",
+  "n_stars": 4000,
+  "n_train": 3200,
+  "n_validation": 800,
+  "dropped": {},
+  "selection": {
+    "service": "https://gea.esac.esa.int/tap-server/tap",
+    "queried_utc": "2026-10-25T19:17:22Z",
+    "adql": "SELECT TOP 4000 gs.source_id, gs.random_index, gs.phot_g_mean_mag,\n  ap.mh_gspspec, ap.teff_gspspec, ap.logg_gspspec, ap.flags_gspspec,\n  xs.bp_n_relevant_bases, xs.rp_n_relevant_bases\nFROM gaiadr3.gaia_source AS gs\nJOIN gaiadr3.astrophysical_parameters AS ap ON ap.source_id = gs.source_id\nJOIN gaiadr3.xp_summary AS xs ON xs.source_id = gs.source_id\nWHERE ap.mh_gspspec IS NOT NULL\n  AND ap.flags_gspspec LIKE '0000000000000%'\nORDER BY gs.random_index",
+    "run_as": "the same query restricted to consecutive random_index ranges of 250,000 (the archive stops anonymous queries after 60 s), scanned below random_index 4,250,000; the first 4000 rows in random_index order were kept",
+    "adql_per_range": "SELECT gs.source_id, gs.random_index, gs.phot_g_mean_mag,\n  ap.mh_gspspec, ap.teff_gspspec, ap.logg_gspspec, ap.flags_gspspec,\n  xs.bp_n_relevant_bases, xs.rp_n_relevant_bases\nFROM gaiadr3.gaia_source AS gs\nJOIN gaiadr3.astrophysical_parameters AS ap ON ap.source_id = gs.source_id\nJOIN gaiadr3.xp_summary AS xs ON xs.source_id = gs.source_id\nWHERE ap.mh_gspspec IS NOT NULL\n  AND ap.flags_gspspec LIKE '0000000000000%'\n  AND gs.random_index >= {lo} AND gs.random_index < {hi}\nORDER BY gs.random_index",
+    "cuts": [
+      "mh_gspspec IS NOT NULL",
+      "flags_gspspec characters 1 to 13 all '0' (best GSP-Spec quality, Recio-Blanco et al. 2023)",
+      "an XP continuous mean spectrum exists (join with gaiadr3.xp_summary)"
+    ],
+    "order": "gaia_source.random_index, ascending"
+  },
+  "coefficients": {
+    "service": "https://gaia.aip.de/tap",
+    "table": "gaiadr3.xp_continuous_mean_spectrum",
+    "queried_utc": "2026-10-25T19:19:51Z",
+    "adql": "SELECT source_id, bp_n_parameters, rp_n_parameters, bp_coefficients, rp_coefficients, bp_coefficient_errors, rp_coefficient_errors\nFROM gaiadr3.xp_continuous_mean_spectrum\nWHERE source_id IN (<500 source_ids per query>)",
+    "why_not_esa": "the ESA TAP service does not expose this table; ESA serves it through DataLink, limited to 50 sources per anonymous request",
+    "esa_datalink_check": {
+      "service": "https://gea.esac.esa.int/data-server/data",
+      "attempted_utc": "2026-10-25T19:50:38Z",
+      "status": "not compared",
+      "reason": "HTTPError: Error 503:"
+    },
+    "consistency_with_esa_g_magnitude": {
+      "test": "-2.5 log10(flux_scale) against phot_g_mean_mag, straight-line fit",
+      "slope": 0.9858,
+      "robust_scatter_mag": 0.0292,
+      "max_abs_residual_mag": 0.134
+    }
+  },
+  "features": {
+    "k_per_band": 24,
+    "order": "bp_0..bp_23 then rp_0..rp_23",
+    "normalisation": "each coefficient divided by flux_scale = bp_coefficients[0] + rp_coefficients[0] of the same star, so the network sees spectral shape and not brightness",
+    "why_k": "validation RMSE of a ridge fit and of a 32-32 tanh network on these stars stops improving near K = 24 (ridge 0.113 dex, network 0.114 dex, against 0.217 dex for predicting the training mean); more coefficients make the file larger and the small network overfit",
+    "storage": "uint16 per feature: value = feature_offset + stored * feature_step (offsets and steps in the header)",
+    "rounding_over_catalogue_error": {
+      "median": 0.00015677718652584174,
+      "p99": 0.02705364691466392,
+      "max": 0.07054243012197536
+    },
+    "browser_scaling": "the page standardises each feature and the label with the mean and standard deviation of the training stars"
+  },
+  "split": {
+    "seed": 20261025,
+    "rule": "numpy.random.default_rng(20261025).permutation(n); the first 20 percent of that permutation is validation"
+  },
+  "columns": {
+    "source_id": "Gaia DR3 source_id",
+    "mh_gspspec": "GSP-Spec [M/H] in dex, catalogue value (no calibration applied)",
+    "teff_gspspec": "GSP-Spec effective temperature in K",
+    "logg_gspspec": "GSP-Spec log g in dex (cgs)",
+    "phot_g_mean_mag": "Gaia G magnitude",
+    "flux_scale": "bp_coefficients[0] + rp_coefficients[0], archive flux units",
+    "split": "0 train, 1 validation",
+    "bp_n_relevant_bases": "from gaiadr3.xp_summary",
+    "rp_n_relevant_bases": "from gaiadr3.xp_summary",
+    "features": "normalised coefficients, row-major [n, 2k]"
+  },
+  "examples": {
+    "rule": "validation stars with Teff 4500 to 5000 K, log g 2 to 3 and a BP share of the flux, bp_coefficients[0] / flux_scale, within 0.02 of the median of that box (to keep strongly reddened stars out); the stars closest to the 3rd, 50th and 97th percentiles of [M/H] among them",
+    "rows": [
+      865,
+      97,
+      930
+    ],
+    "spectra": "GaiaXPy 2.1.5 calibrate() on all 55 BP and 55 RP coefficients, 336 to 1020 nm in 2 nm steps, flux in W m^-2 nm^-1, four significant figures"
+  },
+  "licence": "Gaia data: CC BY-SA 3.0 IGO, ESA/Gaia/DPAC. This file and the binary derived from them are shared under the same licence.",
+  "credits": [
+    "Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1 (Gaia DR3)",
+    "De Angeli et al. 2023, A&A 674, A2 (XP spectra processing)",
+    "Montegriffo et al. 2023, A&A 674, A3 (XP external calibration)",
+    "Recio-Blanco et al. 2023, A&A 674, A29 (GSP-Spec)",
+    "GaiaXPy, developed by Gaia DPAC CU5 and DPCI",
+    "Gaia@AIP partner data centre, https://gaia.aip.de"
+  ]
+}

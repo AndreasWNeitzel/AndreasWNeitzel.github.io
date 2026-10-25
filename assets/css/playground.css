@@ -1,0 +1,244 @@
+/* Neural-network playground (/playground/neural-network/). Scoped to .pg-page; colours,
+   type and radii come only from the site tokens defined in site.css. */
+
+.pg-page {
+  display: grid;
+  gap: clamp(28px, 4vw, 48px);
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-block-end: 8px;
+}
+.wrap .pg-page { padding-inline: 0; }
+.pg-intro { display: grid; gap: 12px; }
+.pg-intro p { max-inline-size: 72ch; }
+.pg-nb { white-space: nowrap; }
+
+.pg {
+  container: pg / inline-size;
+  display: grid;
+  gap: 12px;
+}
+
+/* panels */
+.pg-panel {
+  min-inline-size: 0;
+  margin: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.pg-panel.panel { background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px, var(--surface); }
+.pg-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+.pg-title { font: 600 0.95rem/1.3 var(--sans); letter-spacing: -0.01em; color: var(--ink); }
+.pg-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font: 0.72rem/1.4 var(--mono);
+  color: var(--muted);
+}
+.pg-key span { display: inline-flex; align-items: center; gap: 6px; }
+.pg-key i { display: inline-block; inline-size: 16px; block-size: 3px; border-radius: 2px; background: var(--muted); }
+.pg-key .k-pos, .pg-key .k-val { background: var(--accent); }
+.pg-key .k-neg { background: var(--accent-2); }
+.pg-key .k-train { block-size: 2px; background: var(--ink-2); }
+.pg-key .k-dot { inline-size: 8px; block-size: 8px; border-radius: 50%; }
+
+/* canvases fill a sized stage */
+.pg-stage { position: relative; min-inline-size: 0; }
+.pg-stage canvas { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+/* Fixed heights on narrow screens: a minimum height combined with an aspect ratio
+   would force a minimum width and a sideways scroll. */
+.pg-net .pg-stage { block-size: 340px; }
+.pg-loss .pg-stage { aspect-ratio: 16 / 9; }
+.pg-parity .pg-stage { aspect-ratio: 1 / 1.04; }
+.pg-bars .pg-stage, .pg-spectrum .pg-stage { block-size: 210px; }
+.pg-parity canvas { touch-action: manipulation; }
+
+.pg-tip {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  pointer-events: none;
+  white-space: nowrap;
+  font: 0.72rem/1.45 var(--mono);
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+.pg-tip b { font-weight: 600; color: var(--ink); }
+
+/* controls */
+.pg-controls { gap: 14px; }
+.pg-run { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pg-run .btn { min-inline-size: 76px; }
+.pg-run .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.pg-readout {
+  margin: 0 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 2px 18px;
+  font: 500 0.8rem/1.4 var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}
+.pg-rmse { color: var(--ink); }
+.pg-settings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+  margin: 0;
+  padding: 12px 0 0;
+  border: 0;
+  border-block-start: 1px solid var(--line);
+}
+.pg-field { display: grid; gap: 5px; min-inline-size: 0; font: 500 0.72rem/1.3 var(--mono); letter-spacing: 0.02em; color: var(--muted); }
+.pg-select { position: relative; display: block; }
+.pg-select::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 12px;
+  inset-block-start: 50%;
+  inline-size: 6px;
+  block-size: 6px;
+  margin-block-start: -5px;
+  border-inline-end: 1.5px solid var(--muted);
+  border-block-end: 1.5px solid var(--muted);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.pg-select select {
+  appearance: none;
+  inline-size: 100%;
+  min-block-size: 36px;
+  padding: 0 30px 0 10px;
+  font: 500 0.88rem/1 var(--sans);
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.pg-select select:hover { border-color: color-mix(in oklab, var(--accent) 55%, var(--line-strong)); }
+.pg-note {
+  margin: 0;
+  padding-inline-start: 10px;
+  border-inline-start: 2px solid var(--accent-2);
+  font-size: 0.86rem;
+  color: var(--ink-2);
+}
+.pg-status { margin: 0; font: 0.8rem/1.5 var(--mono); color: var(--muted); }
+
+/* the grid of figures */
+.pg-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "net" "loss" "parity" "input";
+}
+.pg-net { grid-area: net; }
+.pg-loss { grid-area: loss; }
+.pg-parity { grid-area: parity; }
+.pg-input { grid-area: input; }
+
+/* parity legend: the same OKLab ramp the canvas uses */
+.pg-ramp {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 10px;
+  font: 0.72rem/1.3 var(--mono);
+  color: var(--muted);
+}
+.pg-ramp-bar {
+  block-size: 8px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--accent-2), var(--accent));
+  background: linear-gradient(to right in oklab, var(--accent-2), var(--accent));
+}
+.pg-ramp-ticks { grid-column: 2; display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; }
+
+/* one star's input */
+.pg-stars { display: flex; flex-wrap: wrap; gap: 6px; }
+.pg-chip {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 32px;
+  padding: 0 12px;
+  font: 500 0.8rem/1 var(--sans);
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.pg-chip:hover { border-color: var(--line-strong); color: var(--ink); }
+.pg-chip[aria-pressed="true"] { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+.pg-facts, .pg-estimate { margin: 0; font: 0.76rem/1.5 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+.pg-estimate { color: var(--ink-2); }
+.pg-pair { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.pg-sub { display: grid; gap: 8px; align-content: start; min-inline-size: 0; }
+.pg-subhead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.pg-subtitle { font: 600 0.82rem/1.3 var(--sans); color: var(--ink); }
+.pg-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); }
+.pg-seg button {
+  padding: 5px 10px;
+  font: 500 0.74rem/1 var(--sans);
+  color: var(--ink-2);
+  background: none;
+  border: 0;
+  border-radius: 999px;
+}
+.pg-seg button[aria-pressed="true"] { color: var(--bg); background: var(--ink); }
+.pg-caption { margin: 0; font-size: 0.8rem; line-height: 1.45; color: var(--muted); }
+
+@container pg (min-width: 640px) {
+  .pg-settings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pg-net .pg-stage { block-size: auto; aspect-ratio: 16 / 10; }
+  .pg-bars .pg-stage, .pg-spectrum .pg-stage { block-size: auto; aspect-ratio: 2; }
+  .pg-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "net net" "loss parity" "input input";
+  }
+  .pg-pair { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+}
+@container pg (min-width: 1000px) {
+  .pg-settings { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .pg-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-areas: none;
+  }
+  .pg-net { grid-area: auto; grid-column: 1 / span 8; grid-row: 1 / span 2; display: flex; flex-direction: column; }
+  .pg-net .pg-stage { flex: 1; aspect-ratio: auto; }
+  .pg-bars .pg-stage, .pg-spectrum .pg-stage { aspect-ratio: 2.6; }
+  .pg-loss { grid-area: auto; grid-column: 9 / span 4; grid-row: 1; }
+  .pg-parity { grid-area: auto; grid-column: 9 / span 4; grid-row: 2; }
+  .pg-input { grid-area: auto; grid-column: 1 / -1; grid-row: 3; }
+}
+
+/* before the data arrive, keep the frame quiet */
+.pg:not(.is-ready) .pg-grid { opacity: 0.55; }
+@media (prefers-reduced-motion: no-preference) {
+  .pg-grid { transition: opacity 0.24s var(--ease); }
+}
+
+.pg-credits { display: grid; gap: 6px; padding-inline-start: 1.2em; }
