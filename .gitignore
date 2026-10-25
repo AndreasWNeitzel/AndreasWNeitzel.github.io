@@ -13,27 +13,5 @@ assets/rendercv/rendercv_output/*.typ
 Gemfile.lock
 node_modules/
 vendor
-
-# AI assistant tooling and editor artifacts. Local-only; kept out of the
-# published repo so the public surface carries no AI-tool scaffolding.
-.claude/
-.gemini/
-CLAUDE.md
-CLAUDE.local.md
-AGENTS.md
-.github/copilot-instructions.md
-.github/agents/
-.github/instructions/
-.github/workflows/copilot-setup-steps.yml
-
-# Stellar Explorer data file lives in the separate stellar-explorer-data repo;
-# never commit the 152 MB HDF5 to the site repo.
 *.h5
-
-# Windows NTFS alternate-data-stream artifacts (appear when copying from Windows)
 *:Zone.Identifier
-
-# Local-only offline dev build of the Stellar Explorer app. Loads .h5 files
-# from disk via a file picker / drag-drop instead of fetching from
-# raw.githubusercontent. Should never be deployed.
-stellar-explorer/app.local.html
