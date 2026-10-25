@@ -1,0 +1,46 @@
+---
+layout: default
+---
+{%- assign L = site.data.ledger -%}
+<div class="wrap">
+  <header class="page-head">
+    <p class="crumbs"><a href="{{ '/guide/' | relative_url }}">Field guide</a></p>
+    <h1>{{ page.title | missions }}</h1>
+    {%- if page.lede %}<p class="lede">{{ page.lede | missions }}</p>{% endif %}
+  </header>
+  <div class="article-layout">
+    <article class="stack-m">
+      {%- if page.image and page.image != "" %}
+      <figure class="article-hero"><img src="{{ page.image | relative_url }}" alt="{{ page.image_alt }}" loading="eager" decoding="async">
+        <figcaption class="credit" style="padding:8px 10px">{{ page.image_credit }}, <a href="{{ page.image_source }}">{{ page.image_licence }}</a></figcaption></figure>
+      {%- elsif page.photo %}
+      <figure class="article-hero"><img src="{{ page.photo | relative_url }}" alt="{{ page.photo_alt }}" loading="eager" decoding="async"></figure>
+      {%- endif %}
+      <div class="prose article">{{ content }}</div>
+    </article>
+    <aside class="article-aside">
+      {%- if page.related %}
+      <section class="card"><div class="card-body">
+        <h2 class="zone-title">In my record</h2>
+        <ul class="plain stack-s">
+          {%- for rid in page.related %}
+            {%- assign hit = nil -%}
+            {%- for cat in L %}{% for e in cat[1] %}{% if e.id == rid %}{% assign hit = e %}{% assign hitcat = cat[0] %}{% endif %}{% endfor %}{% endfor -%}
+            {%- if hit %}<li class="small"><span class="kicker">{{ hit.date | month_year }}</span><br>{{ hit.title | missions | truncate: 120 }}</li>{% endif -%}
+          {%- endfor %}
+        </ul>
+      </div></section>
+      {%- endif %}
+      {%- if page.sources %}
+      <section class="card"><div class="card-body">
+        <h2 class="zone-title">Sources</h2>
+        <ol class="sources">{% for s in page.sources %}<li><a href="{{ s.url }}">{{ s.label | missions }}</a></li>{% endfor %}</ol>
+      </div></section>
+      {%- endif %}
+      <section class="card"><div class="card-body">
+        <h2 class="zone-title">More in the guide</h2>
+        <ul class="plain stack-s">{% assign gs = site.guide | sort: "order" %}{% for g in gs %}{% if g.url != page.url %}<li><a href="{{ g.url | relative_url }}">{{ g.short | default: g.title }}</a></li>{% endif %}{% endfor %}</ul>
+      </div></section>
+    </aside>
+  </div>
+</div>

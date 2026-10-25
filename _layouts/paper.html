@@ -1,0 +1,45 @@
+---
+layout: default
+---
+<div class="wrap">
+  <header class="page-head paper-head">
+    <p class="crumbs"><a href="{{ '/publications/' | relative_url }}">Publications</a> · {{ page.year }} · {{ page.role }}</p>
+    <h1>{{ page.headline | missions }}</h1>
+    <p class="lede">{{ page.title | missions }}</p>
+  </header>
+  <div class="article-layout">
+    <article class="stack-m">
+      {%- if page.figure %}
+      <figure class="figure paper-fig">
+        <div class="paper-fig-img"><img src="{{ page.figure | relative_url }}" alt="{{ page.figure_alt }}" loading="eager" decoding="async"></div>
+        <figcaption>{{ page.figure_caption | missions }}</figcaption>
+      </figure>
+      {%- endif %}
+      <div class="prose article">{{ content }}</div>
+    </article>
+    <aside class="article-aside">
+      <section class="card"><div class="card-body">
+        <span class="tag tag--paper">{{ page.role }}</span>
+        <p class="small">{{ page.citation | missions }}</p>
+        <p class="links">
+          {%- if page.doi %}<a href="https://doi.org/{{ page.doi }}">doi:{{ page.doi }}</a>{% endif -%}
+          {%- if page.arxiv %}<a href="https://arxiv.org/abs/{{ page.arxiv }}">arXiv:{{ page.arxiv }}</a>{% endif -%}
+        </p>
+      </div></section>
+      <section class="card"><div class="card-body">
+        <h2 class="zone-title">My contribution</h2>
+        <p class="contribution">{{ page.contribution | missions }}</p>
+      </div></section>
+      {%- if page.sources %}
+      <section class="card"><div class="card-body">
+        <h2 class="zone-title">Sources</h2>
+        <ol class="sources">{% for s in page.sources %}<li><a href="{{ s.url }}">{{ s.label | missions }}</a></li>{% endfor %}</ol>
+      </div></section>
+      {%- endif %}
+      <section class="card"><div class="card-body">
+        <h2 class="zone-title">Other explainers</h2>
+        <ul class="plain stack-s">{% assign ps = site.papers | sort: "order" %}{% for x in ps %}{% if x.url != page.url %}<li><a href="{{ x.url | relative_url }}">{{ x.title | missions | truncate: 80 }}</a></li>{% endif %}{% endfor %}</ul>
+      </div></section>
+    </aside>
+  </div>
+</div>

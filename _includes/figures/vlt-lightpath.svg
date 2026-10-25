@@ -1,0 +1,73 @@
+<svg class="bp-svg" viewBox="0 0 900 436" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lp-t lp-d">
+  <title id="lp-t">Light path from a VLT Unit Telescope to ESPRESSO, schematic</title>
+  <desc id="lp-d">Starlight reflects off the 8.2 m primary mirror to the secondary and the tertiary, travels down the coudé train to the Combined-Coudé Laboratory, enters ESPRESSO through fibres, and is spread by an échelle grating and a cross-disperser onto the detector as a two-dimensional spectrum.</desc>
+  <defs>
+    <marker id="lp-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="currentColor" stroke-width="1.4"/></marker>
+  </defs>
+  <!-- ground and pier -->
+  <path class="bp-thin" d="M20 372 L880 372"/>
+  <path class="bp" d="M112 372 L112 330 L308 330 L308 372"/>
+  <path class="bp-thin" d="M120 372 l8 -8 M136 372 l8 -8 M152 372 l8 -8 M168 372 l8 -8 M184 372 l8 -8 M200 372 l8 -8 M216 372 l8 -8 M232 372 l8 -8 M248 372 l8 -8 M264 372 l8 -8 M280 372 l8 -8 M296 372 l8 -8"/>
+  <!-- fork and altitude axis -->
+  <path class="bp" d="M138 330 L138 236 M282 330 L282 236"/>
+  <circle class="bp" cx="210" cy="236" r="5"/>
+  <path class="axis" d="M110 236 L310 236"/>
+  <text class="bp-tick" x="314" y="240">altitude axis</text>
+  <!-- tube: truss from M1 cell to M2 spider -->
+  <path class="bp-thin" d="M132 288 L190 60 M288 288 L230 60 M132 288 L230 60 M288 288 L190 60"/>
+  <path class="bp" d="M184 60 L236 60"/>
+  <!-- M1: concave primary, 8.2 m -->
+  <path class="bp mirror" d="M128 292 Q210 314 292 292"/>
+  <path class="bp-thin" d="M128 304 L128 318 M292 304 L292 318 M128 312 L292 312"/>
+  <text class="bp-tick" x="176" y="328">8.2 m</text>
+  <text class="bp-label2" x="300" y="296">M1 primary</text>
+  <!-- M2: convex secondary -->
+  <path class="bp mirror" d="M196 66 Q210 60 224 66"/>
+  <text class="bp-label2" x="246" y="50">M2 secondary</text>
+  <!-- incoming starlight -->
+  <path class="ray" d="M150 20 L150 296" marker-end="url(#lp-ah)"/>
+  <path class="ray" d="M270 20 L270 296" marker-end="url(#lp-ah)"/>
+  <text class="bp-label2" x="120" y="16">starlight</text>
+  <!-- M1 to M2 to M3 -->
+  <path class="ray" d="M150 296 L204 66 M270 296 L216 66"/>
+  <path class="ray" d="M204 66 L210 230 M216 66 L210 230"/>
+  <!-- M3 tertiary at the axis, sending light along the axis -->
+  <path class="bp mirror" d="M202 228 L218 244"/>
+  <text class="bp-label2" x="164" y="222">M3</text>
+  <!-- coudé train: along the axis, down through the fork, under the floor -->
+  <path class="ray flowray" d="M212 236 L282 236 L282 352 L470 352 L470 300 L560 300" marker-end="url(#lp-ah)"/>
+  <path class="bp mirror" d="M276 230 L288 242"/>
+  <path class="bp mirror" d="M276 346 L288 358"/>
+  <path class="bp mirror" d="M464 346 L476 358"/>
+  <path class="bp mirror" d="M464 294 L476 306"/>
+  <text class="bp-label2" x="300" y="392">coudé train, under the platform</text>
+  <text class="bp-tick" x="300" y="406">to the Combined-Coudé Laboratory</text>
+  <!-- ESPRESSO -->
+  <rect class="bp lab" x="560" y="120" width="320" height="236" rx="4" stroke-dasharray="5 4"/>
+  <text class="bp-label2" x="572" y="140">ESPRESSO</text>
+  <text class="bp-tick" x="572" y="154">échelle spectrograph, vacuum vessel</text>
+  <!-- fibre and collimator -->
+  <path class="bp" d="M560 300 C590 300 596 260 610 252"/>
+  <circle class="bp-fill" cx="612" cy="251" r="2.5"/>
+  <text class="bp-tick" x="572" y="318">front end and fibres</text>
+  <path class="ray" d="M612 251 L660 220 M612 251 L660 282"/>
+  <path class="bp mirror" d="M660 214 Q668 251 660 288"/>
+  <text class="bp-tick" x="640" y="300">collimator</text>
+  <!-- echelle grating -->
+  <path class="ray" d="M664 230 L736 196 M664 272 L736 238"/>
+  <rect class="bp" x="736" y="182" width="16" height="72" transform="rotate(-12 744 218)"/>
+  <path class="bp-thin" d="M738 190 l12 -4 M738 202 l12 -4 M738 214 l12 -4 M738 226 l12 -4 M738 238 l12 -4" transform="rotate(-12 744 218)"/>
+  <text class="bp-tick" x="712" y="176">échelle grating</text>
+  <!-- cross-disperser and camera -->
+  <path class="ray warmray" d="M740 220 L790 252 M742 232 L790 268 M744 244 L790 284"/>
+  <path class="bp" d="M790 244 L802 296 L778 296 Z"/>
+  <text class="bp-tick" x="752" y="314">cross-disperser</text>
+  <!-- detector with echelle orders -->
+  <rect class="bp" x="822" y="232" width="44" height="72" rx="2"/>
+  <path class="order" d="M826 240 q18 -4 36 2 M826 250 q18 -4 36 2 M826 260 q18 -4 36 2 M826 270 q18 -4 36 2 M826 280 q18 -4 36 2 M826 290 q18 -4 36 2"/>
+  <path class="ray warmray" d="M800 270 L820 268"/>
+  <text class="bp-tick" x="812" y="324">detector</text>
+  <text class="bp-tick" x="572" y="342">R ≈ 138,000 in single-telescope high-resolution mode</text>
+  <!-- note -->
+  <text class="bp-tick" x="20" y="426">Schematic, not to scale. After ESO's descriptions of the Unit Telescopes and ESPRESSO; resolving power from Campante et al. 2026, Sect. 2.</text>
+</svg>
