@@ -39,7 +39,7 @@ Thesis: "Determination of Age and Mass for Seismic Stars in the Ariel Input Cata
 
 **PhD Researcher**, IA/CAUP, Stellar Astrophysics Group, Porto · 2022–present
 
-- **Lead developer** of the ML pipelines for FCT Exploratory Project ArqueoGal (2024.15303.PEX, 2026–2027), PI: T. L. Campante. €60k, 16% success-rate call; Co-Investigator with substantial allocations on Task 5 (Stellar Population Classification, 4.4 PM) and Task 6 (Galactic Modeling, 6 PM). Architected and built two production pipelines: **xp_abundances** (semi-supervised multi-task regression with contrastive pretraining; predicts six stellar parameters from _Gaia_ DR3 XP coefficients calibrated against APOGEE DR19, with block-Cholesky covariant uncertainties and OOD/release-tier quality flags) and **Starfold** (the open-source ML classifier shipping as deliverable D5.1 in Dec 2026, extending the Neitzel+2025 _A&A_ manifold-learning methodology to real _Gaia_ DR3 stars — the first application of the method to observed data).
+- **Lead developer** of the ML pipelines for FCT Exploratory Project ArqueoGal (2024.15303.PEX, 2026–2027), PI: T. L. Campante. €60k; Co-Investigator with substantial allocations on Task 5 (Stellar Population Classification, 4.4 PM) and Task 6 (Galactic Modeling, 6 PM). Architected and built two production pipelines: **xp_abundances** (semi-supervised multi-task regression with contrastive pretraining; predicts six stellar parameters from _Gaia_ DR3 XP coefficients calibrated against APOGEE DR19, with block-Cholesky covariant uncertainties and OOD/release-tier quality flags) and **Starfold** (the open-source ML classifier shipping as deliverable D5.1 in Dec 2026, extending the Neitzel+2025 _A&A_ manifold-learning methodology to real _Gaia_ DR3 stars — the first application of the method to observed data).
 - First-author _A&A_ (2025) applying manifold learning (UMAP + HDBSCAN) to _Gaia_ DR3-like synthetic samples from FIRE-2 cosmological simulations; validated the ability to disentangle thin/thick disk, halo, and accreted stellar populations, including populations shaped by radial migration and past accretion events, in the chrono-chemo-kinematic parameter space.
 - Built production ML infrastructure for chemical-abundance prediction from _Gaia_ XP spectra: multi-task regression targeting [M/H], [α/M], [Fe/H], [Mg/H], T_eff, and log g; PyTorch on CUDA (WSL2, RAPIDS 25.10); calibrated uncertainties via block-Cholesky decomposition; paper in preparation.
 - Built seismic and spectroscopic characterisation pipelines cross-matching _Gaia_ DR3, GSP-Spec, _TESS_, _Kepler_/K2, and 2MASS; integrated PARAM Bayesian ages, MWDUST extinction, and bolometric corrections for Galactic archaeology targets.
@@ -59,7 +59,7 @@ Thesis: "Determination of Age and Mass for Seismic Stars in the Ariel Input Cata
 
 ## Grants & awards
 
-- **Co-Investigator, FCT Exploratory Research Project ArqueoGal** (2024.15303.PEX), PI: T. L. Campante. €60k over 18 months; awarded in a 16% success-rate call (400 / 2,545). Named participant on Stellar Population Classification (4.4 PM) and Galactic Modeling (6 PM). 2026–2027.
+- **Co-Investigator, FCT Exploratory Research Project ArqueoGal** (2024.15303.PEX), PI: T. L. Campante. €60k over 18 months. Named participant on Stellar Population Classification (4.4 PM) and Galactic Modeling (6 PM). 2026–2027.
 - **FCT Doctoral Fellowship** (2025.01843.BD), Fundação para a Ciência e a Tecnologia. 2025–2026.
 - **Best Master's Student in Astronomy & Astrophysics**, FCUP, University of Porto. 2023.
 - **FCT MSc Research Grant** (CIAAUP-08/2021-BI-M), BreakStarS project. 2021–2022.
@@ -68,13 +68,13 @@ Thesis: "Determination of Age and Mass for Seismic Stars in the Ariel Input Cata
 
 - **[ArqueoGal](https://github.com/AndreasWNeitzel/ArqueoGal)** — _Gaia_ XP → APOGEE DR19 stellar-abundance prediction pipeline (Python 3.12, PyTorch 2.10, RAPIDS 25.10 on CUDA). Lead developer; OSI-licensed release scheduled for deliverable D5.1 (Dec 2026).
 - **[Starfold](https://github.com/AndreasWNeitzel/Starfold)** — ML stellar-population classifier building on the Neitzel+2025 _A&A_ manifold-learning methodology, augmented and extended for first application to real _Gaia_ DR3 observations (the original paper validated the method on synthetic data only); downstream consumer of ArqueoGal abundance predictions; OSI-licensed release targeted for D5.1.
-- **[Stellar Explorer](/stellar-explorer/)** — Interactive client-side web app for MIST v1.2 stellar evolution tracks with GYRE oscillation spectra; live HR diagram, real-time interior cross-section with pulsation/convection animations driven by GYRE eigenfunctions, interior profiles, PSD/échelle/Schwarzschild views.
+- **[Stellar Explorer](/stellar-explorer/)** — Interactive client-side web app for a MESA r24.08.1 stellar evolution track with GYRE oscillation spectra; HR diagram, animated interior cross-section, interior profiles, PSD, échelle and propagation diagrams.
 
 ## Selected talks & conferences
 
 - Oral (international): "Intelligent Identification of Stellar Populations with Manifold Learning", 11th Iberian Meeting on Asteroseismology, Lluc, Spain (Nov 2024).
 - Oral (international): "Identification of Stellar Populations through Latent Space Projection", 8th _TESS_ / 15th _Kepler_ Asteroseismic Science Consortium Workshop, Porto (Jul 2024).
-- Oral (national): Portuguese National Astronomy Meetings (ENAA): XXXIII Coimbra 2023; XXXIV Guimarães 2024; XXXV Lisbon 2025. Poster: ENAA XXXII Lisbon 2022, and FÍSICA 2022 Porto on _Ariel_ stellar characterisation.
+- Oral (national): Portuguese National Astronomy Meetings (ENAA): XXXIII Coimbra 2023; XXXIV Guimarães 2024; XXXV Lisbon 2025; FÍSICA 2022 Porto on _Ariel_ stellar characterisation. Poster: ENAA XXXII Lisbon 2022.
 - Training: Porto Summer School on Asteroseismology "From Pixels to Stellar Ages" (Jul 2024); The Milky Way Assembly Tale conference (May 2024).
 
 ## Teaching, mentoring & service

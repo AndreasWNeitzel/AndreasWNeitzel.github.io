@@ -12,7 +12,7 @@
 ## Software
 
 - [ArqueoGal](https://github.com/AndreasWNeitzel/ArqueoGal): FCT Exploratory Project 2024.15303.PEX. Extends the Neitzel 2025 method to real *Gaia* DR3 observations; open-source release scheduled December 2026
-- [Stellar Explorer](https://andreaswneitzel.github.io/stellar-explorer/): browser-based interactive exploration of the stellar populations analysed in Neitzel 2025
+- [Stellar Explorer](https://andreaswneitzel.github.io/stellar-explorer/): browser-based, client-side visualiser of a MESA r24.08.1 plus GYRE 1 solar-mass evolutionary track (HR diagram, animated interior, asteroseismic spectrum)
 
 ## Identity
 
