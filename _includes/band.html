@@ -1,0 +1,24 @@
+{%- assign B = site.data.home.band -%}
+<section class="band" aria-label="Portals to my work" data-band style="--band-dur: {{ B.size | times: 5 }}s">
+  <div class="band-viewport">
+    <div class="band-track">
+      {%- for copy in (1..2) %}
+      <div class="band-set"{% if copy == 2 %} aria-hidden="true"{% endif %}>
+        {%- for c in B %}
+        <article class="bcard">
+          {%- if c.img %}<img src="{{ c.img | relative_url }}" alt="" role="presentation" loading="{% if forloop.index < 6 and copy == 1 %}eager{% else %}lazy{% endif %}" decoding="async" width="600" height="375"{% if c.pos %} style="object-position: {{ c.pos }}"{% endif %}>
+          {%- elsif c.art %}<span class="bart">{% include figures/art-{{ c.art }}.svg %}</span>{% endif %}
+          {%- if c.credit %}<a class="bcredit" href="{{ c.credit_url }}"{% if copy == 2 %} tabindex="-1"{% endif %}>{{ c.credit }}</a>{% endif %}
+          <span class="tag tag--{{ c.tag }}">{{ c.label }}</span>
+          <a class="bcard-link" href="{{ c.url | relative_url }}"{% if copy == 2 %} tabindex="-1"{% endif %}>{{ c.title | missions }}</a>
+        </article>
+        {%- endfor %}
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+  <button class="band-pause no-print" type="button" aria-pressed="false" aria-label="Pause the sliding cards" data-band-pause>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path class="p-pause" d="M5 3.5v9M11 3.5v9"/><path class="p-play" d="M5 3.25v9.5L12.5 8Z"/></svg>
+  </button>
+</section>
+<script defer src="{{ '/assets/js/band.js' | relative_url }}"></script>

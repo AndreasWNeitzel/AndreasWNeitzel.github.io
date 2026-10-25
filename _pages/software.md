@@ -15,19 +15,19 @@ extra_links:
   <div class="mosaic">
     <a class="card wide" href="{{ '/playground/neural-network/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-nn.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">Playground</span><h3>Train a neural network on <i>Gaia</i> spectra</h3><p>Real XP spectra of 4,000 stars; watch the network learn metallicity live.</p><span class="go">Open</span></div>
+      <div class="card-body"><span class="tag tag--software">playground</span><h3>Train a neural network on <i>Gaia</i> spectra</h3><p>Real XP spectra of 4,000 stars; watch the network learn metallicity live.</p><span class="go">Open</span></div>
     </a>
     <a class="card" href="{{ '/software/starfold-demo/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-clusters.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">Demo</span><h3>Starfold on a recorded run</h3><p>Inspect every point and replay the 32 refits.</p><span class="go">Open</span></div>
+      <div class="card-body"><span class="tag tag--software">demo</span><h3>Starfold on a recorded run</h3><p>Inspect every point and replay the 32 refits.</p><span class="go">Open</span></div>
     </a>
     <a class="card" href="{{ '/stellar-explorer/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-hr.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">App</span><h3>Stellar Explorer</h3><p>A star of the Sun's mass from birth to white dwarf, from a MESA and GYRE track.</p><span class="go">Open</span></div>
+      <div class="card-body"><span class="tag tag--software">app</span><h3>Stellar Explorer</h3><p>A star of the Sun's mass from birth to white dwarf, from a MESA and GYRE track.</p><span class="go">Open</span></div>
     </a>
-    <a class="card" href="https://tellurion.dev/" data-spotlight>
-      <div class="media art">{% include figures/art-orbit.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">Web</span><h3>Tellurion</h3><p>Nearly 400 interactive physics and astronomy simulations, from a double pendulum to colliding galaxies.</p><span class="go">Open tellurion.dev</span></div>
+    <a class="card wide" href="{{ '/software/tellurion/' | relative_url }}" data-spotlight>
+      <div class="media"><img src="{{ '/assets/img/tellurion/blackhole-legend-3d.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async" width="800" height="500"></div>
+      <div class="card-body"><span class="tag tag--software">website</span><h3>Tellurion</h3><p>My separate website of interactive physics and astronomy simulations, written as a teaching resource.</p><span class="go">What it is</span></div>
     </a>
   </div>
 </section>

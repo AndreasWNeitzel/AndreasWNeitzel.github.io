@@ -11,7 +11,6 @@ lede: The science, institutions and machines behind my work, one minute each, wi
   <a class="card" href="{{ g.url | relative_url }}" data-spotlight>
     <div class="media">{% if g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% else %}<img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}</div>
     <div class="card-body">
-      <span class="kicker">{{ g.short | default: g.title }}</span>
       <h3>{{ g.title | missions }}</h3>
       <p>{{ g.lede | missions }}</p>
       <span class="go">Read</span>

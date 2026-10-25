@@ -11,7 +11,7 @@
   {%- if a contains "Neitzel" -%}{%- assign position = forloop.index -%}{%- endif -%}
 {%- endfor -%}
 <div class="bib-entry">
-<div class="when"><span>{{ entry.year }}</span><span class="tag tag--paper">{% if position == 1 %}first author{% else %}co-author {{ position }}/{{ n }}{% endif %}</span>{% if entry.note contains "accepted" %}<span class="tag tag--grant">accepted</span>{% endif %}</div>
+<div class="when"><span>{{ entry.year }}</span><span class="tag tag--paper">{% if position == 1 %}first author{% else %}co-author {{ position }}/{{ n }}{% endif %}</span>{% if entry.note contains "accepted" %}<span class="tag tag--accepted">accepted</span>{% endif %}</div>
 <p class="title">{{ entry.title | missions }}</p>
 <p class="meta">
   {%- if n > 4 -%}

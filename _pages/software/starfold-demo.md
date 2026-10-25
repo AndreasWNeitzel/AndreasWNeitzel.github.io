@@ -1,6 +1,7 @@
 ---
 layout: page
 permalink: /software/starfold-demo/
+crumb: {label: Software, url: /software/}
 title: Starfold on handwritten digits
 nav_section: Software
 description: A recorded Starfold run on 1,797 handwritten digits, with every digit inspectable and the 32 refits replayable.

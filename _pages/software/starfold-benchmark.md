@@ -1,6 +1,7 @@
 ---
 layout: page
 permalink: /software/starfold-benchmark/
+crumb: {label: Software, url: /software/}
 title: Starfold held-out benchmark
 nav_section: Software
 description: Per-table results of Starfold 0.2.0 against the library defaults on ten tables with known classes.

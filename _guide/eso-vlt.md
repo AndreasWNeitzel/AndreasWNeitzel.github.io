@@ -16,7 +16,7 @@ sources:
   - {label: "ESO, Paranal Observatory", url: "https://www.eso.org/public/teles-instr/paranal-observatory/"}
   - {label: "ESO, Very Large Telescope", url: "https://www.eso.org/public/teles-instr/paranal-observatory/vlt/"}
   - {label: "ESO, ESPRESSO", url: "https://www.eso.org/public/teles-instr/paranal-observatory/vlt/vlt-instr/espresso/"}
-  - {label: "Campante et al. 2026, arXiv:2610.20985 (accepted in Astronomy and Astrophysics)", url: "https://arxiv.org/abs/2610.20985"}
+  - {label: "Campante et al. 2026, Astronomy and Astrophysics, doi:10.1051/0004-6361/202660350", url: "https://doi.org/10.1051/0004-6361/202660350"}
 ---
 
 The European Southern Observatory (ESO) is an intergovernmental organisation that builds and runs telescopes in the Atacama Desert in Chile for its member states, Portugal among them. Its Very Large Telescope (VLT) at Paranal consists of four telescopes with mirrors 8.2 metres across. ESPRESSO, one of the instruments there, spreads a star's light into a detailed spectrum and measures tiny shifts in it, which show how fast the star's surface moves towards or away from us.
@@ -25,4 +25,4 @@ ESO was established in 1962 and has 16 member states; Portugal joined in 2001. P
 
 ## Where I come in
 
-From 4 to 12 May 2024 I was at Paranal as a visiting astronomer for run 113.26FX.002, and on its six scheduled nights (6 to 12 May) I observed the K dwarf GJ 570 A with ESPRESSO in visitor mode, that is, on site. I did this on behalf of the principal investigator, Tiago L. Campante; the observing proposal was his, not mine. The data are in Campante et al. 2026 (arXiv:2610.20985, accepted in *Astronomy and Astrophysics*), where I am sixth of 24 authors.
+From 4 to 12 May 2024 I was at Paranal as a visiting astronomer for run 113.26FX.002, and on its six scheduled nights (6 to 12 May) I observed the K dwarf GJ 570 A with ESPRESSO in visitor mode, that is, on site. I did this on behalf of the principal investigator, Tiago L. Campante; the observing proposal was his, not mine. The data are in Campante et al. 2026, published in *Astronomy and Astrophysics* (doi:10.1051/0004-6361/202660350), where I am sixth of 24 authors.

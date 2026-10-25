@@ -1,0 +1,77 @@
+# Title-card images for the home-page band. Licences and credit lines were read from each
+# source page on 2026-10-25. Each card is a derivative of the original: cropped to 16:10 and
+# resized to 1200 x 750 (gaia-sky.webp is the whole map fitted inside 1200 x 750 on its own
+# near-black background instead), saved as WebP; messier-4.webp and milky-way.webp also have a
+# light blur (0.5 and 0.6 px) to stay under 160 KB. No other edits.
+# ESO requires its credit line in full, visible next to the image, with an active link online.
+# Under CC BY-SA the derivative is shared under the same licence as its source.
+
+gaia-sky:
+  file: gaia-sky.webp
+  title: "The colour of the sky from Gaia's Early Data Release 3"
+  author: ESA/Gaia/DPAC
+  licence: CC BY-SA 3.0 IGO
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/igo/
+  source_url: https://www.esa.int/ESA_Multimedia/Images/2020/12/The_colour_of_the_sky_from_Gaia_s_Early_Data_Release_3
+  credit: "ESA/Gaia/DPAC; CC BY-SA 3.0 IGO. Acknowledgement: A. Moitinho."
+  description: The whole sky in the brightness and colour of more than 1.8 billion stars measured by Gaia (EDR3, 2020).
+
+kepler:
+  file: kepler.webp
+  title: "KSC-2009-1649"
+  author: NASA/Troy Cryder
+  licence: Public domain in the US (NASA content; the media usage guidelines extend permission to personal web pages)
+  licence_url: https://www.nasa.gov/nasa-brand-center/images-and-media/
+  source_url: https://images.nasa.gov/details/KSC-2009-1649
+  credit: "NASA/Troy Cryder"
+  description: The Kepler spacecraft suspended in the Astrotech processing facility in Florida in February 2009, weeks before launch.
+
+messier-4:
+  file: messier-4.webp
+  title: "The globular star cluster Messier 4 (eso1235a)"
+  author: ESO
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  source_url: https://www.eso.org/public/images/eso1235a/
+  credit: "ESO. Acknowledgement: ESO Imaging Survey"
+  description: The globular cluster Messier 4 in Scorpius, imaged with the Wide Field Imager on the MPG/ESO 2.2-metre telescope at La Silla.
+
+vlt-laser:
+  file: vlt-laser.webp
+  title: "The VLT's artificial star (potw1425a)"
+  author: Gianluca Lombardi for ESO
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  source_url: https://www.eso.org/public/images/potw1425a/
+  credit: "ESO/G. Lombardi (glphoto.it)"
+  description: The laser guide star of a VLT Unit Telescope at Paranal pointing into the Milky Way.
+
+espresso:
+  file: espresso.webp
+  title: "ESPRESSO in the ESO cleanroom (img_3076-cc)"
+  author: M. Zamani for ESO
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  source_url: https://www.eso.org/public/images/img_3076-cc/
+  credit: "ESO/M. Zamani"
+  description: The diffraction grating at the heart of the ESPRESSO spectrograph on an optical bench in the cleanroom at ESO Headquarters, Garching, in 2015.
+
+milky-way:
+  file: milky-way.webp
+  title: "The Milky Way panorama (eso0932a)"
+  author: Serge Brunier for ESO
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  source_url: https://www.eso.org/public/images/eso0932a/
+  credit: "ESO/S. Brunier"
+  description: The central part of the Milky Way, with the bulge and dust lanes, from ESO's 360-degree photographic panorama of the sky.
+
+ariel:
+  file: ariel.webp
+  title: "Ariel key visual"
+  author: ESA
+  licence: CC BY-SA 3.0 IGO
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/igo/
+  source_url: https://www.esa.int/ESA_Multimedia/Images/2024/07/Ariel_key_visual
+  credit: "ESA, CC BY-SA 3.0 IGO"
+  description: Artist's impression of ESA's Ariel spacecraft observing a planet as it passes in front of its star; an illustration, not a photograph.

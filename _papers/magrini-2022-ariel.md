@@ -7,6 +7,9 @@ arxiv: "2204.08825"
 year: 2022
 role: "co-author (16 of 19)"
 contribution: "Bayesian stellar characterisation runs with PARAM for a subset of the sample."
+card_image: "/assets/img/cards/ariel.webp"
+card_credit: "ESA, CC BY-SA 3.0 IGO"
+card_credit_url: "https://www.esa.int/ESA_Multimedia/Images/2024/07/Ariel_key_visual"
 order: 4
 sources:
   - label: "Article in A&A (open access)"

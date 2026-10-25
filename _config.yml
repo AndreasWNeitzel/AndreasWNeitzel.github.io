@@ -39,6 +39,11 @@ exclude:
   - .prettierignore
   - .pre-commit-config.yaml
   - .lycheeignore
+  - assets/img/places/credits.yml
+  - assets/img/cards/credits.yml
+  - assets/img/logos/policy.md
+  - assets/img/logos/fct-positive.png
+  - assets/img/logos/fct-negative.png
 include:
   - _pages
   - llms.txt

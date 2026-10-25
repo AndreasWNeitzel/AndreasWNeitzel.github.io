@@ -1,0 +1,28 @@
+<figure class="sd" id="seismo-demo" data-seismo>
+<link rel="stylesheet" href="{{ '/assets/css/seismo-demo.css' | relative_url }}">
+<div class="sd-card">
+<div class="sd-views">
+<div class="sd-stage sd-stage--star"><canvas role="img" aria-label="A rotating star whose surface rises and falls in the chosen oscillation mode, red where it is pushed out and blue where it is pulled in."></canvas><button type="button" class="btn btn--sm sd-play">Pause</button></div>
+<div class="sd-stage sd-stage--spec"><canvas tabindex="0" role="img" aria-label="Model power spectrum, not data: a comb of peaks under a bell-shaped envelope, above a background from granulation. Choose a peak, or use the arrow keys, to show its mode on the star."></canvas><span class="sd-tag">Model, not data</span></div>
+</div>
+<div class="sd-bar">
+<span class="sd-group"><span class="sd-lab" title="Degree: how many nodal lines cross the surface"><i>l</i></span><span class="seg sd-seg" role="group" aria-label="Degree l" data-l><button type="button" data-v="0" aria-pressed="false">0</button><button type="button" data-v="1" aria-pressed="true">1</button><button type="button" data-v="2" aria-pressed="false">2</button><button type="button" data-v="3" aria-pressed="false">3</button></span></span>
+<span class="sd-group"><span class="sd-lab" title="Azimuthal order: how many nodal lines run through the poles"><i>m</i></span><span class="seg sd-seg" role="group" aria-label="Azimuthal order m" data-m></span></span>
+<button type="button" class="btn btn--sm sd-mix" aria-pressed="false">Several modes</button>
+</div>
+<p class="sd-desc" aria-live="polite"></p>
+<div class="sd-bar sd-bar--scale">
+<label class="sd-range"><span>Mass</span><input type="range" min="0.8" max="2" step="0.01" value="1" data-mass><output data-mass-out>1.00 M<sub>☉</sub></output></label>
+<label class="sd-range"><span>Radius</span><input type="range" min="0" max="1000" step="1" value="0" data-radius><output data-radius-out>1.00 R<sub>☉</sub></output></label>
+<span class="sd-presets"><button type="button" class="btn btn--sm" data-preset="1,1">Sun</button><button type="button" class="btn btn--sm" data-preset="1.2,10">Red giant</button></span>
+</div>
+<dl class="sd-read"><div><dt>ν<sub>max</sub></dt><dd data-numax>3,090 µHz</dd></div><div><dt>Δν</dt><dd data-dnu>135.1 µHz</dd></div><div><dt>Strongest mode</dt><dd data-period>every 5.4 min</dd></div></dl>
+</div>
+<figcaption class="sd-cap">
+<p>A star rings in many tones at once: each tone moves the surface in its own pattern and adds a peak to the spectrum, and a denser star rings faster. The star shows the radial displacement of one mode, red outwards and blue inwards, with motion and spin exaggerated. The spectrum is a model from the asteroseismic scaling relations, ν<sub>max</sub> ∝ <i>M</i>/<i>R</i><sup>2</sup> and Δν ∝ (<i>M</i>/<i>R</i><sup>3</sup>)<sup>1/2</sup> at the Sun's temperature, not data.</p>
+<p class="credit">Scaling relations: <a href="https://arxiv.org/abs/astro-ph/9403015">Kjeldsen and Bedding 1995</a>, <a href="https://doi.org/10.1086/169725">Brown et al. 1991</a>, solar values from <a href="https://doi.org/10.1088/0004-637X/743/2/143">Huber et al. 2011</a>. Envelope, visibilities and peak positions: <a href="https://doi.org/10.1051/0004-6361/201015440">Mosser et al. 2011</a> and <a href="https://doi.org/10.1051/0004-6361/201117352">2012</a>, <a href="https://doi.org/10.1111/j.1745-3933.2009.00672.x">Broomhall et al. 2009</a>. Background: <a href="https://doi.org/10.1051/0004-6361/201424313">Kallinger et al. 2014</a>.</p>
+</figcaption>
+<noscript><p class="sd-noscript">The demonstration needs JavaScript; the caption describes what it shows.</p></noscript>
+<script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/seismo-demo.js' | relative_url }}" defer></script>
+</figure>

@@ -1,0 +1,36 @@
+/* FIG 2 on /observing/paranal/: the light path (vlt-lightpath.svg) and its output panel
+   (espresso-output.svg, built by figures/observing/build_espresso_output.py). The two SVGs share
+   one scale: grid columns in the ratio of their viewBox widths, so the data thread crosses the
+   seam at the same height. The one-time build comes from site.css ("figure build"). */
+@layer pages {
+  .vlt-figs { display: grid; grid-template-columns: minmax(0, 900fr) minmax(0, 430fr); align-items: start; }
+  .vlt-figs > svg { inline-size: 100%; block-size: auto; max-block-size: none; }
+  .vlt-fig .b-draw { vector-effect: none; stroke-linecap: butt; }
+
+  /* the data path: the light's moving dash continues as curved links; squares mark each hand-off */
+  .vlt-fig .eo-link { stroke-width: 1.7; fill: none; }
+  .vlt-fig .eo-node { fill: var(--accent-2); }
+  @media (prefers-reduced-motion: no-preference) {
+    /* one dash period (6 + 5) per loop, so the flow never jumps when the loop restarts */
+    .vlt-fig .flowray { stroke-dasharray: 6 5; animation: eo-flow 1.1s linear infinite; }
+    @keyframes eo-flow { to { stroke-dashoffset: -11; } }
+  }
+  .vlt-fig .eo-head { fill: none; stroke: var(--accent-2); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* schematic parts in outline, real data filled */
+  .eo-svg .eo-arrow { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .eo-svg .eo-mark { stroke: var(--accent-2); stroke-width: 1.3; stroke-dasharray: 2 2; }
+  .eo-svg .eo-num { font: 500 9.5px var(--mono); fill: var(--muted); }
+  .eo-svg .eo-dots { fill: none; stroke: var(--accent-2); stroke-width: 2; stroke-linecap: round; }
+  .eo-svg .eo-power { fill: color-mix(in oklab, var(--accent-2) 42%, transparent); stroke: none; }
+  .eo-svg .eo-smooth { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+  .eo-svg .eo-noise { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; }
+  .eo-svg .eo-numax { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 1 3; }
+
+  /* narrow screens: the output panel stacks under the light path; the seam thread is hidden */
+  @media (max-width: 900px) {
+    .vlt-figs { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }
+    .vlt-figs .eo-svg { max-inline-size: 560px; }
+    .vlt-fig .eo-thread-out { display: none; }
+  }
+}

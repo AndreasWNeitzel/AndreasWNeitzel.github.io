@@ -1,5 +1,5 @@
 // Site behaviour: theme toggle, header state, card spotlight, FIG 1 stage captions,
-// timeline filters and lazy start of the travel map. No dependencies.
+// timeline filters, lazy start of the travel map and one-time figure builds. No dependencies.
 (() => {
   const root = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -43,7 +43,7 @@
   if (fig) {
     const caps = {
       gaia: ["Gaia.", "ESA's satellite measures the position, motion and a low-resolution spectrum of each star. Data Release 3 has XP spectra for about 220 million stars; Data Release 4 will have them for about 1.8 billion."],
-      xp: ["XP spectrum.", "Each star's spectrum from 360 to 990 nm, from Gaia's blue and red photometers. The shape carries temperature, gravity and chemistry, blurred at low resolution."],
+      xp: ["XP spectrum.", "Each star's spectrum from 360 to 990 nm, from Gaia's blue and red photometers. The shape carries temperature, gravity and chemistry, blurred at low resolution. The curve drawn is the measured spectrum of one red giant, Gaia DR3 5289554869898620416."],
       seismo: ["Asteroseismology.", "Oscillating red giants observed by TESS and Kepler have seismic masses and ages. They anchor and test the network on stars whose physics is known."],
       janus: ["JANUS.", "An ensemble of eight neural networks, each a conditional normalising flow, that turns an XP spectrum into a distribution over six stellar labels. Shown at TASC10/KASC17 and IMAS13; the paper is in preparation."],
       labels: ["Labels with reliability.", "Teff, log g, [M/H], [α/M], [Fe/H] and [Mg/H], each with a per-star median and spread, plus a calibrated probability that the prediction misses and a novelty score for stars unlike the training set."],
@@ -54,7 +54,7 @@
     const titleEl = fig.querySelector("[data-cap-title]");
     const textEl = fig.querySelector("[data-cap-text]");
     const defTitle = titleEl.innerHTML, defText = textEl.innerHTML;
-    const stages = fig.querySelectorAll(".stage");
+    const stages = fig.querySelectorAll(".f1-stage");
     const set = (key) => {
       stages.forEach((s) => s.classList.toggle("is-active", s.dataset.stage === key));
       fig.classList.toggle("has-active", !!key);
@@ -95,5 +95,18 @@
       }, { rootMargin: "600px 0px" });
       io.observe(map);
     } else start();
+  }
+
+  // ---- figure builds: draw each schematic once, when it first enters the view ------
+  const builds = document.querySelectorAll("[data-build]");
+  if (builds.length && !reduced.matches && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.dataset.build = "run";
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.3 });
+    builds.forEach((el) => { el.dataset.build = "armed"; io.observe(el); });
   }
 })();

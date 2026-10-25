@@ -13,7 +13,7 @@
       <button class="btn btn--sm tmap-replay" type="button">Replay</button>
     </div>
     <div class="tmap-card" role="dialog" aria-live="polite" hidden></div>
-    <p class="tmap-legend"><span><i class="home"></i>Porto, home</span><span><i></i>Trip from Porto</span><span><i class="country"></i>Country I worked in</span><span>Rings: 100 to 10,000 km from Porto</span></p>
+    <p class="tmap-legend"><span><i class="home"></i>Porto, home</span><span><i></i>Trip from Porto</span><span>Countries I worked in, fewer to more entries <span class="ramp" aria-hidden="true"><b style="background:color-mix(in oklab, var(--accent) 16%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 26%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 38%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 50%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 64%, var(--surface-2))"></b></span></span><span>Rings: 100 to 10,000 km from Porto</span></p>
     <noscript><p class="tmap-noscript">The interactive map needs JavaScript. Every place and what happened there is listed alongside.</p></noscript>
   </div>
   <aside class="tmap-side" aria-label="Places">
@@ -44,7 +44,7 @@
         "lat": {{ pl.lat }}, "lon": {{ pl.lon }}, "role": {{ pl.role | default: "visit" | jsonify }},
         "blurb": {{ pl.blurb | default: "" | missions | jsonify }},
         "photo": {% if pl.photo %}{{ pl.photo | relative_url | jsonify }}{% else %}null{% endif %},
-        "photo_alt": {{ pl.photo_alt | default: "" | jsonify }}, "photo_credit": {{ pl.photo_credit | default: "" | jsonify }},
+        "photo_alt": {{ pl.photo_alt | default: "" | jsonify }}, "photo_credit": {{ pl.photo_credit | default: "" | jsonify }}, "photo_credit_url": {{ pl.photo_credit_url | default: "" | jsonify }},
         "items": [
           {%- assign first = true -%}
           {%- for c in cats -%}{%- assign pool = L[c] -%}{%- for e in pool -%}{%- if pl.location and e.location == pl.location -%}

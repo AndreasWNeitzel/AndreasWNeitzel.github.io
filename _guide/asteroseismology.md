@@ -3,6 +3,7 @@ title: "What is asteroseismology?"
 short: "Seismology of stars"
 lede: "Asteroseismology measures a star's size and mass, and through models its age, from the way the star vibrates."
 order: 2
+hero: false
 image: /assets/img/guide/asteroseismology.webp
 image_alt: "Illustration of a yellow sphere covered in a regular pattern of red and blue patches, with a wedge cut away to show the pattern continuing into the interior."
 image_credit: "ESO"
@@ -20,6 +21,8 @@ sources:
 ---
 
 Sound waves travel through the interiors of stars like the Sun and make the whole star vibrate at many frequencies at once. The vibrations change the star's brightness and the speed of its surface by tiny amounts, which space telescopes and precise spectrographs can measure. The frequencies depend on the star's density and internal structure, so they give its radius and mass and, with stellar models, its age.
+
+{% include seismo-demo.html %}
 
 In 2001 Bouchy and Carrier used the CORALIE spectrograph at ESO's La Silla Observatory to detect such oscillations in α Centauri A, with surface speeds of up to 35 cm per second and periods near seven minutes. For the 66 main-sequence stars that *Kepler* observed for at least a year, seven modelling teams later reached average uncertainties of about 2 per cent in radius, 4 per cent in mass and 10 per cent in age (Silva Aguirre et al. 2017).
 

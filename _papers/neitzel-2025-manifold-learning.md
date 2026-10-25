@@ -10,6 +10,9 @@ contribution: "First and corresponding author."
 figure: "/assets/img/papers/neitzel-2025-manifold-learning.webp"
 figure_alt: "Twelve scatter plots in four columns, one per test sample (A to D), and three rows: velocity, alpha-element abundance against iron abundance, and iron abundance against age. Stars are coloured by the group the method assigned; columns A and B show five groups, columns C and D three."
 figure_caption: "Each colour is one group the method found without labels, shown by motion (top), chemistry (middle) and age (bottom) for the four test samples. The error-free samples A and B give five groups; with measurement errors (C and D) the disc stays one group, in green. From Neitzel et al. 2025, A&A 695, A243, Fig. 11, CC BY 4.0."
+card_image: "/assets/img/cards/milky-way.webp"
+card_credit: "ESO/S. Brunier, CC BY 4.0"
+card_credit_url: "https://www.eso.org/public/images/eso0932a/"
 order: 1
 sources:
   - label: "Article in A&A (open access)"

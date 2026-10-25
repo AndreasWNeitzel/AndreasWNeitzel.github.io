@@ -1,19 +1,28 @@
 {%- assign rows = site.data.ledger | timeline -%}
 {%- assign counts = rows | timeline_counts -%}
-{%- assign filters = "paper:Papers,talk:Talks and posters,grant:Funding,hpc:HPC,observing:Observing,software:Software,position:Positions,service:Service and teaching,award:Awards" | split: "," -%}
+{%- assign filters = "paper:Papers,talk:Talks and posters,grant:Funding,hpc:HPC,observing:Observing,software:Software,position:Positions and degrees,service:Service and teaching,award:Awards" | split: "," -%}
 <div class="filters no-print" role="group" aria-label="Filter by type">
   <button type="button" data-filter="all" aria-pressed="true">All <span class="n">{{ rows.size }}</span></button>
   {%- for f in filters %}{% assign kv = f | split: ":" %}{% assign key = kv[0] %}{% assign n = counts[key] %}{% if n and n > 0 %}
-  <button type="button" data-filter="{{ kv[0] }}" aria-pressed="false">{{ kv[1] }} <span class="n">{{ n }}</span></button>
+  <button type="button" class="tag--{{ key }}" data-filter="{{ key }}" aria-pressed="false">{{ kv[1] }} <span class="n">{{ n }}</span></button>
   {%- endif %}{% endfor %}
 </div>
-<ol class="timeline" data-timeline>
-  {%- for r in rows %}
-  <li class="tl-row" data-kind="{{ r.kind }}">
-    <span class="tl-date">{{ r.when }}</span>
-    <span><span class="tag tag--{{ r.tag }}">{{ r.label }}</span></span>
-    <span class="tl-title">{{ r.title | missions }}{% if r.meta != "" %}<small>{{ r.meta | missions }}</small>{% endif %}</span>
-    <span class="tl-links">{% if r.url %}<a href="{{ r.url | relative_url }}">{{ r.link }}</a>{% endif %}</span>
-  </li>
-  {%- endfor %}
-</ol>
+<p class="tl-legend no-print"><span class="tl-legend-lead">Lines of work</span>
+  {%- for t in site.data.threads %}<span class="tl-key" data-thread="{{ t.key }}" style="--th: var({{ t.colour }})" tabindex="0">{{ t.label | missions }}</span>{% endfor %}</p>
+<div class="tl-wrap" data-threads-root>
+  <svg class="tl-gutter" aria-hidden="true" data-threads-svg></svg>
+  <ol class="timeline" data-timeline>
+    <li class="tl-head" aria-hidden="true"><span>Start</span><span>End</span><span>Type</span><span>Entry</span><span></span></li>
+    {%- for r in rows %}
+    <li class="tl-row" data-kind="{{ r.kind }}" data-id="{{ r.id }}">
+      <span class="tl-date">{{ r.start }}</span>
+      <span class="tl-date tl-end">{% if r.end != "" %}{{ r.end }}{% endif %}</span>
+      <span><span class="tag tag--{{ r.tag }}">{{ r.label }}</span></span>
+      <span class="tl-title">{{ r.title | missions }}{% if r.meta != "" %}<small>{{ r.meta | missions }}</small>{% endif %}</span>
+      <span class="tl-links">{% if r.url %}<a href="{{ r.url | relative_url }}">{{ r.link }}</a>{% endif %}</span>
+    </li>
+    {%- endfor %}
+  </ol>
+  <script type="application/json" data-threads-json>{{ site.data.threads | jsonify }}</script>
+</div>
+<script defer src="{{ '/assets/js/timeline-threads.js' | relative_url }}"></script>

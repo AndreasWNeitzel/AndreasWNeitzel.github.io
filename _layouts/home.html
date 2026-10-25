@@ -6,7 +6,7 @@ body_class: home
 {%- assign L = site.data.ledger -%}
 {%- assign H = site.data.home -%}
 <div class="wrap">
-
+{% include band.html %}
 <section class="first" aria-label="Introduction">
   <!-- zone 1: profile card -->
   <div class="profile card">
@@ -67,7 +67,7 @@ body_class: home
       <li><a href="{{ ph.url | relative_url }}"><img src="{{ ph.src | relative_url }}" alt="{{ ph.alt }}" loading="lazy" decoding="async"><span>{{ ph.caption }}</span></a></li>
       {%- endfor %}
     </ul>
-    <p class="now"><span class="tag tag--software">Now</span><span>{{ H.now }}</span></p>
+    <p class="now"><span class="tag tag--now">now</span><span>{{ H.now }}</span></p>
   </div>
 </section>
 

@@ -17,18 +17,21 @@ lede: Four refereed papers in Astronomy and Astrophysics, one as first author, e
 
 <section class="section" id="explainers" aria-labelledby="explainers-title">
   <div class="section-head"><h2 id="explainers-title">Explainers</h2><p>What each paper found and what I did, for readers outside astronomy.</p></div>
-  <div class="mosaic">
+  <div class="mosaic mosaic--pairs">
     {%- assign ps = site.papers | sort: "order" -%}
     {%- for x in ps %}
-    <a class="card{% if forloop.first %} wide{% endif %}" href="{{ x.url | relative_url }}" data-spotlight>
-      {%- if x.figure %}<div class="media light"><img src="{{ x.figure | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-clusters.svg %}</div>{% endif %}
-      <div class="card-body">
-        <span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>
-        <h3>{{ x.headline | missions }}</h3>
-        <p>{{ x.title | missions | truncate: 120 }}</p>
-        <span class="go">Read the explainer</span>
-      </div>
-    </a>
+    <div class="card-wrap">
+      <a class="card" href="{{ x.url | relative_url }}" data-spotlight>
+        {%- if x.card_image %}<div class="media"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
+        <div class="card-body">
+          <span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>
+          <h3>{{ x.headline | missions }}</h3>
+          <p>{{ x.title | missions | truncate: 120 }}</p>
+          <span class="go">Read the explainer</span>
+        </div>
+      </a>
+      {%- if x.card_credit %}<a class="ccredit" href="{{ x.card_credit_url }}">{{ x.card_credit }}</a>{% endif %}
+    </div>
     {%- endfor %}
   </div>
 </section>

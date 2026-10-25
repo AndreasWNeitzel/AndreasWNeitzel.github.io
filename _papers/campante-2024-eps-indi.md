@@ -10,6 +10,9 @@ contribution: "Bayes-factor test for the presence of a power excess against a mo
 figure: "/assets/img/papers/campante-2024-eps-indi.webp"
 figure_alt: "Scatter plot of stellar radius against surface temperature, with hotter stars on the left. Blue circles mark stars with oscillations detected in brightness measurements, orange diamonds those detected in radial velocity, and grey dots are other stars. Epsilon Indi, an orange diamond near 4650 K, lies to the right of every other detection."
 figure_caption: "Stars with measured oscillations, by size and surface temperature, hotter stars on the left. Circles are detections from space photometry, diamonds from radial velocities; grey dots are other stars for reference. ε Indi, on the right, is cooler than all the others. From Campante et al. 2024, A&A 683, L16, Fig. 1, CC BY 4.0."
+card_image: "/assets/img/cards/espresso.webp"
+card_credit: "ESO/M. Zamani, CC BY 4.0"
+card_credit_url: "https://www.eso.org/public/images/img_3076-cc/"
 order: 3
 sources:
   - label: "Letter in A&A (open access)"

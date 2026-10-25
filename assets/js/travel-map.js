@@ -47,6 +47,22 @@
     const gRings = svg.querySelector(".rings");
     let vb = svg.getAttribute("viewBox").split(/\s+/).map(Number);
 
+    // choropleth: shade each country I worked in by how many entries of the record happened there
+    const ISO = { Portugal: "PRT", Spain: "ESP", Italy: "ITA", Denmark: "DNK", Chile: "CHL" };
+    const perCountry = {};
+    data.places.forEach((p) => {
+      const c = ISO[p.country];
+      if (c) perCountry[c] = (perCountry[c] || 0) + Math.max(1, p.items.length);
+    });
+    const step = (n) => (n >= 20 ? 5 : n >= 8 ? 4 : n >= 4 ? 3 : n >= 2 ? 2 : 1);
+    svg.querySelectorAll(".visited[data-c]").forEach((el) => {
+      const n = perCountry[el.dataset.c] || 1;
+      el.classList.add(`lvl-${step(n)}`);
+      const t = document.createElementNS(NS, "title");
+      t.textContent = `${n} ${n === 1 ? "entry" : "entries"} in my record`;
+      el.appendChild(t);
+    });
+
     // ring labels
     const ringLabels = [];
     gRings.querySelectorAll("circle").forEach((c) => {
@@ -202,7 +218,7 @@
       const items = p.items.slice(0, 6).map((it) => `<li><span class="${tagClass(it.tag)}">${esc(it.label)}</span><span>${it.title}${it.when ? ` <span class="kicker">${esc(it.when)}</span>` : ""}</span></li>`).join("");
       const more = p.items.length > 6 ? `<p class="kicker">and ${p.items.length - 6} more in the record</p>` : "";
       card.innerHTML = `${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.photo_alt)}">` : `<div class="tmap-card-art"><span>${esc(p.name.toUpperCase())}</span><span>${p.lat.toFixed(2)}°, ${p.lon.toFixed(2)}°</span></div>`}
-        <div class="card-body"><p class="where">${esc(p.country)}${p.role === "home" ? " · home base" : ` · ${fmt(p.km)} km from Porto`}</p><h3>${esc(p.name)}</h3>${p.blurb ? `<p>${p.blurb}</p>` : ""}${items ? `<ul>${items}</ul>` : ""}${more}${p.photo_credit ? `<p class="credit">Photo: ${esc(p.photo_credit)}</p>` : ""}</div>`;
+        <div class="card-body"><p class="where">${esc(p.country)}${p.role === "home" ? " · home base" : ` · ${fmt(p.km)} km from Porto`}</p><h3>${esc(p.name)}</h3>${p.blurb ? `<p>${p.blurb}</p>` : ""}${items ? `<ul>${items}</ul>` : ""}${more}${p.photo_credit ? `<p class="credit">Photo: ${p.photo_credit_url ? `<a href="${esc(p.photo_credit_url)}">${esc(p.photo_credit)}</a>` : esc(p.photo_credit)}</p>` : ""}</div>`;
       card.hidden = false;
       // position near the marker, inside the stage
       const sr = stage.getBoundingClientRect();

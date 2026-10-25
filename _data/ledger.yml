@@ -111,8 +111,8 @@ publications:
   tagline: Oscillations measured in two nearby K dwarfs, at amplitudes that disagree with 3D convection models.
   kind: article
   role: co-author
-  venue: Astronomy and Astrophysics (accepted)
-  date: '2026-10-14'
+  venue: Astronomy and Astrophysics (published online, volume pending)
+  date: '2026-10-22'
   people:
   - T. L. Campante
   - Y. Zhou
@@ -124,6 +124,7 @@ publications:
   identifiers:
     arxiv: '2610.20985'
     url: https://arxiv.org/abs/2610.20985
+    doi: 10.1051/0004-6361/202660350
   weight: 5
   audiences:
   - academic

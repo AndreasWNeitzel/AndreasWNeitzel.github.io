@@ -1,0 +1,27 @@
+# Lines of work on the home timeline, drawn as dashed arcs in its left gutter. Each thread starts
+# at the degree it grew out of (parent) and joins its entries in date order. Ids are ledger ids.
+- key: manifold
+  label: Manifold learning to Starfold
+  colour: --cat-0
+  parent: edu-2022-phd-astronomy
+  ids: [pres-2023-09-enaa33-oral, pres-2024-07-tasc8-oral, pres-2024-09-enaa34-oral, pres-2024-11-imas11-oral, pub-2025-neitzel-appendix-data, pub-2025-neitzel-manifold-learning, pres-2025-enaa35-oral, sw-2026-starfold, sw-2026-10-starfold-manual]
+- key: espresso
+  label: ESPRESSO asteroseismology
+  colour: --cat-2
+  parent: edu-2022-phd-astronomy
+  ids: [pub-2024-campante-espresso, ev-2024-05-paranal-espresso-observing-run, pub-2026-campante-gj570-gj783]
+- key: haydn
+  label: Italy and HAYDN
+  colour: --cat-1
+  parent: edu-2022-phd-astronomy
+  ids: [pos-2025-visiting-inaf-bologna, pres-2026-04-dfa-week-haydn, pres-2026-07-tasc10-poster-haydnsim]
+- key: janus
+  label: JANUS and ArqueoGal
+  colour: --cat-4
+  parent: edu-2022-phd-astronomy
+  ids: [fund-2025-hpcvlab-deucalion-team-member, fund-2026-arqueogal-pex-participant, pres-2026-05-stars-day-janus, pres-2026-07-tasc10-oral-janus, fund-2026-09-arqueogal-bi-d-fellowship, pres-2026-09-enaa36-pitch-janus, pres-2026-09-enaa36-poster-janus, fund-2026-10-cpca-a1-deucalion, fund-2026-10-cpca-a2-marenostrum, pres-2026-10-imas13-oral-janus]
+- key: ariel
+  label: MSc and Ariel
+  colour: --cat-9
+  parent: edu-2020-msc-astronomy
+  ids: [fund-2021-fct-msc-research-grant, pos-2021-msc-research-fellow, mem-2021-ariel-science-consortium, pres-2022-04-dfa-week-oral, pub-2022-magrini-ariel, pres-2022-09-enaa32-poster-ariel, pres-2022-09-fisica2022-oral-ariel, pub-2022-msc-thesis, award-2023-best-msc-student-astronomy]

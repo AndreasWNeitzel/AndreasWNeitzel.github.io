@@ -9,8 +9,8 @@
   {%- when "software" -%}{%- assign tg = "software" -%}{%- if e.status -%}{%- assign lb = e.status -%}{%- elsif k == "package" and e.version -%}{%- assign lb = "released" -%}{%- elsif k == "app" -%}{%- assign lb = "live" -%}{%- elsif k == "docs" -%}{%- assign lb = "manual" -%}{%- else -%}{%- assign lb = "in development" -%}{%- endif -%}
   {%- when "events" -%}{%- if k == "observing-run" -%}{%- assign tg = "observing" -%}{%- assign lb = "observing" -%}{%- else -%}{%- assign tg = "event" -%}{%- assign lb = k -%}{%- endif -%}
   {%- when "awards" -%}{%- assign tg = "award" -%}{%- assign lb = "award" -%}
-  {%- when "positions" -%}{%- assign tg = "position" -%}{%- assign lb = "position" -%}{%- if k == "visiting" -%}{%- assign lb = "abroad" -%}{%- endif -%}
-  {%- when "education" -%}{%- assign tg = "position" -%}{%- assign lb = "degree" -%}
+  {%- when "positions" -%}{%- assign tg = "position" -%}{%- assign lb = "position" -%}{%- if k == "visiting" -%}{%- assign tg = "abroad" -%}{%- assign lb = "abroad" -%}{%- endif -%}
+  {%- when "education" -%}{%- assign tg = "degree" -%}{%- assign lb = "degree" -%}
   {%- when "memberships" -%}{%- assign tg = "membership" -%}{%- assign lb = "consortium" -%}
   {%- when "teaching" -%}{%- assign tg = "teaching" -%}{%- assign lb = "teaching" -%}
   {%- when "service" -%}{%- assign tg = "service" -%}{%- if e.role == "chair" -%}{%- assign lb = "chair" -%}{%- else -%}{%- assign lb = "organiser" -%}{%- endif -%}

@@ -16,12 +16,20 @@ places:
     photo: /assets/img/photos/dfa-week-2026-talk.webp
     photo_alt: Andreas presenting HAYDN cluster simulations at DFA Week 2026, Porto.
   - id: vila-do-conde
+    photo: /assets/img/places/vila-do-conde.webp
+    photo_alt: The Ave estuary at Vila do Conde, with a replica sixteenth-century nau, the marina and the Santa Clara monastery above the town.
+    photo_credit: Pedro Silva, Wikimedia Commons, CC BY 2.0
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Vila_do_Conde,_Portugal_(43051541201).jpg
     name: Vila do Conde
     country: Portugal
     location: Vila do Conde, Portugal
     lat: 41.3517
     lon: -8.7479
   - id: guimaraes
+    photo: /assets/img/places/guimaraes.webp
+    photo_alt: "Guimar\xE3es Castle seen from the S\xE3o Mamede field."
+    photo_credit: Filipe Fortes, Wikimedia Commons, CC BY-SA 2.0
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Castelo_de_Guimaraes.jpg
     name: Guimarães
     country: Portugal
     location: Guimarães, Portugal
@@ -29,18 +37,30 @@ places:
     lon: -8.2918
     blurb: Also home to Deucalion, the national supercomputer I run on.
   - id: coimbra
+    photo: /assets/img/places/coimbra.webp
+    photo_alt: "The Pa\xE7o das Escolas of the University of Coimbra, with the clock tower and the Via Latina colonnade."
+    photo_credit: Berthold Werner, Wikimedia Commons, CC BY-SA 3.0
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Coimbra_BW_2018-10-06_10-11-56.jpg
     name: Coimbra
     country: Portugal
     location: Coimbra, Portugal
     lat: 40.2033
     lon: -8.4103
   - id: lisbon
+    photo: /assets/img/places/lisbon.webp
+    photo_alt: "Alfama from the Miradouro de Santa Luzia, with the dome of Santa Engr\xE1cia and the Tagus beyond."
+    photo_credit: "Jakub Ha\u0142un, Wikimedia Commons, CC BY 4.0"
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:View_from_Miradouro_de_Santa_Luzia,_Lisbon,_20250603_2016_9045.jpg
     name: Lisbon
     country: Portugal
     location: Lisbon, Portugal
     lat: 38.7223
     lon: -9.1393
   - id: cadiar
+    photo: /assets/img/places/cadiar.webp
+    photo_alt: "The Alpujarra seen from C\xE1diar, with snow on the Sierra Nevada above white villages and olive groves."
+    photo_credit: Feranza, Wikimedia Commons, CC BY-SA 4.0
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Cadiar.jpg
     name: Cádiar
     country: Spain
     location: Cádiar (Granada), Spain
@@ -48,6 +68,10 @@ places:
     lon: -3.1802
     blurb: IMAS13 at the Alquería de Morayma, Granada.
   - id: lluc
+    photo: /assets/img/places/lluc.webp
+    photo_alt: The Santuari de Lluc in the Serra de Tramuntana, Mallorca, seen from the Monte del Rosario.
+    photo_credit: H. Zell, Wikimedia Commons, CC BY-SA 3.0
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Santuari_de_Lluc_-_View_from_Monte_del_Rosario.jpg
     name: Lluc
     country: Spain
     location: Lluc, Balearic Islands, Spain
@@ -55,6 +79,10 @@ places:
     lon: 2.8848
     blurb: IMAS11 at the Lluc sanctuary, Mallorca.
   - id: bologna
+    photo: /assets/img/places/bologna.webp
+    photo_alt: The old town of Bologna with the Two Towers, seen from above.
+    photo_credit: Volodymyr Vlasenko, Wikimedia Commons, CC BY-SA 3.0
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Bologna_Panorama.jpg
     name: Bologna
     country: Italy
     location: Bologna, Italy
@@ -74,6 +102,10 @@ places:
     extra:
       - {tag: position, label: visits, title: "Regular visits to INAF Osservatorio Astronomico di Padova", when: "2025 to 2026", ledger: pos-2025-visiting-inaf-bologna}
   - id: aarhus
+    photo: /assets/img/places/aarhus.webp
+    photo_alt: The main building of Aarhus University seen from the University Park.
+    photo_credit: "\xA9 Villy Fink Isaksen, Wikimedia Commons, CC BY-SA 4.0"
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Aarhus_Universitets_hovedbygning_set_fra_parken.jpg
     name: Aarhus
     country: Denmark
     location: Aarhus, Denmark
@@ -81,6 +113,10 @@ places:
     lon: 10.2030
     blurb: TASC10/KASC17, the joint TESS and Kepler asteroseismology workshop.
   - id: santiago
+    photo: /assets/img/places/santiago.webp
+    photo_alt: Sanhattan, the eastern business district of Santiago, below the snow-covered Andes.
+    photo_credit: Hector Garcia, Wikimedia Commons, CC BY-SA 2.0
+    photo_credit_url: https://commons.wikimedia.org/wiki/File:Cordillera_de_los_Andes,_junto_a_Sanhattan.jpg
     name: Santiago
     country: Chile
     lat: -33.4489

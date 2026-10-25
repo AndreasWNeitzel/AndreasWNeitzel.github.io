@@ -8,7 +8,9 @@
 {%- endif %}
 <meta name="description" content="{{ page.description | default: site.description | strip_html | strip_newlines | strip }}">
 <link rel="canonical" href="{{ page.url | absolute_url }}">
+<link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="48x48">
 <link rel="icon" href="{{ '/assets/img/favicon.svg' | relative_url }}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{ '/assets/img/apple-touch-icon.png' | relative_url }}">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#05070d">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6fa">
 <link rel="preload" href="{{ '/assets/fonts/geist-latin-wght-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>

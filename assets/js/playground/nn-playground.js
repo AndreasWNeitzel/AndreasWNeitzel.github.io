@@ -15,9 +15,9 @@ const root = document.getElementById("nn-playground");
 if (root) {
   const start = () => boot(root).catch((err) => {
     console.error(err);
-    const status = root.querySelector(".pg-status");
-    status.hidden = false;
-    status.textContent = "The star data could not be loaded, so the playground cannot run here.";
+    const state = root.querySelector(".pg-state");
+    state.classList.add("is-alert");
+    state.textContent = "The star data could not be loaded, so the playground cannot run here.";
   });
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => {
@@ -183,20 +183,17 @@ async function boot(root) {
   const autotrain = new URLSearchParams(location.search).get("autotrain") === "1";
 
   const ui = {
-    status: $(".pg-status"),
     train: $(".pg-train"),
     step: $(".pg-step"),
     reset: $(".pg-reset"),
-    readout: $(".pg-readout"),
+    live: $(".pg-live"),
     epoch: $(".pg-epoch"),
     rmse: $(".pg-rmse"),
-    note: $(".pg-note"),
+    state: $(".pg-state"),
     form: $(".pg-settings"),
-    stars: $(".pg-stars"),
+    star: $(".pg-star"),
+    scale: $(".pg-scale"),
     facts: $(".pg-facts"),
-    estimate: $(".pg-estimate"),
-    modes: [...root.querySelectorAll(".pg-mode")],
-    rampTicks: $(".pg-ramp-ticks"),
     lossTip: $(".pg-loss .pg-tip"),
     parityTip: $(".pg-parity .pg-tip"),
     netCanvas: $(".pg-net canvas"),
@@ -274,8 +271,8 @@ async function boot(root) {
   const send = (msg) => worker.postMessage(msg);
   worker.onerror = (e) => {
     e.preventDefault?.();
-    ui.status.hidden = false;
-    ui.status.textContent = "The training worker could not start in this browser.";
+    ui.state.classList.add("is-alert");
+    ui.state.textContent = "The training worker could not start in this browser.";
   };
   worker.onmessage = (event) => {
     const m = event.data;
@@ -302,15 +299,8 @@ async function boot(root) {
     parityDomain = [Math.floor(Math.min(...mh) * 4) / 4, Math.ceil(Math.max(...mh) * 4) / 4];
     const teff = Array.from(valRows, (r) => A.teff_gspspec[r]).sort((a, b) => a - b);
     teffDomain = [Math.floor(teff[Math.floor(teff.length * 0.01)] / 250) * 250, Math.ceil(teff[Math.floor(teff.length * 0.99)] / 250) * 250];
-    const ticks = [teffDomain[0], (teffDomain[0] + teffDomain[1]) / 2, teffDomain[1]];
-    ui.rampTicks.replaceChildren(...ticks.map((t, i) => {
-      const s = document.createElement("span");
-      s.textContent = `${i === 0 ? "\u2264" : i === 2 ? "\u2265" : ""}${grouped(t)} K`;
-      return s;
-    }));
     readTheme();
     for (const b of [ui.train, ui.step, ui.reset]) b.disabled = false;
-    ui.status.hidden = true;
     root.classList.add("is-ready");
     buildStars();
     markAll();
@@ -326,7 +316,7 @@ async function boot(root) {
     S = m;
     edges = null;
     updateReadout();
-    updateEstimate();
+    updateFacts();
     dirty.net = dirty.loss = dirty.parity = true;
     schedule();
     if (autotrain && !autoStarted && m.status === "idle") {
@@ -336,18 +326,25 @@ async function boot(root) {
   }
 
   // ------------------------------------------------------------ controls
+  const STATES = {
+    idle: "Untrained. Press Train, or Step for one epoch.",
+    training: "Training.",
+    paused: "Paused.",
+  };
+
   function updateReadout() {
     const training = S.status === "training";
-    ui.epoch.textContent = `Epoch ${grouped(S.epoch)}`;
-    ui.rmse.textContent = Number.isFinite(S.val) ? `Validation RMSE ${Math.sqrt(S.val).toFixed(3)} dex` : "Validation RMSE not available";
-    ui.readout.setAttribute("aria-busy", training ? "true" : "false");
+    ui.epoch.textContent = grouped(S.epoch);
+    ui.rmse.textContent = Number.isFinite(S.val) ? Math.sqrt(S.val).toFixed(3) : "n/a";
+    ui.live.setAttribute("aria-busy", training ? "true" : "false");
     ui.train.textContent = training ? "Pause" : "Train";
     const stuck = S.status === "diverged" || S.status === "limit";
     ui.train.disabled = stuck;
     ui.step.disabled = stuck;
-    ui.note.hidden = !stuck;
-    if (S.status === "diverged") ui.note.textContent = "The error grew without bound, so training stopped. Lower the learning rate and press Reset.";
-    else if (S.status === "limit") ui.note.textContent = `Training stops after ${grouped(stats.maxEpochs)} epochs. Press Reset to start again.`;
+    ui.state.classList.toggle("is-alert", stuck);
+    if (S.status === "diverged") ui.state.textContent = "The error grew without bound, so training stopped. Lower the learning rate and press Reset.";
+    else if (S.status === "limit") ui.state.textContent = `Training stops after ${grouped(stats.maxEpochs)} epochs. Press Reset to start again.`;
+    else ui.state.textContent = STATES[S.status] ?? "";
     const counts = S.weights.map((w) => w.length);
     const total = counts.reduce((a, b) => a + b, 0);
     const shown = edgeBudgets(counts).reduce((a, b) => a + b, 0);
@@ -377,65 +374,74 @@ async function boot(root) {
   });
 
   // ------------------------------------------------------------ star selection
+  function option(value, text) {
+    const o = document.createElement("option");
+    o.value = value;
+    o.textContent = text;
+    return o;
+  }
+
   function buildStars() {
-    const buttons = examples.map((row) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "pg-chip";
-      b.dataset.row = String(row);
-      b.textContent = `Giant, [M/H] ${signed(A.mh_gspspec[row])}`;
-      return b;
-    });
-    const other = document.createElement("button");
-    other.type = "button";
-    other.className = "pg-chip";
-    other.dataset.row = "other";
-    other.textContent = "Another validation star";
-    ui.stars.replaceChildren(...buttons, other);
-    ui.stars.addEventListener("click", (e) => {
-      const b = e.target.closest("button");
-      if (!b) return;
-      if (b.dataset.row === "other") {
+    ui.star.replaceChildren(
+      ...examples.map((row) => option(String(row), `Example giant, [M/H] ${signed(A.mh_gspspec[row])}`)),
+      option("other", "Another validation star, at random"),
+    );
+    ui.star.disabled = false;
+    ui.star.addEventListener("change", () => {
+      if (ui.star.value === "picked") return;
+      if (ui.star.value === "other") {
         let r = selected;
         while (r === selected || examples.includes(r)) r = valRows[Math.floor(Math.random() * valRows.length)];
         select(r);
-      } else select(Number(b.dataset.row));
+      } else select(Number(ui.star.value));
     });
     select(selected);
+  }
+
+  // Keep the select in step with the followed star; a star chosen at random or in the plot
+  // gets its own entry, so choosing "at random" again draws a new one.
+  function syncStarSelect(row) {
+    let picked = ui.star.querySelector('option[value="picked"]');
+    if (examples.includes(row)) {
+      picked?.remove();
+      ui.star.value = String(row);
+      return;
+    }
+    if (!picked) {
+      picked = option("picked", "");
+      ui.star.insertBefore(picked, ui.star.querySelector('option[value="other"]'));
+    }
+    picked.textContent = `Validation star, [M/H] ${signed(A.mh_gspspec[row])}`;
+    ui.star.value = "picked";
   }
 
   function select(row) {
     selected = row;
     send({ type: "sample", row });
-    for (const b of ui.stars.querySelectorAll("button")) {
-      const on = b.dataset.row === String(row) || (b.dataset.row === "other" && !examples.includes(row));
-      b.setAttribute("aria-pressed", on ? "true" : "false");
-    }
-    const sid = A.source_id[row].toString();
-    ui.facts.textContent = `Gaia DR3 ${sid} · Teff ${grouped(A.teff_gspspec[row])} K · log g ${A.logg_gspspec[row].toFixed(2)} · G ${A.phot_g_mean_mag[row].toFixed(1)} mag`;
+    syncStarSelect(row);
     ui.specNote.hidden = examples.includes(row);
-    updateEstimate();
+    updateFacts();
     dirty.bars = dirty.spectrum = dirty.parity = dirty.net = true;
     schedule();
   }
 
-  function updateEstimate() {
-    const label = `GSP-Spec [M/H] ${signed(A.mh_gspspec[selected])} dex`;
-    const est = S && S.sample.row === selected ? `network ${signed(S.sample.prediction)} dex` : "network estimate pending";
-    ui.estimate.textContent = `${label} · ${est}`;
+  function updateFacts() {
+    const r = selected;
+    const est = S && S.sample.row === r ? `network ${signed(S.sample.prediction)}` : "network estimate pending";
+    const head = document.createElement("b");
+    head.textContent = `GSP-Spec [M/H] ${signed(A.mh_gspspec[r])}, ${est} dex`;
+    const rest = ` \u00b7 Gaia DR3 ${A.source_id[r].toString()} \u00b7 Teff ${grouped(A.teff_gspspec[r])} K \u00b7 log g ${A.logg_gspspec[r].toFixed(2)} \u00b7 G ${A.phot_g_mean_mag[r].toFixed(1)} mag`;
+    ui.facts.replaceChildren(head, document.createTextNode(rest));
   }
 
-  for (const b of ui.modes) {
-    b.addEventListener("click", () => {
-      barMode = b.dataset.mode;
-      for (const o of ui.modes) o.setAttribute("aria-pressed", o === b ? "true" : "false");
-      ui.barsNote.textContent = barMode === "network"
-        ? "Each coefficient divided by the star's brightness, then rescaled so that 0 is the training average and 1 its spread."
-        : "Each coefficient divided by the star's brightness, on a scale that expands small values.";
-      dirty.bars = true;
-      schedule();
-    });
-  }
+  ui.scale.addEventListener("change", () => {
+    barMode = ui.scale.value;
+    ui.barsNote.textContent = barMode === "network"
+      ? "Each coefficient divided by the star's brightness, then rescaled so that 0 is the training average and 1 its spread."
+      : "Each coefficient divided by the star's brightness, on a scale that expands small values.";
+    dirty.bars = true;
+    schedule();
+  });
 
   // ------------------------------------------------------------ network drawing
   function netLayout() {
@@ -643,7 +649,7 @@ async function boot(root) {
   // ------------------------------------------------------------ loss chart
   function lossFrame() {
     const s = cv.loss;
-    const m = { l: 44, r: 14, t: 10, b: 24 };
+    const m = { l: 44, r: 14, t: 16, b: 22 };
     let lo = Infinity;
     let hi = 0;
     for (const p of history) for (const v of [p[1], p[2]]) if (v > 0 && Number.isFinite(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
@@ -671,6 +677,10 @@ async function boot(root) {
     const f = lossFrame();
     ctx.font = `11px ${F.mono}`;
     ctx.lineWidth = 1;
+    ctx.fillStyle = C.muted;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText("dex\u00b2", f.m.l - 6, 10);
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
     for (const t of logTicks(f.l0, f.l1)) {
@@ -775,7 +785,8 @@ async function boot(root) {
     s.ctx.font = `11px ${F.mono}`;
     const [lo0, hi0] = parityDomain;
     const tick = (v) => s.ctx.measureText(axisNumber(v)).width;
-    const m = { l: Math.ceil(Math.max(tick(lo0), tick(hi0))) + 28, r: Math.ceil(tick(hi0) / 2) + 6, t: 10, b: 40 };
+    const legend = 10 + 8 + Math.ceil(s.ctx.measureText(`\u2265${grouped(teffDomain[1])} K`).width);
+    const m = { l: Math.ceil(Math.max(tick(lo0), tick(hi0))) + 28, r: legend + 22, t: 10, b: 40 };
     const size = Math.max(20, Math.min(s.w - m.l - m.r, s.h - m.t - m.b));
     const x0 = m.l + Math.max(0, (s.w - m.l - m.r - size) / 2);
     const y0 = m.t;
@@ -849,6 +860,23 @@ async function boot(root) {
     ctx.textBaseline = "middle";
     ctx.fillText("network [M/H] (dex)", 0, 0);
     ctx.restore();
+    // Temperature scale: the same OKLab ramp as the points, hot at the top.
+    const bx = f.x0 + f.size + 22;
+    const steps = 48;
+    const mix = ramp(C.accent2, C.accent);
+    for (let i = 0; i < steps; i++) {
+      ctx.fillStyle = mix(1 - i / (steps - 1));
+      ctx.fillRect(bx, f.y0 + (i * f.size) / steps, 8, f.size / steps + 0.5);
+    }
+    ctx.fillStyle = C.muted;
+    ctx.font = `11px ${F.mono}`;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText(`\u2265${grouped(teffDomain[1])} K`, bx + 13, f.y0);
+    ctx.textBaseline = "bottom";
+    ctx.fillText(`\u2264${grouped(teffDomain[0])} K`, bx + 13, f.y0 + f.size);
+    ctx.textBaseline = "middle";
+    ctx.fillText("Teff", bx + 13, f.y0 + f.size / 2);
   }
 
   function parityPick(e) {

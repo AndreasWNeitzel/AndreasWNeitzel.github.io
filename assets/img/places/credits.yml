@@ -1,0 +1,106 @@
+# Title-card photographs for the travel map. Licences, authors and titles were read from the
+# Wikimedia Commons file pages (API extmetadata and page wikitext) on 2026-10-25; Flickr imports
+# carry a passed Commons licence review. Each card is a derivative of the original: cropped to
+# 16:9, resized to 1200 x 675 and saved as WebP (lluc.webp also has a 0.5 px blur to stay under
+# 180 KB). Under CC BY-SA the derivative is shared under the same licence as its source.
+# `credit` is the line to print next to the image.
+
+vila-do-conde:
+  file: vila-do-conde.webp
+  title: "Vila do Conde, Portugal (43051541201).jpg"
+  author: Pedro Silva
+  licence: CC BY 2.0
+  licence_url: https://creativecommons.org/licenses/by/2.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Vila_do_Conde,_Portugal_(43051541201).jpg
+  credit: "Pedro Silva, Wikimedia Commons, CC BY 2.0"
+  description: The Ave estuary at Vila do Conde, with a replica sixteenth-century nau, the marina and the Santa Clara monastery above the town.
+
+guimaraes:
+  file: guimaraes.webp
+  title: "Castelo de Guimaraes.jpg"
+  author: Filipe Fortes
+  licence: CC BY-SA 2.0
+  licence_url: https://creativecommons.org/licenses/by-sa/2.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Castelo_de_Guimaraes.jpg
+  credit: "Filipe Fortes, Wikimedia Commons, CC BY-SA 2.0"
+  description: Guimarães Castle seen from the São Mamede field.
+
+coimbra:
+  file: coimbra.webp
+  title: "Coimbra BW 2018-10-06 10-11-56.jpg"
+  author: Berthold Werner
+  licence: CC BY-SA 3.0
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Coimbra_BW_2018-10-06_10-11-56.jpg
+  credit: "Berthold Werner, Wikimedia Commons, CC BY-SA 3.0"
+  description: The Paço das Escolas of the University of Coimbra, with the clock tower and the Via Latina colonnade.
+
+lisbon:
+  file: lisbon.webp
+  title: "View from Miradouro de Santa Luzia, Lisbon, 20250603 2016 9045.jpg"
+  author: Jakub Hałun
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  source_url: https://commons.wikimedia.org/wiki/File:View_from_Miradouro_de_Santa_Luzia,_Lisbon,_20250603_2016_9045.jpg
+  credit: "Jakub Hałun, Wikimedia Commons, CC BY 4.0"
+  description: Alfama from the Miradouro de Santa Luzia, with the dome of Santa Engrácia and the Tagus beyond.
+
+cadiar:
+  file: cadiar.webp
+  title: "Cadiar.jpg"
+  author: Feranza
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Cadiar.jpg
+  credit: "Feranza, Wikimedia Commons, CC BY-SA 4.0"
+  description: The Alpujarra seen from Cádiar, with snow on the Sierra Nevada above white villages and olive groves.
+
+lluc:
+  file: lluc.webp
+  title: "Santuari de Lluc - View from Monte del Rosario.jpg"
+  author: H. Zell
+  licence: CC BY-SA 3.0
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Santuari_de_Lluc_-_View_from_Monte_del_Rosario.jpg
+  credit: "H. Zell, Wikimedia Commons, CC BY-SA 3.0"
+  description: The Santuari de Lluc in the Serra de Tramuntana, Mallorca, seen from the Monte del Rosario.
+
+bologna:
+  file: bologna.webp
+  title: "Bologna Panorama.jpg"
+  author: Volodymyr Vlasenko
+  licence: CC BY-SA 3.0
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Bologna_Panorama.jpg
+  credit: "Volodymyr Vlasenko, Wikimedia Commons, CC BY-SA 3.0"
+  description: The old town of Bologna with the Two Towers, seen from above. Used in place of a photo of the CNR Research Area, because Italy has no freedom of panorama for recent buildings.
+
+aarhus:
+  file: aarhus.webp
+  title: "Aarhus Universitets hovedbygning set fra parken.jpg"
+  author: Villy Fink Isaksen
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Aarhus_Universitets_hovedbygning_set_fra_parken.jpg
+  credit: "© Villy Fink Isaksen, Wikimedia Commons, CC BY-SA 4.0"
+  description: The main building of Aarhus University seen from the University Park.
+
+santiago:
+  file: santiago.webp
+  title: "Cordillera de los Andes, junto a Sanhattan.jpg"
+  author: Hector Garcia
+  licence: CC BY-SA 2.0
+  licence_url: https://creativecommons.org/licenses/by-sa/2.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Cordillera_de_los_Andes,_junto_a_Sanhattan.jpg
+  credit: "Hector Garcia, Wikimedia Commons, CC BY-SA 2.0"
+  description: Sanhattan, the eastern business district of Santiago, below the snow-covered Andes.
+
+porto:
+  file: porto.webp
+  title: "Rabelo boats and Ribeira seen from Cais de Gaia, 20250605 1623 9879.jpg"
+  author: Jakub Hałun
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  source_url: https://commons.wikimedia.org/wiki/File:Rabelo_boats_and_Ribeira_seen_from_Cais_de_Gaia,_20250605_1623_9879.jpg
+  credit: "Jakub Hałun, Wikimedia Commons, CC BY 4.0"
+  description: Rabelo boats on the Douro in front of the Ribeira, seen from Cais de Gaia, with the cathedral on the skyline.

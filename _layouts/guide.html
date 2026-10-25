@@ -10,10 +10,10 @@ layout: default
   </header>
   <div class="article-layout">
     <article class="stack-m">
-      {%- if page.image and page.image != "" %}
+      {%- if page.hero != false and page.image and page.image != "" %}
       <figure class="article-hero"><img src="{{ page.image | relative_url }}" alt="{{ page.image_alt }}" loading="eager" decoding="async">
         <figcaption class="credit" style="padding:8px 10px">{{ page.image_credit }}, <a href="{{ page.image_source }}">{{ page.image_licence }}</a></figcaption></figure>
-      {%- elsif page.photo %}
+      {%- elsif page.hero != false and page.photo %}
       <figure class="article-hero"><img src="{{ page.photo | relative_url }}" alt="{{ page.photo_alt }}" loading="eager" decoding="async"></figure>
       {%- endif %}
       <div class="prose article">{{ content }}</div>

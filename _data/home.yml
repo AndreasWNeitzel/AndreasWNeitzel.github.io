@@ -22,7 +22,7 @@ glance:
 
 highlights:
   - tag: paper
-    label: Paper
+    label: paper
     title: First-author paper in A&A
     text: A manifold-learning method that separates the Milky Way's stellar populations, tested on a simulated galaxy.
     when: "2025"
@@ -36,29 +36,29 @@ highlights:
     url: /guide/supercomputers/
     ledger: [fund-2026-10-cpca-a2-marenostrum, fund-2026-10-cpca-a1-deucalion]
   - tag: observing
-    label: Observing
+    label: observing
     title: ESO Very Large Telescope
-    text: Visiting astronomer at Paranal for the ESPRESSO campaign on GJ 570 A, now in A&A (accepted).
+    text: Visiting astronomer at Paranal for the ESPRESSO campaign on GJ 570 A, now published in A&A.
     when: "2024"
     url: /observing/paranal/
     thumb: /assets/img/photos/vlt-golden-hour.webp
     ledger: ev-2024-05-paranal-espresso-observing-run
   - tag: grant
-    label: Funding
+    label: funding
     title: Three fellowships won
     text: FCT doctoral fellowship, ArqueoGal PhD fellowship and an FCT MSc grant; co-investigator on the FCT project ArqueoGal.
     when: 2021 to 2027
     url: /cv/#funding
     ledger: [fund-2025-09-fct-doctoral-fellowship, fund-2026-09-arqueogal-bi-d-fellowship, fund-2021-fct-msc-research-grant, fund-2026-arqueogal-pex-participant]
-  - tag: position
-    label: Abroad
+  - tag: abroad
+    label: abroad
     title: INAF Bologna secondment
     text: Six months building noise simulations for the proposed <i>HAYDN</i> mission, with visits to INAF Padova.
     when: 2025/26
     url: /guide/inaf/
     ledger: pos-2025-visiting-inaf-bologna
   - tag: talk
-    label: Talks
+    label: talks
     title: Four international talks
     text: TASC10/KASC17 in Aarhus (talk and poster), IMAS13 and IMAS11 in Spain, TASC8/KASC15 in Porto.
     when: 2024 to 2026
@@ -126,47 +126,47 @@ record:
     colour: --t-award
     items:
       - "<strong>Best Master's Student</strong> in Astronomy and Astrophysics, University of Porto (2023)"
-      - "<strong>4 refereed papers</strong> in A&amp;A, one first-author, one accepted in 2026"
+      - "<strong>4 refereed papers</strong> in A&amp;A, one first-author, the latest published in October 2026"
       - "<strong>16 talks and posters</strong> since 2022, six of them international"
-      - "<strong>Open source</strong>: Starfold 0.2.0 (MIT, 294 tests); Tellurion, nearly 400 physics simulations"
+      - "<strong>Open source</strong>: Starfold 0.2.0 (MIT, 294 tests); Tellurion, interactive physics simulations (MIT)"
 
 explore:
   - title: Train a neural network on Gaia spectra
     text: A small network learns stellar metallicity from real Gaia XP spectra, live in your browser.
     tag: software
-    label: Playground
+    label: playground
     url: /playground/neural-network/
     art: nn
     size: wide
   - title: Observing at the Very Large Telescope
     text: Five nights on a K dwarf with ESPRESSO, and what the data showed.
     tag: observing
-    label: Story
+    label: story
     url: /observing/paranal/
     img: /assets/img/photos/ut-mirror-cell.webp
   - title: My papers, explained
     text: What each paper found and what I did in it, without the jargon.
     tag: paper
-    label: Explainers
+    label: explainers
     url: /publications/#explainers
     img: /assets/img/papers/neitzel-2025-manifold-learning.webp
     light: true
   - title: Field guide to the field
     text: Galactic archaeology, asteroseismology, Gaia, ESO, INAF, HAYDN and the supercomputers, each in a minute.
-    tag: data
-    label: Guide
+    tag: guide
+    label: guide
     url: /guide/
     img: /assets/img/guide/gaia.webp
   - title: HAYDN crowded-field simulations
     text: Forecasting photometric noise in 47 Tucanae and other dense clusters for a proposed ESA mission.
     tag: poster
-    label: Poster
+    label: poster
     url: /guide/haydn/
     img: /assets/img/guide/haydn.webp
   - title: Starfold
     text: Open-source grouping with recurrence and 17 named warnings, benchmarked on ten tables.
     tag: software
-    label: Software
+    label: software
     url: /software/starfold-demo/
     art: clusters
   - title: Supercomputers I run on
@@ -175,3 +175,84 @@ explore:
     label: HPC
     url: /guide/supercomputers/
     img: /assets/img/guide/supercomputers.webp
+
+# Title cards sliding along the top of the home page. Third-party images carry their credit line,
+# linked to the source (ESO asks for the credit next to the image with an active link).
+band:
+  - title: Train a neural network on Gaia spectra
+    tag: software
+    label: playground
+    url: /playground/neural-network/
+    art: nn
+  - title: What Gaia measures
+    tag: guide
+    label: guide
+    url: /guide/gaia/
+    img: /assets/img/cards/gaia-sky.webp
+    credit: ESA/Gaia/DPAC, CC BY-SA 3.0 IGO
+    credit_url: https://www.esa.int/ESA_Multimedia/Images/2020/12/The_colour_of_the_sky_from_Gaia_s_Early_Data_Release_3
+  - title: Talk at TASC8/KASC15, Porto
+    tag: talk
+    label: talk, 2024
+    url: /talks/
+    img: /assets/img/photos/tasc8-kasc15-talk.webp
+    pos: 60% 35%
+  - title: Crowded star clusters for HAYDN
+    tag: poster
+    label: poster, 2026
+    url: /guide/haydn/
+    img: /assets/img/cards/messier-4.webp
+    credit: ESO, CC BY 4.0
+    credit_url: https://www.eso.org/public/images/eso1235a/
+  - title: ESPRESSO, the spectrograph I observed with
+    tag: observing
+    label: Paranal, 2024
+    url: /observing/paranal/
+    img: /assets/img/cards/espresso.webp
+    credit: ESO/M. Zamani, CC BY 4.0
+    credit_url: https://www.eso.org/public/images/img_3076-cc/
+  - title: Starfold on a recorded run
+    tag: software
+    label: demo
+    url: /software/starfold-demo/
+    art: clusters
+  - title: Kepler and TESS
+    tag: guide
+    label: guide
+    url: /guide/tess-kepler/
+    img: /assets/img/cards/kepler.webp
+    credit: NASA/Troy Cryder
+    credit_url: https://images.nasa.gov/details/KSC-2009-1649
+  - title: Supercomputers I run on
+    tag: hpc
+    label: HPC
+    url: /guide/supercomputers/
+    img: /assets/img/guide/supercomputers.webp
+    credit: Steve Jurvetson, CC BY 4.0
+    credit_url: https://commons.wikimedia.org/wiki/File:BSC_MareNostrum_5_(54686085845).jpg
+  - title: Six months at INAF
+    tag: abroad
+    label: Bologna and Padova
+    url: /guide/inaf/
+    img: /assets/img/guide/inaf.webp
+    credit: Memi26, CC BY-SA 4.0
+    credit_url: https://commons.wikimedia.org/wiki/File:La_Specola_di_Padova_riflessa_sul_Bacchiglione.jpeg
+  - title: Galactic archaeology in a minute
+    tag: guide
+    label: guide
+    url: /guide/galactic-archaeology/
+    img: /assets/img/cards/milky-way.webp
+    credit: ESO/S. Brunier, CC BY 4.0
+    credit_url: https://www.eso.org/public/images/eso0932a/
+  - title: Stellar Explorer
+    tag: software
+    label: app
+    url: /stellar-explorer/
+    art: hr
+  - title: The laser guide star at Paranal
+    tag: guide
+    label: guide
+    url: /guide/eso-vlt/
+    img: /assets/img/cards/vlt-laser.webp
+    credit: ESO/G. Lombardi (glphoto.it), CC BY 4.0
+    credit_url: https://www.eso.org/public/images/potw1425a/

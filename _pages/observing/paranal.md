@@ -5,12 +5,14 @@ title: Observing at the Very Large Telescope
 nav_section: Publications
 description: My May 2024 visitor-mode run with ESPRESSO at ESO's Very Large Telescope at Paranal, on the K dwarf GJ 570 A, and what the data showed.
 og_image: /assets/img/og-vlt.jpg
+extra_css: [/assets/css/observing.css]
 ---
 <div class="wrap stack-l">
+  <p class="crumbs story-crumbs"><a href="{{ '/publications/' | relative_url }}">Publications</a> · <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">the paper this run produced</a></p>
   <section class="story-hero">
     <img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="Andreas on the Very Large Telescope platform at Paranal at sunset, with the Unit Telescope enclosures behind him." fetchpriority="high">
     <div class="card-body stack-s">
-      <p><span class="tag tag--observing">Observing</span> <span class="kicker" style="color:rgb(255 255 255 / .8)">Paranal, Chile · 4 to 12 May 2024</span></p>
+      <p><span class="tag tag--observing">observing</span> <span class="kicker" style="color:rgb(255 255 255 / .8)">Paranal, Chile · 4 to 12 May 2024</span></p>
       <h1>Observing at the Very Large Telescope</h1>
       <p>In May 2024 I spent nine days at ESO's Paranal Observatory in the Atacama desert and ran a campaign with the ESPRESSO spectrograph on the nearby star GJ 570 A. It was Tiago Campante's programme; I was the astronomer on site.</p>
     </div>
@@ -33,13 +35,16 @@ og_image: /assets/img/og-vlt.jpg
     <div class="prose">
       <h2>What the data showed</h2>
       <p>GJ 570 A rings like a bell with periods of three to four minutes, but very quietly: its surface moves by about 2.6 cm per second at the peak, a sixth of the Sun's value. Together with GJ 783 A, observed later in 2024, it shows that small, cool stars oscillate more weakly than the rule for Sun-like stars predicts, and 3D simulations of their outer layers do not reproduce the drop.</p>
-      <p>The results are in Campante et al. 2026, accepted in <i>Astronomy and Astrophysics</i> (<a href="https://arxiv.org/abs/2610.20985">arXiv:2610.20985</a>), where I am sixth of 24 authors. <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">Read the plain-language explainer</a>.</p>
+      <p>The results are in Campante et al. 2026, published in <i>Astronomy and Astrophysics</i> (<a href="https://doi.org/10.1051/0004-6361/202660350">doi:10.1051/0004-6361/202660350</a>), where I am sixth of 24 authors. <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">Read the plain-language explainer</a>.</p>
     </div>
   </section>
   <section>
-    <figure class="panel blueprint wide-fig">
-      {% include figures/vlt-lightpath.svg %}
-      <figcaption class="credit" style="padding:6px 10px 2px">FIG 2. How the starlight reaches the detector.</figcaption>
+    <figure class="panel blueprint wide-fig vlt-fig" data-build>
+      <div class="vlt-figs">
+        {% include figures/vlt-lightpath.svg %}
+        {% include figures/espresso-output.svg %}
+      </div>
+      <figcaption class="credit" style="padding:6px 10px 2px">FIG 2. How the starlight reaches the detector, and what comes out. A spectrograph measures the Doppler shift of the star's absorption lines, so its output is the speed of the stellar surface, one velocity per exposure, not a light curve of brightness. The output panel shows velocities of GJ 570 A from the night of 8 to 9 May 2024 with slow drifts removed, and the power spectrum of all 2,250 usable velocities from the five nights (weighted sine fits; raw power drawn as the highest value in each plotted column; smoothed curve and noise level times three), computed from the public data of Campante et al. 2026 (Zenodo, <a href="https://doi.org/10.5281/zenodo.17236515">doi:10.5281/zenodo.17236515</a>, CC BY 4.0); the dotted line marks their νmax of 4705 μHz.</figcaption>
     </figure>
   </section>
 

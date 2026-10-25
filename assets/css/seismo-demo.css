@@ -1,0 +1,119 @@
+/* Ringing-star demonstration on the field-guide page (_includes/seismo-demo.html). Colours,
+   type and radii come only from the site tokens; the canvases read them through
+   assets/js/tokens.js and redraw when the theme changes. */
+
+.sd {
+  container: sd / inline-size;
+  margin-block: 6px 4px;
+  display: grid;
+  gap: 10px;
+  font: 400 0.9rem/1.45 var(--sans);
+  color: var(--ink-2);
+}
+.sd-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.sd-views { display: grid; gap: 12px; }
+@container sd (min-width: 600px) {
+  .sd-views { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); }
+}
+
+/* The canvases fill their stages; the stages take their size from the layout. */
+.sd-stage { position: relative; min-inline-size: 0; }
+.sd-stage canvas { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+.sd-stage--star {
+  inline-size: 100%;
+  max-inline-size: 300px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px;
+}
+.sd-stage--spec { min-block-size: 230px; }
+.sd-stage canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-sm); }
+.sd-play { position: absolute; inset-block-start: 4px; inset-inline-end: 4px; min-inline-size: 62px; }
+.sd-tag {
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-start: 18px;
+  font: 500 0.7rem/1.3 var(--mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* controls */
+.sd-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.sd-views + .sd-bar { padding-block-start: 10px; border-block-start: 1px solid var(--line); }
+.sd-group { display: inline-flex; align-items: center; gap: 8px; }
+.sd-lab { font: italic 500 1.05rem/1 var(--serif); color: var(--ink); cursor: help; }
+.sd-seg button { min-inline-size: 30px; padding: 5px 8px; font: 500 0.8rem/1.2 var(--mono); }
+.sd-seg button:not([aria-pressed="true"]):hover { background: var(--surface-2); color: var(--ink); }
+.sd .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sd-mix { margin-inline-start: auto; }
+.sd-desc { min-block-size: 2.9em; font-size: 0.84rem; line-height: 1.45; color: var(--ink-2); }
+.sd-desc i, .sd-cap i { font-family: var(--serif); }
+
+.sd-range {
+  flex: 1 1 200px;
+  display: grid;
+  grid-template-columns: auto minmax(80px, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--ink-2);
+}
+.sd-range output { min-inline-size: 4.4rem; font: 500 0.8rem var(--mono); color: var(--ink); text-align: end; white-space: nowrap; }
+.sd-range input {
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 100%;
+  block-size: 24px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.sd-range input::-webkit-slider-runnable-track { block-size: 4px; border-radius: 999px; background: var(--line-strong); }
+.sd-range input::-moz-range-track { block-size: 4px; border-radius: 999px; background: var(--line-strong); }
+.sd-range input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  inline-size: 16px;
+  block-size: 16px;
+  margin-block-start: -6px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.sd-range input::-moz-range-thumb {
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.sd-range input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.sd-presets { display: inline-flex; gap: 6px; }
+
+.sd-read { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0; }
+.sd-read div { display: flex; align-items: baseline; gap: 8px; }
+.sd-read dt { font: 500 0.74rem/1.3 var(--mono); color: var(--muted); }
+.sd-read dd { margin: 0; font: 620 0.95rem/1.3 var(--sans); letter-spacing: -0.01em; color: var(--ink); white-space: nowrap; }
+.sd sub, .sd sup { font-size: 0.75em; line-height: 0; }
+
+/* caption */
+.sd-cap { display: grid; gap: 4px; font-size: 0.84rem; line-height: 1.5; color: var(--muted); }
+.sd-cap .credit { font: 0.74rem/1.5 var(--sans); }
+.sd-noscript { padding: 12px 14px; border: 1px dashed var(--line-strong); border-radius: var(--radius); color: var(--muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sd-seg button, .sd .btn { transition: background-color 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease); }
+}

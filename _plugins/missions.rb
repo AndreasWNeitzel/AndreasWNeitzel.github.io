@@ -40,7 +40,8 @@ module SiteFilters
     nil
   end
 
-  # Returns rows {when, sort, kind, tag, label, title, meta, url, link} newest first.
+  # Returns rows {id, when, start, end, sort, kind, tag, label, title, meta, url, link} newest first.
+  # "start" and "end" are month-year strings; "end" is empty for single-date entries, "present" when ongoing.
   def timeline(ledger)
     rows = []
     (ledger || {}).each do |cat, entries|
@@ -53,8 +54,13 @@ module SiteFilters
         url = "/observing/paranal/" if e["id"].to_s.include?("paranal")
         meta = [e["venue"], e["institution"], e["location"]].compact.map(&:to_s).reject(&:empty?).uniq.join(" · ")
         meta = e["tagline"].to_s if meta.empty? && e["tagline"]
+        fin = e["end_date"].to_s
+        fin_my = fin == "present" ? "present" : month_year(fin)
+        fin_my = "" if fin_my == month_year(date)
         rows << {
-          "when" => month_year(date), "sort" => date.ljust(10, "0"), "kind" => kind, "tag" => tag, "label" => label,
+          "id" => e["id"].to_s, "when" => month_year(date), "start" => month_year(date),
+          "end" => fin_my,
+          "sort" => date.ljust(10, "0"), "kind" => kind, "tag" => tag, "label" => label,
           "title" => e["title"].to_s, "meta" => meta, "url" => url,
           "link" => url.to_s.include?("doi.org") ? "DOI" : url.to_s.include?("arxiv") ? "arXiv" : "Open"
         }
@@ -92,8 +98,8 @@ module SiteFilters
     when "software"
       ["software", "software", k == "docs" ? "manual" : "software"]
     when "awards" then ["award", "award", "award"]
-    when "positions" then ["position", "position", "position"]
-    when "education" then ["position", "position", "degree"]
+    when "positions" then k == "visiting" ? ["position", "abroad", "abroad"] : ["position", "position", "position"]
+    when "education" then ["position", "degree", "degree"]
     when "service" then ["service", "service", "organiser"]
     when "teaching" then ["service", "teaching", "teaching"]
     when "outreach" then ["service", "service", "outreach"]
