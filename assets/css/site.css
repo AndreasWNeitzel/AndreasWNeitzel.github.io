@@ -555,21 +555,22 @@
   @media (prefers-reduced-motion: no-preference) { .tl-gutter .th.on path { animation: thread-flow 1.2s linear infinite; } }
   @keyframes thread-flow { to { stroke-dashoffset: -14; } }
   .timeline { list-style: none; padding: 0; display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
-  .tl-row, .tl-head { display: grid; grid-template-columns: 5.6rem 5.6rem 9.4rem minmax(0, 1fr) auto; gap: 14px; align-items: baseline;
+  .tl-row, .tl-head { display: grid; grid-template-columns: 7rem 9.4rem minmax(0, 1fr) auto; gap: 14px; align-items: baseline;
     padding: 10px 16px; border-block-end: 1px solid var(--line); transition: opacity .2s; }
   .tl-head { padding-block: 8px; font: 600 0.68rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
   .tl-row:last-child { border-block-end: 0; }
   .tl-row:hover { background: color-mix(in oklab, var(--surface-2) 55%, transparent); }
   .tl-wrap.is-tracing .tl-row:not(.on) { opacity: .4; }
-  .tl-date { font: 500 0.78rem var(--mono); color: var(--muted); }
+  .tl-date { font: 500 0.78rem/1.45 var(--mono); color: var(--muted); }
+  .tl-to { display: block; color: color-mix(in oklab, var(--muted) 80%, transparent); }
   .tl-row .tag { white-space: normal; align-items: flex-start; } .tl-row .tag::before { margin-block-start: 1px; }
   .tl-title { font-size: 0.93rem; color: var(--ink); line-height: 1.4; }
   .tl-title small { display: block; color: var(--muted); font-size: 0.82rem; margin-block-start: 2px; }
   .tl-links { font: 500 0.76rem var(--mono); display: flex; gap: 12px; white-space: nowrap; }
   @media (max-width: 760px) {
     .tl-wrap { padding-inline-start: 0; } .tl-gutter, .tl-legend, .tl-head { display: none; }
-    .tl-row { grid-template-columns: auto auto 1fr; gap: 4px 10px; } .tl-row > :nth-child(n+3) { grid-column: 1 / -1; }
-    .tl-end:not(:empty)::before { content: "to "; }
+    .tl-row { grid-template-columns: auto 1fr; gap: 4px 10px; } .tl-row > :nth-child(n+3) { grid-column: 1 / -1; }
+    .tl-to { display: inline; margin-inline-start: 0.4em; }
   }
 
   /* starfold demo (kept from v1, restyled) */
@@ -817,6 +818,10 @@
   /* guide and paper articles: a reading column beside a wider rail; images sized to the column */
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .paper-fig-img img { filter: invert(.9) hue-rotate(180deg) saturate(1.15); } }
   :root[data-theme="dark"] .paper-fig-img img { filter: invert(.9) hue-rotate(180deg) saturate(1.15); }
+
+  .guide-fig { margin: 0; padding: 10px 12px 8px; }
+  .guide-fig svg { inline-size: 100%; block-size: auto; }
+  .guide-fig .eo-thread-out { display: none; }
 
   /* talks: the record beside a column of photographs from the talks */
   .talks-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); gap: clamp(24px, 3vw, 48px); align-items: start; }

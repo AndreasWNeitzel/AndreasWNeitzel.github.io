@@ -39,7 +39,7 @@ extra_css: [/assets/css/observing.css]
     </div>
   </section>
   <section>
-    <figure class="panel blueprint wide-fig vlt-fig" data-build>
+    <figure class="panel blueprint wide-fig vlt-fig" id="light-path" data-build>
       <div class="vlt-figs">
         {% include figures/vlt-lightpath.svg %}
         {% include figures/espresso-output.svg %}

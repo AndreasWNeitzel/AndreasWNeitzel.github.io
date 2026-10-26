@@ -3,6 +3,8 @@ title: "What are ESO and the Very Large Telescope?"
 short: "ESO and the VLT"
 lede: "ESO is an intergovernmental observatory that builds and runs large telescopes in Chile, among them the Very Large Telescope at Paranal."
 order: 4
+hero: false
+extra_css: [/assets/css/observing.css]
 image: ""
 photo: /assets/img/photos/vlt-daylight.webp
 photo_alt: Andreas in a hard hat in front of a Unit Telescope enclosure at Paranal, May 2024.
@@ -18,6 +20,11 @@ sources:
   - {label: "ESO, ESPRESSO", url: "https://www.eso.org/public/teles-instr/paranal-observatory/vlt/vlt-instr/espresso/"}
   - {label: "Campante et al. 2026, Astronomy and Astrophysics, doi:10.1051/0004-6361/202660350", url: "https://doi.org/10.1051/0004-6361/202660350"}
 ---
+
+<figure class="panel blueprint vlt-fig guide-fig" data-build>
+  {% include figures/vlt-lightpath.svg %}
+  <figcaption class="credit" style="padding:6px 10px 2px">How starlight travels through a VLT Unit Telescope and down the coudé train to ESPRESSO, which spreads it into a spectrum on the detector. Schematic, not to scale. What came out of my own run with it is on the <a href="{{ '/observing/paranal/#light-path' | relative_url }}">observing page</a>.</figcaption>
+</figure>
 
 The European Southern Observatory (ESO) is an intergovernmental organisation that builds and runs telescopes in the Atacama Desert in Chile for its member states, Portugal among them. Its Very Large Telescope (VLT) at Paranal consists of four telescopes with mirrors 8.2 metres across. ESPRESSO, one of the instruments there, spreads a star's light into a detailed spectrum and measures tiny shifts in it, which show how fast the star's surface moves towards or away from us.
 

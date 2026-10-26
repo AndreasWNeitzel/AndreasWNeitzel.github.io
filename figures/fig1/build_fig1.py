@@ -4,7 +4,7 @@ Usage: python3 figures/fig1/build_fig1.py   (stdlib only; run from the repositor
 
 Drafting grammar: construction lines are hairlines and draw first; objects are drawn in the
 working weight; one accent line carries the reading from Gaia to the Milky Way and changes role
-on the way (starlight, the XP spectrum, eight strands through the ensemble, the posterior, the
+on the way (starlight, the XP spectrum, a fan into and out of the ensemble, the posterior, the
 label vector, the thin disc). Between stages the data travels along curved, dashed connectors
 whose dashes keep flowing in the direction of the data. Outline means schematic; fill means
 real data.
@@ -253,15 +253,12 @@ for k in range(3, 0, -1):
         )
     )
 jn.append(draw("f1-o", "M472 64 h148 v142 h-148 Z", tj, 0.3))
-for i, y in enumerate(76.0 + j * 17.0 for j in range(8)):
-    a = 6.0 * math.sin(i * 1.7 + 0.4)
-    b = 6.0 * math.sin(i * 2.3 + 1.1)
-    d = (
-        f"M452 {f(Y1)} C462 {f(Y1)} 466 {f(y)} 482 {f(y)} "
-        f"C498 {f(y + a)} 520 {f(y - a)} {f(cols[1])} {f(y + b)} "
-        f"S{f(cols[2] + 10)} {f(y - b)} 592 {f(y)} C612 {f(y)} 618 {f(Y1)} 634 {f(Y1)}"
-    )
-    jn.append(draw("f1-strand", d, tj + 0.04 * i, 0.4))
+# the thread fans into the first layer and gathers again from the output layer: straight lines
+# that end on the nodes, so the network reads as a network; the stack behind it carries the x8
+for i, y in enumerate(rows5):
+    jn.append(draw("f1-strand", f"M452 {f(Y1)} L{f(cols[0] - 4.2)} {f(y)}", tj + 0.04 * i, 0.3))
+for i, y in enumerate(outs):
+    jn.append(draw("f1-strand", f"M{f(604 + 4.2)} {f(y)} L634 {f(Y1)}", tj + 0.25 + 0.04 * i, 0.3))
 nodes = [(x, y) for x in cols for y in rows5] + [(604, y) for y in outs]
 jn.append(
     pop(

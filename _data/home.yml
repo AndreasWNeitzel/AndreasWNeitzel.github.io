@@ -207,7 +207,7 @@ band:
   - title: ESPRESSO, the spectrograph I observed with
     tag: observing
     label: Paranal, 2024
-    url: /observing/paranal/
+    url: /observing/paranal/#light-path
     img: /assets/img/cards/espresso.webp
     credit: ESO/M. Zamani, CC BY 4.0
     credit_url: https://www.eso.org/public/images/img_3076-cc/
