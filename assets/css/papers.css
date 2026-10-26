@@ -1,0 +1,34 @@
+/* Paper explainer figures. Neitzel et al. 2025 workflow (figures/papers/build_neitzel2025_figure.py):
+   a pipeline of pictograms joined by one flowing thread, construction hairlines underneath, the
+   galaxy's own record as a faint dashed return. Filled marks are real data in the paper's sense
+   (the samples, the embedding); outlines are schematic. The one-time build comes from site.css. */
+@layer pages {
+  .paper-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .paper-wide svg { display: block; inline-size: 100%; block-size: auto; max-block-size: none; }
+  .paper-wide figcaption { padding: 8px 4px 2px; }
+  .paper-wide .b-draw { vector-effect: none; }
+
+  .nw-svg .nw-title { font: 600 11px var(--mono); letter-spacing: 0.08em; fill: var(--ink); }
+  .nw-svg .nw-letter { font: 700 12px var(--mono); fill: var(--accent-2); }
+  .nw-svg .nw-body { font: 500 10.5px var(--mono); fill: var(--ink-2); }
+  .nw-svg .nw-body-tex { fill: var(--ink-2); }
+  .nw-svg .nw-note { font: 500 10.5px var(--mono); fill: var(--muted); }
+  .nw-svg .nw-dim { font: 500 10.5px var(--mono); fill: var(--ink-2); }
+  .nw-svg .nw-guide { fill: none; stroke: var(--muted); stroke-width: 0.6; opacity: 0.4; }
+  .nw-svg .nw-line { fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round; }
+  .nw-svg .nw-box { fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; }
+  .nw-svg .nw-ruler { fill: none; stroke: currentColor; stroke-width: 1; }
+  .nw-svg .nw-sphere { fill: color-mix(in oklab, var(--accent-2) 18%, transparent); stroke: var(--accent-2); stroke-width: 0.9; }
+  .nw-svg .nw-obs { fill: var(--accent-2); }
+  .nw-svg .nw-node { fill: var(--accent-2); }
+  .nw-svg .nw-thread { stroke-width: 1.5; }
+  .nw-svg .nw-dot { fill: var(--accent); }
+  .nw-svg .nw-dot-o { fill: color-mix(in oklab, var(--accent) 22%, transparent); stroke: var(--accent); stroke-width: 0.7; }
+  .nw-svg .nw-hull { fill: none; stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 2.5; }
+  .nw-svg .nw-truth { fill: none; stroke: var(--muted); stroke-width: 0.9; stroke-dasharray: 2 3; }
+  .nw-svg .nw-gate { fill: none; stroke: var(--accent-2); stroke-width: 1; stroke-dasharray: 3 3; }
+  .nw-svg .nw-dimline { fill: none; stroke: var(--ink); stroke-width: 0.8; }
+  .nw-svg .nw-bar { fill: color-mix(in oklab, var(--accent) 55%, transparent); }
+  .nw-svg .nw-diag { fill: color-mix(in oklab, var(--accent) 38%, transparent); }
+  @media (max-width: 760px) { .paper-wide { overflow-x: auto; } .paper-wide .nw-svg { min-inline-size: 900px; } }
+}

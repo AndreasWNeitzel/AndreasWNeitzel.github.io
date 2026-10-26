@@ -14,6 +14,11 @@ card_image: "/assets/img/cards/milky-way.webp"
 card_credit: "ESO/S. Brunier, CC BY 4.0"
 card_credit_url: "https://www.eso.org/public/images/eso0932a/"
 order: 1
+wide_figure: figures/neitzel-2025-workflow.svg
+wide_caption: >-
+  How the paper turned a simulated galaxy into a test of the method: a synthetic <i>Gaia</i> survey of the FIRE-2 galaxy m12f, four samples, five features, an embedding, a clustering, two runs, and a check against the galaxy's own record of each star. Sample A has 75,000 random stars within 3 kpc and sample B 76,168 TESS-like seismic red giants; C and D are B with realistic and optimistic errors (ages 20 and 10 per cent; [Fe/H] and [α/Fe] at the APOGEE DR17 median and 25th-percentile uncertainties) (Sect. 2.2). The five features are V, the combined U and W velocity, [Fe/H], [α/Fe] and age, each standardised (Sect. 2.1). UMAP maps them to two dimensions (n_neighbors 15, min_dist 0, 10,000 epochs), and an embedding passes only if its trustworthiness exceeds 0.90; the four samples score 0.988, 0.994, 0.969 and 0.978 (Sects. 3.1, 3.2, Table 2). HDBSCAN is tuned by Optuna on cluster persistence against a baseline from 1,000 random inputs (Sect. 3.3). The first run gives two components, MC1 and MC2; the second run repeats UMAP 100 times on each (Sect. 4.2). Against the velocity and metallicity criterion the informedness is 0.989, 0.966, 0.966 and 0.973 (Sect. 3.4, Table 2); 97.6 to 98.7 per cent of the accreted stars, those with a formation distance <span class="tex" data-tex="d_\mathrm{form} > 30\ \mathrm{kpc}">d<sub>form</sub> &gt; 30 kpc</span>, fall in MC2, which is 10.9 to 16.6 per cent accreted (Sects. 2.1, 4.1). In the error-free samples the second run separates a low-α and a high-α disc, the in situ halo and the two mergers (6.5 and 1.4 Gyr ago); with errors the disc stays one and the halo splits in two (Sect. 4.3, Table 3; Neitzel et al. 2025, A&amp;A 695, A243).
+extra_css: [/assets/css/papers.css]
+math: true
 sources:
   - label: "Article in A&A (open access)"
     url: "https://doi.org/10.1051/0004-6361/202451718"

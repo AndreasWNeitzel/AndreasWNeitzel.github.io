@@ -35,6 +35,7 @@ layout: default
         <p class="links">
           {%- if page.doi %}<a href="https://doi.org/{{ page.doi }}">doi:{{ page.doi }}</a>{% endif -%}
           {%- if page.arxiv %}<a href="https://arxiv.org/abs/{{ page.arxiv }}">arXiv:{{ page.arxiv }}</a>{% endif -%}
+          {%- if page.handle %}<a href="https://hdl.handle.net/{{ page.handle }}">hdl:{{ page.handle }}</a>{% endif -%}
         </p>
       </div></section>
       <section class="card"><div class="card-body">
