@@ -4,7 +4,8 @@ Usage: uv run --with h5py --with numpy python figures/stellar-explorer/hr_track.
     <stellar_data_real.h5> _includes/figures/art-hr.svg
 
 Input: the public file of github.com/AndreasWNeitzel/stellar-explorer-data (MESA r24.08.1 with
-GYRE, one solar mass, solar metallicity, 176 models). Every point is a model of that run.
+GYRE, one solar mass, solar metallicity). The curve is every row of the run's history; the points
+are the models that carry a stored interior profile.
 
 Construction lines are lines of constant radius from L = 4 pi R^2 sigma Teff^4, so they are exact.
 Colours are CSS custom properties. The page plays a one-time draw-on when the figure first enters
@@ -101,14 +102,23 @@ def run(parts, cls, size, anchor="start"):
 def main(h5: Path, out: Path) -> int:
     with h5py.File(h5, "r") as f:
         t = f["track"]
-        logt = t["log_Teff"][:].astype(float)
-        logl = t["log_L"][:].astype(float)
-        age = t["star_age"][:].astype(float)  # Gyr
-        logr = t["log_R"][:].astype(float)
-        phase = [p.decode() for p in t["phase"][:]]
-    unknown = sorted(set(phase) - set(PHASE))
+        m_phase = [p.decode().strip() for p in t["phase"][:]]
+        m_model = t["model_number_orig"][:].astype(int)
+        h = f["history"]
+        logt = h["log_Teff"][:].astype(float)
+        logl = h["log_L"][:].astype(float)
+        logr = h["log_R"][:].astype(float)
+        age = h["star_age"][:].astype(float)  # Gyr
+        phase = [p.decode().strip() for p in h["phase"][:]]
+        model = h["model_number"][:].astype(int)
+    unknown = sorted(set(phase) | set(m_phase)) and sorted((set(phase) | set(m_phase)) - set(PHASE))
     if unknown:
         raise SystemExit(f"unmapped phases: {unknown}")
+    # Every row of the run is the curve; the models that carry a stored
+    # interior are the points on it.
+    row_of = {int(mn): i for i, mn in enumerate(model)}
+    mrow = [row_of[int(mn)] for mn in m_model]
+
     x, y = px(logt), py(logl)
     seg = np.hypot(np.diff(x), np.diff(y))
     cum = np.concatenate([[0.0], np.cumsum(seg)]) / seg.sum()
@@ -135,7 +145,7 @@ def main(h5: Path, out: Path) -> int:
     p.append(f'<path class="hr-axis b-draw" style="--d:0s;--dur:.17s" pathLength="1" d="M{L_} {T_} V{H - B_} H{W - R_}"/>')
     for teff in (50000, 20000, 10000, 5000, 3000):
         xx = px(math.log10(teff))
-        p.append(f'<path class="hr-tick" d="M{xx:.1f} {H - B_} v4"/><text class="hr-num" x="{xx:.1f}" y="{H - B_ + 15}" text-anchor="middle">{teff:,}</text>'.replace(",", " "))
+        p.append(f'<path class="hr-tick" d="M{xx:.1f} {H - B_} v4"/><text class="hr-num" x="{xx:.1f}" y="{H - B_ + 15}" text-anchor="middle">{teff:,}</text>'.replace(",", " "))
     for lg in (-1, 0, 1, 2, 3):
         yy = py(lg)
         lab = {-1: "0.1", 0: "1", 1: "10", 2: "100", 3: "1000"}[lg]
@@ -143,41 +153,55 @@ def main(h5: Path, out: Path) -> int:
     p.append(f'<text class="hr-lab" x="{W - R_}" y="{H - 6}" text-anchor="end">surface temperature (K), hotter to the left</text>')
     g, _ = run([("text", "luminosity ("), ("tex", r"L_\odot"), ("text", ")")], "hr-lab", 9.5, "end")
     p.append(f'<g transform="translate(13 {T_}) rotate(-90)">{g}</g>')
-    # the pen: one ink path through every model, in order
-    d = "M" + " L".join(f"{a:.1f} {b:.1f}" for a, b in zip(x, y))
+    # the pen: one ink path along the track, thinned to the points the curve needs
+    keep = [0]
+    for i in range(1, len(x) - 1):
+        if math.hypot(x[i] - x[keep[-1]], y[i] - y[keep[-1]]) > 0.9:
+            keep.append(i)
+    keep.append(len(x) - 1)
+    d = "M" + " L".join(f"{x[i]:.1f} {y[i]:.1f}" for i in keep)
     p.append(f'<path class="hr-track b-draw" style="--d:{DRAW_START}s;--dur:{DRAW_DUR}s" pathLength="1" d="{d}"/>')
-    # real data: every model as a filled point, appearing as the pen passes it
-    for k in range(len(x)):
-        var = PHASE[phase[k]][1]
-        p.append(f'<circle class="hr-pt b-pop" style="--d:{when[k]:.2f}s;fill:var({var})" cx="{x[k]:.1f}" cy="{y[k]:.1f}" r="2.1"/>')
-    # square nodes where one phase hands over to the next
-    for k in range(1, len(phase)):
-        if phase[k] != phase[k - 1]:
-            p.append(f'<rect class="hr-node b-pop" style="--d:{when[k]:.2f}s" x="{x[k] - 2.5:.1f}" y="{y[k] - 2.5:.1f}" width="5" height="5"><title>{PHASE[phase[k]][0]} begins</title></rect>')
+    # real data: every model with a stored interior, appearing as the pen passes it
+    for k, i in enumerate(mrow):
+        var = PHASE[m_phase[k]][1]
+        p.append(f'<circle class="hr-pt b-pop" style="--d:{when[i]:.2f}s;fill:var({var})" cx="{x[i]:.1f}" cy="{y[i]:.1f}" r="2.1"><title>model {m_model[k]}, {age[i]:.3g} Gyr</title></circle>')
+    # square nodes where each phase begins, in the order the star meets them
+    seen = set()
+    for i, ph in enumerate(phase):
+        if ph in seen:
+            continue
+        seen.add(ph)
+        if i == 0:
+            continue
+        p.append(f'<rect class="hr-node b-pop" style="--d:{when[i]:.2f}s" x="{x[i] - 2.5:.1f}" y="{y[i] - 2.5:.1f}" width="5" height="5"><title>{PHASE[ph][0]} begins</title></rect>')
     # the model at the Sun's age
     k_sun = int(np.argmin(np.abs(np.where(np.array(phase) == "MS", age, 1e9) - 4.57)))
     p.append(f'<circle class="hr-sun b-pop" style="--d:{when[k_sun] + 0.05:.2f}s" cx="{x[k_sun]:.1f}" cy="{y[k_sun]:.1f}" r="6"/>')
 
+    def rows(name):
+        return [i for i in range(len(phase)) if phase[i] == name]
+
     def first(name):
-        return phase.index(name)
+        return rows(name)[0]
 
     def last(name):
-        return len(phase) - 1 - phase[::-1].index(name)
+        return rows(name)[-1]
+
+    def nearest(name, target_logl):
+        return min(rows(name), key=lambda i: abs(logl[i] - target_logl))
 
     sun_label = f"{age[k_sun]:.1f} Gyr, {10 ** logr[k_sun]:.2f} R_sun: the Sun today"
     sun_parts = [("text", f"{age[k_sun]:.1f} Gyr, {10 ** logr[k_sun]:.2f} "), ("tex", r"R_\odot"), ("text", ": the Sun today")]
-    # labels: (x, y, anchor, text, appear-at model index), placed by hand against the data
+
+    # labels: (x, y, anchor, text, appear-at history row), placed by hand against the data
     def at(k, dx, dy):
         return x[k] + dx, y[k] + dy
 
-    def nearest(name, target_logl):
-        idx = [k for k in range(len(phase)) if phase[k] == name]
-        return min(idx, key=lambda k: abs(logl[k] - target_logl))
-
     rgb_mid = nearest("RGB", 1.0)
-    pms_low = min((k for k in range(len(phase)) if phase[k] == "PMS"), key=lambda k: logl[k])
+    pms_low = min(rows("PMS"), key=lambda i: logl[i])
     agb_mid = nearest("AGB", 2.45)
-    rc_mid = (first("RC") + last("RC")) // 2
+    rc_rows = rows("RC")
+    rc_mid = rc_rows[len(rc_rows) // 2]
     labels = [
         (*at(k_sun, -10, 4), "end", sun_parts, k_sun),
         (*at(pms_low, -8, 16), "end", "pre-main sequence", first("PMS")),
@@ -185,7 +209,7 @@ def main(h5: Path, out: Path) -> int:
         (*at(first("HeFlash"), -4, -9), "end", "helium flash", first("HeFlash")),
         (*at(rc_mid, -9, 4), "end", "red clump", rc_mid),
         (*at(agb_mid, -9, 4), "end", "asymptotic giant branch", agb_mid),
-        (px(4.27), py(2.97) - 8, "middle", "post-AGB", first("postAGB") + 4),
+        (px(4.27), py(2.97) - 8, "middle", "post-AGB", first("postAGB")),
         (*at(last("WD"), 8, 4), "start", "white dwarf", last("WD")),
     ]
     for lx, ly, anchor, txt, k in labels:
@@ -203,7 +227,8 @@ def main(h5: Path, out: Path) -> int:
         'diagonal lines mark constant radius.">' + "".join(p) + "</svg>\n"
     )
     out.write_text(svg)
-    print(f"wrote {out} ({len(svg) / 1024:.1f} KB, {len(phase)} models; Sun-age model {k_sun}: {sun_label})")
+    print(f"wrote {out} ({len(svg) / 1024:.1f} KB, {len(phase)} history rows, {len(mrow)} models with a profile; "
+          f"Sun-age row {k_sun}: {sun_label})")
     return 0
 
 

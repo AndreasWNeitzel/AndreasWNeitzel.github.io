@@ -11,21 +11,19 @@
 The playground at /playground/polytropes/ overlays a real stellar model on the
 polytrope, so the reader sees where the polytrope departs from it. The model comes
 from the HDF5 file behind Stellar Explorer (github.com/AndreasWNeitzel/stellar-explorer-data,
-MESA r24.08.1 + GYRE, 1 M_sun, [Fe/H] = 0), which stores 176 models of the track with a
-256-zone interior profile each. This script writes the profile arrays of one model, as
+MESA r24.08.1 + GYRE, 1 M_sun, [Fe/H] = 0), which stores the 94 models of the track whose
+interior the run saved, with a 256-zone profile each. This script writes the profile arrays of one model, as
 stored, to assets/data/playground/mesa_1msun_profile.json together with their provenance.
 No value is changed, rounded or interpolated: float32 values are written with nine
 significant digits, which round-trips float32 exactly.
 
 Which model
-    The track row nearest the Sun's age is row 27 (4.615 Gyr). The file's builder
-    (archive/preprocess_mesa_v2.py in the data repository) attaches to each track row the
-    nearest native MESA profile when the run saved none for that model, and rows 23 to 28
-    all carry the same arrays. The arrays belong to track row 25 (model 200, 2.758 Gyr),
-    whose central hydrogen fraction in the track table equals the profile's innermost
-    value; the solar-age row's central hydrogen (0.344) does not. This script therefore
-    exports the profile under row 25 with that row's scalars, records the solar-age row
-    for comparison, and asserts that the arrays under rows 25 and 27 are identical.
+    The run saved an interior every fifty models on the main sequence, so the stored model
+    nearest the Sun's age is model 200 at 2.758 Gyr. The star passes the Sun's age at model
+    215 (4.615 Gyr), which is in the run's history but carries no stored interior. This
+    script exports the profile of the nearest stored model with that model's own scalars,
+    checks that the track's central hydrogen fraction equals the profile's innermost value,
+    and records the history row at the Sun's age for comparison.
 
 Usage
     uv run figures/playground/build_mesa_profile.py --h5 PATH [--out assets/data/playground/mesa_1msun_profile.json]
@@ -93,26 +91,37 @@ def main(argv: list[str]) -> int:
     with h5py.File(args.h5, "r") as f:
         track = f["track"]
         ages = track["star_age"][:]
-        solar_row = int(np.argmin(np.abs(ages - SOLAR_AGE_GYR)))
-        prof_solar = f["profiles"][str(solar_row)]
-        # Find the row whose track scalars match the arrays stored under the solar-age row.
-        h1_centre = float(prof_solar["h1"][0])
-        matches = [i for i in range(len(ages)) if abs(float(track["center_h1"][i]) - h1_centre) < 1e-6]
-        if len(matches) != 1:
-            sys.exit(f"expected one track row with center_h1 = {h1_centre}, found {matches}")
-        row = matches[0]
+        row = int(np.argmin(np.abs(ages - SOLAR_AGE_GYR)))
         prof = f["profiles"][str(row)]
-        for k in PROFILE_KEYS:
-            if not np.array_equal(prof[k][:], prof_solar[k][:]):
-                sys.exit(f"profile arrays under rows {row} and {solar_row} differ in {k}")
-        same_rows = [i for i in range(len(ages)) if all(np.array_equal(f["profiles"][str(i)][k][:], prof[k][:]) for k in PROFILE_KEYS)]
+        # The stored interior must be this model's own: its innermost hydrogen
+        # fraction is the central value the track table prints for it.
+        h1_centre = float(prof["h1"][0])
+        if abs(float(track["center_h1"][row]) - h1_centre) > 1e-6:
+            sys.exit(f"row {row}: track center_h1 {float(track['center_h1'][row])} does not match the profile's {h1_centre}")
+        shared = [i for i in range(len(ages)) if i != row and np.array_equal(f["profiles"][str(i)]["logT"][:], prof["logT"][:])]
+        if shared:
+            sys.exit(f"row {row} shares its arrays with rows {shared}")
+        hist = f["history"]
+        h_ages = hist["star_age"][:]
+        h_row = int(np.argmin(np.abs(h_ages - SOLAR_AGE_GYR)))
+        solar = {
+            "history_row": h_row,
+            "model_number": int(hist["model_number"][h_row]),
+            "star_age": fmt(h_ages[h_row]),
+            "log_R": fmt(hist["log_R"][h_row]),
+            "log_L": fmt(hist["log_L"][h_row]),
+            "log_Teff": fmt(hist["log_Teff"][h_row]),
+            "R_Rsun": fmt(np.float32(10.0 ** float(hist["log_R"][h_row]))),
+            "L_Lsun": fmt(np.float32(10.0 ** float(hist["log_L"][h_row]))),
+            "Teff_K": fmt(np.float32(10.0 ** float(hist["log_Teff"][h_row]))),
+            "has_stored_profile": False,
+        }
         arrays = {k: [fmt(v) for v in prof[k][:]] for k in PROFILE_KEYS}
         dtypes = {k: str(prof[k].dtype) for k in PROFILE_KEYS}
         x = prof["x"][:]
         conv = np.where(prof["mixing_type"][:] == 1)[0]
         file_attrs = {k: (v.item() if hasattr(v, "item") else v) for k, v in f.attrs.items()}
         model = row_scalars(track, row)
-        solar = row_scalars(track, solar_row)
 
     sha = hashlib.sha256(args.h5.read_bytes()).hexdigest()
     out = {
@@ -127,22 +136,21 @@ def main(argv: list[str]) -> int:
             "repository_commit": git_head(args.h5.parent),
             "file_attrs": file_attrs,
             "codes": "MESA r24.08.1 (Paxton et al. 2011, ApJS 192, 3, doi:10.1088/0067-0049/192/1/3) with GYRE post-processing (Townsend and Teitler 2013, MNRAS 435, 3406)",
-            "sampling": "the data file resamples each native MESA profile onto 256 fractional radii, linear in each quantity, nearest zone for mixing_type (archive/preprocess_mesa_v2.py in the repository); values below the innermost native zone repeat it",
+            "sampling": "the data file resamples each native MESA profile onto 256 fractional radii, linear in each quantity, nearest zone for mixing_type (archive/preprocess_mesa_v3.py in the repository); values below the innermost native zone repeat it",
         },
         "model": {
             "track_row": row,
             "why_this_row": (
-                f"the track row nearest the solar age ({SOLAR_AGE_GYR} Gyr) is row {solar_row} ({solar['star_age']} Gyr), but the arrays stored "
-                f"under rows {same_rows[0]} to {same_rows[-1]} are one and the same native profile, the one of model {model['model_number_orig']} "
-                f"(row {row}): the file's builder attaches the nearest saved profile to rows without one. The track's central hydrogen fraction "
-                f"equals the profile's innermost value only for row {row}, so this is the model the arrays describe."
+                f"the run saved an interior every fifty models on the main sequence, so the stored model nearest the solar age "
+                f"({SOLAR_AGE_GYR} Gyr) is model {model['model_number_orig']} at {model['star_age']} Gyr, track row {row}. The star reaches "
+                f"the Sun's age at model {solar['model_number']} ({solar['star_age']} Gyr), which the run kept in its history but not as a "
+                f"stored interior. These arrays are this model's own: no other model in the file carries them."
             ),
-            "rows_sharing_these_arrays": same_rows,
             **model,
             "convective_envelope_base_x": fmt(x[conv[0]]) if len(conv) else None,
             "n_convective_zones": int(len(conv)),
         },
-        "solar_age_row_for_comparison": {"track_row": solar_row, **solar},
+        "solar_age_row_for_comparison": solar,
         "units": UNITS,
         "dtypes": dtypes,
         "n_zones": int(len(x)),
