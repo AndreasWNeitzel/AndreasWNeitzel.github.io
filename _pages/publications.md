@@ -7,6 +7,7 @@ lede: Four refereed papers in Astronomy and Astrophysics, one as first author, e
 extra_links:
   pub-2022-msc-thesis:
     - {label: Plain-language explainer, url: /papers/neitzel-2022-msc-thesis/}
+extra_css: [/assets/css/thesis.css]
 ---
 {%- assign L = site.data.ledger -%}
 <section class="section" aria-labelledby="first">
@@ -25,7 +26,8 @@ extra_links:
     {%- for x in ps %}
     <div class="card-wrap{% if x.card_wide %} wide{% endif %}">
       <a class="card" href="{{ x.url | relative_url }}" data-spotlight>
-        {%- if x.card_image %}<div class="media{% if x.card_light %} light{% endif %}"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
+        {%- if x.card_wide and x.wide_figure %}<div class="media art" data-build>{% include {{ x.wide_figure }} %}</div>
+        {%- elsif x.card_image %}<div class="media{% if x.card_light %} light{% endif %}"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
         <div class="card-body">
           <span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>
           <h3>{{ x.headline | missions }}</h3>

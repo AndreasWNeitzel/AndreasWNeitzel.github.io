@@ -4,6 +4,7 @@
 profile:
   role: PhD researcher in astrophysics and machine learning
   institute: IA and University of Porto
+  nouns: [Astronomer, Machine learning, Neural networks, Galactic archaeology, Gaia, Asteroseismology, HPC]
   descriptor: >-
     I build neural networks and unsupervised methods that read stellar chemistry, ages and
     populations from <i>Gaia</i> spectra and asteroseismic data, and I run them on European

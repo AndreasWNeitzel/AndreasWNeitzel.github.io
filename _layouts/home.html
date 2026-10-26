@@ -8,12 +8,13 @@ body_class: home
 <div class="wrap">
 <section class="hero" aria-label="Introduction">
   <div class="profile card">
+    <h1 class="name">{{ p.name | initials }}</h1>
     <div class="profile-top">
-      <img class="avatar" src="{{ '/assets/img/photos/portrait-2026.webp' | relative_url }}" width="112" height="112" alt="Portrait of {{ p.name }}" fetchpriority="high">
-      <div>
-        <h1 class="name">{{ p.name | initials }}</h1>
+      <img class="avatar" src="{{ '/assets/img/photos/portrait-2026.webp' | relative_url }}" width="176" height="176" alt="Portrait of {{ p.name }}" fetchpriority="high">
+      <div class="profile-id">
         <p class="role">{{ H.profile.role }}</p>
         <p class="inst">{{ H.profile.institute }}</p>
+        <p class="nouns">{% for n in H.profile.nouns %}<span>{{ n | missions }}</span>{% endfor %}</p>
       </div>
     </div>
     <p class="descriptor">{{ H.profile.descriptor }}</p>

@@ -4,6 +4,7 @@ permalink: /research/
 title: Research
 description: The research of Andreas W. Neitzel, machine learning for Galactic archaeology, in four lines of work, with the papers explained and the background in one minute each.
 lede: Four lines of work, one chain. Neural networks read red-giant chemistry from Gaia spectra, unsupervised methods find the populations, asteroseismology sets their ages, and a simulation tests HAYDN.
+extra_css: [/assets/css/thesis.css]
 ---
 {%- assign L = site.data.ledger -%}
 <div class="lines">
@@ -61,7 +62,8 @@ lede: Four lines of work, one chain. Neural networks read red-giant chemistry fr
     {%- for x in ps %}
     <div class="card-wrap{% if x.card_wide %} wide{% endif %}">
       <a class="card" href="{{ x.url | relative_url }}" data-spotlight>
-        {%- if x.card_image %}<div class="media{% if x.card_light %} light{% endif %}"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
+        {%- if x.card_wide and x.wide_figure %}<div class="media art" data-build>{% include {{ x.wide_figure }} %}</div>
+        {%- elsif x.card_image %}<div class="media{% if x.card_light %} light{% endif %}"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
         <div class="card-body">
           <span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>
           <h3>{{ x.headline | missions }}</h3>

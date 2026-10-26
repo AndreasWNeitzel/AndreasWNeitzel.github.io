@@ -12,10 +12,15 @@ layout: default
     {% include {{ page.wide_figure }} %}
     {%- if page.wide_caption %}<figcaption class="credit">{{ page.wide_caption | missions }}</figcaption>{% endif %}
   </figure>
+  {%- elsif page.figure %}
+  <figure class="figure paper-fig paper-fig-top">
+    <div class="paper-fig-img"><img src="{{ page.figure | relative_url }}" alt="{{ page.figure_alt }}" loading="eager" decoding="async"></div>
+    <figcaption>{{ page.figure_caption | missions }}</figcaption>
+  </figure>
   {%- endif %}
   <div class="article-layout">
     <article class="stack-m">
-      {%- if page.figure %}
+      {%- if page.figure and page.wide_figure %}
       <figure class="figure paper-fig">
         <div class="paper-fig-img"><img src="{{ page.figure | relative_url }}" alt="{{ page.figure_alt }}" loading="eager" decoding="async"></div>
         <figcaption>{{ page.figure_caption | missions }}</figcaption>

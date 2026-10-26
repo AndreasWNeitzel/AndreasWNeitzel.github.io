@@ -249,23 +249,23 @@ def results_figure() -> str:
         "specphot+numax": [("text", "spec + L + "), ("tex", r"\nu_{\max}")],
         "specphot+dnu+numax": [("text", "spec + L + "), ("tex", r"\Delta\nu"), ("text", " + "), ("tex", r"\nu_{\max}")],
     }
-    panels = [("age", 0, 40, (0, 10, 20, 30, 40), 150), ("mass", 0, 7, (0, 2, 4, 6), 470)]
+    panels = [("age", 0, 40, (0, 10, 20, 30, 40), 196), ("mass", 0, 7, (0, 2, 4, 6), 486)]
     p = []
     top, step = 64, 34
     lab_x = 10
     for i, key in enumerate(order):
         yy = top + i * step
-        p.append(place(labels[key], lab_x, yy + 4, "th-row", 10.5, 0.1 + 0.03 * i))
+        p.append(place(labels[key], lab_x, yy + 4, "th-row", 13, 0.1 + 0.03 * i))
         p.append(draw("th-guide", f"M{lab_x} {yy + 12} H{W - 16}", 0.05 + 0.02 * i, 0.17))
     for name, lo, hi, ticks, x0 in panels:
-        pw = 270
+        pw = 250
         sx = lambda v, lo=lo, hi=hi, x0=x0, pw=pw: x0 + (v - lo) / (hi - lo) * pw
         ybot = top + 7 * step + 16
         p.append(draw("th-axis", f"M{x0} {top - 24} V{ybot} H{x0 + pw}", 0.0, 0.3))
         for tv in ticks:
             p.append(draw("th-tick", f"M{sx(tv)} {ybot} v4", 0.1, 0.17))
             p.append(text(sx(tv), ybot + 16, str(tv), "th-tickl", 0.15, "middle"))
-        p.append(text(x0 + pw, ybot + 32, f"median relative uncertainty of {name}, per cent", "th-note", 0.2, "end"))
+        p.append(text(x0 + pw, ybot + 32, f"{name}, per cent", "th-note", 0.2, "end"))
         p.append(text(x0, top - 32, name.upper(), "th-head", 0.0))
         for i, key in enumerate(order):
             yy = top + i * step
