@@ -420,6 +420,7 @@
     const lc = p.logT[0], ls = p.logT[n - 1], srgb = surfRGB(S.i);
     int_.shells = idx.map((k) => ({ x: p.x[k], col: thermal((p.logT[k] - ls) / (lc - ls || 1), srgb), eps: p.eps[k], k }));
     int_.srgb = srgb;
+    int_.innerRGB = null;
     // a magnified view of the centre when the structure there is too small to see
     const burnOut = p.burn.zones.length ? Math.max(...p.burn.zones.map((z) => z[1])) : 0;
     const inner = (p.burn.peak > 0 && burnOut < 0.08) || (p.conv.length && p.conv[0][1] < 0.1 && p.conv[0][0] < 0.05);
@@ -442,6 +443,148 @@
     }
   }
   const legendre = (l, c) => (l === 0 ? 1 : l === 1 ? c : 0.5 * (3 * c * c - 1));
+  // The star is drawn as a sphere with the octant toward the viewer removed, so the three cut
+  // faces show the shells. Camera at +x, +y, +z; z is up on screen.
+  const AZ = Math.PI / 4, EL = Math.PI / 6;
+  const E1 = [Math.cos(AZ), -Math.sin(AZ), 0], E2 = [Math.sin(AZ) * Math.sin(EL), Math.cos(AZ) * Math.sin(EL), -Math.cos(EL)];
+  const FACES = [
+    { u: [1, 0, 0], v: [0, 0, 1], shade: 0.84 }, // the plane y = 0, to the right
+    { u: [0, 1, 0], v: [0, 0, 1], shade: 0.94 }, // the plane x = 0, to the left
+    { u: [1, 0, 0], v: [0, 1, 0], shade: 1.0 }, // the plane z = 0, the top
+  ];
+  const NA = 32; // vertices per quarter arc
+  const dir3 = (f, a) => [f.u[0] * Math.cos(a) + f.v[0] * Math.sin(a), f.u[1] * Math.cos(a) + f.v[1] * Math.sin(a), f.u[2] * Math.cos(a) + f.v[2] * Math.sin(a)];
+  const sxy = (d) => [d[0] * E1[0] + d[1] * E1[1] + d[2] * E1[2], d[0] * E2[0] + d[1] * E2[1] + d[2] * E2[2]];
+  for (const f of FACES) {
+    f.dirs = Array.from({ length: NA + 1 }, (_, i) => dir3(f, (Math.PI / 2) * (i / NA)));
+    f.scr = f.dirs.map(sxy);
+  }
+  // the silhouette: directions perpendicular to the view, by screen angle
+  const NS = 96;
+  const SIL = Array.from({ length: NS + 1 }, (_, i) => { const ph = (i / NS) * TAU; return { s: [Math.cos(ph), Math.sin(ph)], z: -Math.cos(EL) * Math.sin(ph) }; });
+  const shade = (rgb, f) => `rgb(${rgb.map((v) => Math.round(clamp(v * f + (f > 1 ? (f - 1) * 90 : 0), 0, 255))).join(",")})`;
+
+  // One cut sphere of the shells with x <= xmax, drawn at k pixels per unit x about (cx, cy).
+  // amp is the pulsation factor of this frame; xi (per shell) and ell describe the mode.
+  function drawCutaway(c, cx, cy, k, xmax, p, tsec, amp, xi, ell) {
+    const sh = int_.shells;
+    const last = sh.length - 1;
+    const defo = (i, cosTheta) => (amp && xi ? amp * xi[i] * legendre(ell, cosTheta) : 0);
+    // the body: the silhouette polygon, shaded toward the light
+    const [sr, sg, sb] = int_.srgb;
+    const g = c.createRadialGradient(cx - 0.3 * xmax * k, cy - 0.3 * xmax * k, 0, cx, cy, xmax * k);
+    g.addColorStop(0, shade([sr, sg, sb], 1.22)); g.addColorStop(0.7, shade([sr, sg, sb], 0.95)); g.addColorStop(1, shade([sr, sg, sb], 0.45));
+    c.beginPath();
+    for (let i = 0; i <= NS; i++) {
+      const r = xmax * k * (1 + defo(last, SIL[i].z));
+      const px = cx + r * SIL[i].s[0], py = cy + r * SIL[i].s[1];
+      if (i) c.lineTo(px, py); else c.moveTo(px, py);
+    }
+    c.closePath(); c.fillStyle = g; c.fill();
+    // the three faces, shells from the outside in, each a quarter sector
+    const sector = (f, i, r0) => {
+      c.beginPath(); c.moveTo(cx, cy);
+      for (let q = 0; q <= NA; q++) {
+        const r = r0 * (1 + defo(i, f.dirs[q][2]));
+        c.lineTo(cx + r * f.scr[q][0], cy + r * f.scr[q][1]);
+      }
+      c.closePath();
+    };
+    for (const f of FACES) {
+      for (let i = last; i >= 0; i--) {
+        if (sh[i].x > xmax) continue;
+        const r0 = sh[i].x * k; if (r0 < 0.5) break;
+        sector(f, i, r0); c.fillStyle = sh[i].col; c.fill();
+        if (f.shade < 1) { c.fillStyle = `rgba(0,0,0,${(1 - f.shade).toFixed(2)})`; c.fill(); }
+        if (p.burn.peak > 0) { const fr = sh[i].eps / p.burn.peak; if (fr >= 0.01) { c.fillStyle = `rgba(255,90,30,${(0.6 * Math.sqrt(fr)).toFixed(3)})`; c.fill(); } }
+      }
+    }
+    // zone marks on the faces: radial hairlines where energy goes by radiation, circulating cells where it goes by convection
+    const rad = [];
+    let a = 0;
+    for (const [c0, c1] of p.conv) { if (c0 > a) rad.push([a, c0]); a = c1; }
+    if (a < 1) rad.push([a, 1]);
+    const onFace = (f, r, ang) => { const d = dir3(f, ang); const s = sxy(d); return [cx + r * s[0], cy + r * s[1]]; };
+    c.lineWidth = 0.8; c.strokeStyle = "rgba(0,0,0,0.14)";
+    c.beginPath();
+    for (const [r0, r1] of rad) {
+      const a0 = Math.max(r0, 0.5 / k), a1 = Math.min(r1, xmax);
+      if ((a1 - a0) * k < 4) continue;
+      for (const f of FACES) for (let d = 4; d < 90; d += 6) {
+        const ang = (d * Math.PI) / 180;
+        const [x0, y0] = onFace(f, (a0 + (a1 - a0) * 0.06) * k, ang), [x1, y1] = onFace(f, (a1 - (a1 - a0) * 0.06) * k, ang);
+        c.moveTo(x0, y0); c.lineTo(x1, y1);
+      }
+    }
+    c.stroke();
+    const rings = [];
+    for (const [r0, r1] of p.conv) {
+      let top = Math.min(r1, xmax);
+      while (top > r0) {
+        let bottom = Math.max(r0, top - clamp(0.3 * top, 0.03, 0.16));
+        if (bottom - r0 < 0.02) bottom = r0;
+        rings.push([bottom, top]); top = bottom;
+      }
+    }
+    let ring = 0;
+    for (const [a0, a1] of rings) {
+      ring++;
+      const thick = (a1 - a0) * k; if (thick < 1) continue;
+      const rm = ((a0 + a1) / 2) * k;
+      if (thick < 5) {
+        c.fillStyle = CONV; c.globalAlpha = 0.7;
+        for (const f of FACES) for (let d = 2; d < 90; d += 3) { const [x, y] = onFace(f, rm, (d * Math.PI) / 180); c.beginPath(); c.arc(x, y, 0.9, 0, TAU); c.fill(); }
+        c.globalAlpha = 1; continue;
+      }
+      const rr = ((a1 - a0) / 2) * k * 0.72;
+      const n = clamp(Math.round(((Math.PI / 2) * rm) / (thick * 1.15)), 1, 20);
+      const half = (Math.PI / 2 / n) * 0.42, off = ring % 2 ? 0 : Math.PI / 2 / n / 2;
+      c.strokeStyle = "rgba(10,60,95,0.6)"; c.lineWidth = 1.1;
+      c.beginPath();
+      for (const f of FACES) for (let j = 0; j < n; j++) {
+        const ac = ((j + 0.5) / n) * (Math.PI / 2) + off;
+        if (ac > Math.PI / 2 - half * 0.2) continue;
+        for (let q = 0; q <= 24; q++) {
+          const tau = (q / 24) * TAU;
+          const [x, y] = onFace(f, rm + rr * Math.cos(tau), ac + half * Math.sin(tau));
+          if (q) c.lineTo(x, y); else c.moveTo(x, y);
+        }
+      }
+      c.stroke();
+      c.lineWidth = 1; c.fillStyle = "#0b3e5e";
+      for (const f of FACES) for (let j = 0; j < n; j++) {
+        const ac = ((j + 0.5) / n) * (Math.PI / 2) + off, dirn = j % 2 ? 1 : -1;
+        if (ac > Math.PI / 2 - half * 0.2) continue;
+        for (let q = 0; q < 2; q++) {
+          const tau = dirn * TAU * (tsec / 7 + q / 2 + j * 0.37);
+          const [x, y] = onFace(f, rm + rr * Math.cos(tau), ac + half * Math.sin(tau));
+          c.beginPath(); c.arc(x, y, 1.3, 0, TAU); c.fill();
+        }
+      }
+    }
+    // the boundaries as hairline arcs on the faces, and the three cut edges
+    c.strokeStyle = "rgba(0,0,0,0.4)"; c.lineWidth = 1;
+    c.beginPath();
+    for (const b of p.conv.flat()) {
+      if (b <= 0 || b >= xmax) continue;
+      for (const f of FACES) for (let q = 0; q <= NA; q++) { const [x, y] = [cx + b * k * f.scr[q][0], cy + b * k * f.scr[q][1]]; if (q) c.lineTo(x, y); else c.moveTo(x, y); }
+    }
+    c.stroke();
+    c.strokeStyle = "rgba(255,255,255,0.35)";
+    c.beginPath();
+    for (const d of [[1, 0, 0], [0, 1, 0], [0, 0, 1]]) { const s = sxy(d); c.moveTo(cx, cy); c.lineTo(cx + xmax * k * s[0], cy + xmax * k * s[1]); }
+    c.stroke();
+    // the photosphere outline, in the mode colour while it pulsates
+    c.strokeStyle = amp && xi ? ELL_COLOR[ell] : "rgba(255,255,255,0.35)"; c.lineWidth = 1;
+    c.beginPath();
+    for (let i = 0; i <= NS; i++) {
+      const r = xmax * k * (1 + defo(last, SIL[i].z));
+      const px = cx + r * SIL[i].s[0], py = cy + r * SIL[i].s[1];
+      if (i) c.lineTo(px, py); else c.moveTo(px, py);
+    }
+    c.closePath(); c.stroke();
+  }
+
   function drawInterior(tsec) {
     const s = int_.s, c = s.begin();
     const { w, h } = s;
@@ -451,61 +594,22 @@
     const R = Math.min(w, h) * (int_.inset ? (narrow ? 0.31 : 0.38) : 0.40);
     const cx = int_.inset ? (narrow ? w * 0.42 : w / 2 - w * 0.09) : w / 2;
     const cy = int_.inset && narrow ? h * 0.56 : h / 2;
-    const K = 96;
     const amp = S.pulsate && int_.xi ? 0.055 * Math.cos(TAU * (tsec / 4)) : 0;
     const ell = S.mode ? S.mode.l : 0;
-    const shellPath = (xf, ampl) => {
-      c.beginPath();
-      for (let k = 0; k <= K; k++) {
-        const th = (k / K) * TAU;
-        const r = xf * R * (1 + ampl * legendre(ell, Math.cos(th)));
-        const px = cx + r * Math.sin(th), py = cy - r * Math.cos(th);
-        if (k) c.lineTo(px, py); else c.moveTo(px, py);
-      }
-      c.closePath();
-    };
-    // glow outside the photosphere
     const [sr, sg, sb] = int_.srgb;
     const glow = c.createRadialGradient(cx, cy, R * 0.98, cx, cy, R * 1.25);
     glow.addColorStop(0, `rgba(${sr},${sg},${sb},0.28)`); glow.addColorStop(1, `rgba(${sr},${sg},${sb},0)`);
     c.fillStyle = glow; c.beginPath(); c.arc(cx, cy, R * 1.25, 0, TAU); c.fill();
-    // shells from the outside in, deformed by the mode
-    const sh = int_.shells;
-    for (let i = sh.length - 1; i >= 0; i--) {
-      if (sh[i].x * R < 0.6) continue;
-      shellPath(sh[i].x, amp * (int_.xi ? int_.xi[i] : 0));
-      c.fillStyle = sh[i].col; c.fill();
-    }
-    // nuclear burning as a glow where eps is within a hundredth of its peak
-    if (p.burn.peak > 0) {
-      c.save(); c.globalCompositeOperation = "source-over";
-      for (let i = 0; i < sh.length; i++) {
-        const f = sh[i].eps / p.burn.peak; if (f < 0.01) continue;
-        const r = sh[i].x * R, dr = Math.max(3, (sh[Math.min(i + 1, sh.length - 1)].x - sh[i].x) * R * 1.5);
-        const g = c.createRadialGradient(cx, cy, Math.max(0, r - dr), cx, cy, r + dr);
-        const a = 0.55 * Math.sqrt(f);
-        g.addColorStop(0, "rgba(255,80,30,0)"); g.addColorStop(0.5, `rgba(255,90,30,${a})`); g.addColorStop(1, "rgba(255,60,20,0)");
-        c.fillStyle = g; c.beginPath(); c.arc(cx, cy, r + dr, 0, TAU); c.fill();
-      }
-      c.restore();
-    }
-    drawZoneMarks(c, cx, cy, R, p, tsec, 1);
-    // limb darkening
-    const limb = c.createRadialGradient(cx, cy, R * 0.6, cx, cy, R);
-    limb.addColorStop(0, "rgba(0,0,0,0)"); limb.addColorStop(0.82, "rgba(0,0,0,0.05)"); limb.addColorStop(1, "rgba(0,0,0,0.4)");
-    c.fillStyle = limb; shellPath(1, amp * (int_.xi ? int_.xi[sh.length - 1] : 0)); c.fill();
-    // the photosphere outline, in the mode colour while it pulsates
-    c.strokeStyle = S.pulsate && int_.xi ? ELL_COLOR[ell] : "rgba(255,255,255,0.35)"; c.lineWidth = 1; shellPath(1, amp * (int_.xi ? int_.xi[sh.length - 1] : 0)); c.stroke();
-    // ruler along the horizontal radius, ticks at the zone boundaries
+    drawCutaway(c, cx, cy, R, 1, p, tsec, amp, int_.xi, ell);
+    // ruler under the star, at true scale, ticks at the zone boundaries
     const bounds = [...new Set([...p.conv.flat(), 1].map((v) => +v.toFixed(3)))].filter((v) => v > 0).sort((a, b) => a - b);
-    const ry = cy + R + 18;
+    const ry = cy + R + 18, rx = cx - R * 0.5;
     c.strokeStyle = INK.axis; c.fillStyle = INK.tick; c.font = `11px ${MONO}`; c.textAlign = "center"; c.textBaseline = "top";
-    c.beginPath(); c.moveTo(cx, ry); c.lineTo(cx + R, ry); c.stroke();
-    c.beginPath(); c.moveTo(cx, ry - 3); c.lineTo(cx, ry + 3); c.stroke();
-    c.fillText("0", cx, ry + 6);
-    let lastTick = cx;
+    c.beginPath(); c.moveTo(rx, ry); c.lineTo(rx + R, ry); c.moveTo(rx, ry - 3); c.lineTo(rx, ry + 3); c.stroke();
+    c.fillText("0", rx, ry + 6);
+    let lastTick = rx;
     for (const b of bounds) {
-      const px = cx + b * R;
+      const px = rx + b * R;
       c.beginPath(); c.moveTo(px, ry - 3); c.lineTo(px, ry + 3); c.stroke();
       if (px - lastTick > 26) { c.fillText(b === 1 ? "1 R" : b < 0.01 ? b.toFixed(3) : b.toFixed(2), px, ry + 6); lastTick = px; }
     }
@@ -517,108 +621,23 @@
     const bx = w - 14 - Lpx, by = h - 16;
     c.strokeStyle = INK.tick; c.beginPath(); c.moveTo(bx, by); c.lineTo(bx + Lpx, by); c.moveTo(bx, by - 4); c.lineTo(bx, by + 4); c.moveTo(bx + Lpx, by - 4); c.lineTo(bx + Lpx, by + 4); c.stroke();
     c.textAlign = "right"; c.textBaseline = "bottom"; c.fillText(`${Ls} R☉`, w - 14, by - 5);
-    // detail view of the centre
+    // detail view of the centre: the inner ball cut open the same way
     if (int_.inset) {
       const Ri = Math.min(w, h) * (narrow ? 0.17 : 0.21), ix = w - Ri - 18, iy = Ri + 18;
       const k = Ri / int_.inset;
       c.strokeStyle = INK.axis; c.setLineDash([3, 4]);
       c.beginPath(); c.arc(cx, cy, Math.max(2, int_.inset * R), 0, TAU); c.stroke();
-      // two hairlines joining the small circle to the detail circle
       const ang = Math.atan2(iy - cy, ix - cx);
       for (const d of [-1, 1]) {
         const a = ang + d * Math.PI / 2;
         c.beginPath(); c.moveTo(cx + Math.max(2, int_.inset * R) * Math.cos(a), cy + Math.max(2, int_.inset * R) * Math.sin(a)); c.lineTo(ix + Ri * Math.cos(a), iy + Ri * Math.sin(a)); c.stroke();
       }
       c.setLineDash([]);
-      c.save(); c.beginPath(); c.arc(ix, iy, Ri, 0, TAU); c.clip();
-      c.fillStyle = "#0a0a0d"; c.fillRect(ix - Ri, iy - Ri, 2 * Ri, 2 * Ri);
-      for (let i = sh.length - 1; i >= 0; i--) {
-        if (sh[i].x > int_.inset * 1.05) continue;
-        c.beginPath(); c.arc(ix, iy, Math.max(0.6, sh[i].x * k), 0, TAU); c.fillStyle = sh[i].col; c.fill();
-      }
-      if (p.burn.peak > 0) for (let i = 0; i < sh.length; i++) {
-        const f = sh[i].eps / p.burn.peak; if (f < 0.01 || sh[i].x > int_.inset) continue;
-        const r = sh[i].x * k, dr = Math.max(3, (sh[Math.min(i + 1, sh.length - 1)].x - sh[i].x) * k * 1.5);
-        const g = c.createRadialGradient(ix, iy, Math.max(0, r - dr), ix, iy, r + dr);
-        const a = 0.55 * Math.sqrt(f);
-        g.addColorStop(0, "rgba(255,80,30,0)"); g.addColorStop(0.5, `rgba(255,90,30,${a})`); g.addColorStop(1, "rgba(255,60,20,0)");
-        c.fillStyle = g; c.beginPath(); c.arc(ix, iy, r + dr, 0, TAU); c.fill();
-      }
-      drawZoneMarks(c, ix, iy, k, p, tsec, int_.inset);
-      c.restore();
-      c.strokeStyle = INK.axis; c.beginPath(); c.arc(ix, iy, Ri, 0, TAU); c.stroke();
+      c.beginPath(); c.arc(ix, iy, Ri * 1.02, 0, TAU); c.fillStyle = "#0a0a0d"; c.fill();
+      drawCutaway(c, ix, iy, k, int_.inset, p, tsec, 0, null, 0);
       c.fillStyle = INK.tick; c.font = `11px ${MONO}`; c.textAlign = "center"; c.textBaseline = "top";
-      c.fillText(`r < ${int_.inset} R`, ix, iy + Ri + 6);
+      c.fillText(`r < ${int_.inset} R`, ix, iy + Ri + 8);
     }
-  }
-  // zone overlays within x <= xmax: radial hairlines in radiative regions, circulation cells with
-  // moving particles in convective ones, and a hairline at every boundary. k = pixels per unit x.
-  function drawZoneMarks(c, cx, cy, k, p, tsec, xmax) {
-    const rad = [];
-    let a = 0;
-    for (const [c0, c1] of p.conv) { if (c0 > a) rad.push([a, c0]); a = c1; }
-    if (a < 1) rad.push([a, 1]);
-    c.strokeStyle = "rgba(0,0,0,0.13)"; c.lineWidth = 0.8;
-    for (const [r0, r1] of rad) {
-      const a0 = Math.max(r0, 0.004 * (1 / k) * 60), a1 = Math.min(r1, xmax);
-      if (a1 <= a0 || (a1 - a0) * k < 3) continue;
-      c.beginPath();
-      for (let d = 0; d < 360; d += 5) {
-        const t = (d * Math.PI) / 180;
-        const i0 = (a0 + (a1 - a0) * 0.06) * k, i1 = (a1 - (a1 - a0) * 0.06) * k;
-        c.moveTo(cx + i0 * Math.sin(t), cy - i0 * Math.cos(t)); c.lineTo(cx + i1 * Math.sin(t), cy - i1 * Math.cos(t));
-      }
-      c.stroke();
-    }
-    c.lineWidth = 1;
-    const rings = [];
-    for (const [r0, r1] of p.conv) {
-      let top = Math.min(r1, xmax);
-      while (top > r0) {
-        let bottom = Math.max(r0, top - clamp(0.3 * top, 0.03, 0.16));
-        if (bottom - r0 < 0.02) bottom = r0;
-        rings.push([bottom, top]);
-        top = bottom;
-      }
-    }
-    let ring = 0;
-    for (const [a0, a1] of rings) {
-      ring++;
-      if (a1 <= a0) continue;
-      const thick = (a1 - a0) * k;
-      if (thick < 5) { // too thin for cells: a stippled band
-        c.fillStyle = CONV; c.globalAlpha = 0.7;
-        const rm = ((a0 + a1) / 2) * k;
-        for (let d = 0; d < 360; d += 3) { const t = (d * Math.PI) / 180; c.beginPath(); c.arc(cx + rm * Math.sin(t), cy - rm * Math.cos(t), 0.9, 0, TAU); c.fill(); }
-        c.globalAlpha = 1; continue;
-      }
-      const rm = ((a0 + a1) / 2) * k, rr = ((a1 - a0) / 2) * k * 0.72;
-      const n = clamp(Math.round((TAU * rm) / (thick * 1.15)), 8, 80);
-      c.strokeStyle = "rgba(10,60,95,0.6)"; c.lineWidth = 1.1;
-      c.beginPath();
-      for (let j = 0; j < n; j++) {
-        const phc = (j / n) * TAU + int_.cellPhase + (ring % 2 ? 0 : TAU / n / 2), half = (TAU / n) * 0.42;
-        for (let q = 0; q <= 24; q++) {
-          const tau = (q / 24) * TAU;
-          const r = rm + rr * Math.cos(tau), ph = phc + half * Math.sin(tau);
-          const px = cx + r * Math.sin(ph), py = cy - r * Math.cos(ph);
-          if (q) c.lineTo(px, py); else c.moveTo(px, py);
-        }
-      }
-      c.stroke();
-      // particles circulating, alternate cells in opposite senses
-      c.lineWidth = 1; c.fillStyle = "#0b3e5e";
-      for (let j = 0; j < n; j++) {
-        const phc = (j / n) * TAU + int_.cellPhase + (ring % 2 ? 0 : TAU / n / 2), half = (TAU / n) * 0.42, dir = j % 2 ? 1 : -1;
-        for (let q = 0; q < 2; q++) {
-          const tau = dir * TAU * (tsec / 7 + q / 2 + j * 0.37);
-          const r = rm + rr * Math.cos(tau), ph = phc + half * Math.sin(tau);
-          c.beginPath(); c.arc(cx + r * Math.sin(ph), cy - r * Math.cos(ph), 1.3, 0, TAU); c.fill();
-        }
-      }
-    }
-    c.strokeStyle = "rgba(0,0,0,0.35)";
-    for (const b of p.conv.flat()) { if (b <= 0 || b >= xmax) continue; c.beginPath(); c.arc(cx, cy, b * k, 0, TAU); c.stroke(); }
   }
   function updateModeCard() {
     const el = $("#int-mode");
