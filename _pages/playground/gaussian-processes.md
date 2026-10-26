@@ -162,7 +162,7 @@ math: true
 
 <section class="prose pg-credits" aria-labelledby="origin">
   <h2 id="origin">Where it came from</h2>
-  <p>This page rebuilds my second project for AST4000, Data Analysis in Astronomy, in the MSc at the University of Porto (2020/21): prior draws, conditioning on points and a Metropolis fit of a quasi-periodic kernel to HD 41248. The R notebook had faults I saw only later: the jitter never entered the covariance, the amplitude was not squared, only accepted proposals were stored, the acceptance test compared likelihoods rather than their logarithms, no priors were stated and the prediction was never marginalised over the chain. This version fixes them all and uses the published velocities, not the course file.</p>
+  <p>The method on this page is the one I first worked with in AST4000, Data Analysis in Astronomy, in the MSc at the University of Porto (2020/21): prior draws, conditioning on observations, and a Metropolis fit of a quasi-periodic kernel to the velocities of HD 41248. It is written here from the sources named below. The amplitudes enter the covariance squared and the instrumental jitter as its own diagonal term; the chain stores every state, accepted or not, and the acceptance test works in log likelihood; the priors are stated beside the sampler; and the prediction band is marginalised over the posterior rather than drawn at one parameter set. The velocities are the published ones.</p>
 </section>
 
 <section class="prose pg-credits" aria-labelledby="credits">

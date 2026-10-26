@@ -195,7 +195,7 @@ export function leapfrogStep(sys, body, h) {
   return 1;
 }
 
-// The coursework scheme: position to second order in h, velocity by the explicit Euler step.
+// First-order scheme: position to second order in h, velocity by the explicit Euler step.
 export function eulerStep(sys, body, h) {
   const s = body.s;
   const a = body.a;

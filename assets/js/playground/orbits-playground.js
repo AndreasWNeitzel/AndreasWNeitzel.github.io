@@ -1225,7 +1225,7 @@ async function boot(root) {
           geo ? D.geo.speed_km_s.toFixed(3) : Mo.perigee_speed_km_s.toFixed(3), geo ? D.geo.speed_km_s.toFixed(3) : Mo.apogee_speed_km_s.toFixed(3)];
       }));
     table(ui.tables.stations, [["Station"], ["Latitude", 1], ["Longitude", 1], ["Note"]],
-      D.stations.map((st) => [st.name, `${Math.abs(st.lat_deg).toFixed(2)}° ${st.lat_deg >= 0 ? "N" : "S"}`, `${Math.abs(st.lon_deg).toFixed(2)}° ${st.lon_deg >= 0 ? "E" : "W"}`, st.adjustable_latitude ? `latitude adjustable from ${st.adjustable_latitude[0]} to ${st.adjustable_latitude[1]} degrees; the geostationary satellite sets below the horizon at ${(Math.acos(RE / D.geo.radius_km) / rad).toFixed(1)} degrees` : "coursework station"]));
+      D.stations.map((st) => [st.name, `${Math.abs(st.lat_deg).toFixed(2)}° ${st.lat_deg >= 0 ? "N" : "S"}`, `${Math.abs(st.lon_deg).toFixed(2)}° ${st.lon_deg >= 0 ? "E" : "W"}`, st.adjustable_latitude ? `latitude adjustable from ${st.adjustable_latitude[0]} to ${st.adjustable_latitude[1]} degrees; the geostationary satellite sets below the horizon at ${(Math.acos(RE / D.geo.radius_km) / rad).toFixed(1)} degrees` : "fixed station"]));
     const gb = MODES.galaxy.bodies();
     table(ui.tables.stars, [["Star"], ["<em>Gaia</em> DR3 source_id"], ["G", 1], ["Parallax (mas)", 1], ["RV (km/s)", 1], ["Distance (pc)", 1], ["x, y, z (kpc)"], ["v<sub>x</sub>, v<sub>y</sub>, v<sub>z</sub> (km/s)"], ["e (galpy)", 1], ["z<sub>max</sub> (kpc)", 1], ["R<sub>peri</sub>, R<sub>apo</sub> (kpc)", 1], ["L<sub>z</sub> (kpc km/s)", 1]],
       gb.map((b) => {

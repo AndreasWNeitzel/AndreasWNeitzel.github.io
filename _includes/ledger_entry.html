@@ -28,7 +28,7 @@
     {%- elsif cat == "funding" -%}
       {%- if ids.reference -%}{{ ids.reference }} · {% endif -%}{%- if e.funder -%}{{ e.funder }}{% endif -%}{%- if e.role and e.role != "fellow" %} · {{ e.role | replace: "team-member", "team member" }}{% endif -%}{%- if e.pi and k != "computing" %} · PI {{ e.pi | initials }}{% elsif e.pi %} · co-responsible investigator T.&nbsp;L.&nbsp;Campante{% endif -%}
     {%- elsif cat == "education" -%}
-      {{ e.institution }}{% if e.location %} · {{ e.location }}{% endif %}{%- if e.grade %} · final grade {{ e.grade }}{% endif -%}
+      {{ e.institution }}{% if e.location %} · {{ e.location }}{% endif %}
     {%- elsif cat == "software" -%}
     {%- else -%}
       {%- assign where = e.institution | default: e.venue -%}{%- if where -%}{{ where | missions }}{% endif -%}{%- if e.location %}{% if where %} · {% endif %}{{ e.location }}{% endif -%}
