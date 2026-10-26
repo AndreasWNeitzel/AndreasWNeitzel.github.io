@@ -1,0 +1,27 @@
+/* Field guide, ESO and the VLT: ESO's sites in Chile and the Paranal platform from above
+   (figures/eso/build_eso_figure.py). The one-time build comes from site.css ("figure build"). */
+@layer pages {
+  .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .guide-wide .eso-svg { inline-size: 100%; block-size: auto; }
+  .guide-wide figcaption { padding: 8px 4px 2px; }
+  .eso-svg .eso-land { fill: color-mix(in oklab, var(--muted) 8%, transparent); stroke: var(--line-strong); stroke-width: 0.8; }
+  .eso-svg .eso-chile { fill: color-mix(in oklab, var(--accent) 12%, transparent); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; }
+  .eso-svg .eso-tropic { fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-dasharray: 6 3 1 3; }
+  .eso-svg .eso-sea, .eso-svg .eso-country { font: italic 500 12px var(--serif); fill: var(--muted); }
+  .eso-svg .eso-site { fill: var(--accent-2); }
+  .eso-svg .eso-head { font: 600 11px var(--mono); letter-spacing: 0.1em; fill: var(--muted); }
+  .eso-svg .eso-axis { stroke-dasharray: 10 3 2 3; }
+  .eso-svg .eso-base { fill: none; stroke: var(--muted); stroke-width: 1; }
+  .eso-svg .eso-len { font: 500 11px var(--mono); fill: var(--ink-2); }
+  .eso-svg .eso-mirror { fill: color-mix(in oklab, var(--accent) 22%, transparent); stroke: currentColor; stroke-width: 1.6; }
+  .eso-svg .eso-thread { fill: none; stroke-width: 1.5; }
+  .eso-svg .bp-label2 { font-size: 12px; }
+  .eso-svg .bp-tick { font-size: 11px; }
+  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .eso-svg { min-inline-size: 720px; } }
+}
+@layer pages {
+  .eso-svg .eso-frame { fill: color-mix(in oklab, var(--surface) 70%, transparent); stroke: var(--line-strong); stroke-width: 1; }
+  .eso-svg .eso-dim { fill: none; stroke: var(--ink); stroke-width: 1.1; }
+  .eso-svg .eso-th { font: 600 10.5px var(--mono); letter-spacing: 0.08em; fill: var(--muted); }
+  .eso-svg .eso-td { font: 500 12px var(--mono); fill: var(--ink-2); }
+}

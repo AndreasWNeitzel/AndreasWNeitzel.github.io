@@ -8,6 +8,12 @@ layout: default
     <h1>{{ page.title | missions }}</h1>
     {%- if page.lede %}<p class="lede">{{ page.lede | missions }}</p>{% endif %}
   </header>
+  {%- if page.wide_figure %}
+  <figure class="panel blueprint guide-wide" data-build>
+    {% include {{ page.wide_figure }} %}
+    {%- if page.wide_caption %}<figcaption class="credit">{{ page.wide_caption | missions }}</figcaption>{% endif %}
+  </figure>
+  {%- endif %}
   <div class="article-layout">
     <article class="stack-m">
       {%- if page.hero != false and page.image and page.image != "" %}

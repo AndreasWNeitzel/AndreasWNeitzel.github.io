@@ -606,8 +606,11 @@
   .gallery figure.wide { grid-column: span 8; }
   .gallery img { inline-size: 100%; block-size: 260px; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); }
   .gallery figure.wide img { block-size: 260px; }
+  .gallery figure.half { grid-column: span 6; }
+  .gallery figure.tall { grid-column: span 3; grid-row: span 2; align-content: start; }
+  .gallery figure.tall img { block-size: 556px; }
   .gallery figcaption { font-size: 0.8rem; color: var(--muted); }
-  @media (max-width: 760px) { .gallery figure, .gallery figure.wide { grid-column: span 12; } }
+  @media (max-width: 760px) { .gallery figure, .gallery figure.wide, .gallery figure.half, .gallery figure.tall { grid-column: span 12; grid-row: auto; } .gallery figure.tall img { block-size: 460px; } }
   .blueprint { padding: 10px; color: var(--accent); }
   .blueprint.wide-fig { padding: 18px 22px 10px; }
   .blueprint.wide-fig svg { max-block-size: 520px; }
@@ -819,9 +822,6 @@
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .paper-fig-img img { filter: invert(.9) hue-rotate(180deg) saturate(1.15); } }
   :root[data-theme="dark"] .paper-fig-img img { filter: invert(.9) hue-rotate(180deg) saturate(1.15); }
 
-  .guide-fig { margin: 0; padding: 10px 12px 8px; }
-  .guide-fig svg { inline-size: 100%; block-size: auto; }
-  .guide-fig .eo-thread-out { display: none; }
 
   /* talks: the record beside a column of photographs from the talks */
   .talks-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); gap: clamp(24px, 3vw, 48px); align-items: start; }

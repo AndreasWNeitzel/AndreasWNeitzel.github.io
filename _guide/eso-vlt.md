@@ -4,7 +4,9 @@ short: "ESO and the VLT"
 lede: "ESO is an intergovernmental observatory that builds and runs large telescopes in Chile, among them the Very Large Telescope at Paranal."
 order: 4
 hero: false
-extra_css: [/assets/css/observing.css]
+extra_css: [/assets/css/eso.css]
+wide_figure: figures/eso-vlt.svg
+wide_caption: "Where ESO observes, and how the four Unit Telescopes of the VLT sit on Paranal. Left, ESO's sites in northern Chile; right, the Paranal platform from above, with each 8.2 m primary mirror drawn to scale at its station and the six baselines between the telescopes. Station positions from ESO's VLTI station table, site positions from ESO, coastline from Natural Earth."
 image: ""
 photo: /assets/img/photos/vlt-daylight.webp
 photo_alt: Andreas in a hard hat in front of a Unit Telescope enclosure at Paranal, May 2024.
@@ -21,10 +23,6 @@ sources:
   - {label: "Campante et al. 2026, Astronomy and Astrophysics, doi:10.1051/0004-6361/202660350", url: "https://doi.org/10.1051/0004-6361/202660350"}
 ---
 
-<figure class="panel blueprint vlt-fig guide-fig" data-build>
-  {% include figures/vlt-lightpath.svg %}
-  <figcaption class="credit" style="padding:6px 10px 2px">How starlight travels through a VLT Unit Telescope and down the coudé train to ESPRESSO, which spreads it into a spectrum on the detector. Schematic, not to scale. What came out of my own run with it is on the <a href="{{ '/observing/paranal/#light-path' | relative_url }}">observing page</a>.</figcaption>
-</figure>
 
 The European Southern Observatory (ESO) is an intergovernmental organisation that builds and runs telescopes in the Atacama Desert in Chile for its member states, Portugal among them. Its Very Large Telescope (VLT) at Paranal consists of four telescopes with mirrors 8.2 metres across. ESPRESSO, one of the instruments there, spreads a star's light into a detailed spectrum and measures tiny shifts in it, which show how fast the star's surface moves towards or away from us.
 

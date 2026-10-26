@@ -51,10 +51,10 @@ extra_css: [/assets/css/observing.css]
   <section>
     <div class="section-head"><h2>From the run</h2><p>Photographs from my May 2024 stay at Paranal.</p></div>
     <div class="gallery">
-      <figure class="wide"><img src="{{ '/assets/img/photos/ut-mirror-cell.webp' | relative_url }}" alt="The underside of a Unit Telescope's mirror cell and mount, seen from the dome floor." loading="lazy"><figcaption>The mount and mirror cell of a Unit Telescope, from the dome floor.</figcaption></figure>
-      <figure><img src="{{ '/assets/img/photos/ut-dome-interior.webp' | relative_url }}" alt="Andreas standing beneath the mirror cell of a Unit Telescope inside its dome." loading="lazy"><figcaption>Under the mirror cell of an 8.2 m telescope.</figcaption></figure>
-      <figure><img src="{{ '/assets/img/photos/paranal-milky-way.webp' | relative_url }}" alt="The Milky Way over Paranal before dawn." loading="lazy"><figcaption>The Milky Way before dawn.</figcaption></figure>
-      <figure class="wide"><img src="{{ '/assets/img/photos/atacama-sunset.webp' | relative_url }}" alt="Sunset over the Atacama desert and the Pacific cloud deck, seen from Paranal." loading="lazy"><figcaption>Sunset over the Atacama and the Pacific cloud deck.</figcaption></figure>
+      <figure class="half"><img src="{{ '/assets/img/photos/ut-mirror-cell.webp' | relative_url }}" alt="The underside of a Unit Telescope's mirror cell and mount, seen from the dome floor." loading="lazy"><figcaption>The mount and mirror cell of a Unit Telescope, from the dome floor.</figcaption></figure>
+      <figure class="tall"><img style="object-position: 50% 60%" src="{{ '/assets/img/photos/ut-dome-interior.webp' | relative_url }}" alt="Andreas standing beneath the mirror cell of a Unit Telescope inside its dome." loading="lazy"><figcaption>Under the mirror cell of an 8.2 m telescope.</figcaption></figure>
+      <figure class="tall"><img style="object-position: 82% 55%" src="{{ '/assets/img/photos/paranal-milky-way.webp' | relative_url }}" alt="The Milky Way over Paranal before dawn." loading="lazy"><figcaption>The Milky Way before dawn.</figcaption></figure>
+      <figure class="half"><img src="{{ '/assets/img/photos/atacama-sunset.webp' | relative_url }}" alt="Sunset over the Atacama desert and the Pacific cloud deck, seen from Paranal." loading="lazy"><figcaption>Sunset over the Atacama and the Pacific cloud deck.</figcaption></figure>
       <figure class="wide"><img src="{{ '/assets/img/photos/vlt-daylight.webp' | relative_url }}" alt="Andreas in a hard hat in front of a Unit Telescope enclosure in daylight." loading="lazy"><figcaption>On the platform in daylight.</figcaption></figure>
       <figure><img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="Andreas on the VLT platform at sunset." loading="lazy"><figcaption>The platform at sunset, before the night's observing.</figcaption></figure>
     </div>
