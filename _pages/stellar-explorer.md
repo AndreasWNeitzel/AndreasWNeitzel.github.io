@@ -13,11 +13,11 @@ lede: Stellar Explorer follows one star of the Sun's mass through its life, usin
     <p class="no-print"><a class="btn btn--primary" href="{{ '/stellar-explorer/app.html' | relative_url }}">Open Stellar Explorer (about 12 MB)</a></p>
     <h2 id="shows">What it shows</h2>
     <ul class="list">
-      <li>An HR diagram drawn from every row of the run, with one phase-coloured point for each of the 94 models whose interior the run stored.</li>
-      <li>An animated stellar interior at each selected model, with convective and radiative zones, opacity and burning shells, from that model's own profile.</li>
-      <li>Profile panels for temperature, pressure, density, nuclear energy generation, the Brunt-Väisälä frequency and opacity, on logarithmic axes where the range is large.</li>
-      <li>A Schwarzschild to Ledoux stability toggle in the propagation panel.</li>
-      <li>An asteroseismic spectrum with power spectral density, an échelle diagram coloured by mode type (p, g, mixed) and a propagation diagram. Mode frequencies, degrees, radial orders and normalised inertias come from GYRE, and radial-displacement eigenfunctions are reconstructed from the GYRE-format equilibrium structure by a JWKB (Cowling) approximation. Eight models, on the asymptotic giant branch and at the start of white-dwarf cooling, have no GYRE output in the run, and the panel says so instead of drawing a spectrum.</li>
+      <li>A timeline of the 94 stored models against fractional radius, with convective zones and nuclear burning regions, which doubles as the control for moving along the track.</li>
+      <li>The HR diagram drawn from every row of the run, with the stored models coloured by phase and lines of constant radius.</li>
+      <li>A cut through the star at the selected model, coloured by temperature, with convective cells, radiative zones and burning regions from that model's own profile; a ruler marks the zone boundaries, and a detail circle magnifies the centre of giants, where the burning shell sits within a hundredth of the radius. The shells move with the selected oscillation mode.</li>
+      <li>Six profiles against radius: temperature, density, pressure, nuclear energy generation, opacity, and the hydrogen and helium fractions.</li>
+      <li>The propagation diagram (Brunt-Väisälä and Lamb frequencies with the selected mode's cavities), the échelle diagram, the mode inertias and the mode's radial displacement. Frequencies, degrees, radial orders and inertias come from GYRE; the displacement is a JWKB reconstruction on the GYRE equilibrium structure. Eight models, at the helium flash and along the asymptotic giant branch, have no GYRE output in the run, and the panels say so.</li>
     </ul>
   </div>
   <figure class="se-fig">{% include figures/art-hr.svg %}<figcaption class="credit">The track the app follows, every row of the run. Points mark the models that carry a stored interior, coloured by phase; squares mark where a phase begins and the faint diagonals are lines of constant radius.</figcaption></figure>
