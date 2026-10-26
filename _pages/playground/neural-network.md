@@ -95,6 +95,7 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
   </div>
 </details>
 
+<div class="pg-notes">
 <section class="prose pg-credits" aria-labelledby="credits">
   <h2 id="credits">Data and credits</h2>
   <p>This page is a teaching demonstration. <a href="https://doi.org/10.3847/1538-4365/acd53e">Andrae, Rix and Chandra (2023, ApJS 267, 8)</a> estimated metallicities from the same <em>Gaia</em> spectra for about 175 million stars, with a different method and a much larger training set.</p>
@@ -104,6 +105,7 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
   <p>The example spectra were sampled with GaiaXPy, developed by members of DPAC. <em>Gaia</em> data are © ESA/Gaia/DPAC and released under <a href="https://creativecommons.org/licenses/by-sa/3.0/igo/">CC BY-SA 3.0 IGO</a>, and the derived files below are shared under the same licence.</p>
   <p>Download the <a href="{{ '/assets/data/playground/gaia_xp_mh.bin' | relative_url }}">data</a> (0.5 MB), its <a href="{{ '/assets/data/playground/gaia_xp_mh.json' | relative_url }}">header</a> and its <a href="{{ '/assets/data/playground/gaia_xp_mh.meta.json' | relative_url }}">provenance</a>, which records the queries, their dates and the cuts. Training runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
+</div>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/nn-playground.js' | relative_url }}"></script>

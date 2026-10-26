@@ -2,14 +2,14 @@
 layout: default
 permalink: /observing/paranal/
 title: Observing at the Very Large Telescope
-nav_section: Publications
+nav_section: Research
 description: My May 2024 visitor-mode run with ESPRESSO at ESO's Very Large Telescope at Paranal, on the K dwarf GJ 570 A, and what the data showed.
 og_image: /assets/img/og-vlt.jpg
 extra_css: [/assets/css/observing.css]
 math: true
 ---
 <div class="wrap stack-l">
-  <p class="crumbs story-crumbs"><a href="{{ '/publications/' | relative_url }}">Publications</a> · <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">the paper this run produced</a></p>
+  <p class="crumbs story-crumbs"><a href="{{ '/research/' | relative_url }}">Research</a> · <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">the paper this run produced</a></p>
   <section class="story-hero">
     <img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="Andreas on the Very Large Telescope platform at Paranal at sunset, with the Unit Telescope enclosures behind him." fetchpriority="high">
     <div class="card-body stack-s">

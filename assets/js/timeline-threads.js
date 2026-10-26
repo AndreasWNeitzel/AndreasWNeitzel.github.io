@@ -37,7 +37,8 @@
     };
     const frag = document.createDocumentFragment();
     threads.forEach((t, lane) => {
-      const ys = [t.parent, ...t.ids].map((id) => rows.get(id)).filter((r) => r && !r.hidden).map(yOf);
+      // rows the fold hides have no box; leave them out or the arcs run off the top of the page
+      const ys = [t.parent, ...t.ids].map((id) => rows.get(id)).filter((r) => r && !r.hidden && r.getBoundingClientRect().height > 0).map(yOf);
       if (ys.length < 2) return;
       const g = el("g", { class: "th", "data-thread": t.key, style: `--th: var(${t.colour})` });
       let d = "";

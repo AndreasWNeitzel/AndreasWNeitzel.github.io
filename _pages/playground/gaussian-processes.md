@@ -160,6 +160,7 @@ math: true
   </div>
 </details>
 
+<div class="pg-notes">
 <section class="prose pg-credits" aria-labelledby="origin">
   <h2 id="origin">Where it came from</h2>
   <p>The method on this page is the one I first worked with in AST4000, Data Analysis in Astronomy, in the MSc at the University of Porto (2020/21): prior draws, conditioning on observations, and a Metropolis fit of a quasi-periodic kernel to the velocities of HD 41248. It is written here from the sources named below. The amplitudes enter the covariance squared and the instrumental jitter as its own diagonal term; the chain stores every state, accepted or not, and the acceptance test works in log likelihood; the priors are stated beside the sampler; and the prediction band is marginalised over the posterior rather than drawn at one parameter set. The velocities are the published ones.</p>
@@ -172,6 +173,7 @@ math: true
   <p>The quasi-periodic kernel for activity follows <a href="https://doi.org/10.1093/mnras/stu1320">Haywood et al. (2014, MNRAS 443, 2517)</a>; the kernels, conditioning and marginal likelihood are chapters 2, 4 and 5 of <a href="https://gaussianprocess.org/gpml/">Rasmussen and Williams (2006)</a>; the proposal scaling is from <a href="https://doi.org/10.1214/aoap/1034625254">Roberts, Gelman and Gilks (1997)</a>. The pilot run (60,000 steps, the first 8,000 adapted and discarded, 25 percent accepted) gave η<sub>1</sub> 2.9 m/s, η<sub>2</sub> 38 d, η<sub>3</sub> 25.6 d, η<sub>4</sub> 0.67 and s 1.3 m/s as posterior medians.</p>
   <p>Download the <a href="{{ '/assets/data/playground/hd41248_harps.json' | relative_url }}">velocities</a> (12 kB), their <a href="{{ '/assets/data/playground/hd41248_harps.meta.json' | relative_url }}">provenance</a>, which records the query, its date and the catalogue ReadMe, and the <a href="{{ '/assets/data/playground/hd41248_gp_pilot.json' | relative_url }}">pilot run</a>. The table remains the authors' and the journal's; it is reproduced here for teaching, with its reference. Everything runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
+</div>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/gp-playground.js' | relative_url }}"></script>

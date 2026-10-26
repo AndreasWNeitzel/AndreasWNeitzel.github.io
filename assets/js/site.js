@@ -38,6 +38,17 @@
     card.style.setProperty("--my", `${ev.clientY - r.top}px`);
   }, { passive: true });
 
+  // ---- reveal on scroll ----------------------------------------------------------
+  const revealed = document.querySelectorAll(".reveal");
+  if (revealed.length && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
+    revealed.forEach((el) => io.observe(el));
+  } else {
+    revealed.forEach((el) => el.classList.add("is-in"));
+  }
+
   // ---- FIG 1: stage captions -------------------------------------------------
   const fig = document.getElementById("fig1");
   if (fig) {

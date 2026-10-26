@@ -10,7 +10,7 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
 <link rel="stylesheet" href="{{ '/assets/css/playground.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/orbits-playground.css' | relative_url }}">
 <div class="pg-page">
-<p class="pg-intro">A geostationary satellite sits over the equator, so above 81.3 degrees of latitude it never rises: at the pole there is no signal from it at all. The Molniya orbit is the answer to that, and this page is the demonstration. The same leapfrog, Runge-Kutta and Euler steppers move three Molniya satellites and a geostationary one around a point-mass Earth, with the visibility from Porto, Moscow and a polar station you can move, and then six real stars from <em>Gaia</em> DR3 through the MWPotential2014 model of the Milky Way.</p>
+<p class="pg-intro">A geostationary satellite sits over the equator, so above 81.3 degrees of latitude it never rises: at the pole there is no signal from it at all. The Molniya orbit is the answer to that, and this page is the demonstration.</p>
 
 <section class="pg ob" id="orbits-playground" aria-label="Orbits playground" data-mode="earth" data-src="{{ '/assets/data/playground/orbits.json' | relative_url }}">
   <div class="ob-dash">
@@ -71,7 +71,7 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
     <figure class="pg-panel panel ob-main">
       <figcaption class="pg-head"><span class="pg-title ob-main-title">Around the Earth</span><span class="pg-key ob-main-key"></span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Three Molniya satellites and a geostationary satellite around the rotating Earth, drawn to scale"></canvas></div>
-      <p class="pg-caption ob-main-cap">Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon. At the polar station's starting latitude no line ever reaches the geostationary satellite.</p>
+      <p class="pg-caption ob-main-cap">Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.</p>
     </figure>
 
     <figure class="pg-panel ob-side">
@@ -114,6 +114,7 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
   </div>
 </details>
 
+<div class="pg-notes">
 <section class="prose pg-credits" aria-labelledby="origin">
   <h2 id="origin">Where it came from</h2>
   <p>This page is rebuilt from project 3 of the Computational Astronomy course at the University of Porto (2018/19): an N-body integration of a Molniya constellation and a geostationary satellite, with signal reception at Porto, Moscow and a station at 80 degrees north. Three integrators run the same equations here, a symplectic leapfrog, an adaptive fourth-order Runge-Kutta and a first-order Euler step, so the energy panel shows what each one costs; the Earth turns under the satellites and visibility follows from the elevation angle at each station; and the Galaxy mode sends the same integrators after real stars through a model of the Milky Way.</p>
@@ -126,6 +127,7 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
   <p>The six stars are <em>Gaia</em> DR3 sources with a radial velocity, chosen to span the disc and the halo: 61 Virginis, Proxima Centauri, Barnard's star, Lalande 21185, Kapteyn's star and HD 140283. Arcturus and Alpha Centauri, the obvious bright examples, are brighter than the <em>Gaia</em> DR3 limit and have no entry, and tau Ceti and epsilon Eridani have no DR3 radial velocity. Names were resolved through <a href="https://doi.org/10.1051/aas:2000332">SIMBAD</a>. This page uses data from the European Space Agency mission <em>Gaia</em> (<a href="https://doi.org/10.1051/0004-6361/202243940">Gaia Collaboration, Vallenari et al. 2023, A&amp;A 674, A1</a>), processed by the <em>Gaia</em> Data Processing and Analysis Consortium (DPAC); the astrometry is described by <a href="https://doi.org/10.1051/0004-6361/202039709">Lindegren et al. (2021, A&amp;A 649, A2)</a> and the radial velocities by <a href="https://doi.org/10.1051/0004-6361/202244220">Katz et al. (2023, A&amp;A 674, A5)</a>. <em>Gaia</em> data are © ESA/Gaia/DPAC and released under <a href="https://creativecommons.org/licenses/by-sa/3.0/igo/">CC BY-SA 3.0 IGO</a>, and the derived file below is shared under the same licence.</p>
   <p>Download the <a href="{{ '/assets/data/playground/orbits.json' | relative_url }}">data</a> (15 KB) and its <a href="{{ '/assets/data/playground/orbits.meta.json' | relative_url }}">provenance</a>, which records the queries, their dates, the candidates set aside and why, and the galpy cross-checks. The integration runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
+</div>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/orbits-playground.js' | relative_url }}"></script>

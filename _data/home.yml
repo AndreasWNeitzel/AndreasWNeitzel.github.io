@@ -4,15 +4,10 @@
 profile:
   role: PhD researcher in astrophysics and machine learning
   institute: IA and University of Porto
-  nouns: [Astronomer, Machine learning, Neural networks, Galactic archaeology, Gaia, Asteroseismology, HPC]
   descriptor: >-
     I build neural networks and unsupervised methods that read stellar chemistry, ages and
     populations from <i>Gaia</i> spectra and asteroseismic data, and I run them on European
     supercomputers.
-  facts:
-    - Porto, Portugal
-    - EU citizen (Portugal, Germany)
-    - Portuguese, English (C2), German (A2), Spanish (A2)
 
 glance:
   - {n: "4", label: refereed papers}
@@ -20,50 +15,67 @@ glance:
   - {n: "1.3 M", label: core-hours approved}
   - {n: "5", label: fellowships and allocations}
 
-highlights:
-  - tag: paper
-    label: paper
-    title: First-author paper in A&A
-    text: A manifold-learning method that separates the Milky Way's stellar populations, tested on a simulated galaxy.
-    when: "2025"
+# Four pieces of work, one card each; the rest of the record is on the Research page.
+selected:
+  - title: Dissecting stellar populations with manifold learning
+    kicker: A&A 695, A243 (2025), first author
+    text: Label-free split of disc and halo in a simulated Milky Way and, in error-free data, two swallowed galaxies.
     url: /papers/neitzel-2025-manifold-learning/
+    img: /assets/img/cards/milky-way.webp
+    tag: paper
+    label: paper
     ledger: pub-2025-neitzel-manifold-learning
-  - tag: hpc
-    label: HPC
-    title: 1.3 million core-hours approved
-    text: Responsible investigator on two FCT computing projects, on MareNostrum 5 and Deucalion, with 2,500 GPU-hours.
-    when: "2026"
-    url: /guide/supercomputers/
-    ledger: [fund-2026-10-cpca-a2-marenostrum, fund-2026-10-cpca-a1-deucalion]
-  - tag: observing
-    label: observing
-    title: ESO Very Large Telescope
-    text: Visiting astronomer at Paranal for the ESPRESSO campaign on GJ 570 A, now published in A&A.
-    when: "2024"
-    url: /observing/paranal/
-    thumb: /assets/img/photos/vlt-golden-hour.webp
-    ledger: ev-2024-05-paranal-espresso-observing-run
-  - tag: grant
-    label: funding
-    title: Three fellowships won
-    text: FCT doctoral fellowship, ArqueoGal PhD fellowship and an FCT MSc grant; co-investigator on the FCT project ArqueoGal.
-    when: 2021 to 2027
-    url: /cv/#funding
-    ledger: [fund-2025-09-fct-doctoral-fellowship, fund-2026-09-arqueogal-bi-d-fellowship, fund-2021-fct-msc-research-grant, fund-2026-arqueogal-pex-participant]
-  - tag: abroad
-    label: abroad
-    title: INAF Bologna secondment
-    text: Six months building noise simulations for the proposed <i>HAYDN</i> mission, with visits to INAF Padova.
-    when: 2025/26
-    url: /guide/inaf/
+  - title: JANUS, the chemistry of red giants from Gaia spectra
+    kicker: ArqueoGal, 2025 to 2027
+    text: Normalising-flow networks that read stellar parameters and chemistry from Gaia spectra, with a reliability score for every star.
+    url: /research/#janus
+    art: nn
+    tag: software
+    label: research
+    ledger: [fund-2026-arqueogal-pex-participant, pres-2026-07-tasc10-oral-janus, pres-2026-10-imas13-oral-janus]
+  - title: Starfold, grouping stars with a warning label
+    kicker: open source, 0.2.0
+    text: UMAP and HDBSCAN with 17 named warnings, shown on 9,242 stars, benchmarked on held-out tables with two losses.
+    url: /software/starfold-demo/
+    art: clusters
+    tag: software
+    label: software
+    ledger: sw-2026-starfold
+  - title: HAYDNsim, noise forecasts for crowded clusters
+    kicker: INAF Bologna secondment, 2025 to 2026
+    text: Builds synthetic fields of dense star clusters and forecasts each star's photometric noise for the proposed HAYDN mission.
+    url: /software/haydnsim/
+    img: /assets/img/guide/haydn.webp
+    tag: software
+    label: pipeline
     ledger: pos-2025-visiting-inaf-bologna
-  - tag: talk
-    label: talks
-    title: Four international talks
-    text: TASC10/KASC17 in Aarhus (talk and poster), IMAS13 and IMAS11 in Spain, TASC8/KASC15 in Porto.
-    when: 2024 to 2026
-    url: /talks/
-    ledger: [pres-2026-07-tasc10-oral-janus, pres-2026-07-tasc10-poster-haydnsim, pres-2026-10-imas13-oral-janus, pres-2024-11-imas11-oral, pres-2024-07-tasc8-oral]
+
+# Things to run in the browser, one row.
+try:
+  - title: Train a neural network
+    text: on Gaia spectra of 4,000 stars
+    url: /playground/neural-network/
+    art: nn
+  - title: Orbits
+    text: satellites, then the Milky Way
+    url: /playground/orbits/
+    art: orbit
+  - title: Build a star
+    text: a polytrope against a MESA model
+    url: /playground/polytropes/
+    art: polytrope
+  - title: Gaussian processes
+    text: on the velocities of HD 41248
+    url: /playground/gaussian-processes/
+    art: gp
+  - title: Stellar Explorer
+    text: one star, birth to white dwarf
+    url: /stellar-explorer/
+    art: hr
+  - title: Starfold demo
+    text: 9,242 stars, 32 refits
+    url: /software/starfold-demo/
+    art: clusters
 
 evidence:
   - src: /assets/img/photos/vlt-golden-hour.webp
@@ -182,54 +194,7 @@ record:
       - "<strong>16 talks and posters</strong> since 2022, six of them international"
       - "<strong>Open source</strong>: Starfold 0.2.0 (MIT, 294 tests); Tellurion, interactive physics simulations (MIT)"
 
-explore:
-  - title: Four playgrounds
-    text: A neural network on Gaia spectra, Gaussian processes on a star's velocities, orbits from satellites to the Milky Way, and a star built from a polytrope, all live in your browser.
-    tag: software
-    label: playgrounds
-    url: /software/#playgrounds
-    art: nn
-    size: wide
-  - title: Observing at the Very Large Telescope
-    text: Five nights on a K dwarf with ESPRESSO, and what the data showed.
-    tag: observing
-    label: story
-    url: /observing/paranal/
-    img: /assets/img/photos/ut-mirror-cell.webp
-  - title: My papers, explained
-    text: What each paper found and what I did in it, without the jargon.
-    tag: paper
-    label: explainers
-    url: /publications/#explainers
-    img: /assets/img/papers/neitzel-2025-manifold-learning.webp
-    light: true
-  - title: Field guide to the field
-    text: Galactic archaeology, asteroseismology, Gaia, ESO, INAF, HAYDN and the supercomputers, each in a minute.
-    tag: guide
-    label: guide
-    url: /guide/
-    img: /assets/img/guide/gaia.webp
-  - title: HAYDNsim, noise forecasts for crowded clusters
-    text: The pipeline I wrote to forecast per-star photometric noise in 47 Tucanae and other dense clusters, for the proposed HAYDN mission.
-    tag: software
-    label: pipeline
-    url: /software/haydnsim/
-    img: /assets/img/guide/haydn.webp
-  - title: Starfold
-    text: Open-source grouping with recurrence and 17 named warnings, shown on 9,242 Milky Way stars.
-    tag: software
-    label: software
-    url: /software/starfold-demo/
-    art: clusters
-  - title: Supercomputers I run on
-    text: Deucalion in Guimarães and MareNostrum 5 in Barcelona, and what the allocations buy.
-    tag: hpc
-    label: HPC
-    url: /guide/supercomputers/
-    img: /assets/img/guide/supercomputers.webp
-
 # Title cards sliding along the top of the home page. Third-party images carry their credit line,
-# linked to the source (ESO asks for the credit next to the image with an active link).
 band:
   - title: Train a neural network on Gaia spectra
     tag: software

@@ -81,11 +81,13 @@ defaults:
       type: guide
     values:
       layout: guide
+      nav_section: Research
   - scope:
       path: ""
       type: papers
     values:
       layout: paper
+      nav_section: Publications
 
 feed:
   collections:

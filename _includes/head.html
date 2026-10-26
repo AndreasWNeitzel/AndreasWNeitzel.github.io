@@ -33,7 +33,7 @@
 <meta property="og:image" content="{{ ogimg | absolute_url }}">
 <meta property="og:image:alt" content="{{ page.og_image_alt | default: site.og_image_alt }}">
 <meta name="twitter:card" content="summary_large_image">
-<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 {%- if page.url == "/" %}
 {%- assign p = site.data.person %}
 <script type="application/ld+json">

@@ -228,4 +228,6 @@
   .pg-more > summary::before { transition: transform 0.2s var(--ease); }
 }
 .pg-more > .prose { margin-block-start: 14px; }
-.pg-credits { margin-block-start: 28px; }
+.pg-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 12px 40px; margin-block-start: 28px; padding-block-start: 18px; border-block-start: 1px solid var(--line); }
+.pg-notes .pg-credits { margin: 0; max-inline-size: none; font-size: 0.86rem; align-content: start; }
+.pg-notes .pg-credits h2 { font-size: 1rem; }

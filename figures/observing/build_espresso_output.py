@@ -233,13 +233,11 @@ def main(src: Path, root: Path) -> int:
     E.append(link([((16, 216), (4, 244), (4, 272), (16, 294))], 0, 2.5))
     E.append(link([c_a], 0, T_DESC, dx=dx, seam=True))
     E.append(text(36, 28, f"From one {PAPER['exposure_s']}-second exposure to one velocity", "eo-title", 1.86))
-    E.append(text(36, 46, f"exposure time: {CITE}, {PAPER['exposure_where']}", "eo-note", 1.86))
     # stage 1: extracted spectrum (schematic outline)
     E.append(text(36, 80, "extracted spectrum", "eo-label", 1.92))
     spec = ("M36 98 H64 l4 12 l4 -12 H96 l3 6 l3 -6 H128 l4 18 l4 -18 H160 l3 5 l3 -5 H190 l4 10 l4 -10 "
             "H222 l3 7 l3 -7 H252 l4 16 l4 -16 H284 l3 6 l3 -6 H316 l4 11 l4 -11 H348 l3 5 l3 -5 H400")
     E.append(f'<path class="bp b-draw" style="--d:1.95s;--dur:.25s" pathLength="1" d="{spec}"/>')
-    E.append(text(36, 140, "a stretch of the spectrum and its absorption lines", "eo-note", 2.0))
     # stage 2: cross-correlation dip (schematic outline) and the shift it measures
     E.append(text(36, 176, "cross-correlation", "eo-label", 2.2))
     E.append('<path class="bp-thin b-draw" style="--d:2.22s;--dur:.17s" pathLength="1" d="M36 232 H400 M188 186 V236"/>')
@@ -247,16 +245,12 @@ def main(src: Path, root: Path) -> int:
     E.append('<path class="eo-mark b-pop" style="--d:2.4s" d="M246 184 V236"/>')
     E.append('<path class="eo-dim b-pop" style="--d:2.42s" d="M192 208 H242 M192 204 v8 M242 204 v8"/>')
     E.append(text(217, 202, "shift", "eo-num", 2.42, "middle"))
-    E.append(text(36, 252, "the shift of the dip gives the radial velocity:", "eo-note", 2.42))
-    E.append(text(36, 267, f"{median_rv:.1f} km/s away from us, from the data", "eo-note", 2.42))
+    E.append(text(36, 254, f"{median_rv:.1f} km/s", "eo-value", 2.42))
     # stage 3: one velocity, with its uncertainty and the signal it has to reveal
     E.append(text(36, 304, "one velocity", "eo-label", 2.52))
     E.append(text(36, 324, f"{first_rv:.4f} km/s ± {first_err:.0f} cm/s", "eo-value", 2.55))
-    E.append(text(36, 340, "first exposure of the night below, from the data", "eo-note", 2.55))
-    E.append(text(36, 360, f"average uncertainty {PAPER['sigma_rv_cms']} cm/s", "eo-note", 2.58))
-    E.append(text(36, 375, f"({CITE}, {PAPER['sigma_rv_where']})", "eo-note", 2.58))
-    E.append(text(36, 395, f"peak oscillation amplitude {PAPER['amp_cms']} cm/s", "eo-note", 2.6))
-    E.append(text(36, 410, f"({CITE}, {PAPER['amp_where']})", "eo-note", 2.6))
+    E.append(text(36, 346, f"uncertainty {PAPER['sigma_rv_cms']} cm/s", "eo-note", 2.58))
+    E.append(text(36, 362, f"oscillation {PAPER['amp_cms']} cm/s", "eo-note", 2.6))
     exp_svg = svg("eo-svg eo-exposure", 420, TOP_H, "From one exposure to one radial velocity",
                   f"Each {PAPER['exposure_s']}-second exposure gives an extracted spectrum; cross-correlating it gives a dip whose shift is the "
                   f"radial velocity, {median_rv:.1f} km/s for GJ 570 A. One velocity has an average uncertainty of {PAPER['sigma_rv_cms']} cm/s, while "
@@ -284,7 +278,7 @@ def main(src: Path, root: Path) -> int:
     N.append(link([c_d], L(c_a) + L(c_b) + L(c_c), T_DESC, dy=TOP_H, seam=True))
     N.append(node(18, 145, 2.75, seam=True))
     N.append(text(xp0, 22, f"Radial velocity during the night of {night_date}", "eo-title", 2.75))
-    N.append(text(xp0, 40, f"{b - a} exposures, slow drifts removed; from the data", "eo-note", 2.75))
+    N.append(text(xp0, 40, f"{b - a} exposures", "eo-note", 2.75))
     N.append(text(xp0, 56, "radial velocity, cm/s", "eo-num", 2.85))
     N.append(f'<path class="bp-thin b-draw" style="--d:2.75s;--dur:.17s" pathLength="1" d="M{xp0} {yc - 85} V{yc + 85} M{xp0} {yc} H{xp1}"/>')
     ticks = []
@@ -301,8 +295,7 @@ def main(src: Path, root: Path) -> int:
     N.append(f'<path class="eo-dots b-pop" style="--d:2.95s" d="{dots}"/>')
     N.append(link([d1], 0, T_ARC, seam=True))
     doi = "https://doi.org/10.5281/zenodo.17236515"
-    N.append(f'<a href="{doi}">' + text(xp0, 296, f"Data: {CITE}, Zenodo doi:10.5281/zenodo.17236515, CC BY 4.0,", "eo-note eo-data", 2.95)
-             + text(xp0, 312, "file for GJ 570 A (HD 131977).", "eo-note eo-data", 2.95) + "</a>")
+    N.append(f'<a href="{doi}">' + text(xp0, 296, f"Data: {CITE}, Zenodo, CC BY 4.0", "eo-note eo-data", 2.95) + "</a>")
     night_svg = svg("eo-svg eo-night", 610, BOT_H, f"Radial velocity of GJ 570 A during the night of {night_date}",
                     f"{b - a} radial velocities from one night, with slow drifts removed, scatter by tens of centimetres per second around zero; "
                     "the oscillations are far smaller than the uncertainty of a single point.", N, "eo-n")
@@ -328,7 +321,7 @@ def main(src: Path, root: Path) -> int:
     S.append(link([d2], L(d1), T_ARC, dx=X_SEAM_BOT, dy=TOP_H, seam=True))
     S.append(node(70, 145, 3.1, seam=True))
     S.append(text(xc0, 22, "Power spectrum of the five nights", "eo-title", 3.1))
-    S.append(text(xc0, 40, f"{int(keep.sum()):,} velocities, weighted sine fits; from the data", "eo-note", 3.1))
+    S.append(text(xc0, 40, f"{int(keep.sum()):,} velocities", "eo-note", 3.1))
     S.append(text(xc0, 56, "power, (cm/s)²", "eo-num", 3.2))
     S.append(f'<path class="bp-thin b-draw" style="--d:3.1s;--dur:.17s" pathLength="1" d="M{xc0} {ytop} V{yb} H{xc1}"/>')
     t2 = []
@@ -357,12 +350,10 @@ def main(src: Path, root: Path) -> int:
         cls = {"line": "eo-smooth", "dash": "eo-noise", "dot": "eo-numax"}[kind]
         return f'<path class="{cls}" d="M{x} {y - 4} h16"/>'
     rows = [
-        (xc0, 284, "fill", "power, from the data"),
-        (300, 284, "dash", "white-noise level ×3, from the data"),
-        (xc0, 300, "line", [("text", "power smoothed by a Gaussian "), ("tex", r"4\Delta\nu"),
-                            ("text", " ≈ 790 μHz wide, ×3 as in the paper's Fig. 3")]),
-        (xc0, 316, "dot", [("tex", r"\nu_{\max}"),
-                           ("text", f' {PAPER["numax_uHz"]} μHz ({CITE}, {PAPER["numax_where"]})')]),
+        (xc0, 284, "fill", "power"),
+        (300, 284, "dash", "white noise ×3"),
+        (xc0, 300, "line", [("text", "smoothed, "), ("tex", r"4\Delta\nu"), ("text", " ≈ 790 μHz")]),
+        (xc0, 316, "dot", [("tex", r"\nu_{\max}"), ("text", f' {PAPER["numax_uHz"]} μHz')]),
     ]
     adv = 0.6 * 11  # Geist Mono advance at the 11 px legend size
     for x, y, kind, label in rows:

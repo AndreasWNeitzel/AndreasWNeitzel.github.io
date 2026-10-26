@@ -10,7 +10,7 @@ math: true
 <link rel="stylesheet" href="{{ '/assets/css/playground.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/polytrope-playground.css' | relative_url }}">
 <div class="pg-page">
-<p class="pg-intro">A polytrope assumes one relation between pressure and density, <span class="tex" data-tex="P = K\rho^{1 + 1/n}">P = Kρ^(1 + 1/n)</span>. Solved for an index <span class="tex" data-tex="n">n</span> and scaled to a star's mass and radius, it gives the run of density, pressure and temperature, and hydrogen burning in that structure gives a luminosity to match against the observed one.</p>
+<p class="pg-intro">A polytrope assumes one relation between pressure and density, <span class="tex" data-tex="P = K\rho^{1 + 1/n}">P = Kρ^(1 + 1/n)</span>.</p>
 
 <section class="pg pt" id="pt-playground" aria-label="Polytrope playground" data-stars="{{ '/assets/data/playground/polytrope_stars.json' | relative_url }}" data-mesa="{{ '/assets/data/playground/mesa_1msun_profile.json' | relative_url }}">
   <div class="pt-dash">
@@ -89,6 +89,7 @@ math: true
   </div>
 </details>
 
+<div class="pg-notes">
 <section class="prose pg-credits" aria-labelledby="origin">
   <h2 id="origin">Where it came from</h2>
   <p>This page descends from the first project of my Computational Astronomy course at the University of Porto (2018/19): a Python notebook that solved the Lane-Emden equation with scipy, matched the model luminosity of the Sun, 61 Vir and GJ 504 to the observed one and ran a Monte Carlo over the quoted errors of M, R and L. This version runs the same chain in the browser and re-solves on every slider move; it uses the IAU 2015 nominal Sun, takes the rate formulae and the constants from the sources named below, states the uncertainty conventions of each paper, checks the solver against the three exact solutions, and adds the comparison with a full stellar model.</p>
@@ -102,6 +103,7 @@ math: true
   <p>The stellar model is one interior profile from the data file of my Stellar Explorer (<a href="https://github.com/AndreasWNeitzel/stellar-explorer-data">stellar-explorer-data on GitHub</a>): a 1 M☉, [Fe/H] = 0 track computed with MESA r24.08.1 (<a href="https://doi.org/10.1088/0067-0049/192/1/3">Paxton et al. 2011, ApJS 192, 3</a>) and post-processed with GYRE, stored as the 94 models whose interior the run saved, with 256-zone profiles. On the main sequence the run saved an interior every fifty models, so the one nearest the Sun's age (4.6 Gyr) is the model at 2.76 Gyr, and that is the age stated here; the mass, radius and luminosity of the MESA preset are those of that model, and its profile arrays are exported unchanged.</p>
   <p>Download the <a href="{{ '/assets/data/playground/polytrope_stars.json' | relative_url }}">star table</a>, which records every value with its table and convention, and the <a href="{{ '/assets/data/playground/mesa_1msun_profile.json' | relative_url }}">model profile</a> with its provenance. Everything runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
+</div>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/polytrope-playground.js' | relative_url }}"></script>
