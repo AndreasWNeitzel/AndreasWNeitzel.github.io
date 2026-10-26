@@ -505,3 +505,91 @@ svg = (
 )
 OUT.write_text(svg)
 
+
+# ------------------------------------------------------------------ the JANUS figure for /research/janus/
+# The same stages at the same scale, composed for a wide figure: the XP spectrum, the seismic input,
+# the ensemble and the labels in one row, with the withheld-star test under the labels and the
+# catalogue it produces on the right. Numbers from the IMAS13 abstract (October 2026).
+JW, JH = 1120, 420
+jmasks: list[str] = []
+jlinks: list[str] = []
+
+
+def jlink(d: str, t: float, dur: float) -> None:
+    k = len(jmasks) + 1
+    jmasks.append(
+        f'<mask id="f1jm-{k}" maskUnits="userSpaceOnUse" x="0" y="0" width="{JW}" height="{JH}">'
+        f'<path class="f1-mask b-draw" pathLength="1" {timing(t, dur)} d="{d}"/></mask>'
+    )
+    jlinks.append(f'<path class="f1-link" mask="url(#f1jm-{k})" d="{d}"/>')
+
+
+# row one: the spectrum, the seismic input and the ensemble keep their relation and move together
+DX1, DY1 = -210.0, 4.0
+# the labels stage comes up beside the ensemble
+DX2, DY2 = 20.0, -232.0
+jlink(f"M{f(662 + DX1)} {f(Y1 + DY1)} C{f(700 + DX1)} {f(Y1 + DY1)} {f(med[0] + DX2 - 40)} {f(ry[0] - 3 + DY2)} {f(med[0] + DX2)} {f(ry[0] - 3 + DY2)}", T["l3"], 0.3)
+
+# the withheld-star test, under the labels
+tt = T["labels"] + 0.3
+TX, TY = 476.0, 286.0
+test = [
+    draw("f1-g", f"M{f(TX)} {f(TY - 20)} H688", 0.2, 0.17),
+    text(TX, TY, "WITHHELD STARS", "f1-title f1-small", tt),
+    text(TX, TY + 15, "robust scatter about APOGEE", "f1-sub", tt),
+]
+for i, (nm, val) in enumerate((("Teff", "32 K"), ("log g", "0.072 dex"), ("[M/H]", "0.051 dex"), ("[α/M]", "0.021 dex"))):
+    cx, cy = TX + (i % 2) * 112, TY + 38 + (i // 2) * 44
+    test += [
+        draw("f1-g", f"M{f(cx)} {f(cy + 16)} h100 M{f(cx)} {f(cy + 12)} v8 M{f(cx + 100)} {f(cy + 12)} v8", tt + 0.1 + 0.05 * i, 0.2),
+        text(cx, cy, nm, "f1-tick", tt + 0.15 + 0.05 * i),
+        text(cx + 100, cy + 8, val, "f1-dim", tt + 0.15 + 0.05 * i, "end"),
+    ]
+
+# the catalogue: a field of TESS giants, the ones with APOGEE values filled, the rest JANUS only
+tc = T["starfold"]
+CX0, CY0, CW, CH = 712.0, 70.0, 392.0, 250.0
+rng = __import__("random").Random(11)
+field = []
+for i in range(230):
+    x = CX0 + 10 + rng.random() * (CW - 20)
+    y = CY0 + 10 + rng.random() * (CH - 20)
+    if i % 10 == 0:
+        field.append(f'<circle class="f1-apogee" cx="{f(x)}" cy="{f(y)}" r="2.8"/>')
+    else:
+        field.append(f'<circle cx="{f(x)}" cy="{f(y)}" r="2"/>')
+cat = [
+    draw("f1-g", f"M{f(CX0)} {f(CY0)} H{f(CX0 + CW)} V{f(CY0 + CH)} H{f(CX0)} Z", 0.25, 0.3),
+    pop(f'<g class="f1-marks f1-loose">{"".join(field)}</g>', tc),
+    draw("f1-g", f"M{f(CX0)} {f(CY0 + CH + 16)} H{f(CX0 + CW)} M{f(CX0)} {f(CY0 + CH + 12)} v8 M{f(CX0 + CW)} {f(CY0 + CH + 12)} v8", tc + 0.2, 0.3),
+    text(CX0 + CW / 2, CY0 + CH + 32, "144,304 giants", "f1-dim", tc + 0.3, "middle"),
+    text(CX0, TY, "TESS GIANTS, WITH CHEMISTRY", "f1-title f1-small", tc + 0.3),
+    text(CX0, TY + 15, "filled: the one in ten with APOGEE DR19 values", "f1-sub", tc + 0.35),
+]
+# place the catalogue titles under the field, like the other stages
+cat[-2] = text(CX0, CY0 + CH + 58, "TESS GIANTS, WITH CHEMISTRY", "f1-title f1-small", tc + 0.3)
+cat[-1] = text(CX0, CY0 + CH + 73, "filled: the one in ten that also have APOGEE DR19 values", "f1-sub", tc + 0.35)
+jlink(f"M{f(med[0] + DX2)} {f(ry[-1] - 3 + DY2)} C{f(med[0] + DX2)} {f(ry[-1] + 40 + DY2)} {f(CX0 - 30)} {f(CY0 + CH / 2)} {f(CX0)} {f(CY0 + CH / 2)}", T["l4"], 0.3)
+
+janus_svg = (
+    f'<svg class="f1-svg f1-janus" data-build="" viewBox="0 0 {JW} {JH}" xmlns="http://www.w3.org/2000/svg" role="group" '
+    'aria-label="Schematic of JANUS: a real Gaia XP spectrum of a red giant and the seismic input from TESS and Kepler go into '
+    "an ensemble of eight normalising-flow networks, 110 inputs to six outputs, which returns six labels with a spread and a miss "
+    'probability; the test on withheld stars gives the scatter about APOGEE, and the catalogue covers 144,304 TESS giants.">'
+    + "<defs>" + masks[1] + masks[2] + "".join(jmasks) + "</defs>"
+    + f'<g transform="translate({f(DX1)} {f(DY1)})">'
+    + stage("xp", "XP spectra", (226, 56, 210, 196), xp)
+    + stage("seismo", "Asteroseismology input", (340, 2, 230, 50), sm)
+    + stage("janus", "JANUS neural networks", (456, 62, 212, 196), jn)
+    + "</g>"
+    + f'<g transform="translate({f(DX2)} {f(DY2)})">' + stage("labels", "Stellar labels with reliability", (456, 292, 212, 186), lb) + "</g>"
+    + stage("test", "The test on withheld stars", (470, 262, 222, 140), test)
+    + stage("catalogue", "The catalogue", (704, 60, 408, 350), cat)
+    + '<g class="f1-thread" aria-hidden="true">'
+    + f'<g transform="translate({f(DX1)} {f(DY1)})">' + links[1] + links[2] + roles[1] + roles[2] + "</g>"
+    + f'<g transform="translate({f(DX2)} {f(DY2)})">' + roles[3] + "</g>"
+    + "".join(jlinks)
+    + "</g></svg>\n"
+)
+(ROOT / "_includes/figures/janus.svg").write_text(janus_svg)
+print(f"wrote _includes/figures/janus.svg: {len(janus_svg) / 1024:.1f} KB")

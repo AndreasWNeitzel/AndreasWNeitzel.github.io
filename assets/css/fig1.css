@@ -34,6 +34,7 @@
   .f1-svg .f1-dot { fill: var(--ink); }
   .f1-svg .f1-marks circle { fill: none; stroke: var(--ink); stroke-width: 1.5; }
   .f1-svg .f1-loose circle { stroke: var(--muted); }
+  .f1-svg .f1-loose circle.f1-apogee { fill: var(--accent); stroke: var(--accent); }
   /* real data */
   .f1-svg .f1-fill { fill: var(--accent); opacity: .16; }
 
@@ -56,7 +57,7 @@
   .fig1.has-active .f1-svg .f1-thread { opacity: .55; }
   .f1-svg .f1-thread { pointer-events: none; transition: opacity .2s; }
 }
-  /* a page about one stage shows the same figure with the other stages stepped back */
-  .fig1--focus { max-inline-size: 820px; margin-inline: auto; margin-block-end: 10px; }
-  .fig1--focus .f1-stage[data-stage="gaia"], .fig1--focus .f1-stage[data-stage="starfold"], .fig1--focus .f1-stage[data-stage="galaxy"], .fig1--focus .f1-stage[data-stage="hpc"] { opacity: .3; transition: opacity .2s; }
-  .fig1--focus .f1-stage:hover, .fig1--focus .f1-stage:focus-visible { opacity: 1; }
+  /* the wide JANUS figure: the stages at the home page's scale, across the page */
+  .fig1--wide { margin-block-end: 10px; }
+  .fig1--wide .f1-svg { max-block-size: none; }
+  .fig1--wide .fig1-cap { position: absolute; inset: auto 0 0 0; }
