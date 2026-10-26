@@ -26,6 +26,7 @@
 
 - [Starfold](https://github.com/AndreasWNeitzel/starfold): Python package, MIT, release 0.2.0 (2026-10-19); [manual](https://andreaswneitzel.github.io/Starfold/)
 - [Stellar Explorer](https://andreaswneitzel.github.io/stellar-explorer/): browser app for a MESA r24.08.1 plus GYRE track of a one-solar-mass star
+- [HAYDNsim](https://andreaswneitzel.github.io/software/haydnsim/): simulation pipeline for the proposed HAYDN mission (private repository); synthetic crowded clusters and per-star noise forecasts, presented at TASC10/KASC17 2026
 - [Tellurion](https://tellurion.dev/): a separate website of interactive physics and astronomy simulations that I wrote as a teaching resource (MIT); summary at https://andreaswneitzel.github.io/software/tellurion/
 
 ## Identity

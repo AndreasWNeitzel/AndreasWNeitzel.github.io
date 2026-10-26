@@ -157,11 +157,11 @@ explore:
     label: guide
     url: /guide/
     img: /assets/img/guide/gaia.webp
-  - title: HAYDN crowded-field simulations
-    text: Forecasting photometric noise in 47 Tucanae and other dense clusters for a proposed ESA mission.
-    tag: poster
-    label: poster
-    url: /guide/haydn/
+  - title: HAYDNsim, noise forecasts for crowded clusters
+    text: The pipeline I wrote to forecast per-star photometric noise in 47 Tucanae and other dense clusters, for the proposed HAYDN mission.
+    tag: software
+    label: pipeline
+    url: /software/haydnsim/
     img: /assets/img/guide/haydn.webp
   - title: Starfold
     text: Open-source grouping with recurrence and 17 named warnings, shown on 9,242 Milky Way stars.
@@ -197,10 +197,10 @@ band:
     url: /talks/
     img: /assets/img/photos/tasc8-kasc15-talk.webp
     pos: 60% 35%
-  - title: Crowded star clusters for HAYDN
-    tag: poster
-    label: poster, 2026
-    url: /guide/haydn/
+  - title: HAYDNsim, crowded clusters simulated
+    tag: software
+    label: pipeline
+    url: /software/haydnsim/
     img: /assets/img/cards/messier-4.webp
     credit: ESO, CC BY 4.0
     credit_url: https://www.eso.org/public/images/eso1235a/

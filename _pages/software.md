@@ -25,7 +25,11 @@ extra_links:
       <div class="media art">{% include figures/art-hr.svg %}</div>
       <div class="card-body"><span class="tag tag--software">app</span><h3>Stellar Explorer</h3><p>A star of the Sun's mass from birth to white dwarf, from a MESA and GYRE track.</p><span class="go">Open</span></div>
     </a>
-    <a class="card wide" href="{{ '/software/tellurion/' | relative_url }}" data-spotlight>
+    <a class="card" href="{{ '/software/haydnsim/' | relative_url }}" data-spotlight>
+      <div class="media"><img src="{{ '/assets/img/guide/haydn.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
+      <div class="card-body"><span class="tag tag--software">pipeline</span><h3>HAYDNsim</h3><p>Synthetic crowded clusters and per-star noise forecasts for the proposed <i>HAYDN</i> mission.</p><span class="go">Read about it</span></div>
+    </a>
+    <a class="card" href="{{ '/software/tellurion/' | relative_url }}" data-spotlight>
       <div class="media"><img src="{{ '/assets/img/tellurion/blackhole-legend-3d.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async" width="800" height="500"></div>
       <div class="card-body"><span class="tag tag--software">website</span><h3>Tellurion</h3><p>My separate website of interactive physics and astronomy simulations, written as a teaching resource.</p><span class="go">What it is</span></div>
     </a>
