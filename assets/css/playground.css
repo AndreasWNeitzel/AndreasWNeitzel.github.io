@@ -229,11 +229,9 @@
 }
 .pg-more > .prose { margin-block-start: 14px; }
 .pg-key .sym { font-variant-caps: normal; }
-/* the notes under a playground use the whole width: two columns of prose on a wide screen */
-@media (min-width: 980px) {
-  .pg-more > .prose { max-inline-size: none; display: block; columns: 2; column-gap: 48px; }
-  .pg-more > .prose > * { break-inside: avoid; margin: 0 0 14px; }
-}
+/* the notes under a playground run the full width of the page, one column */
+.pg-more > .prose { max-inline-size: none; }
+.pg-notes .pg-credits { max-inline-size: none; }
 .pg-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 12px 40px; margin-block-start: 28px; padding-block-start: 18px; border-block-start: 1px solid var(--line); }
 .pg-notes .pg-credits { margin: 0; max-inline-size: none; font-size: 0.86rem; align-content: start; }
 .pg-notes .pg-credits h2 { font-size: 1rem; }
