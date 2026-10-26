@@ -1,0 +1,238 @@
+{
+ "description": "Provenance of orbits.json for the Orbits playground.",
+ "built_utc": "2026-10-26T02:56:45Z",
+ "script": "figures/playground/build_orbits_data.py",
+ "identifier_resolution": {
+  "service": "SIMBAD (CDS), astroquery.simbad.Simbad.query_objectids",
+  "queried_utc": "2026-10-26T02:30:26Z",
+  "ids": {
+   "61 Virginis": 3507879565090229888,
+   "Proxima Centauri": 5853498713190525696,
+   "Barnard's star": 4472832130942575872,
+   "Lalande 21185": 762815470562110464,
+   "Kapteyn's star": 4810594479418041856,
+   "HD 140283": 6268770373590148224
+  }
+ },
+ "gaia_query": {
+  "service": "https://gea.esac.esa.int/tap-server/tap",
+  "queried_utc": "2026-10-26T02:30:28Z",
+  "adql": "SELECT source_id, ref_epoch, ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, radial_velocity, radial_velocity_error, rv_nb_transits, rv_template_teff, grvs_mag, ruwe, phot_g_mean_mag, bp_rp, parallax_pmra_corr, parallax_pmdec_corr, pmra_pmdec_corr\nFROM gaiadr3.gaia_source\nWHERE source_id IN (3507879565090229888, 5853498713190525696, 4472832130942575872, 762815470562110464, 4810594479418041856, 6268770373590148224)",
+  "columns": [
+   "source_id",
+   "ref_epoch",
+   "ra",
+   "dec",
+   "parallax",
+   "parallax_error",
+   "pmra",
+   "pmra_error",
+   "pmdec",
+   "pmdec_error",
+   "radial_velocity",
+   "radial_velocity_error",
+   "rv_nb_transits",
+   "rv_template_teff",
+   "grvs_mag",
+   "ruwe",
+   "phot_g_mean_mag",
+   "bp_rp",
+   "parallax_pmra_corr",
+   "parallax_pmdec_corr",
+   "pmra_pmdec_corr"
+  ],
+  "note": "Gaia DR3 reference epoch J2016.0; the archive reported release 3.15 at query time"
+ },
+ "coordinates": {
+  "method": "astropy SkyCoord (ICRS, J2016.0) to Galactocentric",
+  "solar": {
+   "galcen_distance_kpc": 8.0,
+   "z_sun_pc": 20.8,
+   "v_sun_km_s": [
+    11.1,
+    232.24,
+    7.25
+   ],
+   "note": "distance from the Sun to the Galactic centre 8.0 kpc and circular speed 220 km/s, the normalisation of MWPotential2014 (Bovy 2015); height of the Sun above the plane 20.8 pc (Bennett and Bovy 2019, MNRAS 482, 1417); solar peculiar motion (U, V, W) = (11.10, 12.24, 7.25) km/s (Schoenrich, Binney and Dehnen 2010, MNRAS 403, 1829), so the Sun's Galactocentric velocity is (11.10, 232.24, 7.25) km/s. Frame: astropy Galactocentric, right-handed, x from the Sun towards the centre, y along Galactic rotation, z towards the north Galactic pole; the Sun sits at x = -8 kpc",
+   "distance_note": "distances are 1 / parallax; every selected star has parallax / error above 600. No parallax zero-point correction is applied: the Lindegren et al. (2021) offsets are of order -0.02 mas, 0.1 percent of the smallest parallax here"
+  },
+  "uncertainties": "standard deviation over 20000 draws of (parallax, pmra, pmdec, radial velocity) from a multivariate normal with the Gaia errors and the three published correlation coefficients; seed 20261026",
+  "versions": {
+   "astropy": "8.0.2",
+   "galpy": "1.12.0",
+   "numpy": "2.4.6",
+   "python": "3.11.14"
+  }
+ },
+ "reference_orbits": {
+  "method": "galpy Orbit from the same SkyCoord with ro = 8 kpc, vo = 220 km/s, zo = 0.0208 kpc, solarmotion = [-11.1, 12.24, 7.25]; integrated for 10 Gyr in MWPotential2014 with dop853_c on 200,001 output times",
+  "sign_convention": "galpy's L_z is positive for rotation with the disc; in the astropy frame of orbits.json that is -(x v_y - y v_x). The page uses galpy's sign",
+  "energy_convention": "energy_km2_s2 is galpy's orbit energy shifted so that the potential is zero at infinity (galpy's value is kept as energy_galpy_km2_s2); see potential_checks.Phi_zero_point_km2_s2",
+  "potential_checks": {
+   "vcirc_R0_km_s": 220.0,
+   "Phi_sun_km2_s2": -66470.17152750782,
+   "Phi_zero_point_km2_s2": 65094.10508988126,
+   "zero_point_note": "galpy's values of Phi below include this constant; the page's potential is zero at infinity, so page values equal galpy values minus the constant. Forces are unaffected",
+   "radius_note": "galpy's eccentricity, rperi and rap use the spherical radius sqrt(R^2 + z^2); the page computes its live values the same way",
+   "force_fractions_at_R0": {
+    "bulge": 0.05,
+    "disc": 0.6,
+    "halo": 0.35
+   },
+   "masses": {
+    "bulge": {
+     "within_8_kpc_msun": 4501365356.380522,
+     "within_245_kpc_msun": 4501365375.100713
+    },
+    "disc": {
+     "within_8_kpc_msun": 44033159864.665504,
+     "within_245_kpc_msun": 67358792129.41539
+    },
+    "halo": {
+     "within_8_kpc_msun": 31509557494.663647,
+     "within_245_kpc_msun": 809554388793.7134
+    }
+   },
+   "points": [
+    {
+     "R_kpc": 8,
+     "z_kpc": 0,
+     "Phi_km2_s2": -66470.17152750782,
+     "FR_km2_s2_kpc": -6050.0,
+     "Fz_km2_s2_kpc": 0.0
+    },
+    {
+     "R_kpc": 2,
+     "z_kpc": 0.5,
+     "Phi_km2_s2": -126079.27687804775,
+     "FR_km2_s2_kpc": -15289.532794664885,
+     "Fz_km2_s2_kpc": -15004.451562037304
+    },
+    {
+     "R_kpc": 15,
+     "z_kpc": 3,
+     "Phi_km2_s2": -36724.878402675895,
+     "FR_km2_s2_kpc": -2557.759512871941,
+     "Fz_km2_s2_kpc": -719.1354376831023
+    },
+    {
+     "R_kpc": 0.5,
+     "z_kpc": 0.1,
+     "Phi_km2_s2": -159813.1361275897,
+     "FR_km2_s2_kpc": -23816.276230735453,
+     "Fz_km2_s2_kpc": -12741.51542453271
+    },
+    {
+     "R_kpc": 30,
+     "z_kpc": -5,
+     "Phi_km2_s2": -10778.127905813819,
+     "FR_km2_s2_kpc": -1135.4572725111852,
+     "Fz_km2_s2_kpc": 218.58879626373667
+    },
+    {
+     "R_kpc": 1.0,
+     "z_kpc": 0.0,
+     "Phi_km2_s2": -149736.8982950875,
+     "FR_km2_s2_kpc": -19729.29875099817,
+     "Fz_km2_s2_kpc": 0.0
+    },
+    {
+     "R_kpc": 8,
+     "z_kpc": 2,
+     "Phi_km2_s2": -63013.87043824035,
+     "FR_km2_s2_kpc": -5087.131519827063,
+     "Fz_km2_s2_kpc": -2306.2080413409226
+    },
+    {
+     "R_kpc": 4,
+     "z_kpc": -1.5,
+     "Phi_km2_s2": -92071.68882282813,
+     "FR_km2_s2_kpc": -8813.207074851363,
+     "Fz_km2_s2_kpc": 7229.948749952065
+    },
+    {
+     "R_kpc": 60,
+     "z_kpc": 10,
+     "Phi_km2_s2": 11537.50298624774,
+     "FR_km2_s2_kpc": -470.5051219189547,
+     "Fz_km2_s2_kpc": -82.21854676967342
+    },
+    {
+     "R_kpc": 0.05,
+     "z_kpc": 0.02,
+     "Phi_km2_s2": -178659.1923302813,
+     "FR_km2_s2_kpc": -100185.44251475135,
+     "Fz_km2_s2_kpc": -41848.93283736704
+    }
+   ]
+  }
+ },
+ "dropped_candidates": [
+  {
+   "name": "Arcturus",
+   "reason": "no Gaia DR3 source: brighter than the catalogue's bright limit"
+  },
+  {
+   "name": "Alpha Centauri A",
+   "reason": "no Gaia DR3 source: brighter than the catalogue's bright limit"
+  },
+  {
+   "name": "Alpha Centauri B",
+   "reason": "no Gaia DR3 source: brighter than the catalogue's bright limit"
+  },
+  {
+   "name": "tau Ceti",
+   "reason": "in Gaia DR3 (G = 3.30) but without a radial velocity"
+  },
+  {
+   "name": "epsilon Eridani",
+   "reason": "in Gaia DR3 (G = 3.47) but without a radial velocity"
+  },
+  {
+   "name": "mu Cassiopeiae",
+   "reason": "RUWE 6.97: the single-star astrometric solution does not fit this binary"
+  },
+  {
+   "name": "70 Ophiuchi A",
+   "reason": "RUWE 3.27: the single-star astrometric solution does not fit this binary"
+  },
+  {
+   "name": "Groombridge 1830 (HD 103095)",
+   "reason": "not selected; six stars were kept so that the plots stay legible"
+  },
+  {
+   "name": "HD 122563",
+   "reason": "not selected; six stars were kept so that the plots stay legible"
+  },
+  {
+   "name": "HD 19445",
+   "reason": "not selected; six stars were kept so that the plots stay legible"
+  },
+  {
+   "name": "HD 84937",
+   "reason": "not selected; six stars were kept so that the plots stay legible"
+  }
+ ],
+ "references": {
+  "gaia_mission": "Gaia Collaboration, Prusti et al. (2016), A&A 595, A1, doi:10.1051/0004-6361/201629272",
+  "gaia_dr3": "Gaia Collaboration, Vallenari et al. (2023), A&A 674, A1, doi:10.1051/0004-6361/202243940",
+  "gaia_dr3_astrometry": "Lindegren et al. (2021), A&A 649, A2, doi:10.1051/0004-6361/202039709",
+  "gaia_dr3_radial_velocities": "Katz et al. (2023), A&A 674, A5, doi:10.1051/0004-6361/202244220",
+  "gaia_credit": "This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium). Funding for the DPAC has been provided by national institutions, in particular the institutions participating in the Gaia Multilateral Agreement.",
+  "gaia_licence": "ESA/Gaia/DPAC, CC BY-SA 3.0 IGO, https://creativecommons.org/licenses/by-sa/3.0/igo/",
+  "simbad": "Wenger et al. (2000), A&AS 143, 9, doi:10.1051/aas:2000332 (SIMBAD, CDS Strasbourg), used to resolve common names to Gaia DR3 source_ids",
+  "potential": "Bovy (2015), ApJS 216, 29, doi:10.1088/0067-0049/216/2/29, arXiv:1412.3451",
+  "miyamoto_nagai": "Miyamoto and Nagai (1975), PASJ 27, 533",
+  "nfw": "Navarro, Frenk and White (1997), ApJ 490, 493, doi:10.1086/304888",
+  "solar_motion": "Schoenrich, Binney and Dehnen (2010), MNRAS 403, 1829, doi:10.1111/j.1365-2966.2010.16253.x",
+  "z_sun": "Bennett and Bovy (2019), MNRAS 482, 1417, doi:10.1093/mnras/sty2813",
+  "astropy": "Astropy Collaboration (2022), ApJ 935, 167, doi:10.3847/1538-4357/ac7c74",
+  "molniya": "Kidder and Vonder Haar (1990), J. Atmos. Oceanic Technol. 7, 517, doi:10.1175/1520-0426(1990)007<0517:OTUOSI>2.0.CO;2",
+  "molniya_period": "Kolyuka et al. (2009), 21st International Symposium on Space Flight Dynamics, Toulouse",
+  "nasa_orbits": "NASA Earth Observatory, Catalog of Earth Satellite Orbits, https://science.nasa.gov/earth/earth-observatory/catalog-of-earth-satellite-orbits",
+  "esa_orbits": "ESA, Types of orbits, https://www.esa.int/Enabling_Support/Space_Transportation/Types_of_orbits",
+  "iers": "Petit and Luzum (eds.) (2010), IERS Conventions (2010), IERS Technical Note 36, Table 1.1",
+  "nssdc": "NASA NSSDCA, Earth Fact Sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html",
+  "coursework": "Computational Astronomy, University of Porto, 2018/19, project 3 (N-body code applied to a Molniya constellation and a geostationary satellite with ground-station visibility)"
+ }
+}

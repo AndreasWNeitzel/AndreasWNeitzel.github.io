@@ -956,6 +956,8 @@
     </div>
 
     <div id="statusbar">
+      <div class="stat" data-tip="Model: the number this model has in the MESA run · every panel on screen comes from this model's own stored profile"><span class="stat-lbl">Model</span><span
+          class="stat-val" id="s-model">—</span></div>
       <div class="stat" data-tip="Age: stellar age in gigayears · Sun ≈ 4.6 Gyr"><span class="stat-lbl">Age</span><span
           class="stat-val" id="s-age">—</span><span class="stat-unit">Gyr</span></div>
       <div class="stat" data-tip="T_eff: effective surface temperature (K) · Determines colour · Sun: 5778 K"><span
@@ -1076,7 +1078,8 @@
     //  GLOBALS & STATE
     // ═══════════════════════════════════════════════════════════════════
     let H5FILE = null;   // jsfive parsed HDF5 file object
-    let TRACK = null;   // global scalar arrays (cheap — 200 values each)
+    let TRACK = null;   // per-model scalars, one row per stored profile
+    let HISTORY = null; // every history row, for the continuous HR curve
     let CACHE = {};     // LRU cache: { idx: {profile, gyre} }
     let CACHE_ORDER = []; // LRU order
     const CACHE_MAX = 12; // keep last 12 models in memory
@@ -1140,7 +1143,14 @@
       }
 
       const grd = k => Array.from(H5FILE.get(`profiles/${idx}/${k}`).value);
-      const ggrd = k => Array.from(H5FILE.get(`gyre/${idx}/${k}`).value);
+      // Models the run left without GYRE output carry no mode datasets, so a
+      // missing or empty one means "no modes", not an error.
+      const ggrd = k => {
+        try {
+          const ds = H5FILE.get(`gyre/${idx}/${k}`);
+          return ds ? Array.from(ds.value) : [];
+        } catch (e) { return []; }
+      };
       const try_ = p => { try { return Array.from(H5FILE.get(p).value); } catch (e) { return null; } };
 
       const profile = {
@@ -1182,8 +1192,8 @@
       } catch (e) { mode_type_arr = null; }
       const nModes = l_arr.length;
       // N2 and x are now stored once at model level (not per mode)
-      const N2_shared = Array.from(H5FILE.get(`gyre/${idx}/N2_profile`).value);
-      const x_shared = Array.from(H5FILE.get(`gyre/${idx}/x_profile`).value);
+      const N2_shared = ggrd('N2_profile');
+      const x_shared = ggrd('x_profile');
       const modes = [];
       for (let j = 0; j < nModes; j++) {
         const mg = H5FILE.get(`gyre/${idx}/modes/${j}`);
@@ -1664,8 +1674,7 @@
         profile,
       };
 
-      // Start convection animation
-      if (DO_CONV) startConvAnim();
+      // The animation loop is started by startAnim once the static frame is up.
     }
 
     function drawCSLegend(ctx, x, y, hasConv) {
@@ -1893,7 +1902,8 @@
 
       const traces = [
         {
-          x: t.log_Teff, y: t.log_L,
+          x: HISTORY ? HISTORY.log_Teff : t.log_Teff,
+          y: HISTORY ? HISTORY.log_L : t.log_L,
           mode: 'lines',
           line: { color: 'rgba(255,255,255,0.55)', width: 1 },
           hoverinfo: 'skip', showlegend: false,
@@ -1907,7 +1917,7 @@
             line: { color: phaseColors, width: 1.2 },
           },
           text: t.phase.map((p, i) =>
-            `${p}<br>Age: ${t.star_age[i].toFixed(2)} Gyr<br>T<sub>eff</sub>: ${Math.round(10 ** t.log_Teff[i])} K<br>log L: ${t.log_L[i].toFixed(2)}`
+            `${p}${t.model_number ? ' · model ' + t.model_number[i] : ''}<br>Age: ${t.star_age[i].toFixed(2)} Gyr<br>T<sub>eff</sub>: ${Math.round(10 ** t.log_Teff[i])} K<br>log L: ${t.log_L[i].toFixed(2)}`
           ),
           hovertemplate: '%{text}<extra></extra>',
           showlegend: false,
@@ -2065,9 +2075,10 @@
       if (!gdat || !gdat.freq.length) {
         Plotly.react(el, [], {
           ...PLY_BASE,
+          xaxis: { visible: false }, yaxis: { visible: false },
           annotations: [{
-            text: 'No oscillation data', xref: 'paper', yref: 'paper',
-            x: 0.5, y: 0.5, showarrow: false, font: { color: '#2a4a80', size: 12 }
+            text: 'No GYRE output for this model', xref: 'paper', yref: 'paper',
+            x: 0.5, y: 0.5, showarrow: false, font: { color: '#2a4a80', size: 13 }
           }],
         }, PLY_CFG);
         return;
@@ -2357,6 +2368,8 @@
     function updateStatus(idx) {
       const t = TRACK;
       const teff = Math.round(10 ** t.log_Teff[idx]);
+      const mdl = document.getElementById('s-model');
+      if (mdl) mdl.textContent = t.model_number ? t.model_number[idx] : (idx + 1);
       document.getElementById('s-age').textContent = t.star_age[idx].toFixed(2);
       document.getElementById('s-teff').textContent = teff.toLocaleString();
       document.getElementById('s-logl').textContent = t.log_L[idx].toFixed(3);
@@ -2571,7 +2584,13 @@
           pp: try_('track/pp'),
           cno: try_('track/cno'),
           tri_alfa: try_('track/tri_alfa'),
+          model_number: try_('track/model_number_orig'),
         };
+        // Schema 3.1 ships the full evolutionary history as well, so the HR
+        // curve is the run's own track and the markers are the models that
+        // have a stored interior. Older files have the markers only.
+        const hT = try_('history/log_Teff'), hL = try_('history/log_L');
+        HISTORY = (hT && hL && hT.length) ? { log_Teff: hT, log_L: hL } : null;
         TRACK.phase.forEach((p, i) => { if (p === 'SGB' && TRACK.log_L[i] > 0.5) TRACK.phase[i] = 'RGB'; });
         step(`Step 5: Track loaded — ${n} models, phases: ${[...new Set(TRACK.phase)].join(', ')}`);
 

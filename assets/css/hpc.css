@@ -1,0 +1,24 @@
+/* Field guide, supercomputers: the two machines to scale and one JANUS run
+   (figures/hpc/build_hpc_figure.py). The one-time build comes from site.css ("figure build"). */
+@layer pages {
+  .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .guide-wide .hpc-svg { inline-size: 100%; block-size: auto; }
+  .guide-wide figcaption { padding: 8px 4px 2px; }
+  .hpc-svg .b-draw { vector-effect: none; }
+  .hpc-svg .hpc-head { font: 600 11px var(--mono); letter-spacing: 0.1em; fill: var(--muted); }
+  .hpc-svg .bp-label2 { font-size: 12.5px; }
+  .hpc-svg .bp-tick { font-size: 11px; }
+  /* node squares: filled where my allocations run, outline elsewhere */
+  .hpc-svg .hpc-sq { stroke-width: 0.9; }
+  .hpc-svg .hpc-sq.cpu-on { fill: var(--accent); stroke: var(--accent); }
+  .hpc-svg .hpc-sq.gpu-on { fill: var(--accent-2); stroke: var(--accent-2); }
+  .hpc-svg .hpc-sq.cpu-off { fill: none; stroke: var(--muted); }
+  .hpc-svg .hpc-bar { fill: none; stroke: var(--ink); stroke-width: 7; stroke-linecap: butt; }
+  .hpc-svg .hpc-val { font: 600 12px var(--mono); fill: var(--ink); }
+  /* the data thread through the run, flowing as on the other blueprints */
+  .hpc-svg .hpc-thread { fill: none; stroke: var(--accent-2); stroke-width: 1.5; }
+  .hpc-svg .hpc-node { fill: var(--accent-2); }
+  .hpc-svg .hpc-th { font: 600 10.5px var(--mono); letter-spacing: 0.08em; fill: var(--muted); }
+  .hpc-svg .hpc-td { font: 500 11.5px var(--mono); fill: var(--ink-2); }
+  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hpc-svg { min-inline-size: 860px; } }
+}

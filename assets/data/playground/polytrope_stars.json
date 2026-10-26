@@ -1,0 +1,176 @@
+{
+  "description": "Stars of the polytrope playground at /playground/polytropes/: the Sun with the IAU 2015 nominal values, two planet hosts with published mass, radius and luminosity, and the MESA model that the page overlays. Every number is copied from the cited table; nothing is fitted or adjusted here.",
+  "built_utc": "2026-10-26T02:40:00Z",
+  "conventions": {
+    "units": "M in solar masses, R in solar radii, L in solar luminosities, all with the IAU 2015 nominal conversion constants (GM = 1.3271244e20 m^3 s^-2, R = 6.957e8 m, L = 3.828e26 W); the mass in grams is GM / G with the CODATA 2022 G",
+    "uncertainty_fields": "sigma is a one-sigma width; plus and minus give a split normal (one-sigma on each side); log10 with sigma_dex samples the luminosity in log10 L; absent fields mean the quantity is held fixed",
+    "composition": "X and Z of the Sun are the present-day photospheric mass fractions of Asplund et al. (2009), X = 0.7381, Z = 0.0134, Y = 1 - X - Z; for 61 Vir and GJ 504 the same X is kept and Z is scaled by 10^[Fe/H] from the cited paper, a scaled-solar mixture; the MESA model uses its own surface composition",
+    "verified": "all values checked on 2026-10-26 against the papers' tables (arXiv full texts for von Braun et al. 2014, Vogt et al. 2010 and Kuzuhara et al. 2013; the IOP article for Fuhrmann and Chini 2015; the arXiv text of Prsa et al. 2016 for the IAU constants)",
+    "short": "the short field of each quantity is the published value as the page prints it, with the paper's own error convention; the numeric fields carry the one-sigma widths the Monte Carlo uses"
+  },
+  "stars": [
+    {
+      "id": "sun",
+      "name": "Sun",
+      "label": "Sun, IAU 2015 nominal",
+      "M": {
+        "value": 1,
+        "short": "1"
+      },
+      "R": {
+        "value": 1,
+        "short": "1"
+      },
+      "L": {
+        "value": 1,
+        "short": "1"
+      },
+      "X": 0.7381,
+      "Z": 0.0134,
+      "feh": 0,
+      "mesa_overlay": true,
+      "uncertainties": "none: the nominal values are exact conversion constants, not measurements (IAU 2015 Resolution B3)",
+      "sources": [
+        "prsa2016",
+        "asplund2009"
+      ]
+    },
+    {
+      "id": "61vir",
+      "name": "61 Vir",
+      "label": "61 Vir, G7 V, 8.6 pc",
+      "M": {
+        "value": 0.95,
+        "plus": 0.04,
+        "minus": 0.03,
+        "quoted": "0.95 +0.04 -0.03 M_sun",
+        "source": "vogt2010",
+        "where": "Table 1, the Valenti and Fischer (2005) isochrone mass that the paper adopts",
+        "short": "0.95 +0.04 −0.03"
+      },
+      "R": {
+        "value": 0.9867,
+        "sigma": 0.0048,
+        "quoted": "0.9867 +/- 0.0048 R_sun",
+        "source": "vonbraun2014",
+        "where": "Table 4, from the CHARA angular diameter and the Hipparcos parallax",
+        "short": "0.9867 ± 0.0048"
+      },
+      "L": {
+        "value": 0.8222,
+        "sigma": 0.0033,
+        "quoted": "0.8222 +/- 0.0033 L_sun",
+        "source": "vonbraun2014",
+        "where": "Table 4, from the bolometric flux of the SED fit and the parallax",
+        "short": "0.8222 ± 0.0033"
+      },
+      "X": 0.7381,
+      "Z": 0.013712,
+      "feh": {
+        "value": 0.01,
+        "source": "vonbraun2014",
+        "where": "Table 4 (metallicity from Anderson and Francis 2012)"
+      },
+      "mesa_overlay": false,
+      "note": "von Braun et al. (2014) also give an isochrone mass of 0.93 M_sun without an uncertainty; the Vogt et al. (2010) value carries one and is used for the Monte Carlo"
+    },
+    {
+      "id": "gj504",
+      "name": "GJ 504",
+      "label": "GJ 504 (59 Vir), G0 V, 17.6 pc",
+      "M": {
+        "value": 1.16,
+        "sigma": 0.025,
+        "quoted": "1.16 +/- 0.05 M_sun, a 2 sigma error",
+        "source": "fuhrmann2015",
+        "where": "Table 1, from evolutionary tracks at [Fe/H] = +0.13; the table note states that all uncertainties are 2 sigma, so half the quoted width is used as sigma",
+        "short": "1.16 ± 0.05 (2σ)"
+      },
+      "R": {
+        "value": 1.36,
+        "sigma": 0.02,
+        "quoted": "1.36 +/- 0.04 R_sun, a 2 sigma error",
+        "source": "fuhrmann2015",
+        "where": "Table 1; halved to one sigma as for the mass",
+        "short": "1.36 ± 0.04 (2σ)"
+      },
+      "L": {
+        "log10": 0.332,
+        "sigma_dex": 0.032,
+        "quoted": "log (L/L_sun) = 0.332 +/- 0.032",
+        "source": "kuzuhara2013",
+        "where": "Table 1, the Valenti and Fischer (2005) value adopted there; sampled in log L",
+        "short": "log L 0.332 ± 0.032"
+      },
+      "X": 0.7381,
+      "Z": 0.018082,
+      "feh": {
+        "value": 0.13,
+        "source": "fuhrmann2015",
+        "where": "Table 1, [Fe/H] = +0.13 +/- 0.06 (2 sigma)"
+      },
+      "mesa_overlay": false,
+      "note": "Kuzuhara et al. (2013) list 1.22 +/- 0.08 M_sun for the mass and no radius; the mass and radius here follow Fuhrmann and Chini (2015), who find an evolved star of about solar age, and the luminosity follows Kuzuhara et al. (2013), as in the course project this page descends from"
+    },
+    {
+      "id": "mesa",
+      "name": "MESA model",
+      "label": "MESA model, 1 M_sun at 2.8 Gyr",
+      "M": {
+        "value": 0.999362111,
+        "short": "0.9994"
+      },
+      "R": {
+        "value": 0.949850023,
+        "short": "0.9499"
+      },
+      "L": {
+        "value": 0.864446759,
+        "short": "0.8644"
+      },
+      "X": 0.7,
+      "Z": 0.02,
+      "feh": null,
+      "mesa_overlay": true,
+      "uncertainties": "none: a model, not a measurement",
+      "source": "mesa_1msun_profile.json (track row 25 of the Stellar Explorer data file: mass, radius and luminosity of the model whose interior profile the page draws; X and Z are its surface values, 0.7000 and 0.0200)"
+    }
+  ],
+  "sources": {
+    "prsa2016": {
+      "citation": "Prsa, A., et al. 2016, AJ 152, 41",
+      "doi": "10.3847/0004-6256/152/2/41",
+      "arxiv": "1605.09788",
+      "used": "Table 1: R_sun = 6.957e8 m, S_sun = 1361 W m^-2, L_sun = 3.828e26 W, T_eff = 5772 K, GM_sun = 1.3271244e20 m^3 s^-2"
+    },
+    "asplund2009": {
+      "citation": "Asplund, M., Grevesse, N., Sauval, A. J., Scott, P. 2009, ARA&A 47, 481",
+      "doi": "10.1146/annurev.astro.46.060407.145222",
+      "arxiv": "0909.0948",
+      "used": "present-day photospheric X = 0.7381, Y = 0.2485, Z = 0.0134; log eps(C) = 8.43, log eps(N) = 7.83, log eps(O) = 8.69, from which C, N and O are 66 percent of Z by mass"
+    },
+    "vogt2010": {
+      "citation": "Vogt, S. S., et al. 2010, ApJ 708, 1366",
+      "doi": "10.1088/0004-637X/708/2/1366",
+      "arxiv": "0912.2599",
+      "used": "Table 1, stellar parameters of 61 Vir: mass 0.95 +0.04 -0.03 M_sun (Valenti and Fischer 2005)"
+    },
+    "vonbraun2014": {
+      "citation": "von Braun, K., et al. 2014, MNRAS 438, 2413",
+      "doi": "10.1093/mnras/stt2360",
+      "arxiv": "1312.1792",
+      "used": "Table 4: 61 Vir radius 0.9867 +/- 0.0048 R_sun, T_eff 5538 +/- 13 K, luminosity 0.8222 +/- 0.0033 L_sun, [Fe/H] +0.01, isochrone age 8.6 Gyr and mass 0.93 M_sun"
+    },
+    "kuzuhara2013": {
+      "citation": "Kuzuhara, M., et al. 2013, ApJ 774, 11",
+      "doi": "10.1088/0004-637X/774/1/11",
+      "arxiv": "1307.2886",
+      "used": "Table 1, properties of the GJ 504 system: log (L/L_sun) = 0.332 +/- 0.032, T_eff 6234 +/- 25 K, [Fe/H] 0.28 +/- 0.03 (all Valenti and Fischer 2005), mass 1.22 +/- 0.08 M_sun"
+    },
+    "fuhrmann2015": {
+      "citation": "Fuhrmann, K., Chini, R. 2015, ApJ 806, 163",
+      "doi": "10.1088/0004-637X/806/2/163",
+      "used": "Table 1 (2 sigma errors): mass 1.16 +/- 0.05 M_sun, radius 1.36 +/- 0.04 R_sun, T_eff 5978 +/- 60 K, log g 4.23 +/- 0.10, [Fe/H] +0.13 +/- 0.06, M_bol 3.87 +/- 0.05, age 4.5 +2.0 -1.5 Gyr"
+    }
+  }
+}

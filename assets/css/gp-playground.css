@@ -1,0 +1,99 @@
+/* Gaussian-process playground (/playground/gaussian-processes/): two one-screen dashboards
+   that share the neural-network playground's panels, labels and readouts (playground.css). */
+
+/* mode switch and the sentence for the chosen mode */
+.gp-modes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0 0 12px;
+}
+.gp-switch { display: inline-flex; gap: 4px; padding: 3px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); }
+.gp-switch .btn { min-block-size: 28px; padding: 0 12px; border-radius: var(--radius-sm); border-color: transparent; background: transparent; font-weight: 520; }
+.gp-switch .btn[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.gp-switch .btn:not([aria-selected="true"]):hover { background: var(--surface); border-color: var(--line-strong); }
+.gp-mode-text { margin: 0; flex: 1 1 36ch; font-size: 0.9rem; line-height: 1.5; color: var(--ink-2); }
+
+/* dashboard grid: controls, main figure, two linked panels */
+.gp-dash {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "run" "main" "settings" "params" "a" "b";
+}
+.gp-ctrl { display: contents; }
+.gp-ctrl .pg-run { grid-area: run; }
+.gp-ctrl .pg-settings { grid-area: settings; }
+.gp-ctrl .gp-params { grid-area: params; }
+.gp-main { grid-area: main; }
+.gp-a { grid-area: a; }
+.gp-b { grid-area: b; }
+.gp-main .pg-stage { block-size: 320px; }
+.gp-a .pg-stage { block-size: 120px; }
+.gp-b .pg-stage { block-size: 250px; }
+.gp-main canvas, .gp-b canvas { touch-action: manipulation; }
+
+/* legend swatches beyond the ones playground.css defines */
+.pg-key .k-mean { background: var(--accent); }
+.pg-key .k-band { block-size: 9px; border-radius: 2px; background: color-mix(in oklab, var(--accent) 22%, transparent); }
+.pg-key .k-obs, .pg-key .k-data { inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--ink); }
+.pg-key .k-draw { background: linear-gradient(90deg, var(--cat-0), var(--cat-1), var(--cat-2)); }
+.pg-key .k-curve { block-size: 2px; background: var(--accent-2); }
+
+/* range sliders: a label with the value, then the slider */
+.gp-range .pg-label { display: flex; justify-content: space-between; gap: 8px; }
+.gp-range output { font-variant-caps: normal; letter-spacing: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+.gp-range input[type="range"] { inline-size: 100%; margin: 2px 0 0; accent-color: var(--accent); cursor: pointer; }
+.gp-range sub { font-size: 0.72em; }
+
+/* star mode: the parameter table and the selects in panel heads */
+.gp-params { gap: 6px; }
+.gp-table { inline-size: 100%; border-collapse: collapse; font: 0.7rem/1.3 var(--mono); color: var(--ink-2); }
+.gp-table th { padding: 0 4px 3px 0; text-align: left; font-weight: 500; font-variant-caps: all-small-caps; letter-spacing: 0.06em; color: var(--muted); }
+.gp-table th:first-child { inline-size: 1px; }
+.gp-table td { padding: 2px 4px 2px 0; border-block-start: 1px solid var(--line); vertical-align: top; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.gp-key--row { flex-basis: 100%; }
+.gp-axes { display: inline-flex; gap: 10px; }
+.gp-axes .pg-select--sm select { min-inline-size: 58px; }
+.gp-table td:last-child, .gp-table th:last-child { padding-inline-end: 0; }
+.gp-table b { font-weight: 600; color: var(--ink); }
+.gp-table small { font-size: 0.9em; color: var(--muted); }
+.gp-table .prior { color: var(--muted); }
+.gp-s-note { margin: 0; font-size: 0.72rem; line-height: 1.4; color: var(--muted); }
+
+/* the model, below the dashboards */
+.gp-details { margin-block-start: 12px; gap: 12px; }
+.gp-details .gp-cols { display: grid; gap: 12px 24px; grid-template-columns: minmax(0, 1fr); }
+.gp-details .gp-col { display: grid; gap: 6px; align-content: start; min-inline-size: 0; }
+.gp-details .gp-col p { margin: 0; font-size: 0.82rem; line-height: 1.5; color: var(--ink-2); }
+.gp-details .tex-display { display: block; overflow-x: auto; padding: 6px 0; font-size: 0.92rem; color: var(--ink); }
+.gp-details .katex-display { margin: 0; }
+.gp-details ul { margin: 0; padding-inline-start: 1.1em; font: 0.78rem/1.5 var(--mono); color: var(--ink-2); }
+.gp-details li::marker { color: var(--muted); }
+
+@container pg (min-width: 560px) {
+  .gp-ctrl .pg-settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container pg (min-width: 680px) {
+  .gp-dash {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "run settings" "main main" "params a" "params b";
+  }
+  .gp-main .pg-stage { block-size: 380px; }
+  .gp-details .gp-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container pg (min-width: 1000px) {
+  .gp-dash {
+    grid-template-columns: 264px minmax(0, 1fr) minmax(300px, 372px);
+    grid-template-rows: auto auto;
+    grid-template-areas: "ctrl main a" "ctrl main b";
+  }
+  .gp-ctrl { grid-area: ctrl; display: flex; flex-direction: column; gap: 12px; min-inline-size: 0; }
+  .gp-ctrl .pg-settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gp-ctrl > :last-child { flex: 1; }
+  .gp-main { display: flex; flex-direction: column; }
+  .gp-main .pg-stage { flex: 1; block-size: auto; min-block-size: 340px; }
+  .gp-a .pg-stage { block-size: 118px; }
+  .gp-b .pg-stage { block-size: 250px; }
+}

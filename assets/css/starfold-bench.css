@@ -1,0 +1,23 @@
+/* Starfold held-out benchmark: the two figures drawn by figures/starfold/build_benchmark_figures.py
+   from the recorded summary. The one-time build comes from site.css ("figure build"). */
+@layer pages {
+  .sfb-figure { padding: 12px 14px 10px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .sfb-figure figcaption { padding: 6px 2px 0; }
+  .sfb-svg { inline-size: 100%; block-size: auto; overflow: visible; }
+  .sfb-svg .sfb-axis { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+  .sfb-svg .sfb-tick { stroke: var(--ink); stroke-width: 1; }
+  .sfb-svg .sfb-num, .sfb-svg .sfb-lab, .sfb-svg .sfb-note { font: 500 11px var(--mono); fill: var(--muted); }
+  .sfb-svg .sfb-lab-tex, .sfb-svg .sfb-note-tex { fill: var(--muted); }
+  .sfb-svg .sfb-name { font: 500 11px var(--mono); fill: var(--ink); }
+  .sfb-svg .sfb-guide { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 5 4; opacity: .8; }
+  .sfb-svg .sfb-zero { fill: none; stroke: var(--ink); stroke-width: .8; opacity: .6; }
+  .sfb-svg .sfb-dev { fill: var(--cat-0); stroke: var(--surface); stroke-width: 1; }
+  .sfb-svg .sfb-held { fill: var(--cat-6); stroke: var(--surface); stroke-width: 1; }
+  .sfb-svg .sfb-line { fill: none; stroke: var(--cat-0); stroke-width: 1.6; stroke-linejoin: round; }
+  .sfb-svg .sfb-series { fill: none; stroke-width: 1.8; stroke-linejoin: round; }
+  .sfb-svg .sfb-series-dash { fill: none; stroke-width: 1.2; stroke-dasharray: 5 4; stroke-linejoin: round; }
+  .sfb-svg .sfb-legend-dash { stroke: var(--muted); }
+  .sfb-svg .sfb-pt { stroke: var(--surface); stroke-width: 1; }
+  .sfb-svg .sfb-pt-open { fill: var(--surface); stroke-width: 1.4; }
+  @media (max-width: 760px) { .sfb-figure { overflow-x: auto; } .sfb-svg { min-inline-size: 760px; } }
+}

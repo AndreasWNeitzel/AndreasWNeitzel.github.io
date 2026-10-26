@@ -1,0 +1,58 @@
+/* FIG 1, the research-pipeline figure on the home page (_includes/figures/pipeline.svg, built by
+   figures/fig1/build_fig1.py). Drafting grammar: three stroke weights (construction .75, objects
+   1.5, the accent line 2.5), ink plus one accent. The accent marks only the data and what it
+   becomes; outline is schematic, fill is real data. The build itself is the shared one-time
+   [data-build] mechanism in site.css; only the connectors keep moving. */
+@layer pages {
+  .f1-svg { inline-size: 100%; block-size: auto; max-block-size: 640px; overflow: visible; color: var(--ink); }
+  @media (max-width: 860px) { .f1-svg { min-inline-size: 560px; } }
+
+  /* weights */
+  .f1-svg .f1-g { fill: none; stroke: var(--muted); stroke-width: .75; opacity: .5; stroke-linecap: round; stroke-linejoin: round; }
+  .f1-svg .f1-edges { opacity: .32; }
+  .f1-svg .f1-hull { opacity: .7; }
+  .f1-svg .f1-gd { fill: none; stroke: var(--muted); stroke-width: .75; opacity: .6; stroke-dasharray: 3 3; }
+  .f1-svg .f1-gm { fill: none; stroke: var(--ink); stroke-width: .75; }
+  .f1-svg .f1-o { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .f1-svg .f1-t { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .f1-svg .f1-strand { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; opacity: .9; }
+
+  /* connectors between stages: curved and dashed, the dashes flowing in the direction of the data.
+     A mask that draws on reveals each one during the build; under reduced motion they stay still. */
+  .f1-svg .f1-link { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 4; stroke-linecap: round; }
+  .f1-svg .f1-mask { fill: none; stroke: #fff; stroke-width: 14; stroke-linecap: round; }
+  @media (prefers-reduced-motion: no-preference) {
+    .f1-svg .f1-link { animation: f1-flow 1.6s linear infinite; }
+    @keyframes f1-flow { to { stroke-dashoffset: -18; } }
+  }
+
+  /* marks */
+  .f1-svg .f1-node { fill: var(--ink); }
+  .f1-svg .f1-nodes circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+  .f1-svg .f1-star { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; }
+  .f1-svg .f1-needle { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; }
+  .f1-svg .f1-dot { fill: var(--ink); }
+  .f1-svg .f1-marks circle { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+  .f1-svg .f1-loose circle { stroke: var(--muted); }
+  /* real data */
+  .f1-svg .f1-fill { fill: var(--accent); opacity: .16; }
+
+  /* type */
+  .f1-svg .f1-title { font: 650 13px var(--mono); letter-spacing: .08em; fill: var(--ink); }
+  .f1-svg .f1-small { font-size: 11.5px; }
+  .f1-svg .f1-sub { font: 500 11px var(--mono); fill: var(--muted); }
+  .f1-svg .f1-tick { font: 500 10px var(--mono); fill: var(--muted); }
+  .f1-svg .f1-onfill { fill: var(--ink-2); }
+  .f1-svg .f1-ann { font: 600 10.5px var(--mono); fill: var(--ink-2); }
+  .f1-svg .f1-dim { font: 650 11px var(--mono); fill: var(--ink); letter-spacing: .04em; }
+
+  /* stages: hover or focus one, the rest step back */
+  .f1-svg .f1-hit { fill: transparent; stroke: transparent; }
+  .f1-svg .f1-stage { cursor: pointer; outline: none; transition: opacity .2s; }
+  .f1-svg .f1-stage:focus-visible .f1-hit,
+  .f1-svg .f1-stage.is-active .f1-hit { stroke: color-mix(in oklab, var(--accent) 45%, transparent); stroke-width: .75; stroke-dasharray: 3 3;
+    fill: color-mix(in oklab, var(--accent) 4%, transparent); }
+  .fig1.has-active .f1-svg .f1-stage:not(.is-active) { opacity: .38; }
+  .fig1.has-active .f1-svg .f1-thread { opacity: .55; }
+  .f1-svg .f1-thread { pointer-events: none; transition: opacity .2s; }
+}

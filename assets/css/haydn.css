@@ -1,0 +1,43 @@
+/* HAYDNsim page: the pipeline pictograms, how a field is built, and the 47 Tucanae noise budget
+   (figures/haydnsim/build_haydn_figures.py). The one-time build comes from site.css ("figure build"). */
+@layer pages {
+  .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .guide-wide figcaption { padding: 8px 4px 2px; }
+  .guide-wide .hy-svg { inline-size: 100%; block-size: auto; }
+  .hy-svg .hy-head { font: 600 11px var(--mono); letter-spacing: 0.1em; fill: var(--muted); }
+  .hy-svg .hy-key { font: 600 10.5px var(--mono); letter-spacing: 0.08em; fill: var(--muted); }
+  .hy-svg .hy-val { font: 600 12px var(--mono); fill: var(--ink); }
+  .hy-svg .hy-title { font: 600 12px var(--mono); letter-spacing: 0.01em; fill: var(--ink); }
+  .hy-svg .hy-line { font: 500 11px var(--mono); fill: var(--ink-2); }
+  .hy-svg .hy-num { font: 500 11px var(--mono); fill: var(--muted); }
+  .hy-svg .hy-rule { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+  .hy-svg .hy-box { fill: color-mix(in oklab, var(--surface) 60%, transparent); stroke: currentColor; stroke-width: 1.3; stroke-linejoin: round; }
+  .hy-svg .hy-inner { fill: none; stroke: var(--muted); stroke-width: 0.9; stroke-dasharray: 4 3; }
+  .hy-svg .hy-node { fill: var(--accent-2); }
+  .hy-svg .hy-thread { stroke-width: 1.6; }
+  .hy-svg .hy-bypass { stroke: var(--muted); stroke-width: 1.3; opacity: .8; }
+  .hy-svg .hy-axis { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+  .hy-svg .hy-total { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+  .hy-svg .hy-bar { fill: color-mix(in oklab, var(--accent) 55%, transparent); stroke: currentColor; stroke-width: 0.8; }
+  .hy-svg .hy-tex { fill: var(--muted); }
+  .hy-svg .hy-tex-ink { fill: var(--ink-2); }
+  .hy-svg .hy-tex-muted { fill: var(--muted); }
+  /* pictograms: outline means schematic */
+  .hy-svg .hy-pic { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linejoin: round; stroke-linecap: round; }
+  .hy-svg .hy-pic-strong { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+  .hy-svg .hy-pic-dash { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+  .hy-svg .hy-dot { fill: currentColor; opacity: .75; }
+  .hy-svg .hy-window { fill: color-mix(in oklab, var(--accent) 16%, transparent); stroke: none; }
+  .hy-svg .hy-psf { fill: var(--accent-2); }
+  .hy-svg .hy-psf-n { fill: var(--accent); }
+  .hy-svg .hy-mask { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: miter; }
+  /* the field drawing */
+  .hy-svg .hy-sample circle { fill: none; stroke: currentColor; stroke-width: .6; opacity: .8; }
+  .hy-svg .hy-ring { fill: none; stroke: var(--ink); stroke-width: .8; }
+  .hy-svg .hy-ring-strong { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 3 2; }
+  .hy-svg .hy-leader { fill: none; stroke: var(--muted); stroke-width: .8; }
+  .hy-svg .hy-model { fill: none; stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 5 3; }
+  .hy-svg .hy-data circle, .hy-svg .hy-data-key { fill: var(--accent); stroke: var(--surface); stroke-width: .6; }
+  .hy-svg .hy-spr-wedge { fill: var(--accent-2); }
+  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hy-svg { min-inline-size: 760px; } }
+}

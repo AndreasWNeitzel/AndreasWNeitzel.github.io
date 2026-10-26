@@ -1,0 +1,50 @@
+{
+  "description": "HARPS radial velocities of the G dwarf HD 41248 as published with Jenkins and Tuomi (2014), read from VizieR unchanged, for a teaching page that fits a quasi-periodic Gaussian process to them in the browser.",
+  "built_utc": "2026-10-26T02:20:50Z",
+  "script": "figures/playground/build_hd41248_rv.py",
+  "query": {
+    "library": "astroquery.vizier.Vizier(columns=['**'], row_limit=-1).get_catalogs('J/ApJ/794/110')",
+    "table": "J/ApJ/794/110/table1",
+    "queried_utc": "2026-10-26T02:20:50Z",
+    "rows_received": 223,
+    "rows_kept": 223,
+    "dropped": 0,
+    "processing": [
+      "values rounded to the catalogue's printed precision (the VOTable carries the m/s columns in single precision)",
+      "rows sorted by BJD (the catalogue order was already chronological)",
+      "no other change; the page subtracts the mean radial velocity when it loads"
+    ]
+  },
+  "summary": {
+    "first_bjd": 2452943.8528426,
+    "last_bjd": 2456632.8576512,
+    "span_days": 3689.0048,
+    "rv_mean_m_s": 3528.0586,
+    "rv_std_m_s": 3.7594,
+    "rv_min_m_s": 3516.75,
+    "rv_max_m_s": 3540.55,
+    "e_rv_median_m_s": 1.25,
+    "e_rv_min_m_s": 0.72,
+    "e_rv_max_m_s": 7.47
+  },
+  "columns": {
+    "bjd": "Barycentric Julian Date of observation (d), catalogue column BJD",
+    "rv": "radial velocity (m/s), catalogue column RVel",
+    "e_rv": "uncertainty in rv (m/s), catalogue column e_RVel",
+    "s_index": "chromospheric activity S-index, catalogue column S-index",
+    "bis": "bisector inverse slope (m/s), catalogue column BIS",
+    "fwhm": "full width at half maximum of the cross-correlation function (m/s), catalogue column FWHM"
+  },
+  "readme": {
+    "url": "https://cdsarc.cds.unistra.fr/ftp/J/ApJ/794/110/ReadMe",
+    "fetched_utc": "2026-10-26T02:20:50Z",
+    "text": "J/ApJ/794/110        HARPS timeseries data for HD41248          (Jenkins+, 2014)\n================================================================================\nThe curious case of HD 41248. A pair of static signals buried behind red noise.\n    Jenkins J.S., Tuomi M.\n   <Astrophys. J., 794, 110 (2014)>\n   =2014ApJ...794..110J    (SIMBAD/NED BibCode)\n================================================================================\nADC_Keywords: Stars, G-type ; Radial velocities\nKeywords: planetary systems - stars: fundamental parameters -\n          stars: individual: HD41248 - stars: rotation\n\nAbstract:\n    Gaining a better understanding of the effects of stellar-induced\n    radial velocity noise is critical for the future of exoplanet studies\n    since the discovery of the lowest-mass planets using this method will\n    require us to go below the intrinsic stellar noise limit. An\n    interesting test case in this respect is that of the southern solar\n    analog HD 41248. The radial velocity time series of this star has been\n    proposed to contain either a pair of signals with periods of around 18\n    and 25 days, which could be due to a pair of resonant super-Earths, or\n    a single and varying 25 day signal that could arise due to a complex\n    interplay between differential rotation and modulated activity. In\n    this work, we build up more evidence for the former scenario, showing\n    that the signals are still clearly significant, even after more than\n    10 yr of observations, and they likely do not change in period,\n    amplitude, or phase as a function of time, the hallmarks of static\n    Doppler signals. We show that over the last two observing seasons,\n    this star was more intrinsically active and the noise reddened,\n    highlighting why better noise models are needed to find the lowest\n    amplitude signals, in particular, models that consider noise\n    correlations. This analysis shows that there is still sufficient\n    evidence for the existence of two super-Earths on the edge of, or\n    locked into, a 7:5 mean motion resonance orbiting HD 41248.\n\nDescription:\n    We modeled the HARPS radial velocities of HD 42148 by adopting the\n    analysis techniques and the statistical model applied in Tuomi et al.\n    (2014, arXiv:1405.2016). This model contains Keplerian signals, a\n    linear trend, a moving average component with exponential smoothing,\n    and linear correlations with activity indices, namely, BIS, FWHM, and\n    chromospheric activity S index. We applied our statistical model\n    outlined above to the full data set of radial velocities for HD 41248,\n    combining the previously published data in Jenkins et al.\n    (2013ApJ...771...41J) with the newly published data in Santos et al.\n    (2014, J/A+A/566/A35), giving rise to a total time series of 223 HARPS\n    (Mayor et al. 2003Msngr.114...20M) velocities.\n\nObjects:\n ----------------------------------------------------------\n     RA   (ICRS)    DE        Designation(s)\n ----------------------------------------------------------\n  06 00 32.78   -56 09 42.6   HD 41248 = HIP 28460\n ----------------------------------------------------------\n\nFile Summary:\n--------------------------------------------------------------------------------\n FileName      Lrecl  Records   Explanations\n--------------------------------------------------------------------------------\nReadMe            80        .   This file\ntable1.dat        48      223   HARPS timeseries data for HD41248\n--------------------------------------------------------------------------------\n\nSee also:\n J/A+A/566/A35 : Radial velocities of HD 41248 (Santos+, 2014)\n\nByte-by-byte Description of file: table1.dat\n--------------------------------------------------------------------------------\n   Bytes Format Units   Label     Explanations\n--------------------------------------------------------------------------------\n   1- 15  F15.7 d       BJD       Barycentric Julian Date of observation\n  17- 23  F7.2  m/s     RVel      Radial velocity\n  25- 28  F4.2  m/s   e_RVel      Uncertainty in RVel\n  30- 34  F5.3  [-]     S-index   Chromospheric activity S-index\n  36- 40  F5.2  m/s     BIS       Bisector inverse slope\n  42- 48  F7.2  m/s     FWHM      Full-Width at Half-Maximum\n--------------------------------------------------------------------------------\n\nHistory:\n    From electronic version of the journal\n\n================================================================================\n(End)              Prepared by [AAS], Tiphaine Pouvreau [CDS]        15-May-2017\n"
+  },
+  "licence": "The table is the electronic supplement of Jenkins and Tuomi (2014, ApJ 794, 110), served by the CDS through VizieR. The authors and the journal hold the rights to the published table; it is reproduced here unchanged, with its reference, for teaching. The CDS asks that use of VizieR be acknowledged (Ochsenbein, Bauer and Marcout 2000, A&AS 143, 23; doi:10.26093/cds/vizier).",
+  "credits": [
+    "Jenkins, J. S. and Tuomi, M. 2014, ApJ 794, 110, doi:10.1088/0004-637X/794/2/110",
+    "VizieR catalogue access tool, CDS, Strasbourg, France, doi:10.26093/cds/vizier",
+    "Ochsenbein, F., Bauer, P. and Marcout, J. 2000, A&AS 143, 23, doi:10.1051/aas:2000169",
+    "Observations made with the HARPS spectrograph on the ESO 3.6 m telescope at La Silla"
+  ]
+}

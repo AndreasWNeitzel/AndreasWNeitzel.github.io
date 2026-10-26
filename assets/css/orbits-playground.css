@@ -1,0 +1,131 @@
+/* Orbits playground (/playground/orbits/): the dashboard grid on top of playground.css.
+   Scoped to .ob; colours, type and radii come only from the site tokens. */
+
+.ob-dash {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "run" "main" "settings" "side" "energy";
+}
+.ob-run { grid-area: run; }
+.ob-main { grid-area: main; }
+.ob-settings { grid-area: settings; }
+.ob-side { grid-area: side; }
+.ob-energy { grid-area: energy; }
+.ob-main .pg-stage { block-size: 360px; }
+.ob-side .pg-stage { block-size: 190px; }
+.ob-energy .pg-stage { block-size: 150px; }
+.ob-main canvas { touch-action: pan-y; cursor: grab; }
+.ob-main canvas.is-dragging { cursor: grabbing; }
+
+/* mode switch: two plain buttons in one frame, the active one filled */
+.ob-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.ob-mode button {
+  min-block-size: 30px;
+  padding: 0 8px;
+  border: 0;
+  background: var(--surface-2);
+  font: 600 0.82rem/1 var(--sans);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.ob-mode button + button { border-inline-start: 1px solid var(--line-strong); }
+.ob-mode button:hover { color: var(--ink); }
+.ob-mode button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+/* compact panels: the Galaxy readouts need the height */
+.ob .pg-panel { padding: 10px 12px 12px; }
+.ob .pg-run { gap: 10px; }
+.ob-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 12px; }
+.ob-readout dd { font-size: 1.12rem; white-space: nowrap; }
+.ob-readout dt sub { font-size: 0.8em; line-height: 0; }
+.ob-readout dd .ob-ref { display: block; margin-block-start: 1px; font-size: 0.66rem; letter-spacing: 0; color: var(--muted); }
+.ob-readout dd .ob-ref:empty { display: none; }
+.ob-readout [data-mode] { display: none; }
+.ob[data-mode="earth"] .ob-readout [data-mode="earth"],
+.ob[data-mode="galaxy"] .ob-readout [data-mode="galaxy"] { display: block; }
+
+/* mode-specific controls and details */
+.ob-only { display: none; }
+.ob[data-mode="earth"] .ob-only[data-mode="earth"],
+.ob[data-mode="galaxy"] .ob-only[data-mode="galaxy"] { display: contents; }
+.ob-details[data-mode] { display: none; }
+.ob[data-mode="earth"] .ob-details[data-mode="earth"],
+.ob[data-mode="galaxy"] .ob-details[data-mode="galaxy"] { display: grid; }
+
+/* sliders */
+.ob-slider { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 8px; align-items: center; }
+.ob-slider .pg-label { grid-column: 1; }
+.ob-slider output { grid-column: 2; font: 500 0.78rem/1.3 var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.ob-slider input { grid-column: 1 / -1; inline-size: 100%; margin: 2px 0 0; accent-color: var(--accent); }
+/* the test particle folds away so the dashboard keeps to one screen */
+.ob-tp { grid-column: 1 / -1; padding-block-start: 8px; border-block-start: 1px solid var(--line); }
+.ob-tp > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  cursor: pointer;
+  font: 500 0.8rem/1.3 var(--mono);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.ob-tp > summary::-webkit-details-marker { display: none; }
+.ob-tp > summary::before {
+  content: "";
+  inline-size: 6px;
+  block-size: 6px;
+  border-inline-end: 1.5px solid var(--muted);
+  border-block-end: 1.5px solid var(--muted);
+  transform: rotate(-45deg);
+}
+.ob-tp[open] > summary::before { transform: rotate(45deg); }
+.ob-tp > summary:hover { color: var(--ink); }
+.ob-tp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 10px; margin-block-start: 6px; }
+.ob-tp-grid .btn { align-self: end; justify-self: start; }
+.ob-station { grid-column: 1 / -1; padding-block-start: 8px; border-block-start: 1px solid var(--line); }
+
+/* the side canvases' legends */
+.pg-key i.ob-k { inline-size: 10px; block-size: 10px; border-radius: 50%; }
+
+/* details tables */
+.ob-details { gap: 10px; }
+.ob-details h2 { margin: 0; font: 600 0.88rem/1.3 var(--sans); letter-spacing: -0.005em; color: var(--ink); }
+.ob-details .table-wrap { overflow-x: auto; }
+.ob-details table { border-collapse: collapse; inline-size: 100%; font: 0.76rem/1.4 var(--mono); color: var(--ink-2); }
+.ob-details th, .ob-details td { padding: 4px 10px 4px 0; text-align: left; vertical-align: top; border-block-end: 1px solid var(--line); white-space: nowrap; }
+.ob-details th { font-weight: 500; color: var(--muted); font-variant-caps: all-small-caps; letter-spacing: 0.06em; }
+.ob-details td.num, .ob-details th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.ob-details td b { font-weight: 600; color: var(--ink); }
+.ob-details .pg-caption { max-inline-size: 110ch; }
+.ob-details .ob-dot { display: inline-block; inline-size: 9px; block-size: 9px; margin-inline-end: 6px; border-radius: 50%; vertical-align: -1px; }
+
+@container pg (min-width: 680px) {
+  .ob-dash {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "run settings" "main main" "side energy";
+  }
+  .ob-main .pg-stage { block-size: 440px; }
+}
+@container pg (min-width: 1000px) {
+  .ob-dash {
+    grid-template-columns: 272px minmax(0, 1fr) minmax(300px, 360px);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "ctrl main side" "ctrl main energy";
+  }
+  .ob-dash .pg-ctrl { grid-area: ctrl; display: flex; flex-direction: column; gap: 12px; min-inline-size: 0; }
+  .ob-dash .pg-ctrl .pg-settings { flex: 1; align-content: start; grid-template-rows: none; }
+  .ob-dash .pg-ctrl .pg-field--wide { align-self: auto; padding-block-start: 0; border-block-start: 0; }
+  .ob-main { display: flex; flex-direction: column; }
+  .ob-main .pg-stage { flex: 1; block-size: auto; min-block-size: 380px; }
+  .ob-side .pg-stage { block-size: 184px; }
+  .ob-energy { display: flex; flex-direction: column; }
+  .ob-energy .pg-stage { flex: 1; block-size: auto; min-block-size: 130px; }
+}

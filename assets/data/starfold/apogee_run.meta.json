@@ -1,0 +1,158 @@
+{
+  "description": "The recorded Starfold run on the APOGEE DR19 example table (9,242 stars, eight chemo-dynamical columns), with the two-dimensional map HDBSCAN cut, for the interactive demo at /software/starfold-demo/.",
+  "exported_utc": "2026-10-26T01:03:17Z",
+  "script": "figures/starfold/export_apogee_run.py",
+  "starfold": {
+    "repository": "https://github.com/AndreasWNeitzel/starfold",
+    "version_in_run": "0.2.0",
+    "checkout_commit": "f2ac6f612bb1389096ba228d9403ae5988818fe8",
+    "checkout_describe": "v0.2.0-1-gf2ac6f6",
+    "checkout_clean": true,
+    "run_last_changed_in": "65fa355770140929ef5c408cf0b552086d75d859",
+    "release_tag": "v0.2.0",
+    "release_commit": "f93dea03aa0f29a2e538b7221970a35898ea3c90",
+    "tutorials": [
+      "docs/tutorial/apogee.md",
+      "docs/tutorial/apogee-checks.md"
+    ],
+    "notebook": "notebooks/02_apogee.ipynb"
+  },
+  "run": {
+    "path": "notebooks/runs/apogee",
+    "loaded_with": "starfold.load(\"notebooks/runs/apogee\")",
+    "manifest": {
+      "result.json": "6e6e152e28e93da5382bef63836543e12e455ed13a9f8aa648d18cc3080c7c49",
+      "arrays.npz": "25a3ba6264ec0da6189b4916a173b547995d33e77a87af898fb234dedac4979a"
+    },
+    "random_state": 0,
+    "engine_requested": "auto",
+    "engine_resolved": "cuml",
+    "libraries": {
+      "cuml": "26.8.0",
+      "hdbscan": "0.8.44",
+      "joblib": "1.5.3",
+      "numpy": "2.4.6",
+      "optuna": "4.9.0",
+      "pynndescent": "0.6.0",
+      "scikit-learn": "1.9.0",
+      "scipy": "1.18.0",
+      "umap-learn": "0.5.12"
+    },
+    "python": "3.12.3",
+    "config": {
+      "alpha": 0.05,
+      "check_backends": false,
+      "consensus_budget_bytes": 536870912,
+      "consensus_check_rows": 4096,
+      "gap_family": "gaussian_copula",
+      "min_improvement": 0.01,
+      "n_complete_pruned": 3,
+      "n_explore": 16,
+      "n_null_max": 19,
+      "n_null_rescore": 3,
+      "n_resamples": 3,
+      "n_rescore": 3,
+      "n_trials": 48,
+      "n_worlds": 32,
+      "null_exceedances": 3,
+      "null_families": [],
+      "null_procedure": "exploration",
+      "patience": 16,
+      "prune": true,
+      "resample_fraction": 0.8,
+      "scaling": "standard",
+      "space": {
+        "min_cluster_size": null,
+        "min_dist": [
+          0.0,
+          0.5
+        ],
+        "min_samples_fraction": [
+          0.05,
+          1.0
+        ],
+        "n_components": [
+          2,
+          10
+        ],
+        "n_neighbors": [
+          5,
+          100
+        ],
+        "selection_method": [
+          "eom",
+          "leaf"
+        ]
+      },
+      "world_fraction": 0.8
+    },
+    "hardware_in_tutorial": "laptop NVIDIA RTX 3060 with RAPIDS cuML (docs/tutorial/apogee.md)"
+  },
+  "table": {
+    "path": "bench/data/stellar_chemokinematics_apogee_dr19.npz",
+    "loaded_with": "bench.datasets.example_table()",
+    "sha256": "5bd5c78bd1eadaf5d38801fda962c8433922d67bc18aa20a44ea6c47023d411a",
+    "sha256_in_note": "5bd5c78bd1eadaf5d38801fda962c8433922d67bc18aa20a44ea6c47023d411a",
+    "note": "bench/data/stellar_chemokinematics_apogee_dr19.md",
+    "rows": 9242,
+    "columns": [
+      "fe_h",
+      "alpha_m",
+      "mg_fe",
+      "J_R",
+      "J_z",
+      "L_z",
+      "ecc",
+      "E"
+    ],
+    "values": "float32 as stored in the table, unchanged",
+    "use": "The provenance note calls the bundled table a convenience and says not to use it for scientific work; anything citable must be rebuilt from APOGEE and Gaia."
+  },
+  "map": {
+    "call": "starfold.backend.fit_pipeline(x, result.deployed_params, seed=derive_seed(0, 4), engine='cuml', scaling='standard')",
+    "check": "the refit's labels equal the recorded labels for every star",
+    "seed": 1874364848,
+    "libraries": {
+      "cuml-cu13": "26.8.0",
+      "umap-learn": "0.5.12",
+      "hdbscan": "0.8.44",
+      "numpy": "2.4.6",
+      "scikit-learn": "1.9.0"
+    }
+  },
+  "calibration": {
+    "path": "bench/results/apogee_null.json",
+    "sha256": "6cf952562779b886b5e121afb03e4292068ce284f94dbb9c462ffaa8f8a32c99",
+    "run_by": "python -m bench.null_stage (docs/tutorial/apogee-checks.md, step 10)",
+    "record_input": "output/examples/apogee_dr19/result",
+    "record_input_arrays_identical_to_run": true,
+    "check": "the record's observed statistic equals the run's exploration_max exactly",
+    "attached_to_run": "no; attaching it with --update-result would add the flag no_structure_supported"
+  },
+  "derived": {
+    "refit matches": "each group's match is the refit group with the largest Jaccard index, ties to the lowest id (as for recurrence); a refit group matched to no group has no counterpart",
+    "examples": [
+      "the member of group 0 nearest, in the eight standardised columns, to the group's median over the refits",
+      "the member of group 1 nearest, in the eight standardised columns, to the group's median over the refits",
+      "the star whose second-largest support for a group is the largest of all stars",
+      "the unassigned star with the median unresolved share among unassigned stars"
+    ],
+    "column statistics": "mean, standard deviation (ddof 0) and linear percentiles over all stars"
+  },
+  "credits": [
+    "APOGEE DR19, SDSS-V: SDSS Collaboration 2025, arXiv:2507.07093",
+    "ASPCAP abundances in DR19: Meszaros et al. 2025, AJ 170, 96, doi:10.3847/1538-3881/ade4b9",
+    "ASPCAP method: Abdurro'uf et al. 2022, ApJS 259, 35, doi:10.3847/1538-4365/ac4414",
+    "Gaia DR3: Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1, doi:10.1051/0004-6361/202243940",
+    "galpy: Bovy 2015, ApJS 216, 29, doi:10.1088/0067-0049/216/2/29",
+    "McMillan17 potential: McMillan 2017, MNRAS 465, 76, doi:10.1093/mnras/stw2759",
+    "UMAP: McInnes, Healy and Melville 2018, arXiv:1802.03426",
+    "HDBSCAN: Campello, Moulavi and Sander 2013, doi:10.1007/978-3-642-37456-2_14",
+    "Optuna: Akiba et al. 2019, arXiv:1907.10902"
+  ],
+  "licence": "Starfold and its outputs: MIT. Gaia data: ESA/Gaia/DPAC, CC BY-SA 3.0 IGO; the files derived from them are shared under the same licence. APOGEE data: public SDSS data, credited as above.",
+  "files": {
+    "apogee_run.bin": "f72ff1bff3532705a85a83f1ba07b341d29d5f524bfd834bc91f4b1333dd74ff",
+    "apogee_run.json": "295915973229c28245bc39b07ec5e821ebe28cb2cb0b47bd8d91652f636ffea4"
+  }
+}

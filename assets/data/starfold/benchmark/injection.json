@@ -1,0 +1,172 @@
+[
+ {
+  "rows_per_group": 30,
+  "n_real_rows": 2000,
+  "n_injected_rows": 90,
+  "contrast": 1.0,
+  "retrieval_rate": 0.0,
+  "group_size_over_scale": 0.15154704608481648,
+  "by_threshold": [
+   {
+    "threshold": 0.0,
+    "purity": 0.04010537636668734,
+    "completeness": 0.8777777777777778,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.5,
+    "purity": 0.04221299180800738,
+    "completeness": 0.8666666666666667,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.8,
+    "purity": 0.06637069334211414,
+    "completeness": 0.8222222222222223,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.9,
+    "purity": 0.04216867469879518,
+    "completeness": 0.07777777777777778,
+    "groups_with_a_match": 2
+   }
+  ]
+ },
+ {
+  "rows_per_group": 60,
+  "n_real_rows": 2000,
+  "n_injected_rows": 180,
+  "contrast": 2.0,
+  "retrieval_rate": 0.0,
+  "group_size_over_scale": 0.29677162009769875,
+  "by_threshold": [
+   {
+    "threshold": 0.0,
+    "purity": 0.08739183521792217,
+    "completeness": 0.8555555555555556,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.5,
+    "purity": 0.09144647571114894,
+    "completeness": 0.8166666666666668,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.8,
+    "purity": 0.1801075268817204,
+    "completeness": 0.06666666666666667,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.9,
+    "purity": null,
+    "completeness": 0.0,
+    "groups_with_a_match": 0
+   }
+  ]
+ },
+ {
+  "rows_per_group": 120,
+  "n_real_rows": 2000,
+  "n_injected_rows": 360,
+  "contrast": 4.0,
+  "retrieval_rate": 1.0,
+  "group_size_over_scale": 0.570459226249834,
+  "by_threshold": [
+   {
+    "threshold": 0.0,
+    "purity": 0.7404790152606546,
+    "completeness": 0.8555555555555556,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.5,
+    "purity": 0.7481639344262294,
+    "completeness": 0.5138888888888888,
+    "groups_with_a_match": 2
+   },
+   {
+    "threshold": 0.8,
+    "purity": 1.0,
+    "completeness": 0.005555555555555556,
+    "groups_with_a_match": 1
+   },
+   {
+    "threshold": 0.9,
+    "purity": null,
+    "completeness": 0.0,
+    "groups_with_a_match": 0
+   }
+  ]
+ },
+ {
+  "rows_per_group": 240,
+  "n_real_rows": 2000,
+  "n_injected_rows": 720,
+  "contrast": 8.0,
+  "retrieval_rate": 1.0,
+  "group_size_over_scale": 1.0627378626481143,
+  "by_threshold": [
+   {
+    "threshold": 0.0,
+    "purity": 0.7337472878800618,
+    "completeness": 0.9444444444444443,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.5,
+    "purity": 0.8152176496232081,
+    "completeness": 0.9375,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.8,
+    "purity": 0.9222850893875998,
+    "completeness": 0.5277777777777778,
+    "groups_with_a_match": 2
+   },
+   {
+    "threshold": 0.9,
+    "purity": 0.9767441860465116,
+    "completeness": 0.0763888888888889,
+    "groups_with_a_match": 2
+   }
+  ]
+ },
+ {
+  "rows_per_group": 480,
+  "n_real_rows": 2000,
+  "n_injected_rows": 1440,
+  "contrast": 16.0,
+  "retrieval_rate": 1.0,
+  "group_size_over_scale": 1.8899981542995785,
+  "by_threshold": [
+   {
+    "threshold": 0.0,
+    "purity": 0.9219145652858658,
+    "completeness": 0.9125,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.5,
+    "purity": 0.9330249578325954,
+    "completeness": 0.9111111111111111,
+    "groups_with_a_match": 3
+   },
+   {
+    "threshold": 0.8,
+    "purity": 0.939484126984127,
+    "completeness": 0.638888888888889,
+    "groups_with_a_match": 2
+   },
+   {
+    "threshold": 0.9,
+    "purity": 0.9652281614572911,
+    "completeness": 0.5763888888888888,
+    "groups_with_a_match": 2
+   }
+  ]
+ }
+]

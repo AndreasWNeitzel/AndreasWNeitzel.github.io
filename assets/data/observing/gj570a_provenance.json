@@ -1,0 +1,65 @@
+{
+ "source": {
+  "record": "https://doi.org/10.5281/zenodo.17236515",
+  "version_doi": "10.5281/zenodo.17236516",
+  "file": "ts_HD_131977",
+  "md5": "4675c3bf88dad84930a654a4422b6199",
+  "licence": "CC BY 4.0",
+  "creator": "Campante, Tiago L.",
+  "paper": "Campante et al. 2026, A&A, doi:10.1051/0004-6361/202660350",
+  "programme": "ESO 0113.D-0255(B)"
+ },
+ "paper_values_used": {
+  "numax_uHz": 4705,
+  "numax_err_uHz": 105,
+  "numax_where": "Sect. 4.1",
+  "dnu_uHz": 197.29,
+  "dnu_where": "Table 1",
+  "sigma_rv_cms": 46,
+  "sigma_rv_where": "Sect. 2",
+  "exposure_s": 25,
+  "exposure_where": "Sect. 2",
+  "amp_cms": 2.57,
+  "amp_where": "Table 1",
+  "white_cms": 1.51
+ },
+ "selection": "FLUX_CORR_CHECK == 1",
+ "n_rows": 2369,
+ "n_used": 2250,
+ "nights": [
+  {
+   "n": 469,
+   "start_utc": "2024-05-08T01:39+00:00"
+  },
+  {
+   "n": 571,
+   "start_utc": "2024-05-08T23:55+00:00"
+  },
+  {
+   "n": 157,
+   "start_utc": "2024-05-09T23:47+00:00"
+  },
+  {
+   "n": 511,
+   "start_utc": "2024-05-11T00:25+00:00"
+  },
+  {
+   "n": 542,
+   "start_utc": "2024-05-11T23:46+00:00"
+  }
+ ],
+ "median_cadence_s": 60.8,
+ "mean_rv_err_cms": 45.6,
+ "median_rv_kms": 27.0001,
+ "rms_detrended_cms": 55.4,
+ "detrend": "per night, minus a weighted triangular smoothing of half-width 1.2 h",
+ "spectrum": "weighted least-squares sine fits, weights 1/RV_ERR^2, 1 microhertz grid, power = amplitude^2",
+ "white_noise": {
+  "mean_amplitude_6_8_mHz_cms": 1.547,
+  "mean_power_6_8_mHz_cms2": 3.108
+ },
+ "smooth": "Gaussian, FWHM = 4 x 197.29 microhertz, edge-corrected",
+ "smooth_peak_uHz": 4694.0,
+ "display": "raw power: highest value per display column; smooth curve and noise level x3, as in the paper's Fig. 3",
+ "script": "figures/observing/build_espresso_output.py"
+}

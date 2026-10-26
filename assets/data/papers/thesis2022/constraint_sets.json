@@ -1,0 +1,210 @@
+{
+ "quantity": "median relative uncertainty, per cent",
+ "stars": "ten F-G-K seismic planet hosts from the Ariel input catalogue (identities withheld)",
+ "published_inputs": {
+  "spec": {
+   "age": 28.8,
+   "mass": 5.3
+  },
+  "spec+dnu": {
+   "age": 8.4,
+   "mass": 1.5
+  },
+  "spec+numax": {
+   "age": 9.1,
+   "mass": 2.3
+  },
+  "spec+dnu+numax": {
+   "age": 7.7,
+   "mass": 1.5
+  },
+  "specphot": {
+   "age": 9.2,
+   "mass": 1.2
+  },
+  "specphot+dnu": {
+   "age": 9.8,
+   "mass": 1.1
+  },
+  "specphot+numax": {
+   "age": 8.9,
+   "mass": 2.0
+  },
+  "specphot+dnu+numax": {
+   "age": 8.7,
+   "mass": 2.0
+  }
+ },
+ "published_inputs_no_logg": {
+  "spec": {
+   "age": 38.3,
+   "mass": 5.9
+  },
+  "spec+dnu": {
+   "age": 8.6,
+   "mass": 1.5
+  },
+  "spec+numax": {
+   "age": 9.1,
+   "mass": 2.4
+  },
+  "spec+dnu+numax": {
+   "age": 7.9,
+   "mass": 1.6
+  },
+  "specphot": {
+   "age": 9.1,
+   "mass": 1.2
+  },
+  "specphot+dnu": {
+   "age": 9.8,
+   "mass": 1.2
+  },
+  "specphot+numax": {
+   "age": 8.9,
+   "mass": 2.0
+  },
+  "specphot+dnu+numax": {
+   "age": 8.7,
+   "mass": 2.0
+  }
+ },
+ "inflated_inputs": {
+  "spec": {
+   "age": 34.1,
+   "mass": 5.9
+  },
+  "specphot": {
+   "age": 22.0,
+   "mass": 3.9
+  },
+  "spec+dnu+numax": {
+   "age": 19.0,
+   "mass": 4.1
+  },
+  "specphot+dnu+numax": {
+   "age": 14.1,
+   "mass": 3.3
+  }
+ },
+ "inflated_inputs_no_logg": {
+  "spec": {
+   "age": 37.2,
+   "mass": 6.5
+  },
+  "specphot": {
+   "age": 24.1,
+   "mass": 4.1
+  },
+  "spec+dnu+numax": {
+   "age": 19.1,
+   "mass": 4.3
+  },
+  "specphot+dnu+numax": {
+   "age": 14.1,
+   "mass": 3.3
+  }
+ },
+ "input_uncertainties": {
+  "ten_ariel_stars": {
+   "teff_K": 33.5,
+   "feh_dex": 0.02,
+   "dnu_pct": 1.0,
+   "numax_pct": 3.1
+  },
+  "33_kepler_hosts": {
+   "teff_K": 75,
+   "feh_dex": 0.1,
+   "dnu_pct": 1.0,
+   "numax_pct": 3.2
+  },
+  "magrini_2022": {
+   "teff_K": 80,
+   "feh_dex": 0.12
+  }
+ },
+ "code_comparison": {
+  "PARAM": {
+   "mass": 4.9,
+   "age": 26.0
+  },
+  "BASTA": {
+   "mass": 2.7,
+   "age": 11.6,
+   "bias_mass": [
+    0.2,
+    0.7
+   ],
+   "bias_age": [
+    -5.2,
+    3.6
+   ]
+  },
+  "ASTFIT": {
+   "mass": 2.8,
+   "age": 14.6,
+   "bias_mass": [
+    0.6,
+    0.7
+   ],
+   "bias_age": [
+    -12.0,
+    3.3
+   ]
+  },
+  "YMCM": {
+   "mass": 3.4,
+   "age": 9.6,
+   "bias_mass": [
+    -2.2,
+    0.6
+   ],
+   "bias_age": [
+    0.0,
+    3.8
+   ]
+  },
+  "AMP": {
+   "mass": 3.0,
+   "age": 12.8,
+   "bias_mass": [
+    0.9,
+    1.0
+   ],
+   "bias_age": [
+    -3.8,
+    4.1
+   ]
+  }
+ },
+ "self_consistency": {
+  "cluster": {
+   "mass": [
+    1.1,
+    4.1
+   ],
+   "age": [
+    7.9,
+    43.6
+   ],
+   "radius": [
+    0.8,
+    2.0
+   ]
+  },
+  "same_track": {
+   "mass": [
+    0.7,
+    4.5
+   ],
+   "age": [
+    3.4,
+    28.2
+   ],
+   "radius": [
+    0.6,
+    2.1
+   ]
+  }
+ }
+}

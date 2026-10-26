@@ -1,0 +1,14 @@
+{
+ "source": "Neitzel, A. W. 2022, Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog, MSc dissertation, Faculdade de Ci\u00eancias da Universidade do Porto, hdl:10216/147245",
+ "handle": "https://hdl.handle.net/10216/147245",
+ "tables": {
+  "constraint sets, published input uncertainties": "Table 6.8 (PDF page 109, printed page 81)",
+  "constraint sets, inflated input uncertainties": "Table 6.18 (PDF page 115, printed page 87)",
+  "input uncertainties compared": "Table 6.17 (PDF page 115, printed page 87)",
+  "code comparison, median relative uncertainties": "Table 6.4 (PDF page 97, printed page 69)",
+  "code comparison, bias": "Table 6.3 (PDF page 96, printed page 68)",
+  "self-consistency": "Table 5.1 (PDF page 89, printed page 61)"
+ },
+ "transcribed": "2026-10-26, by hand from the dissertation PDF; per-star values deliberately not copied",
+ "units": "per cent; bias entries are [value, uncertainty] in per cent"
+}

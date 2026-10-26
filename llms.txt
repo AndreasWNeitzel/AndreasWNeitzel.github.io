@@ -1,18 +1,37 @@
 # Andreas W. Neitzel
 
-> PhD candidate in astronomy at IA/CAUP (Instituto de Astrofísica e Ciências do Espaço), University of Porto. Develops machine-learning methods for Galactic archaeology, focused on disentangling Milky Way stellar populations using *Gaia* BP/RP spectra and asteroseismic age priors. First author on Neitzel et al. 2025 (A&A 695, A243), which introduces a manifold-learning pipeline (UMAP + HDBSCAN) for chemodynamic separation of stellar populations on a synthetic Milky Way-like galaxy. Co-Investigator and lead developer of the ML pipelines for the FCT Exploratory Project ArqueoGal (2024.15303.PEX), which is extending the Neitzel 2025 method to real *Gaia* DR3 observations. Publications span manifold-learning methods, cool-dwarf asteroseismology with ESPRESSO, and stellar characterisation for the ESA *Ariel* mission.
+> PhD researcher in astrophysics and machine learning at IA (Instituto de Astrofísica e Ciências do Espaço) and the University of Porto. Builds neural networks and unsupervised methods that read stellar chemistry, ages and populations from Gaia XP spectra and asteroseismic data, for Galactic archaeology. First author of Neitzel et al. 2025 (A&A 695, A243). Co-author of Campante et al. 2026 (A&A, doi:10.1051/0004-6361/202660350), for which he carried out the GJ 570 A observations with ESPRESSO at ESO's Very Large Telescope in May 2024, as visiting astronomer for the principal investigator T. L. Campante. Responsible investigator on two approved FCT advanced-computing allocations (MareNostrum 5 and Deucalion, 2026). Co-investigator (team member) on the FCT exploratory project ArqueoGal (2024.15303.PEX). Six-month secondment at INAF-OAS Bologna (2025 to 2026) building simulations for the proposed HAYDN mission. Author of Starfold, an open-source Python package for label-free group recovery with reliability flags.
 
-## Research
+## Pages
 
-- [Publications](https://andreaswneitzel.github.io/publications/): full list with DOI and ADS links
-- [Neitzel et al. 2025, A&A 695, A243](https://doi.org/10.1051/0004-6361/202451718) ([arXiv:2501.16294](https://arxiv.org/abs/2501.16294)): first-author paper introducing manifold learning (UMAP + HDBSCAN) for chemodynamic stellar-population separation on a synthetic Milky Way-like galaxy
-- [Campante et al. 2024, A&A 683, L16](https://doi.org/10.1051/0004-6361/202449197): co-author; expanding cool-dwarf asteroseismology with ESPRESSO
-- [Magrini et al. 2022, A&A 663, A161](https://doi.org/10.1051/0004-6361/202243405): co-author; *Ariel* stellar characterisation of 187 FGK planet hosts
+- [Home](https://andreaswneitzel.github.io/): profile, highlights, research pipeline, track record, travel map and timeline
+- [Publications](https://andreaswneitzel.github.io/publications/): refereed papers with DOI and arXiv links and the contribution to each
+- [Paper explainers](https://andreaswneitzel.github.io/publications/#explainers): plain-language summaries of each paper
+- [Observing at the Very Large Telescope](https://andreaswneitzel.github.io/observing/paranal/): the May 2024 ESPRESSO run at Paranal
+- [Software and demos](https://andreaswneitzel.github.io/software/): Starfold, Stellar Explorer, Tellurion and the demos
+- [Neural-network playground](https://andreaswneitzel.github.io/playground/neural-network/): a small network trained in the browser on Gaia DR3 XP spectra (teaching demo)
+- [Orbits playground](https://andreaswneitzel.github.io/playground/orbits/): leapfrog, Runge-Kutta and Euler integrators around the Earth (Molniya and geostationary satellites with ground-station visibility) and in MWPotential2014 for six Gaia DR3 stars
+- [Gaussian-process playground](https://andreaswneitzel.github.io/playground/gaussian-processes/): kernels, conditioning and the marginal likelihood, then a quasi-periodic Gaussian process with jitter sampled by Metropolis on the 223 HARPS velocities of HD 41248 (Jenkins and Tuomi 2014)
+- [Polytrope playground](https://andreaswneitzel.github.io/playground/polytropes/): Lane-Emden solved in the browser, scaled to the Sun, 61 Virginis and GJ 504, compared with a MESA profile
+- [Starfold held-out benchmark](https://andreaswneitzel.github.io/software/starfold-benchmark/): the ten-table benchmark, including the two held-out tables it lost
+- [Talks and posters](https://andreaswneitzel.github.io/talks/): international and national talks and posters with Zenodo DOIs
+- [Field guide](https://andreaswneitzel.github.io/guide/): short explainers of Galactic archaeology, asteroseismology, Gaia, ESO, INAF, IA and FCT, HAYDN, TESS and Kepler, and supercomputers
+- [CV](https://andreaswneitzel.github.io/cv/): funding, computing allocations, education, positions, observing, service and teaching, with a two-page PDF
+
+## Publications
+
+- [Neitzel et al. 2025, A&A 695, A243](https://doi.org/10.1051/0004-6361/202451718) ([arXiv:2501.16294](https://arxiv.org/abs/2501.16294)): first author; manifold learning (UMAP and HDBSCAN) separates thin-disc, thick-disc, halo and accreted populations in a simulated Milky Way-like galaxy
+- [Campante et al. 2026, A&A](https://doi.org/10.1051/0004-6361/202660350) ([arXiv:2610.20985](https://arxiv.org/abs/2610.20985)): co-author, 6 of 24; ESPRESSO asteroseismology of the K dwarfs GJ 570 A and GJ 783 A; carried out the GJ 570 A observations
+- [Campante et al. 2024, A&A 683, L16](https://doi.org/10.1051/0004-6361/202449197): co-author; solar-like oscillations in the K5 dwarf epsilon Indi with ESPRESSO; Bayes-factor test for a power excess (Appendix D)
+- [MSc dissertation, 2022](https://andreaswneitzel.github.io/papers/neitzel-2022-msc-thesis/): Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog, University of Porto, hdl:10216/147245, with a plain-language explainer
+- [Magrini et al. 2022, A&A 663, A161](https://doi.org/10.1051/0004-6361/202243405): co-author; Ariel stellar characterisation of 187 FGK planet hosts; PARAM runs for a subset of the sample
 
 ## Software
 
-- [ArqueoGal](https://github.com/AndreasWNeitzel/ArqueoGal): FCT Exploratory Project 2024.15303.PEX. Extends the Neitzel 2025 method to real *Gaia* DR3 observations; open-source release scheduled December 2026
-- [Stellar Explorer](https://andreaswneitzel.github.io/stellar-explorer/): browser-based interactive exploration of the stellar populations analysed in Neitzel 2025
+- [Starfold](https://github.com/AndreasWNeitzel/starfold): Python package, MIT, release 0.2.0 (2026-10-19); [manual](https://andreaswneitzel.github.io/Starfold/)
+- [Stellar Explorer](https://andreaswneitzel.github.io/stellar-explorer/): browser app for a MESA r24.08.1 plus GYRE track of a one-solar-mass star
+- [HAYDNsim](https://andreaswneitzel.github.io/software/haydnsim/): simulation pipeline for the proposed HAYDN mission (private repository); synthetic crowded clusters and per-star noise forecasts, presented at TASC10/KASC17 2026
+- [Tellurion](https://tellurion.dev/): a separate website of interactive physics and astronomy simulations that I wrote as a teaching resource (MIT); summary at https://andreaswneitzel.github.io/software/tellurion/
 
 ## Identity
 
@@ -21,13 +40,4 @@
 - [NASA ADS author search](https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&sort=date%20desc)
 - [GitHub](https://github.com/AndreasWNeitzel)
 - [LinkedIn](https://www.linkedin.com/in/andreaswneitzel)
-
-## About
-
-- [About page](https://andreaswneitzel.github.io/)
-- [CV (PDF)](https://andreaswneitzel.github.io/assets/pdf/CV_Neitzel_Academic_Public.pdf)
 - Contact: andreaswneitzel@gmail.com
-
-## Keywords
-
-Galactic archaeology; Milky Way; stellar populations; manifold learning; UMAP; HDBSCAN; *Gaia* BP/RP spectra; *Gaia* DR3; chemodynamics; chrono-chemo-kinematic analysis; asteroseismology; cool dwarfs; ESPRESSO; ESA *Ariel*; machine learning; PyTorch; RAPIDS.

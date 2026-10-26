@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Build a star, Andreas W. Neitzel</title>
+<meta name="description" content="Solve the Lane-Emden equation in your browser, scale the polytrope to the Sun, 61 Vir or GJ 504, infer its index from the luminosity with a Monte Carlo over the published uncertainties, and see where it departs from a MESA model.">
+<link rel="canonical" href="https://andreaswneitzel.github.io/playground/polytropes/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#05070d">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6fa">
+<link rel="preload" href="/assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/geist-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/vendor/katex/katex.min.css">
+<link rel="alternate" type="application/atom+xml" title="Andreas W. Neitzel" href="/feed.xml"><meta property="og:type" content="article">
+<meta property="og:title" content="Build a star">
+<meta property="og:description" content="Solve the Lane-Emden equation in your browser, scale the polytrope to the Sun, 61 Vir or GJ 504, infer its index from the luminosity with a Monte Carlo over the published uncertainties, and see where it departs from a MESA model.">
+<meta property="og:url" content="https://andreaswneitzel.github.io/playground/polytropes/">
+<meta property="og:site_name" content="Andreas W. Neitzel">
+<meta property="og:image" content="https://andreaswneitzel.github.io/assets/img/og-vlt.jpg">
+<meta property="og:image:alt" content="Andreas W. Neitzel on the platform of ESO's Very Large Telescope at Paranal at sunset">
+<meta name="twitter:card" content="summary_large_image">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+
+</head>
+<body class="">
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+  <symbol id="i-orcid" viewBox="0 0 24 24"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.097-3.722h-2.222z"/></symbol>
+  <symbol id="i-scholar" viewBox="0 0 24 24"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><g class="i-stroke"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></g></symbol>
+  <symbol id="i-ads" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4 19V6.5A1.5 1.5 0 0 1 5.5 5H9v14H5.5A1.5 1.5 0 0 0 4 20.5"/><path d="M9 5h3.5v14H9"/><path d="M14.2 6.2l3.2-.9 3.4 12.6-3.2.9z"/></g></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><g class="i-stroke"><path d="M12 4v11"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M5 19.5h14"/></g></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><g class="i-stroke"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><g class="i-stroke"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></g></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><g class="i-stroke"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></g></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><g class="i-stroke"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></g></symbol>
+  <symbol id="i-nn" viewBox="0 0 24 24"><g class="i-stroke"><circle cx="4" cy="6" r="1.6"/><circle cx="4" cy="12" r="1.6"/><circle cx="4" cy="18" r="1.6"/><circle cx="12" cy="8.5" r="1.6"/><circle cx="12" cy="15.5" r="1.6"/><circle cx="20" cy="12" r="1.6"/><path d="M5.5 6.5l5 1.6M5.5 11.4l5-2.4M5.5 12.6l5 2.4M5.5 17.5l5-1.6M13.5 9l5 2.4M13.5 15l5-2.4"/></g></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><g class="i-stroke"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></g></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><g class="i-stroke"><ellipse cx="12" cy="5.5" rx="7" ry="2.8"/><path d="M5 5.5v6.5c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V5.5"/><path d="M5 12v6.5c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V12"/></g></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4-5"/><path d="M4 19.5h16"/></g></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><g class="i-stroke"><path d="M8.5 7L3.5 12l5 5"/><path d="M15.5 7l5 5-5 5"/><path d="M13.5 4.5l-3 15"/></g></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><g class="i-stroke"><path d="M12 3.5l1.9 6.6 6.6 1.9-6.6 1.9L12 20.5l-1.9-6.6L3.5 12l6.6-1.9z"/></g></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4 20V4"/><path d="M4 20h16"/><path d="M7 15l3.5-4 3 2.5 5-6.5"/></g></symbol>
+  <symbol id="i-telescope" viewBox="0 0 24 24"><g class="i-stroke"><path d="M3.5 13.5l13-6 1.5 3.3-13 6z"/><path d="M16.5 7.5l2.6-1.2 1.5 3.3-2.6 1.2"/><path d="M10.5 15.2L8 21M12 14.5l2.5 6.5"/></g></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><g class="i-stroke"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.3 3.8 5.2 3.8 8.5s-1.2 6.2-3.8 8.5c-2.6-2.3-3.8-5.2-3.8-8.5s1.2-6.2 3.8-8.5z"/></g></symbol>
+  <symbol id="m-gaia" viewBox="0 0 24 24"><g class="i-stroke"><ellipse cx="12" cy="16.6" rx="10.2" ry="3"/><path d="M8.2 16V9.6M15.8 16V9.6"/><ellipse cx="12" cy="9.6" rx="3.8" ry="1.5"/><path d="M12 8.1V5.4"/></g></symbol>
+  <symbol id="m-kepler" viewBox="0 0 24 24"><g class="i-stroke"><path d="M8.6 6.8h7v12.4h-7z"/><ellipse cx="12.1" cy="6.8" rx="3.5" ry="1.4"/><path d="M8.6 7.6L4.6 5.2v15.2l4-2.4"/><path d="M15.6 10.2h3.8v6h-3.8"/></g></symbol>
+  <symbol id="m-tess" viewBox="0 0 24 24"><g class="i-stroke"><path d="M9.4 10.4h5.2v7.8H9.4z"/><path d="M2.6 11.8h6.8v4.6H2.6zM14.6 11.8h6.8v4.6h-6.8z"/><path d="M9.8 8.2h.9v2.2h-.9zM11.5 8.2h.9v2.2h-.9zM13.2 8.2h.9v2.2h-.9z"/></g></symbol>
+  <symbol id="m-ariel" viewBox="0 0 24 24"><g class="i-stroke"><ellipse cx="11" cy="6.6" rx="5.2" ry="2.5"/><path d="M11 9.1v2.3"/><path d="M6.4 12.3h9.2M5 15h12M3.6 17.7h14.8"/><path d="M18.4 6.2h3.2v5.2h-3.2z"/></g></symbol>
+  <symbol id="m-haydn" viewBox="0 0 24 24"><g class="i-stroke"><circle cx="12" cy="12" r="8.8"/><rect x="12.4" y="12.4" width="5.6" height="5.6" rx="1"/></g><g class="m-field"><circle cx="15.2" cy="15.2" r="1.7"/><circle cx="8.6" cy="9.4" r="1.5"/><circle cx="12.6" cy="7.6" r="1.1"/><circle cx="16.4" cy="9.6" r="1"/><circle cx="7.6" cy="14.4" r="1.1"/><circle cx="10.8" cy="12.2" r="0.9"/><circle cx="10.4" cy="17.2" r="0.9"/></g></symbol>
+  <symbol id="i-brand" viewBox="0 0 32 32"><g fill="currentColor"><circle cx="19.84" cy="14.29" r="0.42"/><circle cx="20.56" cy="15.75" r="0.62"/><circle cx="20.69" cy="17.85" r="0.77"/><circle cx="19.76" cy="20.16" r="0.92"/><circle cx="17.64" cy="22.03" r="1.04"/><circle cx="14.60" cy="22.82" r="1.15"/><circle cx="11.28" cy="22.13" r="1.22"/><circle cx="8.45" cy="19.99" r="1.25"/><circle cx="6.68" cy="16.84" r="1.23"/><circle cx="6.20" cy="13.31" r="1.16"/><circle cx="6.87" cy="9.99" r="1.06"/><circle cx="12.17" cy="3.78" r="0.58"/><circle cx="13.94" cy="2.92" r="0.42"/><circle cx="15.44" cy="2.41" r="0.42"/><circle cx="16.99" cy="2.08" r="0.42"/><circle cx="18.57" cy="1.92" r="0.42"/><circle cx="12.16" cy="17.71" r="0.42"/><circle cx="11.44" cy="16.25" r="0.62"/><circle cx="11.31" cy="14.15" r="0.77"/><circle cx="17.40" cy="9.18" r="1.15"/><circle cx="20.72" cy="9.87" r="1.22"/><circle cx="23.55" cy="12.01" r="1.25"/><circle cx="25.32" cy="15.16" r="1.23"/><circle cx="25.80" cy="18.69" r="1.16"/><circle cx="25.13" cy="22.01" r="1.06"/><circle cx="23.66" cy="24.76" r="0.92"/><circle cx="21.78" cy="26.82" r="0.76"/><circle cx="19.83" cy="28.22" r="0.58"/><circle cx="18.06" cy="29.08" r="0.42"/><circle cx="16.56" cy="29.59" r="0.42"/><circle cx="15.01" cy="29.92" r="0.42"/><circle cx="13.43" cy="30.08" r="0.42"/><ellipse cx="16" cy="16" rx="3.35" ry="2.2" transform="rotate(-24.0 16 16)"/><circle cx="11.60" cy="8.15" r="2.25" fill="none" stroke="currentColor" stroke-width="1.05"/><circle cx="11.60" cy="8.15" r="0.75"/></g></symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="/publications/">Publications</a>
+      <a href="/software/">Software</a>
+      <a href="/talks/">Talks</a>
+      <a href="/guide/">Guide</a>
+      <a href="/cv/">CV</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <a class="btn btn--primary btn--sm" href="/assets/pdf/cv_neitzel_academic_summary.pdf"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap">
+  <header class="page-head"><p class="crumbs"><a href="/software/">Software</a></p>
+    <h1>Build a star</h1>
+    <p class="lede">Solve the Lane-Emden equation here in your browser, scale the result to a real star and see where a polytrope stops describing one.</p>
+  </header>
+  <link rel="stylesheet" href="/assets/css/playground.css" />
+
+<link rel="stylesheet" href="/assets/css/polytrope-playground.css" />
+
+<div class="pg-page">
+<p class="pg-intro">A polytrope assumes one relation between pressure and density, <span class="tex" data-tex="P = K\rho^{1 + 1/n}">P = Kρ^(1 + 1/n)</span>. Solved for an index <span class="tex" data-tex="n">n</span> and scaled to a star's mass and radius, it gives the run of density, pressure and temperature, and hydrogen burning in that structure gives a luminosity to match against the observed one.</p>
+
+<section class="pg pt" id="pt-playground" aria-label="Polytrope playground" data-stars="/assets/data/playground/polytrope_stars.json" data-mesa="/assets/data/playground/mesa_1msun_profile.json">
+  <div class="pt-dash">
+    <div class="pt-ctrl">
+    <div class="pg-panel pg-run pt-run">
+      <label class="pg-field"><span class="pg-label">Star</span><span class="pg-select"><select name="star" class="pt-star" disabled=""><option>Loading</option></select></span></label>
+      <p class="pt-obs">Loading the star table.</p>
+      <div class="pg-buttons">
+        <button type="button" class="btn btn--primary btn--sm pt-draw" title="Sample M, R and L from their uncertainties" disabled="">Draw</button>
+        <button type="button" class="btn btn--sm pt-reset" title="Discard the draws" disabled="">Reset</button>
+      </div>
+      <div class="pg-live" aria-live="polite" aria-atomic="true">
+        <dl class="pg-readout">
+          <div><dt>n at L obs</dt><dd><span class="pt-nstar">&hellip;</span></dd></div>
+          <div><dt>L model at slider n</dt><dd><span class="pt-lmodel">&hellip;</span> <small>L&#9737;</small></dd></div>
+        </dl>
+        <p class="pg-state">Loading.</p>
+      </div>
+    </div>
+    <form class="pg-panel pg-settings pt-settings" aria-label="Polytrope settings">
+      <label class="pt-slider pt-slider--wide"><span class="pt-slider-head"><span class="pg-label">Polytropic index n</span><output>3.00</output></span><input type="range" name="n" min="0" max="4.9" step="0.01" value="3" disabled="" /></label>
+      <label class="pt-slider"><span class="pt-slider-head"><span class="pg-label">Mass (M&#9737;)</span><output>1.00</output></span><input type="range" name="M" min="0.5" max="2" step="0.01" value="1" disabled="" /></label>
+      <label class="pt-slider"><span class="pt-slider-head"><span class="pg-label">Radius (R&#9737;)</span><output>1.00</output></span><input type="range" name="R" min="0.5" max="2.5" step="0.01" value="1" disabled="" /></label>
+      <label class="pt-slider"><span class="pt-slider-head"><span class="pg-label">Hydrogen X</span><output>0.74</output></span><input type="range" name="X" min="0.5" max="0.8" step="0.01" value="0.7381" disabled="" /></label>
+      <label class="pt-slider"><span class="pt-slider-head"><span class="pg-label">Metals Z</span><output>0.013</output></span><input type="range" name="Z" min="0.001" max="0.04" step="0.001" value="0.0134" disabled="" /></label>
+      <p class="pg-hint">A star sets M, R, X and Z and moves n to the index at its luminosity; every slider move re-solves the model.</p>
+    </form>
+    </div>
+
+    <figure class="pg-panel panel pt-main">
+      <figcaption class="pg-head">
+        <span class="pg-title">Inside the star</span>
+        <span class="pg-key"><span><i class="k-poly"></i>polytrope</span><span class="pt-main-key" hidden=""><i class="k-mesa"></i>MESA model, 1 M&#9737; at 2.8 Gyr</span><span class="pt-main-key" hidden=""><i class="k-conv"></i>convective in MESA</span></span>
+      </figcaption>
+      <div class="pg-stage"><canvas role="img" aria-label="Density, temperature, pressure and energy generation against fractional radius"></canvas><div class="pg-tip" hidden=""></div></div>
+    </figure>
+
+    <figure class="pg-panel pt-curve">
+      <figcaption class="pg-head"><span class="pg-title">Model luminosity against index</span><span class="pg-key"><span><i class="k-obs"></i><span class="pt-curve-key">L obs</span></span></span></figcaption>
+      <div class="pg-stage"><canvas role="img" aria-label="Model luminosity in solar units on a log scale against the polytropic index from 0 to 4.9, with the observed luminosity marked"></canvas><div class="pg-tip" hidden=""></div></div>
+    </figure>
+
+    <figure class="pg-panel pt-hist">
+      <figcaption class="pg-head"><span class="pg-title">Index from the uncertainties</span><span class="pg-key pt-mc-key">no draws yet</span></figcaption>
+      <div class="pg-stage"><canvas role="img" aria-label="Histogram of the polytropic index over Monte Carlo draws of mass, radius and luminosity, with the median and the 68 per cent interval"></canvas></div>
+    </figure>
+  </div>
+
+  <section class="pg-panel pt-detail" aria-label="The solution and the energy generation">
+    <div class="pg-head"><span class="pg-title">The solution behind the picture</span></div>
+    <p class="pt-facts">Solving.</p>
+    <div class="pg-pair">
+      <figure class="pg-sub pt-theta">
+        <div class="pg-stage"><canvas role="img" aria-label="The Lane-Emden solution theta against xi for the chosen index, with the exact solutions for n = 0, 1 and 5"></canvas></div>
+        <figcaption class="pg-caption"><span class="pt-check">Checking the solver against the exact solutions.</span></figcaption>
+      </figure>
+      <figure class="pg-sub pt-eps">
+        <div class="pg-stage"><canvas role="img" aria-label="Energy generation of the pp chain and the CNO cycle against fractional radius, with the fraction of the luminosity generated inside each radius"></canvas></div>
+        <figcaption class="pg-caption"><span class="pg-key"><span><i class="k-pp"></i>pp chain</span><span><i class="k-cno"></i>CNO cycle</span><span><i class="k-cum"></i>L inside r, right axis</span><span class="pt-main-key" hidden=""><i class="k-ana"></i>X in MESA, right axis</span></span> <span class="pt-share"></span></figcaption>
+      </figure>
+    </div>
+  </section>
+  <noscript><p class="pg-state">The playground needs JavaScript. The data it uses are described below.</p></noscript>
+</section>
+
+<details class="pg-more">
+  <summary>What you are looking at</summary>
+  <div class="prose">
+    <p>Writing <span class="tex" data-tex="\rho = \rho_c\,\theta^n">ρ = ρ_c θ^n</span> and measuring the radius in units of <span class="tex" data-tex="\alpha^2 = (n+1)K\rho_c^{1/n - 1}/(4\pi G)">α² = (n + 1)K ρ_c^(1/n − 1)/(4πG)</span> turns hydrostatic equilibrium and mass conservation into the Lane-Emden equation,</p>
+    <p><span class="tex tex-display" data-tex="\frac{1}{\xi^2}\frac{d}{d\xi}\left(\xi^2\frac{d\theta}{d\xi}\right) + \theta^n = 0,\qquad \theta(0) = 1,\quad \theta'(0) = 0.">(1/ξ²) d/dξ (ξ² dθ/dξ) + θ^n = 0, with θ(0) = 1 and θ′(0) = 0.</span></p>
+    <p>The solver integrates it by fourth-order Runge-Kutta from a series start, in steps of 0.01 that grow with ξ, and halves the last step until the first zero, ξ₁, is bracketed within 10⁻⁹. At n = 0 and n = 1 the equation has closed forms, θ = 1 − ξ²/6 and θ = sin ξ/ξ; at n = 5 the solution (1 + ξ²/3)^(−1/2) never reaches zero. The caption under the solution reports the comparison, and the tabulated values of Chandrasekhar (1939) for n = 1.5, 3 and 4 are reproduced to the printed digits (ξ₁ = 3.65375, 6.89685 and 14.97155).</p>
+    <p>With M and R the constants follow: <span class="tex" data-tex="\rho_c = \bar\rho\,\xi_1 / (3\,|\theta'(\xi_1)|)">ρ_c = ρ̄ ξ₁/(3|θ′(ξ₁)|)</span> with <span class="tex" data-tex="\bar\rho = 3M/(4\pi R^3)">ρ̄ = 3M/(4πR³)</span>, <span class="tex" data-tex="P_c = GM^2 / \big(4\pi R^4 (n+1)\,\theta'(\xi_1)^2\big)">P_c = GM²/(4πR⁴(n + 1)θ′(ξ₁)²)</span>, and the ideal gas with the mean molecular weight of a fully ionised mixture, <span class="tex" data-tex="\mu = 4/(3 + 5X - Z)">μ = 4/(3 + 5X − Z)</span>, gives <span class="tex" data-tex="T_c = \mu m_u P_c / (k \rho_c)">T_c = μ m_u P_c/(k ρ_c)</span>. Inside, ρ = ρ_c θ^n, P = P_c θ^(n+1) and T = T_c θ at r = R ξ/ξ₁. Radiation pressure, degeneracy and any change of composition with depth are left out: a polytrope has one μ throughout.</p>
+    <p>The energy generation is the pp chain plus the CNO cycle in the approximations of Kippenhahn, Weigert and Weiss (2012), eqs. (18.63) and (18.65), which fit the NACRE rates of Angulo et al. (1999): <span class="tex" data-tex="\varepsilon_{pp} = 2.57\times10^{4}\,\psi f_{11} g_{11}\,\rho X^2\, T_9^{-2/3}\, e^{-3.381\, T_9^{-1/3}}">ε_pp = 2.57 × 10⁴ ψ f₁₁ g₁₁ ρ X² T₉^(−2/3) exp(−3.381 T₉^(−1/3))</span> with <span class="tex" data-tex="g_{11} = 1 + 3.82\,T_9 + 1.51\,T_9^2 + 0.144\,T_9^3 - 0.0114\,T_9^4">g₁₁ = 1 + 3.82 T₉ + 1.51 T₉² + 0.144 T₉³ − 0.0114 T₉⁴</span>, and <span class="tex" data-tex="\varepsilon_{CNO} = 8.24\times10^{25}\, g_{14,1}\, X_{CNO} X \rho\, T_9^{-2/3}\, e^{-15.231\, T_9^{-1/3} - (T_9/0.8)^2}">ε_CNO = 8.24 × 10²⁵ g₁₄ X_CNO X ρ T₉^(−2/3) exp(−15.231 T₉^(−1/3) − (T₉/0.8)²)</span> with <span class="tex" data-tex="g_{14,1} = 1 - 2.00\,T_9 + 3.41\,T_9^2 - 2.43\,T_9^3">g₁₄ = 1 − 2.00 T₉ + 3.41 T₉² − 2.43 T₉³</span>, both in erg g⁻¹ s⁻¹ with ρ in g cm⁻³ and T₉ = T/10⁹ K. The page takes ψ = 1 (the pp I branch alone), f₁₁ = 1 (no screening) and X_CNO = 0.66 Z, the share of C, N and O among the metals in the solar mixture of Asplund et al. (2009). The luminosity is <span class="tex" data-tex="L = \int_0^R 4\pi r^2 \rho\,\varepsilon\, dr">L = ∫ 4πr² ρ ε dr</span> over the model, by Simpson's rule on 400 intervals.</p>
+    <p>The model luminosity rises steeply with n because the central temperature does, so one index matches the observed luminosity: the dot on the curve and the first readout. Draw repeats that match with M, R and L sampled from the published uncertainties (a normal distribution; a split normal where the error bars are asymmetric; in log L where the paper quotes it that way) and collects the indices in the histogram with their median and 16th to 84th percentiles, until 2,000 draws or Pause; the small triangle under its axis marks the index at the central values. The nominal Sun and the MESA model carry no uncertainties, so there is nothing to draw for them.</p>
+    <p>For the Sun and the MESA preset the dots are the interior of a 1 M☉, [Fe/H] = 0 MESA model at 2.76 Gyr, the stored profile nearest the Sun's age (see the data notes), and the shaded band is its convective envelope, which begins at 0.74 R. The polytrope has a single index everywhere; the model's envelope follows a nearly adiabatic run of pressure with density that a core-fitted index cannot share, and its composition is not uniform: the hydrogen fraction, the dotted curve in the energy panel, falls from 0.70 at the surface to 0.50 at the centre, where the pp chain has been at work. The two small panels show the solution θ(ξ) against the three exact cases, and the energy generation split into its two chains with the fraction of the luminosity produced inside each radius. Hover over the figures for values; a click on the luminosity curve sets n.</p>
+  </div>
+</details>
+
+<section class="prose pg-credits" aria-labelledby="origin">
+  <h2 id="origin">Where it came from</h2>
+  <p>This page descends from the first project of my Computational Astronomy course at the University of Porto (2018/19): a Python notebook that solved the Lane-Emden equation with scipy, matched the model luminosity of the Sun, 61 Vir and GJ 504 to the observed one and ran a Monte Carlo over the quoted errors of M, R and L. This version runs the same chain in the browser and re-solves on every slider move; it uses the IAU 2015 nominal Sun, takes the rate formulae and the constants from the sources named below, states the uncertainty conventions of each paper, checks the solver against the three exact solutions, and adds the comparison with a full stellar model.</p>
+</section>
+
+<section class="prose pg-credits" aria-labelledby="credits">
+  <h2 id="credits">Data and credits</h2>
+  <p>Constants: the solar radius, luminosity and mass parameter are the nominal conversion constants of IAU 2015 Resolution B3 (<a href="https://doi.org/10.3847/0004-6256/152/2/41">Prša et al. 2016, AJ 152, 41</a>): R☉ = 6.957 × 10⁸ m, L☉ = 3.828 × 10²⁶ W and GM☉ = 1.3271244 × 10²⁰ m³ s⁻², with the <a href="https://physics.nist.gov/cuu/Constants/">CODATA 2022</a> values of G and the atomic mass constant. The solar composition, X = 0.7381 and Z = 0.0134, and the share of C, N and O in Z come from <a href="https://doi.org/10.1146/annurev.astro.46.060407.145222">Asplund et al. (2009, ARA&amp;A 47, 481)</a>.</p>
+  <p>Rates and polytropes: the energy generation follows <a href="https://doi.org/10.1007/978-3-642-30304-3">Kippenhahn, Weigert and Weiss, Stellar Structure and Evolution (2nd ed., Springer, 2012)</a>, Sect. 18.5, eqs. (18.63) and (18.65), which are their fits to the NACRE rates of Angulo et al. (1999, Nucl. Phys. A 656, 3). The polytropic relations and the tabulated constants are those of Chandrasekhar (1939, An Introduction to the Study of Stellar Structure), as reproduced in Chap. 19 and Table 19.1 of the same textbook.</p>
+  <p>61 Vir: radius 0.9867 ± 0.0048 R☉, luminosity 0.8222 ± 0.0033 L☉ and [Fe/H] = +0.01 from <a href="https://doi.org/10.1093/mnras/stt2360">von Braun et al. (2014, MNRAS 438, 2413)</a>, Table 4, where the radius comes from a CHARA angular diameter; the mass 0.95 (+0.04, −0.03) M☉ from <a href="https://doi.org/10.1088/0004-637X/708/2/1366">Vogt et al. (2010, ApJ 708, 1366)</a>, Table 1, who adopt the isochrone mass of Valenti and Fischer (2005). GJ 504: mass 1.16 ± 0.05 M☉, radius 1.36 ± 0.04 R☉ and [Fe/H] = +0.13 from <a href="https://doi.org/10.1088/0004-637X/806/2/163">Fuhrmann and Chini (2015, ApJ 806, 163)</a>, Table 1, whose note states that the errors are 2σ, so half of each is used as σ; log (L/L☉) = 0.332 ± 0.032 from <a href="https://doi.org/10.1088/0004-637X/774/1/11">Kuzuhara et al. (2013, ApJ 774, 11)</a>, Table 1, who adopt the Valenti and Fischer (2005) value. The two stars are planet hosts, and the two papers on GJ 504 disagree about its age; nothing here depends on that.</p>
+  <p>The stellar model is one interior profile from the data file of my Stellar Explorer (<a href="https://github.com/AndreasWNeitzel/stellar-explorer-data">stellar-explorer-data on GitHub</a>): a 1 M☉, [Fe/H] = 0 track computed with MESA r24.08.1 (<a href="https://doi.org/10.1088/0067-0049/192/1/3">Paxton et al. 2011, ApJS 192, 3</a>) and post-processed with GYRE, stored as the 94 models whose interior the run saved, with 256-zone profiles. On the main sequence the run saved an interior every fifty models, so the one nearest the Sun's age (4.6 Gyr) is the model at 2.76 Gyr, and that is the age stated here; the mass, radius and luminosity of the MESA preset are those of that model, and its profile arrays are exported unchanged.</p>
+  <p>Download the <a href="/assets/data/playground/polytrope_stars.json">star table</a>, which records every value with its table and convention, and the <a href="/assets/data/playground/mesa_1msun_profile.json">model profile</a> with its provenance. Everything runs in your browser, and nothing you do here is sent anywhere.</p>
+</section>
+</div>
+<script src="/assets/js/tokens.js" defer=""></script>
+
+<script type="module" src="/assets/js/playground/polytrope-playground.js"></script>
+
+
+</div>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-id">
+      <a class="brand" href="/"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
+      <p>PhD researcher in astrophysics and machine learning at IA and the University of Porto. Gaia, asteroseismology, neural networks, HPC.</p>
+    </div>
+    <nav aria-label="Contact">
+      <h2>Contact and profiles</h2>
+      <ul>
+        <li><a href="mailto:andreaswneitzel@gmail.com">Email</a></li>
+        <li><a href="https://orcid.org/0000-0001-6283-907X" rel="me">ORCID</a></li>
+        <li><a href="https://scholar.google.com/citations?user=7Pt74F0AAAAJ" rel="me">Google Scholar</a></li>
+        <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc">NASA ADS</a></li>
+        <li><a href="https://github.com/AndreasWNeitzel" rel="me">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/andreaswneitzel" rel="me">LinkedIn</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Site">
+      <h2>On this site</h2>
+      <ul>
+        <li><a href="/publications/">Publications and explainers</a></li>
+        <li><a href="/software/">Software and demos</a></li>
+        <li><a href="/software/#playgrounds">Playgrounds</a></li>
+        <li><a href="/guide/">Field guide</a></li>
+        <li><a href="/observing/paranal/">Observing at Paranal</a></li>
+        <li><a href="/cv/">CV</a> · <a href="/assets/pdf/cv_neitzel_academic_summary.pdf">PDF</a></li>
+      </ul>
+    </nav>
+    <div class="footer-ack">
+      <div class="wordmarks">
+        <p><span class="wm-k">Affiliations</span><span><a href="https://www.iastro.pt/">IA</a> · <a href="https://www.up.pt/">U.Porto</a> · <a href="https://www.fc.up.pt/">FCUP</a> · <a href="https://www.oas.inaf.it/">INAF-OAS</a>, visiting 2025 to 2026</span></p>
+        <p><span class="wm-k">Consortia</span><span><i>Ariel</i> Science Consortium (ESA) · KASC · TASOC</span></p>
+        <p><span class="wm-k">Facilities</span><span>ESO Very Large Telescope with ESPRESSO · <i>Gaia</i> (ESA) · <i>TESS</i> and <i>Kepler</i> (NASA) · Deucalion · MareNostrum 5</span></p>
+      </div>
+      <div class="funding">
+        <a class="fct" href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia">
+          <img class="fct-light" src="/assets/img/logos/fct-positive-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
+          <img class="fct-dark" src="/assets/img/logos/fct-negative-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
+        </a>
+        <p>Funded by FCT, Fundação para a Ciência e a Tecnologia, I.P., through a research fellowship under the project ArqueoGal (2024.15303.PEX) and, from 2025 to 2026, the doctoral fellowship 2025.01843.BD. Computing on Deucalion and MareNostrum 5 through FCT projects 2026.08382.CPCA.A1 and 2026.08362.CPCA.A2.</p>
+      </div>
+    </div>
+    <p class="colophon"><span>Porto, Portugal · Last updated <time datetime="2026-10-26">2026-10-26</time></span><span>Hand-written HTML, CSS and JavaScript. No trackers. Map data Natural Earth.</span></p>
+  </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/vendor/katex/katex.min.js" defer></script>
+<script src="/assets/js/math.js" defer></script>
+</body>
+</html>

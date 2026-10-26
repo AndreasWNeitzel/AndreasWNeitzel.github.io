@@ -1,0 +1,57 @@
+/* FIG 2 on /observing/paranal/, read as a Z: the light path (vlt-lightpath.svg) and the exposure
+   column (espresso-exposure.svg) on top; the night of velocities (espresso-night.svg) and the power
+   spectrum (espresso-spectrum.svg) below. The four SVGs share one scale (grid columns in the ratio
+   of their viewBox widths: 800 + 420 on top, 610 + 610 below), so the data thread, cut at the seams
+   by figures/observing/build_espresso_output.py, joins up. The one-time build comes from site.css. */
+@layer pages {
+  .vlt-top { display: grid; grid-template-columns: minmax(0, 800fr) minmax(0, 420fr); }
+  .vlt-bottom { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .blueprint.wide-fig.vlt-fig svg { display: block; inline-size: 100%; block-size: auto; max-block-size: none; }
+  .vlt-fig .b-draw { vector-effect: none; stroke-linecap: butt; }
+
+  /* type: at a 1440 px viewport the figure renders at about 1.05 px per unit, so 11 units is the floor */
+  .vlt-fig .bp-label2 { font-size: 13px; }
+  .vlt-fig .bp-tick { font-size: 11.5px; }
+  .vlt-fig .eo-title { font: 600 14.5px var(--sans); fill: var(--ink); }
+  .vlt-fig .eo-label { font: 600 13px var(--mono); fill: var(--ink); letter-spacing: 0.02em; }
+  .vlt-fig .eo-value { font: 600 12.5px var(--mono); fill: var(--ink); }
+  .vlt-fig .eo-tex { fill: var(--ink); }
+  .vlt-fig .eo-tex-note { fill: var(--muted); }
+  .vlt-fig .eo-note, .vlt-fig .eo-num { font: 500 11px var(--mono); fill: var(--muted); }
+  .vlt-fig .eo-data { fill: var(--ink-2); }
+  .vlt-fig a .eo-data { text-decoration: underline; text-decoration-thickness: 1px; }
+  /* symbols in the serif, as in print: italic nu, upright Delta, "max" as a subscript; in the
+     monospace labels a plain "ν" reads as "v" */
+  .vlt-fig figcaption .sym { font-family: var(--serif); font-size: 1.1em; }
+  .vlt-fig figcaption .sym sub { font-size: 0.72em; }
+
+  /* the data thread: the light's moving dash continues as curved links; squares mark each hand-off */
+  .vlt-fig .eo-link { fill: none; stroke-width: 1.7; vector-effect: none; }
+  .vlt-fig .eo-node { fill: var(--accent-2); }
+  .vlt-fig .eo-head { fill: none; stroke: var(--accent-2); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  @media (prefers-reduced-motion: no-preference) {
+    /* one dash period (6 + 5) per loop, so the flow never jumps when the loop restarts; pieces cut
+       at a seam carry their phase in an inline animation-delay */
+    .vlt-fig .flowray { stroke-dasharray: 6 5; animation: eo-flow 1.1s linear infinite; }
+    @keyframes eo-flow { to { stroke-dashoffset: -11; } }
+  }
+
+  /* schematic parts in outline, real data filled */
+  .eo-svg .eo-mark { stroke: var(--accent-2); stroke-width: 1.3; stroke-dasharray: 2 2; }
+  .eo-svg .eo-dim { fill: none; stroke: currentColor; stroke-width: 1; }
+  .eo-svg .eo-dots { fill: none; stroke: var(--accent-2); stroke-width: 2.4; stroke-linecap: round; }
+  .eo-svg .eo-power { fill: color-mix(in oklab, var(--accent-2) 42%, transparent); stroke: none; }
+  .eo-svg .eo-smooth { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+  .eo-svg .eo-noise { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .eo-svg .eo-numax { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 1 3; }
+
+  /* narrow screens: the light path and the two panels scroll sideways at a legible scale and stack;
+     the thread pieces that cross a seam are hidden */
+  @media (max-width: 900px) {
+    .vlt-top, .vlt-bottom { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
+    .vlt-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+    .blueprint.wide-fig.vlt-fig .vlt-scroll--path > svg { min-inline-size: 700px; }
+    .blueprint.wide-fig.vlt-fig .vlt-scroll--series > svg { min-inline-size: 560px; }
+    .vlt-fig .eo-seam { display: none; }
+  }
+}
