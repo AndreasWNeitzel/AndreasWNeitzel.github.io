@@ -1,0 +1,11 @@
+{
+  "file": "47tuc_noise_budget_binned.csv",
+  "what": "47 Tucanae on the HAYDN baseline: medians per 0.3 mag bin in Gaia G of the HAYDN Noise Estimator output, from 10.0 to 18.4 mag. Per bin: star count, median total noise-to-signal ratio, the median photon, detector, target-jitter and crowding terms, and the median stellar pollution ratio. Noise terms in ppm per square root of an hour.",
+  "source": "HAYDNsim run output for 47 Tuc (runs/47tuc/outputs/47tuc_mag185_hne.npz, 91,350 stars), binned by the HAYDNsim maintainer on 2026-10-26",
+  "same_as": "The bins and term groups of the 47 Tuc panel on the TASC10/KASC17 poster, Neitzel et al. 2026, doi:10.5281/zenodo.23263454 (CC BY 4.0)",
+  "status": "The per-star table is private. These binned medians are the values already shown on the public poster.",
+  "n_stars_binned": 91350,
+  "n_bins": 28,
+  "columns": ["g_bin_centre_mag", "n_stars", "median_total_nsr_ppm_sqrt_hr", "median_photon", "median_detector", "median_target_jitter", "median_crowding", "median_spr"],
+  "copied": "2026-10-26, unchanged"
+}

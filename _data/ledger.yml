@@ -26,7 +26,7 @@ education:
   institution: Faculdade de Ciências da Universidade do Porto
   location: Porto, Portugal
   date: 2020-09
-  end_date: 2022-12
+  end_date: '2022-12-06'
   identifiers:
     handle: 10216/147245
   weight: 5
@@ -40,12 +40,12 @@ education:
   grade: 16/20
   thesis: Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog
 - id: edu-2017-bsc-physics
-  title: BSc in Physics
+  title: BSc in Physics (Astrophysics branch)
   kind: bachelor
   institution: Faculdade de Ciências da Universidade do Porto
   location: Porto, Portugal
   date: '2017'
-  end_date: '2020'
+  end_date: '2020-11-25'
   weight: 5
   audiences:
   - academic
@@ -202,9 +202,10 @@ publications:
   kind: thesis
   role: first-author
   venue: Universidade do Porto, Faculdade de Ciências
-  date: 2022-12
+  date: '2022-12-06'
   identifiers:
     handle: 10216/147245
+    url: https://hdl.handle.net/10216/147245
   weight: 2
   audiences:
   - academic

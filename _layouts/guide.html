@@ -14,6 +14,12 @@ layout: default
     {%- if page.wide_caption %}<figcaption class="credit">{{ page.wide_caption | missions }}</figcaption>{% endif %}
   </figure>
   {%- endif %}
+  {%- for wf in page.wide_figures %}
+  <figure class="panel blueprint guide-wide" data-build>
+    {% include {{ wf.include }} %}
+    {%- if wf.caption %}<figcaption class="credit">{{ wf.caption | missions }}</figcaption>{% endif %}
+  </figure>
+  {%- endfor %}
   <div class="article-layout">
     <article class="stack-m">
       {%- if page.hero != false and page.image and page.image != "" %}

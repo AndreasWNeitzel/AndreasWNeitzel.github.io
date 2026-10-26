@@ -3,6 +3,13 @@ title: "What is HAYDN?"
 short: "HAYDN mission concept"
 lede: "HAYDN is a proposed space telescope to measure the vibrations of stars in crowded clusters, where today's missions cannot tell the stars apart."
 order: 7
+hero: false
+extra_css: [/assets/css/haydn.css]
+wide_figures:
+  - include: figures/haydn-pipeline.svg
+    caption: "How HAYDNsim turns a cluster into per-star noise forecasts. The six stages follow the flowchart of my TASC10/KASC17 poster (Neitzel et al. 2026, doi:10.5281/zenodo.23263454) and slide 6 of my DFA Week 2026 talk; the instrument figures are from slide 2 of that talk. The point-spread function, the aperture and the crowding treatment belong to the HAYDN Noise Estimator (HNE, R. Samadi), not to HAYDNsim."
+  - include: figures/haydn-noise.svg
+    caption: "What the forecast looks like for 47 Tucanae: crowding becomes the largest term for stars fainter than about 14th magnitude, and the share of a star's light that comes from its neighbours rises towards 0.4 at 18th magnitude. Left and top right: medians per 0.3 mag bin in Gaia G of the HNE output for 91,350 stars in 47 Tucanae, the same bins as the poster's 47 Tucanae panel; the per-star table is not public, the binned medians are in assets/data/haydnsim/. Bottom right: the fractions of stars with SPR above 0.5 printed on the poster for seven clusters."
 image: /assets/img/guide/haydn.webp
 image_alt: "A dense, roughly spherical cluster of stars, packed into a bright core and thinning towards the edges, against a dark background scattered with field stars."
 image_credit: "ESO/M.-R. Cioni/VISTA Magellanic Cloud survey. Acknowledgment: Cambridge Astronomical Survey Unit"
@@ -26,4 +33,4 @@ The concept comes from a white paper for ESA's Voyage 2050 long-term plan (Migli
 
 ## Where I come in
 
-During my secondment at INAF-OAS Bologna, from September 2025 to March 2026, I built the noise-estimation and synthetic-catalogue tools for the globular and open clusters on *HAYDN*'s target list, using TRILEGAL stellar populations and King-profile sampling. The noise simulations ran on Deucalion and on the University of Bologna clusters. I presented the pipeline, HAYDNsim, on a poster at TASC10/KASC17 in Aarhus in July 2026; it is on Zenodo under CC BY 4.0.
+I designed and wrote HAYDNsim, starting from target lists and parameters provided by L. Girardi (INAF Padova), during a secondment in A. Miglio's group at INAF-OAS Bologna. The secondment ran from September 2025 to March 2026. HAYDNsim is a Python package that builds synthetic stellar fields for the proposed ESA *HAYDN* mission and turns them into per-star inputs for the HAYDN Noise Estimator; the first figure above follows its stages, for the globular and open clusters on the target list, with TRILEGAL stellar populations and King-profile sampling. The noise simulations ran on Deucalion and on the University of Bologna clusters. I presented the pipeline on a poster at TASC10/KASC17 in Aarhus in July 2026; it is on Zenodo under CC BY 4.0.
