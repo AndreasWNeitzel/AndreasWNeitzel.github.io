@@ -15,6 +15,11 @@ extra_css: [/assets/css/haydn.css]
   <figcaption class="credit">The six stages, read left to right: the archive data (a <i>Gaia</i> DR3 cone to G = 18.5, HST photometry of the core, and the catalogues of Harris 2010, Baumgardt and Hilker 2018, Hunt and Reffert 2024 and Forbes and Bridges 2010); the magnitude window where <i>Gaia</i> in the outskirts and HST in the core are both complete, which also selects the members; a King profile normalised to the HST counts in the 50 to 100 arcsec annulus and checked against <i>Gaia</i>; a TRILEGAL population calibrated to the cluster mass and bright-star counts and placed on the sky by inverse-CDF sampling; the HAYDN Noise Estimator (HNE, R. Samadi) on Deucalion, which owns the point spread function, the mask and the crowding treatment and returns a noise-to-signal ratio and a stellar pollution ratio per star; and the seismic performance model of Mosser et al. 2019. Open clusters and resolved fields skip the profile and the population steps. After the flowchart of my TASC10/KASC17 poster (Neitzel et al. 2026, doi:10.5281/zenodo.23263454) and slide 6 of my DFA Week 2026 talk; the instrument strip is from slide 2 of that talk. Outline means schematic.</figcaption>
 </figure>
 
+<figure class="panel blueprint guide-wide" data-build>
+  {% include figures/haydn-field.svg %}
+  <figcaption class="credit">What the noise estimator sees. The telescope looks along the axis: far along it a cluster of synthetic stars drawn from a King profile, dense in the core; the tube is the column of sky the one-degree field covers; at the near end the detector, with the cluster landed on its pixels at 0.5 arcsec each. The seven ringed stars lie near one line of sight through the core, at different depths, and their light meets on the same pixels: the raised mask of the target collects theirs with its own. That shared light, per star, is the stellar pollution ratio HAYDNsim returns. Star positions schematic, drawn from a King profile; the plate scale and field are the mission's.</figcaption>
+</figure>
+
 <section class="section" aria-labelledby="what">
   <div class="section-head"><h2 id="what">What it does</h2></div>
   <div class="prose">

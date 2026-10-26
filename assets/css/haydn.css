@@ -41,3 +41,4 @@
   .hy-svg .hy-spr-wedge { fill: var(--accent-2); }
   @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hy-svg { min-inline-size: 760px; } }
 }
+

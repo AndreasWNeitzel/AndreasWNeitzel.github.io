@@ -1,0 +1,3 @@
+Isometric drawing kit from github.com/wheresryan22/anatomy, MIT licence, vendored unchanged
+(iso-kit.mjs, lathe.mjs). Used by the node scripts under figures/ that draw the site's
+three-dimensional figures.
