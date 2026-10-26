@@ -19,7 +19,7 @@ extra_links:
     </a>
     <a class="card" href="{{ '/software/starfold-demo/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-clusters.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">demo</span><h3>Starfold on a recorded run</h3><p>Inspect every point and replay the 32 refits.</p><span class="go">Open</span></div>
+      <div class="card-body"><span class="tag tag--software">demo</span><h3>Starfold on 9,242 Milky Way stars</h3><p>APOGEE chemistry and <i>Gaia</i> orbits: inspect any star and replay the 32 refits.</p><span class="go">Open</span></div>
     </a>
     <a class="card" href="{{ '/stellar-explorer/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-hr.svg %}</div>
