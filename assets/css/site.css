@@ -773,6 +773,7 @@
   .hr-svg .hr-node { fill: var(--ink); }
   .hr-svg .hr-sun { fill: none; stroke: var(--ink); stroke-width: 1.2; }
   .hr-svg .hr-note { font: 500 10px var(--mono); fill: var(--ink); }
+  .hr-svg .hr-dim-tex, .hr-svg .hr-lab-tex { fill: var(--muted); } .hr-svg .hr-note-tex { fill: var(--ink); }
   .card .media.art .hr-num, .card .media.art .hr-lab, .card .media.art .hr-note,
   .card .media.art .hr-dim, .card .media.art .hr-tick { display: none; }
 

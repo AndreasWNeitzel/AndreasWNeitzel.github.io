@@ -613,8 +613,8 @@
   const clock = (nu) => `One cycle takes ${fmt(1 / fShow(nu, S.star.numax), 1)} s here and ${periodOf(nu, true)} in the star.`;
   function describe() {
     const v = voice;
-    if (v.kind === "mix") return `${v.comps.length} modes near ν<sub>max</sub> at once, each excited and damped by convection, so the pattern never repeats. ${clock(S.star.numax)}`;
-    let s = `${NAMES[v.l]} mode (<i>l</i> = ${v.l}, <i>m</i> = ${signed(v.m)}): `;
+    if (v.kind === "mix") return `${v.comps.length} modes near <span class="tex" data-tex="\\nu_{\\max}">ν<sub>max</sub></span> at once, each excited and damped by convection, so the pattern never repeats. ${clock(S.star.numax)}`;
+    let s = `${NAMES[v.l]} mode (<span class="tex" data-tex="\\ell = ${v.l},\\ m = ${v.m > 0 ? "+" : ""}${v.m}"><i>l</i> = ${v.l}, <i>m</i> = ${signed(v.m)}</span>): `;
     if (v.l === 0) s += "the whole star swells and shrinks, with no nodal lines.";
     else {
       s += `${WORDS[v.l]} nodal line${v.l > 1 ? "s" : ""}, ${v.m ? WORDS[Math.abs(v.m)] : "none"} through the poles; `;
@@ -636,14 +636,16 @@
     $(".sd-mix").setAttribute("aria-pressed", String(S.mix));
     $(".sd-play").textContent = S.playing ? "Pause" : "Play";
     $(".sd-desc").innerHTML = describe();
+    if (window.renderTex) window.renderTex($(".sd-desc"));
   }
   function readouts() {
     const st = S.star, M = fmt(S.M, 2), R = fmt(S.R, S.R < 9.995 ? 2 : 1);
     $("[data-numax]").textContent = `${fmt(st.numax, st.numax >= 100 ? 0 : st.numax >= 10 ? 1 : 2)} µHz`;
     $("[data-dnu]").textContent = `${fmt(st.dnu, st.dnu >= 10 ? 1 : 2)} µHz`;
     $("[data-period]").textContent = `every ${periodOf(st.top.nu)}`;
-    $("[data-mass-out]").innerHTML = `${M} M<sub>☉</sub>`;
-    $("[data-radius-out]").innerHTML = `${R} R<sub>☉</sub>`;
+    $("[data-mass-out]").innerHTML = `${M} <span class="tex" data-tex="M_\\odot">M<sub>☉</sub></span>`;
+    $("[data-radius-out]").innerHTML = `${R} <span class="tex" data-tex="R_\\odot">R<sub>☉</sub></span>`;
+    if (window.renderTex) { window.renderTex($("[data-mass-out]")); window.renderTex($("[data-radius-out]")); }
     massIn.setAttribute("aria-valuetext", `${M} solar masses`);
     radIn.setAttribute("aria-valuetext", `${R} solar radii`);
   }

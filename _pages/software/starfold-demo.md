@@ -1,6 +1,7 @@
 ---
 layout: page
 permalink: /software/starfold-demo/
+math: true
 crumb: {label: Software, url: /software/}
 title: Starfold on 9,242 Milky Way stars
 nav_section: Software
@@ -67,9 +68,9 @@ extra_css: [/assets/css/starfold-demo.css]
     </figure>
 
     <figure class="sfd-panel sfd-plot sfd-orbit">
-      <figcaption class="sfd-head"><span class="sfd-title">Orbits</span><span class="sfd-seg" role="group" aria-label="Orbital quantities"><button type="button" aria-pressed="true" data-orbit="el"><i>E</i>, <i>L</i><sub>z</sub></button><button type="button" aria-pressed="false" data-orbit="j"><i>J</i><sub>R</sub>, <i>J</i><sub>z</sub></button></span></figcaption>
+      <figcaption class="sfd-head"><span class="sfd-title">Orbits</span><span class="sfd-seg" role="group" aria-label="Orbital quantities"><button type="button" aria-pressed="true" data-orbit="el"><i>E</i>, <span class="tex" data-tex="L_z"><i>L</i><sub>z</sub></span></button><button type="button" aria-pressed="false" data-orbit="j"><span class="tex" data-tex="J_\mathrm{R}"><i>J</i><sub>R</sub></span>, <span class="tex" data-tex="J_z"><i>J</i><sub>z</sub></span></button></span></figcaption>
       <div class="sfd-stage"><canvas role="img" aria-label="Orbital energy against angular momentum for every star, coloured as the map"></canvas><div class="sfd-tip" hidden></div></div>
-      <p class="sfd-cap"><span class="sfd-orbit-plain">How bound each orbit is, against how much it turns with the disc.</span> <span class="sfd-exact sfd-orbit-exact"><i>E</i> and <i>L</i><sub>z</sub> from galpy orbits in the McMillan17 potential; rings mark the group medians.</span></p>
+      <p class="sfd-cap"><span class="sfd-orbit-plain">How bound each orbit is, against how much it turns with the disc.</span> <span class="sfd-exact sfd-orbit-exact"><i>E</i> and <span class="tex" data-tex="L_z"><i>L</i><sub>z</sub></span> from galpy orbits in the McMillan17 potential; rings mark the group medians.</span></p>
     </figure>
 
     <section class="sfd-panel sfd-replay" aria-labelledby="sfd-replay-title">
@@ -112,9 +113,9 @@ extra_css: [/assets/css/starfold-demo.css]
 <tr><th scope="row">[Fe/H] <small>dex</small></th><td>−0.416 <small>(−0.424 to −0.405)</small></td><td>−0.076 <small>(−0.080 to −0.071)</small></td><td>−0.138</td></tr>
 <tr><th scope="row">[α/M] <small>dex</small></th><td>0.222 <small>(0.221 to 0.224)</small></td><td>0.026 <small>(0.025 to 0.027)</small></td><td>0.045</td></tr>
 <tr><th scope="row">[Mg/Fe] <small>dex</small></th><td>0.273 <small>(0.271 to 0.275)</small></td><td>0.040 <small>(0.039 to 0.042)</small></td><td>0.062</td></tr>
-<tr><th scope="row"><i>J</i><sub>R</sub> <small>kpc km/s</small></th><td>79.3 <small>(76 to 82.2)</small></td><td>23.4 <small>(23 to 23.8)</small></td><td>29.4</td></tr>
-<tr><th scope="row"><i>J</i><sub>z</sub> <small>kpc km/s</small></th><td>32.6 <small>(31.4 to 33.7)</small></td><td>8.55 <small>(8.36 to 8.66)</small></td><td>11.3</td></tr>
-<tr><th scope="row"><i>L</i><sub>z</sub> <small>kpc km/s</small></th><td>1,474 <small>(1,464 to 1,485)</small></td><td>1,926 <small>(1,922 to 1,935)</small></td><td>1,857</td></tr>
+<tr><th scope="row"><span class="tex" data-tex="J_\mathrm{R}"><i>J</i><sub>R</sub></span> <small>kpc km/s</small></th><td>79.3 <small>(76 to 82.2)</small></td><td>23.4 <small>(23 to 23.8)</small></td><td>29.4</td></tr>
+<tr><th scope="row"><span class="tex" data-tex="J_z"><i>J</i><sub>z</sub></span> <small>kpc km/s</small></th><td>32.6 <small>(31.4 to 33.7)</small></td><td>8.55 <small>(8.36 to 8.66)</small></td><td>11.3</td></tr>
+<tr><th scope="row"><span class="tex" data-tex="L_z"><i>L</i><sub>z</sub></span> <small>kpc km/s</small></th><td>1,474 <small>(1,464 to 1,485)</small></td><td>1,926 <small>(1,922 to 1,935)</small></td><td>1,857</td></tr>
 <tr><th scope="row">eccentricity</th><td>0.260 <small>(0.254 to 0.265)</small></td><td>0.130 <small>(0.128 to 0.131)</small></td><td>0.148</td></tr>
 <tr><th scope="row"><i>E</i> <small>km²/s²</small></th><td>−163,784 <small>(−164,177 to −163,230)</small></td><td>−154,301 <small>(−154,408 to −154,095)</small></td><td>−155,907</td></tr>
         </tbody>
@@ -148,7 +149,7 @@ extra_css: [/assets/css/starfold-demo.css]
 <details class="sfd-more">
   <summary>What you are looking at</summary>
   <div class="prose">
-    <p>Each star carries eight numbers. [Fe/H] is its iron abundance relative to the Sun, in dex, a base-10 logarithm, and [α/M] and [Mg/Fe] say how rich it is in alpha elements such as magnesium; all three come from APOGEE spectra through the ASPCAP pipeline. The other five describe its orbit, integrated with galpy in the McMillan17 model of the Galaxy from <em>Gaia</em> DR3 astrometry: the radial and vertical actions <i>J</i><sub>R</sub> and <i>J</i><sub>z</sub>, the angular momentum <i>L</i><sub>z</sub>, the eccentricity and the energy <i>E</i>.</p>
+    <p>Each star carries eight numbers. [Fe/H] is its iron abundance relative to the Sun, in dex, a base-10 logarithm, and [α/M] and [Mg/Fe] say how rich it is in alpha elements such as magnesium; all three come from APOGEE spectra through the ASPCAP pipeline. The other five describe its orbit, integrated with galpy in the McMillan17 model of the Galaxy from <em>Gaia</em> DR3 astrometry: the radial and vertical actions <span class="tex" data-tex="J_\mathrm{R}"><i>J</i><sub>R</sub></span> and <span class="tex" data-tex="J_z"><i>J</i><sub>z</sub></span>, the angular momentum <span class="tex" data-tex="L_z"><i>L</i><sub>z</sub></span>, the eccentricity and the energy <i>E</i>.</p>
     <p>Starfold tried 48 settings of UMAP and HDBSCAN, scored each without labels against a structureless copy of the table, and fitted the selected one on all stars. The map shows that fit. UMAP placed the stars so that neighbours in the eight standardised columns stay close, and HDBSCAN marked the two dense regions as groups and left 1,068 stars around and between them unassigned. Positions on the map have no units; only which stars sit near which counts.</p>
     <p>The chemistry panel is the classic test. The Milky Way disc holds two chemical sequences: a high-alpha one of older, metal-poorer stars on hotter orbits, and a low-alpha one that reaches solar [Fe/H] and above (<a href="https://doi.org/10.1051/0004-6361/201322631">Bensby et al. 2014</a>; <a href="https://doi.org/10.1088/0004-637X/808/2/132">Hayden et al. 2015</a>). Starfold was told none of this. Group 0 has the high-alpha pattern and group 1 the reverse, in chemistry and in orbits. That passes a sanity check of the method; it is not a finding about the Galaxy.</p>
     <p>To see how far the split holds, Starfold refitted the same setting 32 times, each on a random 80 percent of the stars with new seeds. A star's support for a group is the share of its refit group that belongs to that group, averaged over the refits that drew it, and dots fade where support for their own group is low. Refit groups carry arbitrary numbers, so the replay colours each one by the group it matches by Jaccard index, as Starfold does for recurrence.</p>

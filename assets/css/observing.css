@@ -15,14 +15,13 @@
   .vlt-fig .eo-title { font: 600 14.5px var(--sans); fill: var(--ink); }
   .vlt-fig .eo-label { font: 600 13px var(--mono); fill: var(--ink); letter-spacing: 0.02em; }
   .vlt-fig .eo-value { font: 600 12.5px var(--mono); fill: var(--ink); }
+  .vlt-fig .eo-tex { fill: var(--ink); }
+  .vlt-fig .eo-tex-note { fill: var(--muted); }
   .vlt-fig .eo-note, .vlt-fig .eo-num { font: 500 11px var(--mono); fill: var(--muted); }
   .vlt-fig .eo-data { fill: var(--ink-2); }
   .vlt-fig a .eo-data { text-decoration: underline; text-decoration-thickness: 1px; }
   /* symbols in the serif, as in print: italic nu, upright Delta, "max" as a subscript; in the
      monospace labels a plain "ν" reads as "v" */
-  .vlt-fig .eo-sym { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 1.14em; letter-spacing: 0; }
-  .vlt-fig .eo-sym-up { font-family: var(--serif); font-style: normal; font-weight: 500; font-size: 1.1em; letter-spacing: 0; }
-  .vlt-fig .eo-sub { font-size: 0.74em; }
   .vlt-fig figcaption .sym { font-family: var(--serif); font-size: 1.1em; }
   .vlt-fig figcaption .sym sub { font-size: 0.72em; }
 

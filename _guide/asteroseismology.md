@@ -4,6 +4,7 @@ short: "Seismology of stars"
 lede: "Asteroseismology measures a star's size and mass, and through models its age, from the way the star vibrates."
 order: 2
 hero: false
+math: true
 image: /assets/img/guide/asteroseismology.webp
 image_alt: "Illustration of a yellow sphere covered in a regular pattern of red and blue patches, with a wedge cut away to show the pattern continuing into the interior."
 image_credit: "ESO"

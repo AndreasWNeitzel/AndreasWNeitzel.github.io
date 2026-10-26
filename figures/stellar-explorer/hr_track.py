@@ -20,6 +20,9 @@ from pathlib import Path
 import h5py
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from texsvg import tex_glyphs  # noqa: E402  (LaTeX glyphs for the solar symbols)
+
 W, H = 520, 330
 L_, R_, T_, B_ = 50, 16, 14, 40
 TX0, TX1 = 4.98, 3.42  # log Teff, hot on the left
@@ -79,6 +82,22 @@ def clip_line(x0, y0, x1, y1):
     return x0 + t0 * dx, y0 + t0 * dy, x0 + t1 * dx, y0 + t1 * dy
 
 
+
+def run(parts, cls, size, anchor="start"):
+    """Set a label made of mono text and LaTeX glyphs from its left end; returns (svg, width)."""
+    adv = 0.6 * size  # Geist Mono advance
+    cur, out = 0.0, []
+    for kind, seg in parts:
+        if kind == "text":
+            out.append(f'<text class="{cls}" x="{cur:.1f}" y="0" style="white-space:pre">{seg}</text>')
+            cur += len(seg) * adv
+        else:
+            body, w = tex_glyphs(seg, size * 1.1)
+            out.append(f'<g class="{cls}-tex" transform="translate({cur + 0.5:.1f} 0)">{body}</g>')
+            cur += w + 1.5
+    shift = {"start": 0.0, "middle": -cur / 2, "end": -cur}[anchor]
+    return f'<g transform="translate({shift:.1f} 0)">{"".join(out)}</g>', cur
+
 def main(h5: Path, out: Path) -> int:
     with h5py.File(h5, "r") as f:
         t = f["track"]
@@ -105,12 +124,13 @@ def main(h5: Path, out: Path) -> int:
             continue
         x0, y0, x1, y1 = c
         p.append(f'<path class="hr-guide b-draw" style="--d:{0.06 * k:.2f}s;--dur:.17s" pathLength="1" d="M{x0:.1f} {y0:.1f} L{x1:.1f} {y1:.1f}"/>')
-        lab = f"{r:g} R☉" if labelled else ""
+        lab = f"{r:g}" if labelled else ""
         # label at the upper (left) end, nudged inside the box
         lx, ly = (x0, y0) if y0 < y1 else (x1, y1)
         ang = math.degrees(math.atan2(y1 - y0, x1 - x0))
         if lab:
-            p.append(f'<text class="hr-dim b-pop" style="--d:{0.06 * k + 0.17:.2f}s" transform="translate({lx + 4:.1f} {ly + 10:.1f}) rotate({ang:.1f})">{lab}</text>')
+            g, _ = run([("text", lab + " "), ("tex", r"R_\odot")], "hr-dim", 9.5)
+            p.append(f'<g class="b-pop" style="--d:{0.06 * k + 0.17:.2f}s" transform="translate({lx + 4:.1f} {ly + 10:.1f}) rotate({ang:.1f})">{g}</g>')
     # axes: object weight
     p.append(f'<path class="hr-axis b-draw" style="--d:0s;--dur:.17s" pathLength="1" d="M{L_} {T_} V{H - B_} H{W - R_}"/>')
     for teff in (50000, 20000, 10000, 5000, 3000):
@@ -121,7 +141,8 @@ def main(h5: Path, out: Path) -> int:
         lab = {-1: "0.1", 0: "1", 1: "10", 2: "100", 3: "1000"}[lg]
         p.append(f'<path class="hr-tick" d="M{L_ - 4} {yy:.1f} h4"/><text class="hr-num" x="{L_ - 7}" y="{yy + 3.5:.1f}" text-anchor="end">{lab}</text>')
     p.append(f'<text class="hr-lab" x="{W - R_}" y="{H - 6}" text-anchor="end">surface temperature (K), hotter to the left</text>')
-    p.append(f'<text class="hr-lab" transform="translate(13 {T_}) rotate(-90)" text-anchor="end">luminosity (L☉)</text>')
+    g, _ = run([("text", "luminosity ("), ("tex", r"L_\odot"), ("text", ")")], "hr-lab", 9.5, "end")
+    p.append(f'<g transform="translate(13 {T_}) rotate(-90)">{g}</g>')
     # the pen: one ink path through every model, in order
     d = "M" + " L".join(f"{a:.1f} {b:.1f}" for a, b in zip(x, y))
     p.append(f'<path class="hr-track b-draw" style="--d:{DRAW_START}s;--dur:{DRAW_DUR}s" pathLength="1" d="{d}"/>')
@@ -143,7 +164,8 @@ def main(h5: Path, out: Path) -> int:
     def last(name):
         return len(phase) - 1 - phase[::-1].index(name)
 
-    sun_label = f"{age[k_sun]:.1f} Gyr, {10 ** logr[k_sun]:.2f} R☉: the Sun today"
+    sun_label = f"{age[k_sun]:.1f} Gyr, {10 ** logr[k_sun]:.2f} R_sun: the Sun today"
+    sun_parts = [("text", f"{age[k_sun]:.1f} Gyr, {10 ** logr[k_sun]:.2f} "), ("tex", r"R_\odot"), ("text", ": the Sun today")]
     # labels: (x, y, anchor, text, appear-at model index), placed by hand against the data
     def at(k, dx, dy):
         return x[k] + dx, y[k] + dy
@@ -157,7 +179,7 @@ def main(h5: Path, out: Path) -> int:
     agb_mid = nearest("AGB", 2.45)
     rc_mid = (first("RC") + last("RC")) // 2
     labels = [
-        (*at(k_sun, -10, 4), "end", sun_label, k_sun),
+        (*at(k_sun, -10, 4), "end", sun_parts, k_sun),
         (*at(pms_low, -8, 16), "end", "pre-main sequence", first("PMS")),
         (*at(rgb_mid, -9, 4), "end", "red-giant branch", rgb_mid),
         (*at(first("HeFlash"), -4, -9), "end", "helium flash", first("HeFlash")),
@@ -167,6 +189,10 @@ def main(h5: Path, out: Path) -> int:
         (*at(last("WD"), 8, 4), "start", "white dwarf", last("WD")),
     ]
     for lx, ly, anchor, txt, k in labels:
+        if isinstance(txt, list):
+            g, _ = run(txt, "hr-note", 10, anchor)
+            p.append(f'<g class="b-pop" style="--d:{when[k] + 0.1:.2f}s" transform="translate({lx:.1f} {ly:.1f})">{g}</g>')
+            continue
         p.append(f'<text class="hr-note b-pop" style="--d:{when[k] + 0.1:.2f}s" x="{lx:.1f}" y="{ly:.1f}" text-anchor="{anchor}">{txt}</text>')
 
     svg = (

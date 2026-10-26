@@ -6,6 +6,7 @@ nav_section: Publications
 description: My May 2024 visitor-mode run with ESPRESSO at ESO's Very Large Telescope at Paranal, on the K dwarf GJ 570 A, and what the data showed.
 og_image: /assets/img/og-vlt.jpg
 extra_css: [/assets/css/observing.css]
+math: true
 ---
 <div class="wrap stack-l">
   <p class="crumbs story-crumbs"><a href="{{ '/publications/' | relative_url }}">Publications</a> · <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">the paper this run produced</a></p>
@@ -48,7 +49,7 @@ extra_css: [/assets/css/observing.css]
         <div class="vlt-scroll vlt-scroll--series">{% include figures/espresso-night.svg %}</div>
         <div class="vlt-scroll vlt-scroll--series">{% include figures/espresso-spectrum.svg %}</div>
       </div>
-      <figcaption class="credit" style="padding:6px 10px 2px">FIG 2. How the starlight reaches the detector, and what comes out. A spectrograph measures the Doppler shift of the star's absorption lines, so its output is the speed of the stellar surface, one velocity per exposure, not a light curve of brightness. Top: schematic, not to scale, after ESO's descriptions of the Unit Telescopes and ESPRESSO; M1, M2 and M3 are the primary, secondary and tertiary mirrors; resolving power from Campante et al. 2026, Sect. 2. Bottom: the velocities with slow drifts removed (each night minus a 1.2-hour triangular smoothing, as in the paper) and their power spectrum from weighted sine fits, with the raw power drawn as the highest value in each plotted column, computed from the public data of Campante et al. 2026 (Zenodo, <a href="https://doi.org/10.5281/zenodo.17236515">doi:10.5281/zenodo.17236515</a>, CC BY 4.0). <span class="sym">Δ<i>ν</i></span>, 197.29 μHz, is the large frequency separation and <span class="sym"><i>ν</i><sub>max</sub></span> the frequency of maximum oscillation power (Campante et al. 2026, Table 1 and Sect. 4.1).</figcaption>
+      <figcaption class="credit" style="padding:6px 10px 2px">FIG 2. How the starlight reaches the detector, and what comes out. A spectrograph measures the Doppler shift of the star's absorption lines, so its output is the speed of the stellar surface, one velocity per exposure, not a light curve of brightness. Top: schematic, not to scale, after ESO's descriptions of the Unit Telescopes and ESPRESSO; M1, M2 and M3 are the primary, secondary and tertiary mirrors; resolving power from Campante et al. 2026, Sect. 2. Bottom: the velocities with slow drifts removed (each night minus a 1.2-hour triangular smoothing, as in the paper) and their power spectrum from weighted sine fits, with the raw power drawn as the highest value in each plotted column, computed from the public data of Campante et al. 2026 (Zenodo, <a href="https://doi.org/10.5281/zenodo.17236515">doi:10.5281/zenodo.17236515</a>, CC BY 4.0). <span class="tex" data-tex="\Delta\nu">Δν</span>, 197.29 μHz, is the large frequency separation and <span class="tex" data-tex="\nu_{\max}">ν<sub>max</sub></span> the frequency of maximum oscillation power (Campante et al. 2026, Table 1 and Sect. 4.1).</figcaption>
     </figure>
   </section>
 

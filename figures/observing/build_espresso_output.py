@@ -63,9 +63,9 @@ PAPER = {"numax_uHz": 4705, "numax_err_uHz": 105, "numax_where": "Sect. 4.1",
          "exposure_s": 25, "exposure_where": "Sect. 2",
          "amp_cms": 2.57, "amp_where": "Table 1", "white_cms": 1.51}
 CITE = "Campante et al. 2026"
-NU = '<tspan class="eo-sym">ν</tspan>'
-DNU = '<tspan class="eo-sym-up">Δ</tspan>' + NU
-NUMAX = NU + '<tspan class="eo-sub" dy="2.6">max</tspan>'  # follow with a tspan dy="-2.6" to return to the baseline
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from texsvg import tex_glyphs  # noqa: E402  (LaTeX glyphs for the symbols)
+
 NIGHT_SHOWN = 2  # 1-based: the longest night of the run
 F0, F1 = 2.0, 8.2  # mHz shown
 CHILE = timezone(timedelta(hours=-4))  # local time at Paranal in May 2024
@@ -346,8 +346,9 @@ def main(src: Path, root: Path) -> int:
     S.append(f'<path class="eo-smooth b-draw" style="--d:3.3s;--dur:.53s" pathLength="1" d="{sm}"/>')
     S.append(f'<path class="eo-noise b-pop" style="--d:3.6s" d="M{xc0} {yp(3 * white_p):.1f} H{xc1}"/>')
     xn = xc0 + (xc1 - xc0) * (PAPER["numax_uHz"] / 1e3 - F0) / (F1 - F0)
+    numax_glyphs = tex_glyphs(r"\nu_{\max}", 14)[0]
     S.append(f'<g class="b-pop" style="--d:3.7s"><path class="eo-numax" d="M{xn:.1f} {ytop} V{yb}"/>'
-             f'<text class="eo-label" x="{xn + 6:.1f}" y="{ytop + 12}">{NUMAX}</text></g>')
+             f'<g class="eo-tex" transform="translate({xn + 6:.1f} {ytop + 13})">{numax_glyphs}</g></g>')
     # legend: every mark on the panel, with its source
     lg = []
     def swatch(x, y, kind):
@@ -358,11 +359,24 @@ def main(src: Path, root: Path) -> int:
     rows = [
         (xc0, 284, "fill", "power, from the data"),
         (300, 284, "dash", "white-noise level ×3, from the data"),
-        (xc0, 300, "line", f"power smoothed by a Gaussian 4{DNU} ≈ 790 μHz wide, ×3 as in the paper's Fig. 3"),
-        (xc0, 316, "dot", f'{NUMAX}<tspan dy="-2.6"> {PAPER["numax_uHz"]} μHz ({CITE}, {PAPER["numax_where"]})</tspan>'),
+        (xc0, 300, "line", [("text", "power smoothed by a Gaussian "), ("tex", r"4\Delta\nu"),
+                            ("text", " ≈ 790 μHz wide, ×3 as in the paper's Fig. 3")]),
+        (xc0, 316, "dot", [("tex", r"\nu_{\max}"),
+                           ("text", f' {PAPER["numax_uHz"]} μHz ({CITE}, {PAPER["numax_where"]})')]),
     ]
+    adv = 0.6 * 11  # Geist Mono advance at the 11 px legend size
     for x, y, kind, label in rows:
-        lg.append(swatch(x, y, kind) + f'<text class="eo-note" x="{x + 22}" y="{y}">{label}</text>')
+        parts = [("text", label)] if isinstance(label, str) else label
+        cur, out = x + 22, []
+        for kind_, seg in parts:
+            if kind_ == "text":
+                out.append(f'<text class="eo-note" x="{cur:.1f}" y="{y}" style="white-space:pre">{seg}</text>')
+                cur += len(seg) * adv
+            else:
+                body, w = tex_glyphs(seg, 12)
+                out.append(f'<g class="eo-tex-note" transform="translate({cur + 1:.1f} {y})">{body}</g>')
+                cur += w + 2
+        lg.append(swatch(x, y, kind) + "".join(out))
     S.append(f'<g class="b-pop" style="--d:3.75s">{"".join(lg)}</g>')
     spec_svg = svg("eo-svg eo-spectrum", 610, BOT_H, "Power spectrum of the radial velocities of GJ 570 A, five nights",
                    f"The power spectrum of {int(keep.sum()):,} velocities from five nights. Peaks crowd together near "

@@ -930,10 +930,12 @@ async function boot(root) {
       for (const o of b.parentElement.children) o.setAttribute("aria-pressed", String(o === b));
       if (S.orbit === "el") {
         ui.orbitPlain.textContent = "How bound each orbit is, against how much it turns with the disc.";
-        ui.orbitExact.replaceChildren(partsNode(NAME.E), " and ", partsNode(NAME.L_z), " from galpy orbits in the McMillan17 potential; rings mark the group medians.");
+        ui.orbitExact.innerHTML = '<span class="tex" data-tex="E"><i>E</i></span> and <span class="tex" data-tex="L_z"><i>L</i><sub>z</sub></span> from galpy orbits in the McMillan17 potential; rings mark the group medians.';
+        if (window.renderTex) window.renderTex(ui.orbitExact);
       } else {
         ui.orbitPlain.textContent = "How far each orbit swings up and down, against in and out.";
-        ui.orbitExact.replaceChildren("The actions ", partsNode(NAME.J_z), " and ", partsNode(NAME.J_R), " from galpy on log axes; rings mark the group medians.");
+        ui.orbitExact.innerHTML = 'The actions <span class="tex" data-tex="J_z"><i>J</i><sub>z</sub></span> and <span class="tex" data-tex="J_\\mathrm{R}"><i>J</i><sub>R</sub></span> from galpy on log axes; rings mark the group medians.';
+        if (window.renderTex) window.renderTex(ui.orbitExact);
       }
       P.orbit.canvas.setAttribute("aria-label", S.orbit === "el"
         ? "Orbital energy against angular momentum for every star, coloured as the map"
