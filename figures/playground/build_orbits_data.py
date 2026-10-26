@@ -108,8 +108,8 @@ GEO["speed_km_s"] = math.sqrt(mu / GEO["radius_km"])
 STATIONS = [
     {"id": "porto", "name": "Porto", "short_name": "Porto", "lat_deg": 41.15, "lon_deg": -8.61},
     {"id": "moscow", "name": "Moscow", "short_name": "Moscow", "lat_deg": 55.75, "lon_deg": 37.62},
-    {"id": "north", "name": "80 N station", "short_name": "80 N", "lat_deg": 80.0, "lon_deg": 0.0, "adjustable_latitude": [60.0, 90.0],
-     "note": "a test point at the longitude of the geostationary satellite, as in the coursework; its latitude can be changed on the page"},
+    {"id": "north", "name": "Polar station", "short_name": "Polar", "lat_deg": 85.0, "lon_deg": 0.0, "adjustable_latitude": [60.0, 90.0],
+     "note": "a movable station on the geostationary satellite's own meridian, where the satellite's elevation is highest for that latitude; it starts at 85 degrees north, above the limit of acos(R_E / r_geo) = 81.3 degrees beyond which the geostationary satellite never rises. The coursework placed it at 80 degrees north"},
 ]
 
 # ----------------------------------------------------------------------------- Galaxy

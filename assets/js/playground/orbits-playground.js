@@ -199,7 +199,7 @@ async function boot(root) {
       speeds: [[600, "10 min per s"], [1800, "30 min per s"], [3600, "1 h per s"], [10800, "3 h per s"]], speed: 3600,
       trailEvery: 120, sampleEvery: 60, historyEvery: 60,
       title: "Around the Earth", sideTitle: "Visible from the ground",
-      cap: "Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.",
+      cap: "Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon. At the polar station's starting latitude no line ever reaches the geostationary satellite.",
       mainAria: "Three Molniya satellites and a geostationary satellite around the rotating Earth, drawn to scale",
       sideAria: "Timeline of when each satellite is above the horizon of Porto, Moscow and the third station",
       bodies() {
@@ -556,6 +556,7 @@ async function boot(root) {
       if (mode === "earth") {
         stations[2].lat = Number(f.lat.value);
         clearStationVisibility(2);
+        buildStationsTable();
         markAll();
       }
     } else if (name.startsWith("tp")) {
@@ -833,7 +834,9 @@ async function boot(root) {
     if (s.w < 60 || !visibility) return;
     const nb = bodies.length;
     ctx.font = `500 10px ${F.mono}`;
-    const left = 8 + Math.ceil(Math.max(...stations.map((st) => ctx.measureText(st.name).width)));
+    // The movable station is labelled by the latitude it is at, not by a fixed name.
+    const label = (st) => (st.adjustable_latitude ? `${Math.round(st.lat)}\u00b0 N` : st.name);
+    const left = 8 + Math.ceil(Math.max(...stations.map((st) => ctx.measureText(label(st)).width)));
     const right = 8 + Math.ceil(ctx.measureText("Molniya 100%").width);
     const W = s.w - left - right - 8;
     const top = 6;
@@ -862,7 +865,7 @@ async function boot(root) {
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       ctx.fillStyle = C.ink2;
-      ctx.fillText(st.name, left - 8, y0 + (groupH - 8) / 2);
+      ctx.fillText(label(st), left - 8, y0 + (groupH - 8) / 2);
       let anyMolniya = 0;
       let geo = 0;
       const any = new Uint8Array(VIS_N);
@@ -1212,6 +1215,11 @@ async function boot(root) {
     return span;
   }
 
+  function buildStationsTable() {
+      table(ui.tables.stations, [["Station"], ["Latitude", 1], ["Longitude", 1], ["Note"]],
+        D.stations.map((st, i) => [st.name, `${Math.abs(st.adjustable_latitude && stations[i] ? stations[i].lat : st.lat_deg).toFixed(2)}° ${st.lat_deg >= 0 ? "N" : "S"}`, `${Math.abs(st.lon_deg).toFixed(2)}° ${st.lon_deg >= 0 ? "E" : "W"}`, st.adjustable_latitude ? `latitude adjustable from ${st.adjustable_latitude[0]} to ${st.adjustable_latitude[1]} degrees; the geostationary satellite sets below the horizon at ${(Math.acos(RE / D.geo.radius_km) / rad).toFixed(1)} degrees` : "fixed station"]));
+  }
+
   function buildTables() {
     const earthBodies = MODES.earth.bodies();
     const Mo = D.molniya;
@@ -1224,8 +1232,7 @@ async function boot(root) {
           geo ? grouped(D.geo.altitude_km) : grouped(Mo.perigee_altitude_km), geo ? grouped(D.geo.altitude_km) : grouped(Mo.apogee_altitude_km),
           geo ? D.geo.speed_km_s.toFixed(3) : Mo.perigee_speed_km_s.toFixed(3), geo ? D.geo.speed_km_s.toFixed(3) : Mo.apogee_speed_km_s.toFixed(3)];
       }));
-    table(ui.tables.stations, [["Station"], ["Latitude", 1], ["Longitude", 1], ["Note"]],
-      D.stations.map((st) => [st.name, `${Math.abs(st.lat_deg).toFixed(2)}° ${st.lat_deg >= 0 ? "N" : "S"}`, `${Math.abs(st.lon_deg).toFixed(2)}° ${st.lon_deg >= 0 ? "E" : "W"}`, st.adjustable_latitude ? `latitude adjustable from ${st.adjustable_latitude[0]} to ${st.adjustable_latitude[1]} degrees; the geostationary satellite sets below the horizon at ${(Math.acos(RE / D.geo.radius_km) / rad).toFixed(1)} degrees` : "fixed station"]));
+    buildStationsTable();
     const gb = MODES.galaxy.bodies();
     table(ui.tables.stars, [["Star"], ["<em>Gaia</em> DR3 source_id"], ["G", 1], ["Parallax (mas)", 1], ["RV (km/s)", 1], ["Distance (pc)", 1], ["x, y, z (kpc)"], ["v<sub>x</sub>, v<sub>y</sub>, v<sub>z</sub> (km/s)"], ["e (galpy)", 1], ["z<sub>max</sub> (kpc)", 1], ["R<sub>peri</sub>, R<sub>apo</sub> (kpc)", 1], ["L<sub>z</sub> (kpc km/s)", 1]],
       gb.map((b) => {
