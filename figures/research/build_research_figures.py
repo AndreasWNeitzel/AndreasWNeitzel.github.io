@@ -133,13 +133,6 @@ def arqueogal() -> str:
              '<path class="nw-hatch-line" d="M0 0 V6"/></pattern>')
     T = 0.0
     P.append(pop(text(20, 28, "ONE RED GIANT, THROUGH THE PROJECT", "nw-title"), T))
-    kx = 700
-    P.append(pop(f'<rect class="nw-key-me" x="{kx}" y="20" width="9" height="9"/>', T + 0.1))
-    P.append(pop(text(kx + 15, 28, "built by Neitzel", "nw-note"), T + 0.1))
-    P.append(pop(f'<rect class="nw-key-part" x="{kx + 130}" y="20" width="9" height="9"/>', T + 0.1))
-    P.append(pop(text(kx + 145, 28, "with Neitzel taking part", "nw-note"), T + 0.1))
-    P.append(pop(f'<rect class="nw-key-team" x="{kx + 312}" y="20" width="9" height="9"/>', T + 0.1))
-    P.append(pop(text(kx + 327, 28, "the team's", "nw-note"), T + 0.1))
     P.append(draw("nw-guide", "M20 36 H1100", T, 0.4))
 
     L = (150.0, 270.0, 390.0)  # lane centres
@@ -180,7 +173,7 @@ def arqueogal() -> str:
 
     # lane 1: the light curve and its oscillations (task 2), then PARAM (task 4)
     y = L[0]
-    P += stage(XA, y, WA, "TESS LIGHT CURVE", "TASK 2 · Campante", "team", T)
+    P += stage(XA, y, WA, "TESS LIGHT CURVE", "TASK 2", "team", T)
     x0, yc = XA + 12, y - 8
     pts = [(x0 + 1.9 * i, yc + 8 * math.sin(i * 0.9) * (0.6 + 0.4 * math.sin(i * 0.17)) + 3 * math.sin(i * 2.7)) for i in range(46)]
     P.append(draw("nw-line", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), T + 0.2, 0.6))
@@ -191,7 +184,7 @@ def arqueogal() -> str:
         P.append(draw("nw-line", f"M{cx0 + 7 * k} {y + 14} v{-h:.1f}", T + 0.3 + 0.02 * k, 0.2))
     P.append(thread(f"M{XA + WA} {f(y)} H{XB}", T + 0.4))
     P.append(node(XA + WA, y, T + 0.4)); P.append(node(XB, y, T + 0.45))
-    P += stage(XB, y, WA, "PARAM: MASS AND AGE", "TASK 4 · Monteiro, Bossini", "team", T + 0.3)
+    P += stage(XB, y, WA, "PARAM: MASS AND AGE", "TASK 4", "team", T + 0.3)
     gx, gy = XB + 14, y - 30
     P.append(draw("nw-line", f"M{gx} {gy} V{gy + 44} H{gx + 52}", T + 0.5, 0.3))
     for k in range(4):
@@ -205,7 +198,7 @@ def arqueogal() -> str:
 
     # lane 2: Gaia astrometry (task 3), then the orbit
     y = L[1]
-    P += stage(XA, y, WA, "GAIA ASTROMETRY", "TASK 3 · Bossini", "team", T + 0.2)
+    P += stage(XA, y, WA, "GAIA ASTROMETRY", "TASK 3", "team", T + 0.2)
     sx, sy = XA + 40, y - 6
     P.append(pop(f'<circle class="nw-dot" cx="{f(sx)}" cy="{f(sy)}" r="3"/>', T + 0.4))
     P.append(draw("nw-line", f"M{sx + 6} {sy - 4} L{sx + 46} {sy - 26} M{sx + 38} {sy - 27} L{sx + 46} {sy - 26} L{sx + 42} {sy - 19}", T + 0.4, 0.4))
@@ -215,7 +208,7 @@ def arqueogal() -> str:
     P.append(note(XA + 112, y - 2, "parallax", 70, T + 0.5))
     P.append(thread(f"M{XA + WA} {f(y)} H{XB}", T + 0.6))
     P.append(node(XA + WA, y, T + 0.6)); P.append(node(XB, y, T + 0.65))
-    P += stage(XB, y, WA, "ORBIT IN THE GALAXY", "TASK 3 · Bossini", "me", T + 0.5)
+    P += stage(XB, y, WA, "ORBIT IN THE GALAXY", "TASK 3", "me", T + 0.5)
     ox, oy = XB + 58, y - 4
     opts = []
     for k in range(181):
@@ -229,7 +222,7 @@ def arqueogal() -> str:
 
     # lane 3: the spectrum (task 3), APOGEE where it exists, else JANUS
     y = L[2]
-    P += stage(XA, y, WA, "SPECTRUM", "TASK 3 · Bossini", "team", T + 0.4)
+    P += stage(XA, y, WA, "SPECTRUM", "TASK 3", "team", T + 0.4)
     ax, ay = XA + 14, y - 26
     P.append(draw("nw-line", f"M{ax} {ay} H{ax + 70} " + " ".join(f"M{f(ax + 3 + 1.9 * k)} {ay} v{f(3 + 9 * abs(math.sin(k * 1.37) * math.cos(k * 0.41)))}" for k in range(35)), T + 0.6, 0.5))
     P.append(note(ax + 80, ay + 4, "APOGEE", 90, T + 0.7))
@@ -240,7 +233,7 @@ def arqueogal() -> str:
     P.append(note(bx + 80, by - 2, "Gaia XP", 90, T + 0.75))
     P.append(thread(f"M{XA + WA} {f(y)} H{XB}", T + 0.8))
     P.append(node(XA + WA, y, T + 0.8)); P.append(node(XB, y, T + 0.85))
-    P += stage(XB, y, WA, "CHEMISTRY: JANUS", "TASK 3 · Bossini", "me", T + 0.7)
+    P += stage(XB, y, WA, "CHEMISTRY: JANUS", "TASK 3", "me", T + 0.7)
     nx, ny = XB + 16, y - 30
     cols = (nx, nx + 22, nx + 44)
     rows = (ny + 4, ny + 18, ny + 32, ny + 46)
@@ -268,7 +261,9 @@ def arqueogal() -> str:
         P.append(note(XC + WC - 10, by + 4, dl, 60, T + 0.15 + 0.06 * k, "end"))
         if k:
             P.append(draw("nw-guide", f"M{XC + 6} {f(by - 18)} H{XC + WC - 6}", T + 0.1 + 0.06 * k, 0.25))
-    P.append(thread(f"M{XA + WA} {L[0]} C{XA + WA + 20} {L[0]}, {XC - 20} {L[0] - 24}, {XC} {L[0] - 24}", T))
+    ytop = L[0] - BH / 2 - 16
+    P.append(thread(f"M{XA + WA} {L[0] - 30} C{XA + WA + 22} {L[0] - 30}, {XB - 30} {ytop}, {XB} {ytop} H{XC - 24} C{XC - 10} {ytop}, {XC - 10} {L[0] - 24}, {XC} {L[0] - 24}", T))
+    P.append(node(XA + WA, L[0] - 30, T))
     P.append(thread(f"M{XB + WA} {L[0]} C{XB + WA + 16} {L[0]}, {XC - 16} {L[0] + 24}, {XC} {L[0] + 24}", T + 0.05))
     P.append(thread(f"M{XB + WA} {L[1]} H{XC}", T + 0.1))
     P.append(thread(f"M{XB + WA} {L[2]} H{XC}", T + 0.15))
@@ -279,7 +274,7 @@ def arqueogal() -> str:
 
     # Starfold reads the row and returns the population
     y = L[1]
-    P += stage(XD, y, WD, "STARFOLD: POPULATION", "TASK 5 · Campante, Miglio", "me", T)
+    P += stage(XD, y, WD, "STARFOLD: POPULATION", "TASK 5", "me", T)
     gold = math.pi * (3 - math.sqrt(5))
     for g, (cx, cy, axx, ayy, tilt, n) in enumerate(((XD + 40, y - 12, 22, 11, -14, 7), (XD + 96, y - 13, 20, 10, 12, 6), (XD + 66, y + 12, 28, 11, 4, 8))):
         th = math.radians(tilt)
@@ -304,8 +299,8 @@ def arqueogal() -> str:
     T += 0.5
 
     # the Galactic model reads the catalogue and draws the map
-    P += stage(XE, y, WE, "THE DISC, MAPPED", ("TASK 6", "Campante, Miglio"), "part", T)
-    mx, my = XE + WE / 2, y + 4
+    P += stage(XE, y, WE, "THE DISC, MAPPED", "TASK 6", "part", T)
+    mx, my = XE + WE / 2, y - 4
     for r in (16, 30, 44):
         P.append(draw("nw-line", f"M{f(mx - r)} {f(my)} a{r} {r * 0.4:.1f} 0 1 0 {2 * r} 0 a{r} {r * 0.4:.1f} 0 1 0 {-2 * r} 0", T + 0.1, 0.5))
     P.append(pop(f'<circle class="nw-obs" cx="{f(mx + 24)}" cy="{f(my + 3)}" r="2.6"/>', T + 0.3))
