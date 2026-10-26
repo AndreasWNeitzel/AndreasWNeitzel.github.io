@@ -194,6 +194,11 @@ band:
     label: playground
     url: /playground/polytropes/
     art: polytrope
+  - title: Gaussian processes on a star's velocities
+    tag: software
+    label: playground
+    url: /playground/gaussian-processes/
+    art: gp
   - title: What Gaia measures
     tag: guide
     label: guide

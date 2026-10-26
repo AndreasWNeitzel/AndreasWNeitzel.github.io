@@ -11,6 +11,7 @@
 - [Software and demos](https://andreaswneitzel.github.io/software/): Starfold, Stellar Explorer, Tellurion and the demos
 - [Neural-network playground](https://andreaswneitzel.github.io/playground/neural-network/): a small network trained in the browser on Gaia DR3 XP spectra (teaching demo)
 - [Orbits playground](https://andreaswneitzel.github.io/playground/orbits/): leapfrog, Runge-Kutta and Euler integrators around the Earth (Molniya and geostationary satellites with ground-station visibility) and in MWPotential2014 for six Gaia DR3 stars
+- [Gaussian-process playground](https://andreaswneitzel.github.io/playground/gaussian-processes/): kernels, conditioning and the marginal likelihood, then a quasi-periodic Gaussian process with jitter sampled by Metropolis on the 223 HARPS velocities of HD 41248 (Jenkins and Tuomi 2014)
 - [Polytrope playground](https://andreaswneitzel.github.io/playground/polytropes/): Lane-Emden solved in the browser, scaled to the Sun, 61 Virginis and GJ 504, compared with a MESA profile
 - [Starfold held-out benchmark](https://andreaswneitzel.github.io/software/starfold-benchmark/): the ten-table benchmark, including the two held-out tables it lost
 - [Talks and posters](https://andreaswneitzel.github.io/talks/): international and national talks and posters with Zenodo DOIs

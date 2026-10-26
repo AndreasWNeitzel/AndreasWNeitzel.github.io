@@ -21,6 +21,10 @@ extra_links:
       <div class="media art">{% include figures/art-orbit.svg %}</div>
       <div class="card-body"><span class="tag tag--software">playground</span><h3>Orbits, from satellites to the Milky Way</h3><p>Leapfrog against Runge-Kutta and Euler around the Earth, then six <i>Gaia</i> stars through the Galaxy.</p><span class="go">Open</span></div>
     </a>
+    <a class="card" href="{{ '/playground/gaussian-processes/' | relative_url }}" data-spotlight>
+      <div class="media art">{% include figures/art-gp.svg %}</div>
+      <div class="card-body"><span class="tag tag--software">playground</span><h3>Gaussian processes on a star's velocities</h3><p>Draw functions from a kernel, pin them with observations, then sample the activity of HD 41248 from 223 HARPS velocities.</p><span class="go">Open</span></div>
+    </a>
     <a class="card" href="{{ '/playground/polytropes/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-polytrope.svg %}</div>
       <div class="card-body"><span class="tag tag--software">playground</span><h3>Build a star</h3><p>Solve the Lane-Emden equation, scale it to a real star and see where a polytrope stops describing one.</p><span class="go">Open</span></div>
