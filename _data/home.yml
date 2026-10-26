@@ -17,7 +17,7 @@ profile:
 glance:
   - {n: "4", label: refereed papers}
   - {n: "16", label: talks and posters}
-  - {n: "1.1 M", label: core-hours approved}
+  - {n: "1.3 M", label: core-hours approved}
   - {n: "5", label: fellowships and allocations}
 
 highlights:
@@ -30,7 +30,7 @@ highlights:
     ledger: pub-2025-neitzel-manifold-learning
   - tag: hpc
     label: HPC
-    title: 1.1 million core-hours approved
+    title: 1.3 million core-hours approved
     text: Responsible investigator on two FCT computing projects, on MareNostrum 5 and Deucalion, with 2,500 GPU-hours.
     when: "2026"
     url: /guide/supercomputers/
@@ -96,7 +96,7 @@ record:
       - "<strong>ArqueoGal PhD fellowship</strong>, FCT project 2024.15303.PEX, 2026 to 2027"
       - "<strong>FCT MSc research grant</strong>, BreakStarS project, 2021 to 2022"
       - "<strong>MareNostrum 5</strong>: 1,002,400 core-hours and 1,000 H100 GPU-hours, as responsible investigator, approved 2026"
-      - "<strong>Deucalion</strong>: 99,840 core-hours and 1,500 A100 GPU-hours, as responsible investigator, approved 2026"
+      - "<strong>Deucalion</strong>: 299,520 core-hours (99,840 granted, tripled as a bonus) and 1,500 A100 GPU-hours, as responsible investigator, approved 2026"
   - id: leadership
     title: Leadership
     count: "3"

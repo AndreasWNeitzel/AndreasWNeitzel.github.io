@@ -62,7 +62,7 @@ positions:
   location: Bologna, Italy
   date: 2025-09
   end_date: 2026-03
-  summary: Six-month secondment in A. Miglio's group building simulation pipelines for the proposed HAYDN mission, with regular visits to INAF Osservatorio Astronomico di Padova.
+  summary: Six-month secondment in A. Miglio's group building the HAYDNsim simulation pipeline for the proposed HAYDN mission, with regular visits to INAF Osservatorio Astronomico di Padova.
   details:
   - Built the noise-estimation and synthetic-catalogue tools (TRILEGAL, King-profile sampling) for globular and open clusters.
   - Ran the noise simulations on the Deucalion supercomputer and the University of Bologna clusters.
@@ -129,6 +129,25 @@ publications:
   audiences:
   - academic
   contribution: Carried out the GJ 570 A ESPRESSO observations at Paranal (visitor mode, May 2024).
+- id: pub-2026-haydnsim-inprep
+  title: 'HAYDNsim: an end-to-end stellar-field and photometric-noise simulation framework for the HAYDN mission concept'
+  tagline: First-author paper on the HAYDNsim pipeline and the HAYDN crowded-field noise requirement, in preparation.
+  kind: in-preparation
+  role: first-author
+  venue: In preparation
+  date: '2026'
+  people:
+  - A. W. Neitzel
+  - et al.
+  summary: Describes HAYDNsim and tests the HAYDN crowded-field noise requirement on three globular clusters, in preparation.
+  tags:
+  - HAYDN
+  - asteroseismology
+  - mission-simulation
+  weight: 5
+  audiences:
+  - academic
+  status: in-preparation
 - id: pub-2025-neitzel-manifold-learning
   title: Dissecting stellar populations with manifold learning. I. Validation of the method on a synthetic Milky Way-like galaxy
   tagline: A method for separating the Milky Way's stellar populations, tested on a synthetic galaxy.
@@ -486,7 +505,7 @@ funding:
   - T. L. Campante (co-responsible investigator)
   identifiers:
     reference: 2026.08382.CPCA.A1
-  summary: 'Approved national computing allocation to apply JANUS to the Gaia DR3 XP spectra of about 220 million stars: 99,840 core-hours on the ARM partition, 1,500 A100 GPU-hours and 10 TB for 12 months.'
+  summary: 'Allocation to run JANUS on the Gaia DR3 XP spectra of about 220 million stars: 299,520 ARM core-hours (99,840 granted, tripled as a bonus), 1,500 A100 GPU-hours and 10 TB for 12 months.'
   details:
   - Approved under call FCT/CPCA/2025/01.
   tags:
@@ -502,10 +521,11 @@ funding:
   funder: FCT I.P.
   pi: Andreas W. Neitzel (responsible investigator); Tiago L. Campante (co-responsible investigator)
   numbers:
-    core_hours: 99840
+    core_hours: 299520
     gpu_hours: 1500
     stars_millions: 220
     months: 12
+    core_hours_granted: 99840
 - id: fund-2026-10-cpca-a2-marenostrum
   title: 'FCT Advanced Computing Project 2026.08362.CPCA.A2: JANUS on MareNostrum 5, Gaia DR4'
   tagline: National computing allocation to run JANUS on Gaia DR4 spectra on MareNostrum 5.
@@ -517,7 +537,7 @@ funding:
   - T. L. Campante (co-responsible investigator)
   identifiers:
     reference: 2026.08362.CPCA.A2
-  summary: 'Approved national computing allocation to apply JANUS to the Gaia DR4 XP spectra of about 1.8 billion stars: 1,002,400 core-hours on the general-purpose partition, 1,000 H100 GPU-hours and 25 TB for 12 months.'
+  summary: 'Allocation to run JANUS on the Gaia DR4 XP spectra of about 1.8 billion stars: 1,002,400 core-hours, 1,000 H100 GPU-hours and 25 TB for 12 months.'
   details:
   - Approved under call FCT/CPCA/2025/01.
   tags:
@@ -579,7 +599,7 @@ funding:
   end_date: 2026-09
   identifiers:
     reference: 2025.00007.HPCVLAB.UPORTO
-  summary: 'Development work on the ARM, x86 and A100 partitions for JANUS, the HAYDN proposal tests and the HAYDNsim noise runs: 94,001 core-hours in about 250 jobs.'
+  summary: 'Development work on the ARM, x86 and A100 partitions for JANUS and for the HAYDNsim noise simulations behind the HAYDN mission proposal: 94,001 core-hours in about 250 jobs.'
   tags:
   - hpc
   - deucalion
@@ -957,7 +977,7 @@ events:
   identifiers:
     reference: ESO 113.26FX.002
     url: https://arxiv.org/abs/2610.20985
-  summary: Visitor-mode run 113.26FX.002, six nights from 6 to 12 May 2024, on the K dwarf GJ 570 A for PI T. L. Campante.
+  summary: Visitor-mode run 113.26FX.002, six nights in May 2024, on the K dwarf GJ 570 A for PI T. L. Campante.
   weight: 5
   audiences:
   - academic

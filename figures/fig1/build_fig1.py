@@ -471,7 +471,7 @@ rl = [
     text(
         84,
         513,
-        "Deucalion · MareNostrum 5 · Slurm · CUDA · RAPIDS · 1.1 M core-h approved",
+        "Deucalion · MareNostrum 5 · Slurm · CUDA · RAPIDS · 1.3 M core-h approved",
         "f1-sub",
         T["done"],
     ),

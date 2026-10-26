@@ -49,7 +49,7 @@
       labels: ["Labels with reliability.", "Teff, log g, [M/H], [α/M], [Fe/H] and [Mg/H], each with a per-star median and spread, plus a calibrated probability that the prediction misses and a novelty score for stars unlike the training set."],
       starfold: ["Starfold.", "My open-source package for finding groups without labels: UMAP and HDBSCAN with an unsupervised search, refit 32 times to measure how often each group recurs."],
       galaxy: ["The Milky Way.", "Grouped by chemistry, age and motion, stars separate into the thin disc, thick disc, halo and accreted debris, the populations that record how the Galaxy was assembled. My 2025 paper tested this on a simulated galaxy."],
-      hpc: ["Compute.", "Responsible investigator on two approved FCT allocations: 1,002,400 core-hours and 1,000 H100 GPU-hours on MareNostrum 5, and 99,840 core-hours and 1,500 A100 GPU-hours on Deucalion."],
+      hpc: ["Compute.", "Responsible investigator on two approved FCT allocations: 1,002,400 core-hours and 1,000 H100 GPU-hours on MareNostrum 5, and 299,520 core-hours and 1,500 A100 GPU-hours on Deucalion."],
     };
     const titleEl = fig.querySelector("[data-cap-title]");
     const textEl = fig.querySelector("[data-cap-text]");

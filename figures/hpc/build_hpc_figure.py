@@ -60,7 +60,7 @@ MACHINES = [
 ALLOC = [
     {
         "machine": "Deucalion", "ref": "2026.08382.CPCA.A1", "data": "Gaia DR3, about 220 million stars",
-        "cpu": "99,840 core-hours, ARM", "gpu": "1,500 A100 GPU-hours", "store": "10 TB", "months": "12 months",
+        "cpu": "299,520 core-hours, ARM", "gpu": "1,500 A100 GPU-hours", "store": "10 TB", "months": "12 months",
         "cpu_days": 99840 / 48 / 24, "gpu_days": 1500 / 4 / 24, "cores": 48,
     },
     {
@@ -195,7 +195,7 @@ def run_panel():
     ry = by + bh + 76
     parts.append(text(x0, ry, "CPU TIME, TO SCALE", "hpc-head", tb + 1.4))
     bars = (("HPCvLAB development access, used", 94001, "94,001 core-hours, about 250 jobs"),
-            ("Deucalion allocation 2026.08382.CPCA.A1", 99840, "99,840 core-hours"),
+            ("Deucalion allocation 2026.08382.CPCA.A1", 299520, "299,520 core-hours"),
             ("MareNostrum 5 allocation 2026.08362.CPCA.A2", 1002400, "1,002,400 core-hours"))
     for k, (lab, n, val) in enumerate(bars):
         by_ = ry + 24 + 46 * k
