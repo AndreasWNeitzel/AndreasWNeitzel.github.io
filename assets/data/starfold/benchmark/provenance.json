@@ -1,0 +1,22 @@
+{
+ "source": {
+  "repository": "https://github.com/AndreasWNeitzel/starfold",
+  "file": "bench/results/summary.json",
+  "sha256": "23ae1e8dab6994e3a301570305f4220ee706e0ca9c020548b29708091e07e336",
+  "file_last_commit": "bc89297ba02d697928e8af3914d21bdde01d2b58 (2026-09-28)",
+  "benchmark_tag": "v0.2.0",
+  "benchmark_commit": "f93dea03aa0f29a2e538b7221970a35898ea3c90",
+  "injection_records_file": "bench/results/injection_recovery.json",
+  "injection_records_sha256": "b29a50ba1737c6423f6c1994bd349b6e4c38c545b8e02a9ec011e653c4096835"
+ },
+ "exported": "2026-10-26",
+ "definitions": {
+  "starfold_recovery": "adjusted Rand index (floored at 0) against the true classes on the assigned rows, times the share of rows assigned, for the selected setting",
+  "defaults_recovery": "median of the same quantity for the UMAP and HDBSCAN library defaults over 8 seeds",
+  "gain": "starfold_recovery minus defaults_recovery",
+  "spearman_score_recovery": "Spearman correlation of the label-free trial score with the recovery of each trial, over the search trials of that table",
+  "class_size_over_scale": "0.8 n / classes divided by sqrt(15 x 0.8 n): the mean class size in an 80 percent resample over the modularity resolution scale, as in bench/figures.py",
+  "injection": "synthetic groups of declared size were injected into the real APOGEE DR19 example table (2,000 rows) as a check of the method; a group counts as retrieved when an emitted group reaches Jaccard 0.5 with it; purity and completeness are averaged over the three injected groups at each support threshold; purity is null where no group matched; the injected rows are never kept (bench/injection_recovery.py)"
+ },
+ "licence": "Results: MIT, as the Starfold repository. Only derived scores are exported."
+}

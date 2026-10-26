@@ -5,6 +5,7 @@ crumb: {label: Software, url: /software/}
 title: Starfold held-out benchmark
 nav_section: Software
 description: Per-table results of Starfold 0.2.0 against the library defaults on ten tables with known classes.
+extra_css: [/assets/css/starfold-bench.css]
 lede: Starfold 0.2.0 was tested on ten tables with known classes and lost to the library defaults on two of the four held-out tables.
 ---
 <div class="row">
@@ -31,16 +32,12 @@ lede: Starfold 0.2.0 was tested on ten tables with known classes and lost to the
 </section>
 <section class="row" aria-labelledby="figures">
   <h2 id="figures">Figures</h2>
-  <figure class="figure">
-    <img src="{{ '/assets/figures/starfold/digits_partitions.png' | relative_url }}" width="1639" height="711" alt="Three two-dimensional maps of the digits table: true digits, the ten Starfold groups faded by recurrence, and the fifty-one groups one default fit finds." loading="lazy">
-    <figcaption>The scikit-learn digits on a two-dimensional map, coloured by the true digits (left, used only to check the fit), the 10 Starfold groups faded where refits rarely agree (middle), and the 51 groups from one default fit (right).</figcaption>
+  <figure class="figure sfb-figure">
+    {% include figures/starfold-resolution.svg %}
+    <figcaption>Starfold gains most where the classes are large compared with the finest structure its graph can resolve, and its label-free score tracks recovery on most tables. Left, recovery minus the default recovery; right, the Spearman correlation of the trial score with recovery; both against the mean class size in an 80 per cent resample over the modularity resolution scale, the square root of 15 m rows (dashed line, Fortunato and Barthelemy 2007, <a href="https://doi.org/10.1073/pnas.0605965104">doi:10.1073/pnas.0605965104</a>). Values from the recorded <code>bench/results/summary.json</code> at tag v0.2.0, exported to <a href="{{ '/assets/data/starfold/benchmark/resolution.json' | relative_url }}">resolution.json</a>.</figcaption>
   </figure>
-  <figure class="figure">
-    <img src="{{ '/assets/figures/starfold/bench_resolution.png' | relative_url }}" width="2179" height="1028" alt="Recovery gain and score-recovery correlation plotted against class size relative to the modularity resolution scale." loading="lazy">
-    <figcaption>Recovery gain, and the correlation of the label-free score with recovery, against class size in units of the modularity resolution scale, about the square root of 15 m rows (dashed line, Fortunato and Barthelemy 2007, <a href="https://doi.org/10.1073/pnas.0605965104">doi:10.1073/pnas.0605965104</a>).</figcaption>
-  </figure>
-  <figure class="figure">
-    <img src="{{ '/assets/figures/starfold/bench_injection.png' | relative_url }}" width="2181" height="1047" alt="Retrieval, purity and completeness of injected groups against their size." loading="lazy">
-    <figcaption>Retrieval, purity and completeness of injected groups against their size, in units of the same resolution scale. Each size is a single draw of three sites, so the plot gives only a rough threshold.</figcaption>
+  <figure class="figure sfb-figure">
+    {% include figures/starfold-injection.svg %}
+    <figcaption>Groups smaller than the resolution scale are not found, and the groups that are found stay pure as the support threshold rises while their completeness falls. This is a method check: synthetic groups of 30 to 480 rows were injected into the real APOGEE DR19 example table of 2,000 rows, each size as a single draw of three sites, and a group counts as retrieved when an emitted group reaches a Jaccard index of 0.5 with it; the injected rows are never kept. Left, the fraction retrieved against the injected size over the same scale; right, purity (solid) and completeness (dashed) of the retrieved groups against the recurrence support threshold. Values from <code>bench/results/injection_recovery.json</code> at tag v0.2.0, exported to <a href="{{ '/assets/data/starfold/benchmark/injection.json' | relative_url }}">injection.json</a>, with the <a href="{{ '/assets/data/starfold/benchmark/provenance.json' | relative_url }}">provenance</a> record.</figcaption>
   </figure>
 </section>
