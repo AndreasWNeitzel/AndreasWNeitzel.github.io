@@ -10,13 +10,26 @@ extra_links:
     - {label: Held-out benchmark, url: /software/starfold-benchmark/}
 ---
 {%- assign L = site.data.ledger -%}
-<section class="section" aria-labelledby="try">
-  <div class="section-head"><h2 id="try">Try in the browser</h2></div>
-  <div class="mosaic">
-    <a class="card wide" href="{{ '/playground/neural-network/' | relative_url }}" data-spotlight>
+<section class="section" id="playgrounds" aria-labelledby="pg">
+  <div class="section-head"><h2 id="pg">Playgrounds</h2><p>Methods from my coursework and research, rebuilt to run in the browser on real data.</p></div>
+  <div class="mosaic mosaic--pairs">
+    <a class="card" href="{{ '/playground/neural-network/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-nn.svg %}</div>
       <div class="card-body"><span class="tag tag--software">playground</span><h3>Train a neural network on <i>Gaia</i> spectra</h3><p>Real XP spectra of 4,000 stars; watch the network learn metallicity live.</p><span class="go">Open</span></div>
     </a>
+    <a class="card" href="{{ '/playground/orbits/' | relative_url }}" data-spotlight>
+      <div class="media art">{% include figures/art-orbit.svg %}</div>
+      <div class="card-body"><span class="tag tag--software">playground</span><h3>Orbits, from satellites to the Milky Way</h3><p>Leapfrog against Runge-Kutta and Euler around the Earth, then six <i>Gaia</i> stars through the Galaxy.</p><span class="go">Open</span></div>
+    </a>
+    <a class="card" href="{{ '/playground/polytropes/' | relative_url }}" data-spotlight>
+      <div class="media art">{% include figures/art-polytrope.svg %}</div>
+      <div class="card-body"><span class="tag tag--software">playground</span><h3>Build a star</h3><p>Solve the Lane-Emden equation, scale it to a real star and see where a polytrope stops describing one.</p><span class="go">Open</span></div>
+    </a>
+  </div>
+</section>
+<section class="section" aria-labelledby="try">
+  <div class="section-head"><h2 id="try">Demos and apps</h2></div>
+  <div class="mosaic mosaic--pairs">
     <a class="card" href="{{ '/software/starfold-demo/' | relative_url }}" data-spotlight>
       <div class="media art">{% include figures/art-clusters.svg %}</div>
       <div class="card-body"><span class="tag tag--software">demo</span><h3>Starfold on 9,242 Milky Way stars</h3><p>APOGEE chemistry and <i>Gaia</i> orbits: inspect any star and replay the 32 refits.</p><span class="go">Open</span></div>

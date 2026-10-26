@@ -10,6 +10,8 @@
 - [Observing at the Very Large Telescope](https://andreaswneitzel.github.io/observing/paranal/): the May 2024 ESPRESSO run at Paranal
 - [Software and demos](https://andreaswneitzel.github.io/software/): Starfold, Stellar Explorer, Tellurion and the demos
 - [Neural-network playground](https://andreaswneitzel.github.io/playground/neural-network/): a small network trained in the browser on Gaia DR3 XP spectra (teaching demo)
+- [Orbits playground](https://andreaswneitzel.github.io/playground/orbits/): leapfrog, Runge-Kutta and Euler integrators around the Earth (Molniya and geostationary satellites with ground-station visibility) and in MWPotential2014 for six Gaia DR3 stars
+- [Polytrope playground](https://andreaswneitzel.github.io/playground/polytropes/): Lane-Emden solved in the browser, scaled to the Sun, 61 Virginis and GJ 504, compared with a MESA profile
 - [Starfold held-out benchmark](https://andreaswneitzel.github.io/software/starfold-benchmark/): the ten-table benchmark, including the two held-out tables it lost
 - [Talks and posters](https://andreaswneitzel.github.io/talks/): international and national talks and posters with Zenodo DOIs
 - [Field guide](https://andreaswneitzel.github.io/guide/): short explainers of Galactic archaeology, asteroseismology, Gaia, ESO, INAF, IA and FCT, HAYDN, TESS and Kepler, and supercomputers

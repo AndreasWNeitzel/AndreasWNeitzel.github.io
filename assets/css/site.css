@@ -655,7 +655,7 @@
   .band.is-paused .band-pause .p-pause { display: none; } .band.is-paused .band-pause .p-play { display: block; }
   @media (prefers-reduced-motion: reduce) {
     .band-track { animation: none; } .band-set[aria-hidden] { display: none; } .band-pause { display: none; }
-    .band-viewport { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-mask-image: none; mask-image: none; }
+    .band-viewport { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; -webkit-mask-image: none; mask-image: none; }
     .bcard { scroll-snap-align: start; }
   }
   @media (max-width: 640px) { .bcard { inline-size: 220px; block-size: 112px; } }
@@ -796,6 +796,8 @@
 
   /* paper explainer cards in pairs, each photo with its credit linked beside it */
   .mosaic--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mosaic--pairs > .card { grid-column: auto; min-block-size: 250px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .mosaic--pairs > .card.wide { grid-column: 1 / -1; }
   .card-wrap { position: relative; display: grid; }
   .card-wrap > .card { min-block-size: 280px; display: flex; flex-direction: column; justify-content: flex-end; }
   .ccredit { position: absolute; inset-block-start: 6px; inset-inline-end: 8px; z-index: 3; max-inline-size: 80%; text-align: end;

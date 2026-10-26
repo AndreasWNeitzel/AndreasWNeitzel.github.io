@@ -131,11 +131,11 @@ record:
       - "<strong>Open source</strong>: Starfold 0.2.0 (MIT, 294 tests); Tellurion, interactive physics simulations (MIT)"
 
 explore:
-  - title: Train a neural network on Gaia spectra
-    text: A small network learns stellar metallicity from real Gaia XP spectra, live in your browser.
+  - title: Four playgrounds
+    text: A neural network on Gaia spectra, Gaussian processes on a star's velocities, orbits from satellites to the Milky Way, and a star built from a polytrope, all live in your browser.
     tag: software
-    label: playground
-    url: /playground/neural-network/
+    label: playgrounds
+    url: /software/#playgrounds
     art: nn
     size: wide
   - title: Observing at the Very Large Telescope
@@ -184,6 +184,16 @@ band:
     label: playground
     url: /playground/neural-network/
     art: nn
+  - title: Orbits, from satellites to the Milky Way
+    tag: software
+    label: playground
+    url: /playground/orbits/
+    art: orbit
+  - title: Build a star from a polytrope
+    tag: software
+    label: playground
+    url: /playground/polytropes/
+    art: polytrope
   - title: What Gaia measures
     tag: guide
     label: guide
