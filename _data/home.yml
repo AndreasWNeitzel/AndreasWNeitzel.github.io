@@ -18,14 +18,14 @@ glance:
 
 # Four pieces of work, one card each; the rest of the record is on the Research page.
 selected:
-  - title: Dissecting stellar populations with manifold learning
-    kicker: A&A 695, A243 (2025), first author
-    text: Label-free split of disc and halo in a simulated Milky Way and, in error-free data, two swallowed galaxies.
-    url: /papers/neitzel-2025-manifold-learning/
+  - title: Stellar populations without labels, from the paper to Starfold
+    kicker: A&A 695, A243 (2025), first author · Starfold 0.2.0, open source
+    text: Manifold learning separates disc, halo and accreted stars in a simulated Milky Way; Starfold is the package that grew out of it, with 17 named warnings.
+    url: /research/#populations
     img: /assets/img/cards/milky-way.webp
     tag: paper
-    label: paper
-    ledger: pub-2025-neitzel-manifold-learning
+    label: paper and software
+    ledger: [pub-2025-neitzel-manifold-learning, sw-2026-starfold]
   - title: JANUS, the chemistry of red giants from Gaia spectra
     kicker: PhD work within the FCT project ArqueoGal, 2025 to 2027
     text: Normalising-flow networks that read stellar parameters and chemistry from Gaia spectra, with a reliability score for every star.
@@ -34,14 +34,14 @@ selected:
     tag: software
     label: research
     ledger: [fund-2026-arqueogal-pex-participant, pres-2026-07-tasc10-oral-janus, pres-2026-10-imas13-oral-janus]
-  - title: Starfold, grouping stars with a warning label
-    kicker: open source, 0.2.0
-    text: UMAP and HDBSCAN with 17 named warnings, shown on 9,242 stars, benchmarked on held-out tables with two losses.
-    url: /software/starfold-demo/
+  - title: ArqueoGal, the Milky Way's history with Galactic archaeology
+    kicker: FCT exploratory project, 2026 to 2027, co-investigator
+    text: The project JANUS and Starfold serve. I develop its machine-learning pipelines and the repository that prepares Gaia DR3 and APOGEE DR19 data with provenance.
+    url: /research/#arqueogal
     art: clusters
-    tag: software
-    label: software
-    ledger: sw-2026-starfold
+    tag: grant
+    label: project
+    ledger: [fund-2026-arqueogal-pex-participant, sw-2026-arqueogal-repo]
   - title: HAYDNsim, noise forecasts for crowded clusters
     kicker: INAF Bologna secondment, 2025 to 2026
     text: Builds synthetic fields of dense star clusters and forecasts each star's photometric noise for the proposed HAYDN mission.

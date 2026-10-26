@@ -3,7 +3,7 @@ layout: page
 permalink: /research/
 title: Research
 description: The research of Andreas W. Neitzel, machine learning for Galactic archaeology, in four lines of work, with the papers explained and the background in one minute each.
-lede: Four lines of work, one chain. Neural networks read red-giant chemistry from Gaia spectra, unsupervised methods find the populations, asteroseismology sets their ages, and a simulation tests HAYDN.
+lede: Six lines of work, one chain. Neural networks read red-giant chemistry from Gaia spectra, unsupervised methods find the populations, asteroseismology sets their ages, and a simulation tests HAYDN.
 extra_css: [/assets/css/thesis.css]
 ---
 {%- assign L = site.data.ledger -%}
@@ -15,6 +15,15 @@ extra_css: [/assets/css/thesis.css]
       <h2>JANUS: chemistry from <i>Gaia</i> spectra</h2>
       <p><i>Gaia</i> DR3 carries low-resolution spectra of 220 million stars. JANUS, eight normalising-flow networks, reads a red giant's parameters and abundances from them, with a per-star miss probability. Trained where <i>Gaia</i> overlaps APOGEE, validated on open clusters, wide binaries and the first dredge-up. Talks at TASC10/KASC17 and IMAS13; two FCT projects on Deucalion and MareNostrum 5.</p>
       <p class="links"><a href="{{ '/talks/' | relative_url }}">The talks</a> · <a href="{{ '/guide/machine-learning-for-stars/' | relative_url }}">Machine learning for stars, in a minute</a> · <a href="{{ '/playground/neural-network/' | relative_url }}">Train a small one yourself</a></p>
+    </div>
+  </article>
+  <article class="line card" id="arqueogal">
+    <div class="line-pic"><img src="{{ '/assets/img/guide/supercomputers.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
+    <div class="card-body">
+      <span class="kicker">2026 to 2027 · FCT exploratory project 2024.15303.PEX · PI T. L. Campante</span>
+      <h2>ArqueoGal: the project the pipelines serve</h2>
+      <p>ArqueoGal is an FCT exploratory project to unravel the Milky Way's history with Galactic archaeology, led by Tiago L. Campante. I am a co-investigator (team member) and I develop its machine-learning pipelines: JANUS for the stellar labels, Starfold for the populations, and the integration repository that prepares <i>Gaia</i> DR3 and APOGEE DR19 data with provenance for both. The two FCT computing allocations on Deucalion and MareNostrum 5 run that work.</p>
+      <p class="links"><a href="https://doi.org/10.54499/2024.15303.PEX">The project record</a> · <a href="https://github.com/AndreasWNeitzel/ArqueoGal">The integration repository</a> · <a href="{{ '/guide/supercomputers/' | relative_url }}">The supercomputers, in a minute</a></p>
     </div>
   </article>
   <article class="line card" id="populations">
