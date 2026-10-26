@@ -97,8 +97,8 @@ def method_figure() -> str:
     L = [(40, 170, 290, 120, "SPECTROSCOPY"), (40, 300, 290, 120, "LUMINOSITY"), (40, 430, 290, 120, "SEISMIC PARAMETERS")]
     for i, (x, y, w, h, title) in enumerate(L):
         p += frame(x, y, w, h, title, T_FRAME + 0.1 * i)
-    p += frame(380, 40, 185, 110, "MESA GRID", T_FRAME + 0.3)
-    p += frame(585, 40, 185, 110, "GYRE", T_FRAME + 0.4)
+    p += frame(380, 40, 185, 120, "MESA GRID", T_FRAME + 0.3)
+    p += frame(585, 40, 185, 120, "GYRE", T_FRAME + 0.4)
     PX, PY, PW, PH = 380, 170, 390, 380
     p += frame(PX, PY, PW, PH, "PARAM", T_FRAME + 0.5)
     p += frame(810, 170, 280, 180, "MASS, RADIUS, AGE", T_OUT)
@@ -148,35 +148,35 @@ def method_figure() -> str:
 
     # ---- pictograms, model panels
     # MESA grid: HR axes, tracks clipped inside them, a mass dimension line
-    ax, ay, aw, ah = 396, 76, 140, 40
+    ax, ay, aw, ah = 396, 78, 150, 52
     p.append(f'<clipPath id="th-hr"><rect x="{ax}" y="{ay - 2}" width="{aw}" height="{ah + 2}"/></clipPath>')
     p.append(draw("th-axis", f"M{ax} {ay} V{ay + ah} H{ax + aw}", T_PIC + 0.3, 0.3))
     # a schematic main sequence and subgiant branch for each mass, drawn in the log Teff, log L plane
     def model(m, a):
         tms = 10 / m ** 2.5
         fr = min(a / tms, 1.7)
-        lum = m ** 3.6 * (0.75 + 0.45 * fr + 2.2 * max(0.0, fr - 1.0) ** 1.3)
-        teff = m ** 0.55 * (1.02 - 0.06 * fr - 0.3 * max(0.0, fr - 1.0) ** 1.1)
-        return ax + aw * (1 - (math.log10(teff) + 0.3) / 0.52), ay + ah * (1 - (math.log10(lum) + 1.2) / 2.6)
+        lum = m ** 3.6 * (0.75 + 0.45 * fr + 6.0 * max(0.0, fr - 1.0) ** 1.3)
+        teff = m ** 0.55 * (1.02 - 0.06 * fr - 0.42 * max(0.0, fr - 1.0) ** 1.1)
+        return ax + aw * (1 - (math.log10(teff) + 0.36) / 0.6), ay + ah * (1 - (math.log10(lum) + 1.25) / 3.0)
     masses = (0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.8)
     tracks, pts_by_mass = [], []
     for i, m in enumerate(masses):
         pts = [model(m, (j / 30) * 1.7 * 10 / m ** 2.5) for j in range(31)]
         pts_by_mass.append(pts)
         tracks.append(draw("th-pic", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), T_PIC + 0.35 + 0.04 * i, 0.5))
-    for j in (8, 16, 22, 27):
+    for j in (0, 16, 24, 30):
         iso = [pts[j] for pts in pts_by_mass]
         tracks.append(draw("th-guide", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in iso), T_PIC + 0.6, 0.3))
     p.append('<g clip-path="url(#th-hr)">' + "".join(tracks) + "</g>")
-    p.append(draw("th-dimline", f"M{ax + 10} {ay + ah + 10} H{ax + aw - 6} M{ax + 10} {ay + ah + 6} v8 M{ax + aw - 6} {ay + ah + 6} v8", T_PIC + 0.6, 0.3))
-    p.append(place([("text", "0.5 to 1.8 "), ("tex", r"M_\odot")], ax + aw / 2 + 2, ay + ah + 26, "th-note", 10.5, T_PIC + 0.65, "middle"))
+    p.append(draw("th-dimline", f"M{ax + 10} {ay + ah + 8} H{ax + aw - 6} M{ax + 10} {ay + ah + 4} v8 M{ax + aw - 6} {ay + ah + 4} v8", T_PIC + 0.6, 0.3))
+    p.append(place([("text", "0.5 to 1.8 "), ("tex", r"M_\odot")], ax + aw / 2 + 2, ay + ah + 23, "th-note", 10.5, T_PIC + 0.65, "middle"))
     # GYRE: a mode spectrum
-    mx0, mbase = 603, 126
+    mx0, mbase = 603, 134
     pattern = (26, 8, 18, 28, 9, 20, 30, 10, 20, 28, 8, 17, 24)
     p.append(draw("th-guide", f"M{mx0 - 6} {mbase} H{mx0 + 12 * len(pattern)}", T_PIC + 0.4, 0.17))
     for i, h in enumerate(pattern):
         p.append(draw("th-pic", f"M{mx0 + i * 12} {mbase} v{-h}", T_PIC + 0.45 + 0.02 * i, 0.2))
-    p.append(text(597, 142, "mode frequencies", "th-line", T_PIC + 0.6))
+    p.append(text(597, 152, "mode frequencies", "th-line", T_PIC + 0.6))
 
     # ---- PARAM: the posterior hill with its 68 per cent band
     p.append(text(PX + 12, PY + 46, "Bayesian isochrone fitting", "th-line", T_PIC + 0.5))
@@ -199,8 +199,8 @@ def method_figure() -> str:
         p.append(thread(f"M{x + w} {yc} H{PX}", T_THREAD + 0.05 * i))
     ports += [node(565, 95, T_THREAD), node(585, 95, T_THREAD)]
     p.append(thread("M565 95 H585", T_THREAD))
-    ports += [node(677, 150, T_THREAD + 0.1), node(677, PY, T_THREAD + 0.1)]
-    p.append(thread(f"M677 150 V{PY}", T_THREAD + 0.1))
+    ports += [node(677, 160, T_THREAD + 0.1), node(677, PY, T_THREAD + 0.1)]
+    p.append(thread(f"M677 160 V{PY}", T_THREAD + 0.1))
     for (yp, yo, t) in ((PY + 110, 260, T_OUT + 0.2), (PY + 270, 460, T_OUT + 0.3)):
         ports += [node(PX + PW, yp, t), node(810, yo, t)]
         p.append(thread(f"M{PX + PW} {yp} C{PX + PW + 24} {yp}, {810 - 24} {yo}, 810 {yo}", t))
@@ -245,7 +245,7 @@ def method_figure() -> str:
     bottom = sy0 + 4 * (cell + gap) - gap
     p.append(draw("th-dimline", f"M{right + 12} {sy0} H{right + 16} V{bottom} H{right + 12}", T_OUT + 0.9, 0.3))
     p.append(text(right + 22, (sy0 + bottom) / 2 + 4, "16", "th-note", T_OUT + 0.95))
-    p.append(text(sx0 - 90, bottom + 22, "mark area: the age uncertainty that set gives", "th-line", T_OUT + 1.0))
+    p.append(text(sx0 - 90, bottom + 22, "filled area: the age uncertainty", "th-line", T_OUT + 1.0))
     return (
         f'<svg class="bp-svg th-svg th-method" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
         'aria-labelledby="th-m-t"><title id="th-m-t">The method chain of the dissertation as framed stages: spectroscopy, '
