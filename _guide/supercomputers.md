@@ -6,7 +6,7 @@ order: 8
 hero: false
 extra_css: [/assets/css/hpc.css]
 wide_figure: figures/hpc.svg
-wide_caption: "The two national machines I compute on, drawn to scale, and how one JANUS run moves through them. Left, each square is 32 nodes and the filled squares are the partitions my allocations use; the bars compare peak performance. Right, the spectra wait on the parallel file system, a Slurm job array prepares them on CPU nodes, the GPU nodes run the network, and the catalogue is written back; the table lists what my two FCT allocations grant, with node-days worked out by arithmetic. Node counts, peaks and storage from EuroHPC JU and BSC, node hardware from the hosting sites, allocations from the FCT decisions."
+wide_caption: "The two national machines I compute on, drawn to scale, and how one JANUS run moves through them. Left, each square is 32 nodes and the filled squares are the partitions my allocations use; the bars compare peak performance. Right, the spectra wait on the parallel file system, a Slurm job array prepares them on CPU nodes, the GPU nodes run the network, and the catalogue is written back; the bars compare the computing time I have used and been granted. By arithmetic, 99,840 core-hours is one 48-core Deucalion node for 87 days, and 1,002,400 core-hours is one 112-core MareNostrum 5 node for 373 days. Node counts, peaks and storage from EuroHPC JU and BSC, node hardware from the hosting sites, allocations from the FCT decisions."
 image: /assets/img/guide/supercomputers.webp
 image_alt: "Rows of black computer cabinets in a white machine hall, with bundles of teal cables running along their tops and down their fronts."
 image_credit: "Steve Jurvetson / Wikimedia Commons"

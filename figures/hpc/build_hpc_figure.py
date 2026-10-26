@@ -144,95 +144,66 @@ def machines_panel():
 def run_panel():
     x0, x1 = 560, 1100
     parts = [text(x0, 24, "ONE JANUS RUN ON THE MACHINES", "hpc-head", 1.4)]
-    bw, gap, by, bh = 112, 24, 48, 108
-    stages = [
-        ("file system", "parallel storage: Gaia XP spectra, staged", "pfs"),
-        ("CPU nodes", "Slurm job array: batches, preprocessing", "cpu"),
-        ("GPU nodes", "JANUS, an ensemble of 8 neural networks, PyTorch with CUDA", "gpu"),
-        ("catalogue", "labels and reliability, written back", "cat"),
+    bw, gap, by, bh = 116, 22, 48, 160
+    stages = [  # title, one short line, pictogram
+        ("file system", "spectra, 10 to 25 TB", "pfs"),
+        ("CPU nodes", "Slurm job array", "cpu"),
+        ("GPU nodes", "JANUS on CUDA", "gpu"),
+        ("catalogue", "labels, reliability", "cat"),
     ]
-    xs = [x0 + 6 + k * (bw + gap) for k in range(4)]
+    xs = [x0 + 4 + k * (bw + gap) for k in range(4)]
     tb = 1.5
     mid = by + bh / 2
-    parts.append(pop(f'<path class="ray flowray hpc-thread" d="M{x0 - 12} {f(mid + 12)} C{x0 - 2} {f(mid + 12)} {x0 - 4} {f(mid)} {xs[0]} {f(mid)}"/>', tb))
+    parts.append(pop(f'<path class="ray flowray hpc-thread" d="M{x0 - 12} {f(mid + 14)} C{x0 - 2} {f(mid + 14)} {x0 - 4} {f(mid)} {xs[0]} {f(mid)}"/>', tb))
     for k in range(3):
         xa, xb = xs[k] + bw, xs[k + 1]
         xm = (xa + xb) / 2
-        d = (f"M{xa} {f(mid)} C{f(xm)} {f(mid)} {f(xm)} {f(mid - 9)} {xb} {f(mid - 9)}" if k % 2 == 0
-             else f"M{xa} {f(mid - 9)} C{f(xm)} {f(mid - 9)} {f(xm)} {f(mid)} {xb} {f(mid)}")
+        d = (f"M{xa} {f(mid)} C{f(xm)} {f(mid)} {f(xm)} {f(mid - 10)} {xb} {f(mid - 10)}" if k % 2 == 0
+             else f"M{xa} {f(mid - 10)} C{f(xm)} {f(mid - 10)} {f(xm)} {f(mid)} {xb} {f(mid)}")
         parts.append(pop(f'<path class="ray flowray hpc-thread" d="{d}"/>', tb + 0.35 + 0.35 * k))
-    for k, (title, sub, kind) in enumerate(stages):
+    for k, (title, line, kind) in enumerate(stages):
         x = xs[k]
         t = tb + 0.1 + 0.35 * k
         parts.append(draw("bp", f"M{x} {by} h{bw} v{bh} h-{bw} Z", t, 0.3))
-        parts.append(node(x, mid - 9 if k % 2 == 1 else mid, t + 0.05))
+        parts.append(node(x, mid - 10 if k % 2 == 1 else mid, t + 0.05))
         if k < 3:
-            parts.append(node(x + bw, mid - 9 if k % 2 == 0 else mid, t + 0.3))
-        cx, cy = x + bw / 2, by + 38
-        if kind == "pfs":
-            for j in range(3):
-                yy = cy - 14 + 14 * j
-                parts.append(draw("bp", f"M{cx - 26} {yy} a26 7 0 1 0 52 0 a26 7 0 1 0 -52 0 M{cx - 26} {yy} v9 a26 7 0 0 0 52 0 v-9", t + 0.1 + 0.05 * j, 0.3))
-            parts.append(text(cx, cy + 36, "10 TB or 25 TB", "bp-tick", t + 0.35, "middle"))
-        elif kind == "cpu":
+            parts.append(node(x + bw, mid - 10 if k % 2 == 0 else mid, t + 0.3))
+        cx, cy = x + bw / 2, by + bh / 2
+        if kind == "pfs":  # four stacked disks
+            for j in range(4):
+                yy = cy - 30 + 18 * j
+                parts.append(draw("bp", f"M{cx - 32} {yy} a32 9 0 1 0 64 0 a32 9 0 1 0 -64 0 M{cx - 32} {yy} v11 a32 9 0 0 0 64 0 v-11", t + 0.1 + 0.05 * j, 0.3))
+        elif kind == "cpu":  # a 5 x 5 array of nodes under one job-array bracket
+            for j in range(25):
+                r, c = divmod(j, 5)
+                parts.append(pop(f'<rect class="hpc-sq cpu-on" x="{f(cx - 36 + c * 15)}" y="{f(cy - 42 + r * 15)}" width="10.5" height="10.5"/>', t + 0.1 + 0.015 * j))
+            parts.append(draw("bp-thin", f"M{cx - 38} {cy + 38} v5 h76 v-5", t + 0.3, 0.17))
+        elif kind == "gpu":  # three nodes of four GPUs
             for j in range(12):
                 r, c = divmod(j, 4)
-                parts.append(pop(f'<rect class="hpc-sq cpu-on" x="{f(cx - 24 + c * 12)}" y="{f(cy - 22 + r * 12)}" width="8.5" height="8.5"/>', t + 0.1 + 0.02 * j))
-            parts.append(draw("bp-thin", f"M{cx - 28} {cy + 18} v4 h56 v-4", t + 0.3, 0.17))
-            parts.append(text(cx, cy + 36, "job array", "bp-tick", t + 0.35, "middle"))
-        elif kind == "gpu":
-            for j in range(8):
-                r, c = divmod(j, 4)
-                parts.append(pop(f'<rect class="hpc-sq gpu-on" x="{f(cx - 30 + c * 15)}" y="{f(cy - 22 + r * 20)}" width="11" height="16"/>', t + 0.1 + 0.03 * j))
-            parts.append(text(cx, cy + 36, "4 GPUs a node", "bp-tick", t + 0.35, "middle"))
-        else:
-            for j in range(5):
-                yy = cy - 24 + 11 * j
-                parts.append(draw("bp-thin", f"M{cx - 28} {yy} h40", t + 0.1 + 0.04 * j, 0.17))
-                parts.append(pop(f'<rect class="hpc-sq {"gpu-on" if j in (1, 3) else "cpu-on"}" x="{f(cx + 18)}" y="{f(yy - 4)}" width="8" height="8"/>', t + 0.15 + 0.04 * j))
-            parts.append(text(cx, cy + 36, "label + P(miss)", "bp-tick", t + 0.35, "middle"))
-        parts.append(text(cx, by + bh + 17, title, "bp-label2", t + 0.2, "middle"))
-        words, lines, cur = sub.split(), [], ""
-        for w_ in words:
-            if len(cur) + len(w_) + 1 > 20 and cur:
-                lines.append(cur)
-                cur = w_
-            else:
-                cur = f"{cur} {w_}".strip()
-        lines.append(cur)
-        for j, ln in enumerate(lines):
-            parts.append(text(cx, by + bh + 31 + 12 * j, ln, "bp-tick", t + 0.25, "middle"))
-    # what each run is granted: one block of three lines per allocation
-    ty = by + bh + 92
-    parts.append(text(x0, ty, "WHAT EACH RUN IS GRANTED", "hpc-head", tb + 1.4))
-    parts.append(draw("bp-thin", f"M{x0} {ty + 8} H{x1}", tb + 1.4, 0.17))
-    yy = ty + 28
-    for k, a in enumerate(ALLOC):
-        t = tb + 1.5 + 0.15 * k
-        cx = x0 + 150
-        parts.append(text(x0, yy, a["machine"], "hpc-td", t))
-        parts.append(text(x0, yy + 14, a["ref"], "bp-tick", t))
-        parts.append(text(x0, yy + 28, f"{a['store']}, {a['months']}", "bp-tick", t))
-        parts.append(text(cx, yy, a["data"], "hpc-td", t))
-        cpu, arm = a["cpu"].split(", ")
-        parts.append(text(cx, yy + 14, f"{cpu} ({arm}) = one {a['cores']}-core node for {a['cpu_days']:.0f} days", "bp-tick", t))
-        parts.append(text(cx, yy + 28, f"{a['gpu']} = one 4-GPU node for {a['gpu_days']:.0f} days", "bp-tick", t))
-        yy += 46
-    parts.append(draw("bp-thin", f"M{x0} {yy - 12} H{x1}", tb + 1.8, 0.17))
-    parts.append(text(x0, yy + 2, "Node-days are arithmetic: core-hours over the cores of one node, over 24 hours.", "bp-tick", tb + 1.85))
-    # core-hours to scale, including the development access that came first
-    ry = yy + 28
-    parts.append(text(x0, ry, "CPU TIME, TO SCALE", "hpc-head", tb + 1.9))
+                parts.append(pop(f'<rect class="hpc-sq gpu-on" x="{f(cx - 36 + c * 19)}" y="{f(cy - 46 + r * 30)}" width="14" height="24"/>', t + 0.1 + 0.02 * j))
+                if c == 0:
+                    parts.append(draw("bp-thin", f"M{cx - 42} {f(cy - 50 + r * 30)} h84 v30 h-84 Z", t + 0.08 + 0.05 * r, 0.2))
+        else:  # a table: rows with a label column and a reliability column
+            for j in range(7):
+                yy = cy - 42 + 14 * j
+                parts.append(draw("bp-thin", f"M{cx - 36} {yy} h50", t + 0.1 + 0.03 * j, 0.17))
+                parts.append(pop(f'<rect class="hpc-sq {"gpu-on" if j in (1, 4) else "cpu-on"}" x="{f(cx + 22)}" y="{f(yy - 5)}" width="10" height="10"/>', t + 0.15 + 0.03 * j))
+        parts.append(text(cx, by + bh + 18, title, "bp-label2", t + 0.2, "middle"))
+        parts.append(text(cx, by + bh + 33, line, "bp-tick", t + 0.25, "middle"))
+    # CPU time to scale, including the development access that came first
+    ry = by + bh + 76
+    parts.append(text(x0, ry, "CPU TIME, TO SCALE", "hpc-head", tb + 1.4))
     bars = (("HPCvLAB development access, used", 94001, "94,001 core-hours, about 250 jobs"),
             ("Deucalion allocation 2026.08382.CPCA.A1", 99840, "99,840 core-hours"),
             ("MareNostrum 5 allocation 2026.08362.CPCA.A2", 1002400, "1,002,400 core-hours"))
     for k, (lab, n, val) in enumerate(bars):
-        by_ = ry + 20 + 26 * k
+        by_ = ry + 24 + 46 * k
         w = (x1 - x0) * n / bars[-1][1]
-        parts.append(text(x0, by_, lab, "bp-tick", tb + 1.95 + 0.1 * k))
-        parts.append(text(x1, by_, val, "hpc-val", tb + 2.1 + 0.1 * k, "end"))
-        parts.append(draw("hpc-bar", f"M{x0} {by_ + 8} h{f(w)}", tb + 2.0 + 0.1 * k, 0.4))
-    return parts, ry + 20 + 26 * 2 + 12
+        parts.append(text(x0, by_, lab, "bp-tick", tb + 1.45 + 0.1 * k))
+        parts.append(text(x1, by_, val, "hpc-val", tb + 1.6 + 0.1 * k, "end"))
+        parts.append(draw("hpc-bar", f"M{x0} {by_ + 10} h{f(w)}", tb + 1.5 + 0.1 * k, 0.4))
+    return parts, ry + 24 + 46 * 2 + 14
 
 
 def main(out: Path) -> None:
