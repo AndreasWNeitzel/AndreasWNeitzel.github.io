@@ -580,7 +580,7 @@ al += [
 jlink("M464 258 C464 268 464 278 464 292", T["post"] + 0.1, 0.15)
 
 # the labels stage beside the networks, the test on withheld stars under it
-jlink(f"M662 140 C700 140 {f(med[0] + LX - 40)} {f(ry[0] - 3 + LY)} {f(med[0] + LX)} {f(ry[0] - 3 + LY)}", T["l3"], 0.3)
+jlink(f"M662 140 C684 140 690 68 722 68 H{f(med[0] + LX - 16)} C{f(med[0] + LX - 6)} 68 {f(med[0] + LX)} 72 {f(med[0] + LX)} {f(ry[0] - 3 + LY)}", T["l3"], 0.35)
 tt = T["labels"] + 0.3
 TX, TY = 696.0, 300.0
 test = [
@@ -595,7 +595,7 @@ for i, (nm, val) in enumerate((("Teff", "32 K"), ("log g", "0.072 dex"), ("[M/H]
         text(cx, cy, nm, "f1-tick", tt + 0.15 + 0.05 * i),
         text(cx + 96, cy + 8, val, "f1-dim", tt + 0.15 + 0.05 * i, "end"),
     ]
-jlink(f"M{f(635 + LX)} {f(410 + LY)} C{f(635 + LX)} {f(430 + LY)} 906 {f(TY - 60)} 906 {f(TY - 24)}", T["labels"] + 0.3, 0.2)
+jlink(f"M{f(658 + LX)} {f(410 + LY)} C{f(672 + LX)} {f(410 + LY)} 906 {f(TY - 70)} 906 {f(TY - 24)}", T["labels"] + 0.3, 0.2)
 
 # the seismic sample above the catalogue: TESS red giants with measured oscillations
 sm2 = [draw("f1-g", "M936 42 H1026", 0.2, 0.17), pop('<path class="f1-gd" d="M940 40 C960 40 962 14 981 12 C1000 14 1002 40 1022 40"/>', 0.25)]
@@ -630,7 +630,7 @@ cat += [
     text(CX0, TY2, "THE CATALOGUE", "f1-title", tc + 0.5),
     text(CX0, TY2 + 15, "one row in ten has APOGEE values too", "f1-sub", tc + 0.55),
 ]
-jlink(f"M{f(med[-1] + LX)} {f(ry[-1] - 3 + LY)} C{f(med[-1] + LX)} 220 900 226 {f(CX0 - 2)} 226", T["l4"], 0.3)
+jlink(f"M{f(med[-1] + LX)} {f(ry[-1] - 3 + LY)} C{f(med[-1] + LX)} 206 820 206 860 206 H{f(CX0 - 2)}", T["l4"], 0.3)
 
 # the compute rail, under the first three stages
 rl2 = [
