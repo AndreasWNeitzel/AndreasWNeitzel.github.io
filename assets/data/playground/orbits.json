@@ -1,0 +1,537 @@
+{
+ "description": "Numbers used by the Orbits playground: a point-mass Earth with a Molniya constellation and a geostationary satellite, and six Gaia DR3 stars in the MWPotential2014 model of the Milky Way.",
+ "built_utc": "2026-10-26T02:56:45Z",
+ "earth": {
+  "gm_km3_s2": 398600.4418,
+  "gm_source": "IERS Conventions (2010), Petit and Luzum (eds.), IERS Technical Note 36, Table 1.1: GM_E = 3.986004418 x 10^14 m^3 s^-2; the NSSDC Earth fact sheet gives 0.39860 x 10^6 km^3 s^-2",
+  "radius_km": 6378.137,
+  "radius_source": "NSSDC Earth fact sheet, equatorial radius 6378.137 km (also the WGS 84 semi-major axis); the Earth is treated as a sphere of this radius",
+  "rotation_rate_rad_s": 7.292115e-05,
+  "rotation_source": "IERS Conventions (2010), Table 1.1, nominal mean angular velocity of the Earth 7.292115 x 10^-5 rad s^-1; the NSSDC fact sheet gives the sidereal rotation period as 23.9345 h",
+  "sidereal_day_s": 86164.10063718943
+ },
+ "molniya": {
+  "period_s": 43082.05031859472,
+  "period_note": "half a sidereal day (semi-synchronous), so the ground track repeats daily; Kolyuka et al. (2009) give 718 min, the NASA catalogue 12 h",
+  "eccentricity": 0.74,
+  "eccentricity_source": "Kidder and Vonder Haar (1990), J. Atmos. Oceanic Technol. 7, 517, as relayed by the Molniya orbit article of Wikipedia (0.74, 'approximately 0.737'); the NASA Earth Observatory catalogue gives 0.722 for the orbit type. Operational Molniya satellites varied between these values",
+  "inclination_deg": 63.4,
+  "inclination_source": "NASA Earth Observatory, Catalog of Earth Satellite Orbits (63.4 degrees); Kidder and Vonder Haar (1990). At this critical inclination the Earth's oblateness does not rotate the line of apsides, which keeps the apogee over the northern hemisphere",
+  "argument_of_perigee_deg": 270.0,
+  "argument_of_perigee_source": "the perigee at the southernmost point of the orbit puts the apogee over the northern hemisphere (Kidder and Vonder Haar 1990); 270 degrees is the value listed for the orbit type",
+  "constellation": {
+   "count": 3,
+   "raan_spacing_deg": 120.0,
+   "mean_anomaly_spacing_deg": -240.0,
+   "apogee_longitude_deg": 37.62,
+   "note": "three planes spaced by 120 degrees in the longitude of the ascending node, with mean anomalies spaced by -240 degrees, so one satellite passes apogee every two thirds of a period above the same longitude; the apogee longitude is set to Moscow's, as in the coursework test. The Greenwich meridian lies along the inertial x axis at t = 0"
+  },
+  "semi_major_axis_km": 26561.764513686318,
+  "perigee_radius_km": 6906.058773558443,
+  "apogee_radius_km": 46217.470253814194,
+  "perigee_altitude_km": 527.9217735584434,
+  "apogee_altitude_km": 39839.33325381419,
+  "perigee_speed_km_s": 10.021399534177746,
+  "apogee_speed_km_s": 1.4974505051070195,
+  "derived_note": "semi-major axis from Kepler's third law with the period and GM above; radii, altitudes and speeds (vis-viva) follow from it and the eccentricity. Kidder and Vonder Haar (1990) give about 26,600 km, a perigee altitude of about 600 km and an apogee altitude of 39,700 km"
+ },
+ "geo": {
+  "period_s": 86164.10063718943,
+  "longitude_deg": 0.0,
+  "source": "NASA Earth Observatory, Catalog of Earth Satellite Orbits: 42,164 km from the centre of the Earth, about 36,000 km above the surface, one orbit per day; ESA, Types of orbits: altitude 35,786 km, period 23 h 56 min 4 s",
+  "radius_km": 42164.17293115725,
+  "altitude_km": 35786.03593115725,
+  "speed_km_s": 3.0746599789388602
+ },
+ "stations": [
+  {
+   "id": "porto",
+   "name": "Porto",
+   "short_name": "Porto",
+   "lat_deg": 41.15,
+   "lon_deg": -8.61
+  },
+  {
+   "id": "moscow",
+   "name": "Moscow",
+   "short_name": "Moscow",
+   "lat_deg": 55.75,
+   "lon_deg": 37.62
+  },
+  {
+   "id": "north",
+   "name": "80 N station",
+   "short_name": "80 N",
+   "lat_deg": 80.0,
+   "lon_deg": 0.0,
+   "adjustable_latitude": [
+    60.0,
+    90.0
+   ],
+   "note": "a test point at the longitude of the geostationary satellite, as in the coursework; its latitude can be changed on the page"
+  }
+ ],
+ "potential": {
+  "name": "MWPotential2014",
+  "source": "Bovy (2015), ApJS 216, 29, doi:10.1088/0067-0049/216/2/29, Table 1 and Section 3.5; parameters checked against galpy's definition (galpy.potential.MWPotential2014)",
+  "R0_kpc": 8.0,
+  "v0_km_s": 220.0,
+  "bulge": {
+   "form": "power-law density with exponential cut-off, rho(r) proportional to r^-alpha exp(-(r/rc)^2)",
+   "alpha": 1.8,
+   "rc_kpc": 1.9,
+   "force_fraction_at_R0": 0.05
+  },
+  "disc": {
+   "form": "Miyamoto and Nagai (1975) potential",
+   "a_kpc": 3.0,
+   "b_kpc": 0.28,
+   "force_fraction_at_R0": 0.6
+  },
+  "halo": {
+   "form": "Navarro, Frenk and White (1997) profile",
+   "a_kpc": 16.0,
+   "force_fraction_at_R0": 0.35
+  }
+ },
+ "solar": {
+  "galcen_distance_kpc": 8.0,
+  "z_sun_pc": 20.8,
+  "v_sun_km_s": [
+   11.1,
+   232.24,
+   7.25
+  ],
+  "note": "distance from the Sun to the Galactic centre 8.0 kpc and circular speed 220 km/s, the normalisation of MWPotential2014 (Bovy 2015); height of the Sun above the plane 20.8 pc (Bennett and Bovy 2019, MNRAS 482, 1417); solar peculiar motion (U, V, W) = (11.10, 12.24, 7.25) km/s (Schoenrich, Binney and Dehnen 2010, MNRAS 403, 1829), so the Sun's Galactocentric velocity is (11.10, 232.24, 7.25) km/s. Frame: astropy Galactocentric, right-handed, x from the Sun towards the centre, y along Galactic rotation, z towards the north Galactic pole; the Sun sits at x = -8 kpc",
+  "distance_note": "distances are 1 / parallax; every selected star has parallax / error above 600. No parallax zero-point correction is applied: the Lindegren et al. (2021) offsets are of order -0.02 mas, 0.1 percent of the smallest parallax here"
+ },
+ "stars": [
+  {
+   "name": "61 Virginis",
+   "other": "HD 115617",
+   "source_id": 3507879565090229888,
+   "gaia": {
+    "source_id": 3507879565090229888,
+    "ref_epoch": 2016.0,
+    "ra": 199.596298132351,
+    "dec": -18.31592210064546,
+    "parallax": 117.1726460991387,
+    "parallax_error": 0.14559289813041687,
+    "pmra": -1070.2015735200084,
+    "pmra_error": 0.15287327766418457,
+    "pmdec": -1063.8486605375717,
+    "pmdec_error": 0.12301944941282272,
+    "radial_velocity": -7.8643388748168945,
+    "radial_velocity_error": 0.1293913871049881,
+    "rv_nb_transits": 16.0,
+    "rv_template_teff": 5500.0,
+    "grvs_mag": 3.836165428161621,
+    "ruwe": 1.1792638301849365,
+    "phot_g_mean_mag": 4.532528400421143,
+    "bp_rp": 0.8984379768371582,
+    "parallax_pmra_corr": -0.0677686482667923,
+    "parallax_pmdec_corr": 0.527199387550354,
+    "pmra_pmdec_corr": -0.49559152126312256
+   },
+   "galactocentric": {
+    "distance_pc": 8.5344,
+    "distance_error_pc": 0.0107,
+    "xyz_kpc": [
+     -7.995868,
+     -0.004566,
+     0.026727
+    ],
+    "xyz_error_kpc": [
+     5e-06,
+     6e-06,
+     7e-06
+    ],
+    "vxyz_km_s": [
+     -12.473,
+     184.8847,
+     -24.2263
+    ],
+    "vxyz_error_km_s": [
+     0.066,
+     0.0954,
+     0.095
+    ]
+   },
+   "reference": {
+    "eccentricity": 0.176,
+    "zmax_kpc": 0.3775,
+    "rperi_kpc": 5.635,
+    "rapo_kpc": 8.0417,
+    "energy_km2_s2": -114124.7,
+    "energy_galpy_km2_s2": -49030.6,
+    "Lz_kpc_km_s": 1478.38,
+    "galpy_xyz0_kpc": [
+     7.995895,
+     -0.004566,
+     0.026727
+    ],
+    "galpy_vxyz0_km_s": [
+     12.473,
+     184.8847,
+     -24.2263
+    ]
+   }
+  },
+  {
+   "name": "Proxima Centauri",
+   "other": "GJ 551",
+   "source_id": 5853498713190525696,
+   "gaia": {
+    "source_id": 5853498713190525696,
+    "ref_epoch": 2016.0,
+    "ra": 217.39232147200883,
+    "dec": -62.67607511676666,
+    "parallax": 768.0665391873573,
+    "parallax_error": 0.049872905015945435,
+    "pmra": -3781.741008265163,
+    "pmra_error": 0.03138607740402222,
+    "pmdec": 769.4650146478623,
+    "pmdec_error": 0.05052453279495239,
+    "radial_velocity": -21.942726135253906,
+    "radial_velocity_error": 0.21612651646137238,
+    "rv_nb_transits": 7.0,
+    "rv_template_teff": 3500.0,
+    "grvs_mag": 6.990696907043457,
+    "ruwe": 0.9714532494544983,
+    "phot_g_mean_mag": 8.984748840332031,
+    "bp_rp": 3.8045802116394043,
+    "parallax_pmra_corr": -0.11339641362428665,
+    "parallax_pmdec_corr": -0.09566396474838257,
+    "pmra_pmdec_corr": 0.6296852827072144
+   },
+   "galactocentric": {
+    "distance_pc": 1.302,
+    "distance_error_pc": 0.0001,
+    "xyz_kpc": [
+     -7.99907,
+     -0.000937,
+     0.020754
+    ],
+    "xyz_error_kpc": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "vxyz_km_s": [
+     -18.1299,
+     233.8945,
+     21.0956
+    ],
+    "vxyz_error_km_s": [
+     0.1498,
+     0.1556,
+     0.0077
+    ]
+   },
+   "reference": {
+    "eccentricity": 0.0966,
+    "zmax_kpc": 0.3511,
+    "rperi_kpc": 7.8303,
+    "rapo_kpc": 9.5053,
+    "energy_km2_s2": -103828.4,
+    "energy_galpy_km2_s2": -38734.2,
+    "Lz_kpc_km_s": 1870.96,
+    "galpy_xyz0_kpc": [
+     7.999097,
+     -0.000937,
+     0.020754
+    ],
+    "galpy_vxyz0_km_s": [
+     18.1299,
+     233.8945,
+     21.0956
+    ]
+   }
+  },
+  {
+   "name": "Barnard's star",
+   "other": "GJ 699",
+   "source_id": 4472832130942575872,
+   "gaia": {
+    "source_id": 4472832130942575872,
+    "ref_epoch": 2016.0,
+    "ra": 269.44850252543836,
+    "dec": 4.739420051112412,
+    "parallax": 546.975939730948,
+    "parallax_error": 0.04011635482311249,
+    "pmra": -801.5509783684709,
+    "pmra_error": 0.0318208672106266,
+    "pmdec": 10362.394206546573,
+    "pmdec_error": 0.036070454865694046,
+    "radial_velocity": -110.46822357177734,
+    "radial_velocity_error": 0.13125522434711456,
+    "rv_nb_transits": 12.0,
+    "rv_template_teff": 3300.0,
+    "grvs_mag": 6.365547180175781,
+    "ruwe": 1.084850549697876,
+    "phot_g_mean_mag": 8.193974494934082,
+    "bp_rp": 2.8336968421936035,
+    "parallax_pmra_corr": -0.05781335011124611,
+    "parallax_pmdec_corr": 0.5593565106391907,
+    "pmra_pmdec_corr": 0.03058500960469246
+   },
+   "galactocentric": {
+    "distance_pc": 1.8282,
+    "distance_error_pc": 0.0001,
+    "xyz_kpc": [
+     -7.998453,
+     0.000915,
+     0.021241
+    ],
+    "xyz_error_kpc": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "vxyz_km_s": [
+     -130.1119,
+     237.1044,
+     26.0235
+    ],
+    "vxyz_error_km_s": [
+     0.1092,
+     0.0658,
+     0.0319
+    ]
+   },
+   "reference": {
+    "eccentricity": 0.4416,
+    "zmax_kpc": 0.6664,
+    "rperi_kpc": 5.9156,
+    "rapo_kpc": 15.272,
+    "energy_km2_s2": -94659.8,
+    "energy_galpy_km2_s2": -29565.7,
+    "Lz_kpc_km_s": 1896.36,
+    "galpy_xyz0_kpc": [
+     7.99848,
+     0.000915,
+     0.021241
+    ],
+    "galpy_vxyz0_km_s": [
+     130.1119,
+     237.1044,
+     26.0235
+    ]
+   }
+  },
+  {
+   "name": "Lalande 21185",
+   "other": "HD 95735, GJ 411",
+   "source_id": 762815470562110464,
+   "gaia": {
+    "source_id": 762815470562110464,
+    "ref_epoch": 2016.0,
+    "ra": 165.83095967577933,
+    "dec": 35.948653032660104,
+    "parallax": 392.75294543876464,
+    "parallax_error": 0.032066650688648224,
+    "pmra": -580.0570872139048,
+    "pmra_error": 0.02556595392525196,
+    "pmdec": -4776.588719443488,
+    "pmdec_error": 0.03003409504890442,
+    "radial_velocity": -85.11064147949219,
+    "radial_velocity_error": 0.13100340962409973,
+    "rv_nb_transits": 11.0,
+    "rv_template_teff": 3900.0,
+    "grvs_mag": 4.989918231964111,
+    "ruwe": 0.9638494253158569,
+    "phot_g_mean_mag": 6.551171779632568,
+    "bp_rp": 2.215608596801758,
+    "parallax_pmra_corr": 0.308246910572052,
+    "parallax_pmdec_corr": -0.24246975779533386,
+    "pmra_pmdec_corr": -0.2608736455440521
+   },
+   "galactocentric": {
+    "distance_pc": 2.5461,
+    "distance_error_pc": 0.0002,
+    "xyz_kpc": [
+     -8.001021,
+     -9.5e-05,
+     0.023118
+    ],
+    "xyz_error_kpc": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "vxyz_km_s": [
+     57.2689,
+     178.492,
+     -67.5581
+    ],
+    "vxyz_error_km_s": [
+     0.0546,
+     0.0068,
+     0.1207
+    ]
+   },
+   "reference": {
+    "eccentricity": 0.2512,
+    "zmax_kpc": 1.6918,
+    "rperi_kpc": 5.3331,
+    "rapo_kpc": 8.9105,
+    "energy_km2_s2": -111704.8,
+    "energy_galpy_km2_s2": -46610.7,
+    "Lz_kpc_km_s": 1428.12,
+    "galpy_xyz0_kpc": [
+     8.001048,
+     -9.5e-05,
+     0.023118
+    ],
+    "galpy_vxyz0_km_s": [
+     -57.2689,
+     178.492,
+     -67.5581
+    ]
+   }
+  },
+  {
+   "name": "Kapteyn's star",
+   "other": "GJ 191",
+   "source_id": 4810594479418041856,
+   "gaia": {
+    "source_id": 4810594479418041856,
+    "ref_epoch": 2016.0,
+    "ra": 77.9599373502188,
+    "dec": -45.0438126993602,
+    "parallax": 254.19859326384577,
+    "parallax_error": 0.016842743381857872,
+    "pmra": 6491.223339061598,
+    "pmra_error": 0.018412088975310326,
+    "pmdec": -5708.614150045243,
+    "pmdec_error": 0.020839408040046692,
+    "radial_velocity": 245.05313110351562,
+    "radial_velocity_error": 0.12662343680858612,
+    "rv_nb_transits": 21.0,
+    "rv_template_teff": 3600.0,
+    "grvs_mag": 6.611197471618652,
+    "ruwe": 1.170168399810791,
+    "phot_g_mean_mag": 8.063551902770996,
+    "bp_rp": 2.0266456604003906,
+    "parallax_pmra_corr": 0.06753232330083847,
+    "parallax_pmdec_corr": -0.14728854596614838,
+    "pmra_pmdec_corr": -0.0865703672170639
+   },
+   "galactocentric": {
+    "distance_pc": 3.9339,
+    "distance_error_pc": 0.0003,
+    "xyz_kpc": [
+     -8.001038,
+     -0.003002,
+     0.018492
+    ],
+    "xyz_error_kpc": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "vxyz_km_s": [
+     31.0292,
+     -55.6837,
+     -45.1037
+    ],
+    "vxyz_error_km_s": [
+     0.035,
+     0.0977,
+     0.0751
+    ]
+   },
+   "reference": {
+    "eccentricity": 0.7569,
+    "zmax_kpc": 0.8967,
+    "rperi_kpc": 1.1233,
+    "rapo_kpc": 8.1163,
+    "energy_km2_s2": -128508.0,
+    "energy_galpy_km2_s2": -63413.8,
+    "Lz_kpc_km_s": -445.62,
+    "galpy_xyz0_kpc": [
+     8.001065,
+     -0.003002,
+     0.018492
+    ],
+    "galpy_vxyz0_km_s": [
+     -31.0292,
+     -55.6837,
+     -45.1037
+    ]
+   }
+  },
+  {
+   "name": "HD 140283",
+   "other": "the metal-poor subgiant",
+   "source_id": 6268770373590148224,
+   "gaia": {
+    "source_id": 6268770373590148224,
+    "ref_epoch": 2016.0,
+    "ra": 235.75785685172764,
+    "dec": -10.934848057403192,
+    "parallax": 16.26724221803098,
+    "parallax_error": 0.02603433094918728,
+    "pmra": -1115.1411639955027,
+    "pmra_error": 0.02853638492524624,
+    "pmdec": -303.5727744644891,
+    "pmdec_error": 0.020811788737773895,
+    "radial_velocity": -170.3622283935547,
+    "radial_velocity_error": 0.15684741735458374,
+    "rv_nb_transits": 14.0,
+    "rv_template_teff": 5750.0,
+    "grvs_mag": 6.352089881896973,
+    "ruwe": 1.0640039443969727,
+    "phot_g_mean_mag": 7.035969257354736,
+    "bp_rp": 0.7588825225830078,
+    "parallax_pmra_corr": -0.2317069172859192,
+    "parallax_pmdec_corr": -0.0050647747702896595,
+    "pmra_pmdec_corr": -0.16991709172725677
+   },
+   "galactocentric": {
+    "distance_pc": 61.4732,
+    "distance_error_pc": 0.0988,
+    "xyz_kpc": [
+     -7.948799,
+     -0.003297,
+     0.054701
+    ],
+    "xyz_error_kpc": [
+     8.2e-05,
+     5e-06,
+     5.5e-05
+    ],
+    "vxyz_km_s": [
+     -245.9208,
+     -39.0864,
+     59.9209
+    ],
+    "vxyz_error_km_s": [
+     0.2259,
+     0.4498,
+     0.2496
+    ]
+   },
+   "reference": {
+    "eccentricity": 0.9222,
+    "zmax_kpc": 2.6884,
+    "rperi_kpc": 0.661,
+    "rapo_kpc": 16.34,
+    "energy_km2_s2": -99068.9,
+    "energy_galpy_km2_s2": -33974.8,
+    "Lz_kpc_km_s": -309.88,
+    "galpy_xyz0_kpc": [
+     7.948826,
+     -0.003297,
+     0.054701
+    ],
+    "galpy_vxyz0_km_s": [
+     245.9208,
+     -39.0864,
+     59.9209
+    ]
+   }
+  }
+ ],
+ "credit": "Gaia data: ESA/Gaia/DPAC, CC BY-SA 3.0 IGO"
+}
