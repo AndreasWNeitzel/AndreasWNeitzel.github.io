@@ -13,22 +13,16 @@
       <button class="btn btn--sm tmap-replay" type="button">Replay</button>
     </div>
     <div class="tmap-card" role="dialog" aria-live="polite" hidden></div>
-    <p class="tmap-legend"><span><i class="home"></i>Porto, home</span><span><i></i>Trip from Porto</span><span>Countries I worked in, fewer to more entries <span class="ramp" aria-hidden="true"><b style="background:color-mix(in oklab, var(--accent) 16%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 26%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 38%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 50%, var(--surface-2))"></b><b style="background:color-mix(in oklab, var(--accent) 64%, var(--surface-2))"></b></span></span><span>Rings: 100 to 10,000 km from Porto</span></p>
+    <p class="tmap-legend"><span><i class="home"></i>Porto, home</span><span><i></i>Trip from Porto</span></p>
     <noscript><p class="tmap-noscript">The interactive map needs JavaScript. Every place and what happened there is listed alongside.</p></noscript>
   </div>
   <aside class="tmap-side" aria-label="Places">
-    <header>
-      <div class="tmap-stats"><span><b>5</b>countries</span><span><b data-n-places>11</b>places</span><span><b>9,700 km</b>farthest</span></div>
-    </header>
     <ol class="tmap-list">
+      {%- assign last_country = "" -%}
       {%- for pl in PL.places %}
       {%- if pl.role == "waypoint" %}{% continue %}{% endif %}
-      {%- assign n = 0 -%}
-      {%- capture what -%}
-        {%- for c in cats -%}{%- assign pool = L[c] -%}{%- for e in pool -%}{%- if e.location == pl.location -%}{%- assign n = n | plus: 1 -%}{%- if n <= 2 -%}{{ e.title | split: ":" | first | truncate: 70 }}. {% endif -%}{%- endif -%}{%- endfor -%}{%- endfor -%}
-        {%- for x in pl.extra -%}{%- assign n = n | plus: 1 -%}{{ x.title }}. {% endfor -%}
-      {%- endcapture -%}
-      <li><button type="button" data-place="{{ pl.id }}"><span class="nm">{{ pl.name }}</span><span class="ct">{{ pl.country }}</span><span class="what">{% if pl.blurb %}{{ pl.blurb | missions }} {% endif %}{% if n > 0 %}<span class="n">{{ n }} item{% if n > 1 %}s{% endif %}</span>{% endif %}</span></button></li>
+      {%- if pl.country != last_country %}<li class="tmap-country" aria-hidden="true">{{ pl.country }}</li>{% assign last_country = pl.country %}{% endif %}
+      <li><button type="button" data-place="{{ pl.id }}"><span class="nm">{{ pl.name }}</span><span class="what">{{ pl.line | missions }}</span></button></li>
       {%- endfor %}
     </ol>
   </aside>

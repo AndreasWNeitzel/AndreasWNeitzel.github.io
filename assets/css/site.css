@@ -451,12 +451,14 @@
   .tmap-card ul { list-style: none; padding: 0; display: grid; gap: 7px; }
   .tmap-card li { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; font-size: 0.82rem; color: var(--ink-2); line-height: 1.4; }
   .tmap-card .credit { margin-block-start: 2px; }
-  .tmap-side { border-inline-start: 1px solid var(--line); background: var(--surface); display: grid; grid-template-rows: auto 1fr; min-block-size: 0; }
+  .tmap-side { border-inline-start: 1px solid var(--line); background: var(--surface); display: grid; grid-template-rows: 1fr; min-block-size: 0; }
   .tmap-side header { padding: 16px 16px 10px; display: grid; gap: 6px; border-block-end: 1px solid var(--line); }
   .tmap-stats { display: flex; gap: 18px; font: 0.74rem var(--mono); color: var(--muted); }
   .tmap-stats b { display: block; font: 640 1.4rem/1.1 var(--sans); color: var(--ink); letter-spacing: -0.03em; }
-  .tmap-list { overflow-y: auto; min-block-size: 0; padding: 6px 8px 10px; list-style: none; margin: 0; display: grid; gap: 2px; align-content: start; }
-  .tmap-list button { inline-size: 100%; text-align: start; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 9px 10px; border-radius: 10px; border: 1px solid transparent; background: none; }
+  .tmap-list { overflow-y: auto; min-block-size: 0; padding: 8px 8px 10px; list-style: none; margin: 0; display: grid; gap: 1px; align-content: start; }
+  .tmap-country { font: 600 0.68rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 12px 10px 4px; }
+  .tmap-country:first-child { padding-block-start: 4px; }
+  .tmap-list button { inline-size: 100%; text-align: start; display: grid; grid-template-columns: 1fr; gap: 2px; padding: 9px 10px; border-radius: 10px; border: 1px solid transparent; background: none; }
   .tmap-list button:hover, .tmap-list button[aria-current="true"] { background: var(--surface-2); border-color: var(--line); }
   .tmap-list .nm { font-weight: 600; font-size: 0.9rem; color: var(--ink); }
   .tmap-list .ct { font: 0.72rem var(--mono); color: var(--muted); }

@@ -6,6 +6,7 @@ home: porto
 
 places:
   - id: porto
+    line: Home since 2017. IA and the University of Porto.
     name: Porto
     country: Portugal
     location: Porto, Portugal
@@ -16,6 +17,7 @@ places:
     photo: /assets/img/photos/dfa-week-2026-talk.webp
     photo_alt: Andreas presenting HAYDN cluster simulations at DFA Week 2026, Porto.
   - id: vila-do-conde
+    line: Porto Summer School on Asteroseismology, 2024.
     photo: /assets/img/places/vila-do-conde.webp
     photo_alt: The Ave estuary at Vila do Conde, with a replica sixteenth-century nau, the marina and the Santa Clara monastery above the town.
     photo_credit: Pedro Silva, Wikimedia Commons, CC BY 2.0
@@ -26,6 +28,7 @@ places:
     lat: 41.3517
     lon: -8.7479
   - id: guimaraes
+    line: ENAA XXXIV talk, 2024. Deucalion's home.
     photo: /assets/img/places/guimaraes.webp
     photo_alt: "Guimar\xE3es Castle seen from the S\xE3o Mamede field."
     photo_credit: Filipe Fortes, Wikimedia Commons, CC BY-SA 2.0
@@ -37,6 +40,7 @@ places:
     lon: -8.2918
     blurb: Also home to Deucalion, the national supercomputer I run on.
   - id: coimbra
+    line: ENAA XXXIII talk, 2023.
     photo: /assets/img/places/coimbra.webp
     photo_alt: "The Pa\xE7o das Escolas of the University of Coimbra, with the clock tower and the Via Latina colonnade."
     photo_credit: Berthold Werner, Wikimedia Commons, CC BY-SA 3.0
@@ -47,6 +51,7 @@ places:
     lat: 40.2033
     lon: -8.4103
   - id: lisbon
+    line: ENAA poster in 2022, talk in 2025.
     photo: /assets/img/places/lisbon.webp
     photo_alt: "Alfama from the Miradouro de Santa Luzia, with the dome of Santa Engr\xE1cia and the Tagus beyond."
     photo_credit: "Jakub Ha\u0142un, Wikimedia Commons, CC BY 4.0"
@@ -57,6 +62,7 @@ places:
     lat: 38.7223
     lon: -9.1393
   - id: cadiar
+    line: IMAS13 talk on JANUS, 2026.
     photo: /assets/img/places/cadiar.webp
     photo_alt: "The Alpujarra seen from C\xE1diar, with snow on the Sierra Nevada above white villages and olive groves."
     photo_credit: Feranza, Wikimedia Commons, CC BY-SA 4.0
@@ -68,6 +74,7 @@ places:
     lon: -3.1802
     blurb: IMAS13 at the Alquería de Morayma, Granada.
   - id: lluc
+    line: IMAS11 talk, 2024.
     photo: /assets/img/places/lluc.webp
     photo_alt: The Santuari de Lluc in the Serra de Tramuntana, Mallorca, seen from the Monte del Rosario.
     photo_credit: H. Zell, Wikimedia Commons, CC BY-SA 3.0
@@ -79,6 +86,7 @@ places:
     lon: 2.8848
     blurb: IMAS11 at the Lluc sanctuary, Mallorca.
   - id: bologna
+    line: Six-month secondment at INAF-OAS, 2025 to 2026.
     photo: /assets/img/places/bologna.webp
     photo_alt: The old town of Bologna with the Two Towers, seen from above.
     photo_credit: Volodymyr Vlasenko, Wikimedia Commons, CC BY-SA 3.0
@@ -90,6 +98,7 @@ places:
     lon: 11.3386
     blurb: Six-month secondment at INAF-OAS, in A. Miglio's group.
   - id: padova
+    line: INAF Padova, visited from Bologna.
     name: Padova
     country: Italy
     location: Padova, Italy
@@ -102,6 +111,7 @@ places:
     extra:
       - {tag: position, label: visits, title: "Regular visits to INAF Osservatorio Astronomico di Padova", when: "2025 to 2026", ledger: pos-2025-visiting-inaf-bologna}
   - id: aarhus
+    line: TASC10/KASC17 talk and poster, 2026.
     photo: /assets/img/places/aarhus.webp
     photo_alt: The main building of Aarhus University seen from the University Park.
     photo_credit: "\xA9 Villy Fink Isaksen, Wikimedia Commons, CC BY-SA 4.0"
@@ -124,6 +134,7 @@ places:
     role: waypoint
     blurb: Transit to Paranal.
   - id: paranal
+    line: ESPRESSO observing run at the VLT, May 2024.
     name: Cerro Paranal
     country: Chile
     location: Paranal, Chile
