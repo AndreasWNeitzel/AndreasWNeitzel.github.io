@@ -3,7 +3,10 @@ layout: page
 permalink: /publications/
 title: Publications
 description: Refereed papers by Andreas W. Neitzel, with DOI and arXiv links, his contribution to each, and plain-language explainers.
-lede: Four refereed papers in Astronomy and Astrophysics, one as first author, each with my contribution stated and a plain-language explainer.
+lede: Four refereed papers in Astronomy and Astrophysics, one as first author, each with my contribution stated and a plain-language explainer, plus the MSc dissertation.
+extra_links:
+  pub-2022-msc-thesis:
+    - {label: Plain-language explainer, url: /papers/neitzel-2022-msc-thesis/}
 ---
 {%- assign L = site.data.ledger -%}
 <section class="section" aria-labelledby="first">
@@ -20,9 +23,9 @@ lede: Four refereed papers in Astronomy and Astrophysics, one as first author, e
   <div class="mosaic mosaic--pairs">
     {%- assign ps = site.papers | sort: "order" -%}
     {%- for x in ps %}
-    <div class="card-wrap">
+    <div class="card-wrap{% if x.card_wide %} wide{% endif %}">
       <a class="card" href="{{ x.url | relative_url }}" data-spotlight>
-        {%- if x.card_image %}<div class="media"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
+        {%- if x.card_image %}<div class="media{% if x.card_light %} light{% endif %}"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
         <div class="card-body">
           <span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>
           <h3>{{ x.headline | missions }}</h3>
@@ -41,7 +44,7 @@ lede: Four refereed papers in Astronomy and Astrophysics, one as first author, e
 <section class="section" aria-labelledby="other">
   <div class="section-head"><h2 id="other">Thesis and data</h2></div>
   <ol class="entries">
-    {%- for e in other %}{% include ledger_entry.html e=e category="publications" %}{% endfor %}
+    {%- for e in other %}{% assign extra = page.extra_links[e.id] %}{% include ledger_entry.html e=e category="publications" extra=extra %}{% endfor %}
   </ol>
 </section>
 {%- endif %}

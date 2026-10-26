@@ -54,7 +54,7 @@
     {%- if ids.arxiv -%}<a href="https://arxiv.org/abs/{{ ids.arxiv }}">arXiv:{{ ids.arxiv }}</a>{%- endif -%}
     {%- if ids.ads -%}<a href="https://ui.adsabs.harvard.edu/abs/{{ ids.ads }}/abstract">ADS</a>{%- endif -%}
     {%- if ids.handle -%}<a href="https://hdl.handle.net/{{ ids.handle }}">hdl:{{ ids.handle }}</a>{%- endif -%}
-    {%- if ids.url -%}{%- unless ids.url contains "doi.org" or ids.url contains "arxiv.org" -%}<a href="{{ ids.url }}">{% if cat == "software" %}{% if k == "app" %}Open the app{% else %}Documentation{% endif %}{% elsif cat == "presentations" or cat == "events" or cat == "service" or cat == "teaching" %}Meeting page{% else %}Web page{% endif %}</a>{%- endunless -%}{%- endif -%}
+    {%- if ids.url -%}{%- unless ids.url contains "doi.org" or ids.url contains "arxiv.org" or ids.url contains "hdl.handle.net" -%}<a href="{{ ids.url }}">{% if cat == "software" %}{% if k == "app" %}Open the app{% else %}Documentation{% endif %}{% elsif cat == "presentations" or cat == "events" or cat == "service" or cat == "teaching" %}Meeting page{% else %}Web page{% endif %}</a>{%- endunless -%}{%- endif -%}
     {%- if ids.repo -%}<a href="{{ ids.repo }}">{% if ids.repo contains "-data" %}Data repository{% else %}Source code{% endif %}</a>{%- endif -%}
     {%- for x in include.extra -%}<a href="{{ x.url | relative_url }}">{{ x.label }}</a>{%- endfor -%}
   {%- endcapture -%}
