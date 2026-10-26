@@ -567,8 +567,11 @@
   .tl-title { font-size: 0.93rem; color: var(--ink); line-height: 1.4; }
   .tl-title small { display: block; color: var(--muted); font-size: 0.82rem; margin-block-start: 2px; }
   .tl-links { font: 500 0.76rem var(--mono); display: flex; gap: 12px; white-space: nowrap; }
+  .tl-more { display: none; }
   @media (max-width: 760px) {
     .tl-wrap { padding-inline-start: 0; } .tl-gutter, .tl-legend, .tl-head { display: none; }
+    .timeline.is-folded .tl-row:nth-child(n+14) { display: none; }
+    .tl-more { display: block; margin-block-start: 10px; }
     .tl-row { grid-template-columns: auto 1fr; gap: 4px 10px; } .tl-row > :nth-child(n+3) { grid-column: 1 / -1; }
     .tl-to { display: inline; margin-inline-start: 0.4em; }
   }
@@ -746,7 +749,8 @@
   .bib-entry .contribution { font-size: 0.9rem; color: var(--ink-2); border-inline-start: 2px solid var(--accent); padding-inline-start: 10px; }
   @media (max-width: 640px) { .bib-entry { grid-template-columns: 1fr; } .bib-entry .when { grid-row: auto; display: flex; flex-wrap: wrap; } }
   .small { font-size: 0.86rem; color: var(--ink-2); }
-  .paper-fig-img { background: light-dark(#fff, var(--surface)); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; }
+  /* a published figure is shown as published, on a white plate in both themes, so its colours keep their meaning */
+  .paper-fig-img { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; }
   .paper-fig-img img { border: 0; }
   /* blueprint figures (light path) */
   .bp-svg { inline-size: 100%; block-size: auto; color: var(--accent); }
@@ -800,8 +804,6 @@
   @media (max-width: 760px) { .mosaic--pairs { grid-template-columns: 1fr; } }
 
   /* guide and paper articles: a reading column beside a wider rail; images sized to the column */
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .paper-fig-img img { filter: invert(.9) hue-rotate(180deg) saturate(1.15); } }
-  :root[data-theme="dark"] .paper-fig-img img { filter: invert(.9) hue-rotate(180deg) saturate(1.15); }
 
 
   /* talks: the record beside a column of photographs from the talks */

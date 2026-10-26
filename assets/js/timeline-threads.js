@@ -80,6 +80,9 @@
     k.addEventListener("blur", off);
   });
 
+  const more = root.querySelector("[data-tl-more]");
+  if (more) more.addEventListener("click", () => { list.classList.remove("is-folded"); more.hidden = true; redraw(); });
+
   let queued = false;
   const redraw = () => {
     if (queued) return;

@@ -11,7 +11,7 @@
   {%- for t in site.data.threads %}<span class="tl-key" data-thread="{{ t.key }}" style="--th: var({{ t.colour }})" tabindex="0">{{ t.label | missions }}</span>{% endfor %}</p>
 <div class="tl-wrap" data-threads-root>
   <svg class="tl-gutter" aria-hidden="true" data-threads-svg></svg>
-  <ol class="timeline" data-timeline>
+  <ol class="timeline is-folded" data-timeline>
     <li class="tl-head" aria-hidden="true"><span>When</span><span>Type</span><span>Entry</span><span></span></li>
     {%- for r in rows %}
     <li class="tl-row" data-kind="{{ r.kind }}" data-id="{{ r.id }}">
@@ -22,6 +22,7 @@
     </li>
     {%- endfor %}
   </ol>
+  <button type="button" class="btn tl-more no-print" data-tl-more>Show all {{ rows.size }} entries</button>
   <script type="application/json" data-threads-json>{{ site.data.threads | jsonify }}</script>
 </div>
 <script defer src="{{ '/assets/js/timeline-threads.js' | relative_url }}"></script>
