@@ -20,6 +20,7 @@
 - [Neitzel et al. 2025, A&A 695, A243](https://doi.org/10.1051/0004-6361/202451718) ([arXiv:2501.16294](https://arxiv.org/abs/2501.16294)): first author; manifold learning (UMAP and HDBSCAN) separates thin-disc, thick-disc, halo and accreted populations in a simulated Milky Way-like galaxy
 - [Campante et al. 2026, A&A](https://doi.org/10.1051/0004-6361/202660350) ([arXiv:2610.20985](https://arxiv.org/abs/2610.20985)): co-author, 6 of 24; ESPRESSO asteroseismology of the K dwarfs GJ 570 A and GJ 783 A; carried out the GJ 570 A observations
 - [Campante et al. 2024, A&A 683, L16](https://doi.org/10.1051/0004-6361/202449197): co-author; solar-like oscillations in the K5 dwarf epsilon Indi with ESPRESSO; Bayes-factor test for a power excess (Appendix D)
+- [MSc dissertation, 2022](https://andreaswneitzel.github.io/papers/neitzel-2022-msc-thesis/): Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog, University of Porto, hdl:10216/147245, with a plain-language explainer
 - [Magrini et al. 2022, A&A 663, A161](https://doi.org/10.1051/0004-6361/202243405): co-author; Ariel stellar characterisation of 187 FGK planet hosts; PARAM runs for a subset of the sample
 
 ## Software
