@@ -1,0 +1,14 @@
+{
+ "file": "47tuc_radial_profile.csv",
+ "what": "Surface density of the placed stars (G <= 18.5) of the synthetic 47 Tucanae field in 24 logarithmic radial bins from 2 to 1,800 arcsec from the cluster centre, in stars per square arcminute, with the star count per bin.",
+ "source": "angular_distance_arcsecs in runs/47tuc/outputs/47tuc_mag185_hne_catalogue.csv (HAYDNsim run output), binned by the HAYDNsim maintainer on 2026-10-26",
+ "status": "The per-star catalogue is private. This binned profile is cleared for the site by the maintainer, pending the author's approval.",
+ "profile": "King (1962) profile with the Harris 2010 shape for NGC 104: core radius 0.36 arcmin, concentration 2.07, so a tidal radius of 42.3 arcmin; the amplitude was fitted to HST counts in the 50 to 100 arcsec annulus and is not published",
+ "columns": [
+  "r_lo_arcsec",
+  "r_hi_arcsec",
+  "n_stars",
+  "density_per_arcmin2"
+ ],
+ "copied": "2026-10-26, unchanged"
+}

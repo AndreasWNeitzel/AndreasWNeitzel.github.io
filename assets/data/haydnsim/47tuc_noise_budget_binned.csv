@@ -1,6 +1,6 @@
-# 47 Tuc, HAYDN baseline, HNE output; median per 0.3 mag bin in Gaia G, same binning and term grouping as the TASC10/KASC17 poster panel (Zenodo 23263454).
+# 47 Tuc, HAYDN baseline, HNE output; median per 0.3 mag bin in the P band (HNE's magnitude, about 0.23 mag brighter than Gaia G for these stars), same binning and term grouping as the TASC10/KASC17 poster panel (Zenodo 23263454).
 # Noise terms in ppm sqrt(hr). Source: runs/47tuc/outputs/47tuc_mag185_hne.npz (HAYDNsim working tree, not public).
-g_bin_centre_mag,n_stars,median_total_nsr_ppm_sqrt_hr,median_photon,median_detector,median_target_jitter,median_crowding,median_spr
+p_bin_centre_mag,n_stars,median_total_nsr_ppm_sqrt_hr,median_photon,median_detector,median_target_jitter,median_crowding,median_spr
 10.15,9,19.74,13.38,1.484,0.4162,1.131,0.0004868
 10.45,36,21.36,15.1,1.845,0.4559,1.857,0.001082
 10.75,33,24.45,16.91,2.289,0.7705,9.734,0.01398

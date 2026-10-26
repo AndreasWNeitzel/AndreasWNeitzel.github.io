@@ -1,4 +1,4 @@
-/* Field guide, HAYDN: the HAYDNsim pipeline and the 47 Tucanae noise budget
+/* HAYDNsim page: the pipeline pictograms, how a field is built, and the 47 Tucanae noise budget
    (figures/haydnsim/build_haydn_figures.py). The one-time build comes from site.css ("figure build"). */
 @layer pages {
   .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
@@ -27,5 +27,25 @@
   .hy-svg .hy-bar { fill: color-mix(in oklab, var(--accent) 55%, transparent); stroke: currentColor; stroke-width: 0.8; }
   .hy-svg .hy-tex { fill: var(--muted); }
   .hy-svg .hy-tex-ink { fill: var(--ink-2); }
+  .hy-svg .hy-tex-muted { fill: var(--muted); }
+  /* pictograms: outline means schematic */
+  .hy-svg .hy-pic { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linejoin: round; stroke-linecap: round; }
+  .hy-svg .hy-pic-strong { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+  .hy-svg .hy-pic-dash { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+  .hy-svg .hy-dot { fill: currentColor; opacity: .75; }
+  .hy-svg .hy-window { fill: color-mix(in oklab, var(--accent) 16%, transparent); stroke: none; }
+  .hy-svg .hy-psf { fill: var(--accent-2); }
+  .hy-svg .hy-psf-n { fill: var(--accent); }
+  .hy-svg .hy-mask { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: miter; }
+  /* the field drawing */
+  .hy-svg .hy-sample circle { fill: none; stroke: currentColor; stroke-width: .6; opacity: .8; }
+  .hy-svg .hy-ring { fill: none; stroke: var(--ink); stroke-width: .8; }
+  .hy-svg .hy-ring-strong { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 3 2; }
+  .hy-svg .hy-leader { fill: none; stroke: var(--muted); stroke-width: .8; }
+  .hy-svg .hy-model { fill: none; stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 5 3; }
+  .hy-svg .hy-data circle, .hy-svg .hy-data-key { fill: var(--accent); stroke: var(--surface); stroke-width: .6; }
+  .hy-svg .hy-ebar { fill: color-mix(in oklab, var(--accent-2) 55%, transparent); stroke: currentColor; stroke-width: .8; }
+  .hy-svg .hy-ebar-total { fill: color-mix(in oklab, var(--ink) 70%, transparent); }
+  .hy-svg .hy-spr-wedge { fill: var(--accent-2); }
   @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hy-svg { min-inline-size: 760px; } }
 }
