@@ -178,7 +178,7 @@ def pipeline() -> str:
     """The six stages in two rows of three, each box wide enough for its pictogram and its line;
     the thread snakes from the first row into the second, and the bypass for open clusters drops
     straight from the threshold to the noise estimator."""
-    W, H = 1140, 596
+    W, H = 1140, 636
     p: list[str] = []
     p.append(text(20, 30, "HAYDN, AS PROPOSED", "hy-head", 0.0))
     facts = [("aperture", "1.2 m"), ("field of view", "1 degree"), ("plate scale", "0.5 arcsec per pixel"),
@@ -189,9 +189,9 @@ def pipeline() -> str:
         p.append(text(x, 46, v, "hy-val", 0.15))
         x += 185
     p.append(draw("hy-rule", f"M20 60 H{W - 20}", 0.1, 0.3))
-    w, h = 356, 196
+    w, h = 356, 216
     xs = [20, 392, 764]
-    ys = [84, 324]
+    ys = [84, 344]
     stages = [
         ("ARCHIVE DATA", "Gaia DR3 to G = 18.5, HST photometry of the core, four catalogues", pic_archive),
         ("THRESHOLD", "the magnitudes where Gaia and HST are both complete; the members", pic_threshold),
@@ -208,7 +208,10 @@ def pipeline() -> str:
         p.append(draw("hy-box", f"M{x} {y} h{w} v{h} h-{w} Z", t, 0.4))
         p.append(text(x + 12, y + 20, f"{i + 1}  {title}", "hy-title", t + 0.1))
         p.append(draw("hy-rule", f"M{x + 12} {y + 28} h{w - 24}", t + 0.1, 0.2))
-        p += pic(x + 14, y + 40, t + 0.15)
+        # the pictogram, drawn at its native size and scaled up to fill the box
+        px, py, sc = x + 12, y + 38, 1.3
+        shift = (w - 24 - 150 * sc) / 2
+        p.append(f'<g transform="translate({f(px + shift)} {f(py)}) scale({sc}) translate({f(-px)} {f(-py)})">' + "".join(pic(px, py, t + 0.15)) + "</g>")
         # the line, wrapped by hand at the box width
         words, lines, cur = line.split(), [], ""
         for wd in words:
@@ -227,7 +230,7 @@ def pipeline() -> str:
         p.append(thread(f"M{xa} {ym[0]} C{xa + 5} {ym[0] - 7}, {xb - 5} {ym[0] + 7}, {xb} {ym[0]}", t))
         p.append(node(xa, ym[0], t)); p.append(node(xb, ym[0], t + 0.05))
     xe = xs[2] + w
-    turn = f"M{xe} {ym[0]} C{xe + 24} {ym[0]}, {xe + 24} {ys[0] + h + 22}, {xe - 60} {ys[0] + h + 22} H{xs[0] - 4} C{xs[0] - 24} {ys[0] + h + 22}, {xs[0] - 24} {ym[1]}, {xs[0]} {ym[1]}"
+    turn = f"M{xe} {ym[0]} C{xe + 24} {ym[0]}, {xe + 24} {ys[0] + h + 12}, {xe - 60} {ys[0] + h + 12} H{xs[0] - 4} C{xs[0] - 24} {ys[0] + h + 12}, {xs[0] - 24} {ym[1]}, {xs[0]} {ym[1]}"
     p.append(thread(turn, 0.65))
     p.append(node(xe, ym[0], 0.65)); p.append(node(xs[0], ym[1], 0.8))
     for i in range(2):
@@ -241,7 +244,7 @@ def pipeline() -> str:
     xm = xs[1] + w / 2
     p.append(thread(f"M{f(xm)} {ys[0] + h} V{ys[1]}", 1.15, "ray flowray hy-bypass"))
     p.append(node(xm, ys[0] + h, 1.15)); p.append(node(xm, ys[1], 1.2))
-    p.append(text(xm + 8, ys[0] + h + 26, "open clusters skip 3 and 4", "hy-line", 1.25))
+    p.append(text(xm + 10, ys[0] + h + 34, "open clusters skip 3 and 4", "hy-line", 1.25))
     return (
         f'<svg class="bp-svg hy-svg" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
         'aria-labelledby="hy-pt hy-pd"><title id="hy-pt">The HAYDNsim pipeline, in six stages</title>'
