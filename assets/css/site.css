@@ -340,7 +340,10 @@
   .skill .ev a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-strong); }
 
   /* missions and machines: marks drawn for this site, never an agency logo */
-  .missions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 10px; list-style: none; }
+  .missions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; list-style: none; }
+  .missions li { display: grid; }
+  @media (max-width: 1100px) { .missions { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .missions { grid-template-columns: 1fr; } }
   .missions a { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "mark name" "mark who" "text text";
     column-gap: 10px; row-gap: 2px; align-items: center; padding: 12px 14px; border: 1px solid var(--line);
     border-radius: 6px; background: var(--surface); color: var(--ink); text-decoration: none;
@@ -352,7 +355,7 @@
   .mi-logo img { max-inline-size: 100%; max-block-size: 100%; object-fit: contain; }
   .mi-name { grid-area: name; font: 520 0.95rem var(--sans); align-self: end; }
   .mi-who { grid-area: who; font: 0.72rem var(--mono); color: var(--muted); align-self: start; }
-  .mi-text { grid-area: text; margin-block-start: 6px; font-size: 0.82rem; color: var(--ink-2); line-height: 1.4; }
+  .mi-text { grid-area: text; margin-block-start: 6px; font-size: 0.82rem; color: var(--ink-2); line-height: 1.4; min-block-size: 2.8em; }
   .m-field { fill: currentColor; }
 
   /* research pipeline schematic */
@@ -440,7 +443,7 @@
   .tmap-legend i { inline-size: 18px; block-size: 2px; background: var(--accent-2); display: inline-block; border-radius: 2px; }
   .tmap-legend i.home { inline-size: 9px; block-size: 9px; border-radius: 50%; background: var(--accent); }
   .tmap-legend i.country { inline-size: 12px; block-size: 9px; border-radius: 2px; background: color-mix(in oklab, var(--accent) 34%, var(--surface-2)); }
-  .tmap-card { position: absolute; z-index: 5; inline-size: min(320px, calc(100% - 28px)); background: var(--surface); border: 1px solid var(--line-strong);
+  .tmap-card { position: absolute; z-index: 5; inline-size: min(320px, calc(100% - 28px)); max-block-size: calc(100% - 68px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line-strong);
     border-radius: 14px; box-shadow: var(--shadow-lg); overflow: hidden; pointer-events: auto; opacity: 0; transform: translateY(6px) scale(.98);
     transition: opacity .18s var(--ease), transform .18s var(--ease); }
   .tmap-card.is-open { opacity: 1; transform: none; }
@@ -457,6 +460,8 @@
   .tmap-stats b { display: block; font: 640 1.4rem/1.1 var(--sans); color: var(--ink); letter-spacing: -0.03em; }
   .tmap-list { overflow-y: auto; min-block-size: 0; padding: 8px 8px 10px; list-style: none; margin: 0; display: grid; gap: 1px; align-content: start; }
   .tmap-country { font: 600 0.68rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 12px 10px 4px; }
+  .tmap-country { display: flex; align-items: center; gap: 8px; }
+  .flag { inline-size: 20px; block-size: 14px; flex: none; border-radius: 2px; box-shadow: 0 0 0 1px var(--line); }
   .tmap-country:first-child { padding-block-start: 4px; }
   .tmap-list button { inline-size: 100%; text-align: start; display: grid; grid-template-columns: 1fr; gap: 2px; padding: 9px 10px; border-radius: 10px; border: 1px solid transparent; background: none; }
   .tmap-list button:hover, .tmap-list button[aria-current="true"] { background: var(--surface-2); border-color: var(--line); }

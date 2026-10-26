@@ -170,7 +170,7 @@ record:
     items:
       - "<strong>First author</strong>, <a href=\"/papers/neitzel-2025-manifold-learning/\">A&amp;A 695, A243</a> (2025)"
       - "<strong>Responsible investigator</strong>, two FCT advanced-computing projects (2026)"
-      - "<strong>Sole developer</strong> of <a href=\"/software/\">Starfold, Stellar Explorer and Tellurion</a>"
+      - "<strong>Sole developer</strong> of JANUS, HAYDNsim, <a href=\"/software/\">Starfold, Stellar Explorer and Tellurion</a>"
       - "<strong>Chair</strong>, IA Stars Day organising committee (2023); <strong>supervisor</strong>, IA Summer Programme (2024, 2025)"
   - id: international
     title: International

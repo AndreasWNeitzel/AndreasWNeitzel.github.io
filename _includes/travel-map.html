@@ -1,7 +1,7 @@
 {%- assign PL = site.data.places -%}
 {%- assign L = site.data.ledger -%}
 {%- assign cats = "presentations,events,positions,service,teaching,awards,outreach" | split: "," -%}
-<div class="tmap card" data-travel-map data-script="{{ '/assets/js/travel-map.js' | relative_url }}" data-basemap="{{ '/assets/img/map/world_map.svg' | relative_url }}">
+<div class="tmap card" data-travel-map data-script="{{ '/assets/js/travel-map.js' | relative_url }}" data-basemap="{{ '/assets/img/map/world_map.svg' | relative_url }}" data-about="{{ '/about/' | relative_url }}">
   <div class="tmap-stage">
     <div class="tmap-canvas"></div>
     <div class="tmap-ui">
@@ -21,7 +21,7 @@
       {%- assign last_country = "" -%}
       {%- for pl in PL.places %}
       {%- if pl.role == "waypoint" %}{% continue %}{% endif %}
-      {%- if pl.country != last_country %}<li class="tmap-country" aria-hidden="true">{{ pl.country }}</li>{% assign last_country = pl.country %}{% endif %}
+      {%- if pl.country != last_country %}<li class="tmap-country" aria-hidden="true"><svg class="flag"><use href="#f-{{ pl.country | downcase }}"/></svg>{{ pl.country }}</li>{% assign last_country = pl.country %}{% endif %}
       <li><button type="button" data-place="{{ pl.id }}"><span class="nm">{{ pl.name }}</span><span class="what">{{ pl.line | missions }}</span></button></li>
       {%- endfor %}
     </ol>

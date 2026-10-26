@@ -4,6 +4,7 @@
   const host = document.querySelector("[data-travel-map]");
   if (!host || host.dataset.ready) return;
   host.dataset.ready = "1";
+  const aboutUrl = host.dataset.about || "/about/";
 
   const R = 6371.0, LAT0 = 41.1496, LON0 = -8.6110;
   const rad = (d) => (d * Math.PI) / 180;
@@ -215,8 +216,8 @@
       marks.forEach((m) => m.g.classList.toggle("is-active", m.p.id === id));
       routes.forEach((r) => r.path.classList.toggle("is-dim", !(r.a.id === id || r.b.id === id || (id === "paranal" && r.b.id === "santiago"))));
       host.querySelectorAll(".tmap-list [data-place]").forEach((b) => b.setAttribute("aria-current", String(b.dataset.place === id)));
-      const items = p.items.slice(0, 6).map((it) => `<li><span class="${tagClass(it.tag)}">${esc(it.label)}</span><span>${it.title}${it.when ? ` <span class="kicker">${esc(it.when)}</span>` : ""}</span></li>`).join("");
-      const more = p.items.length > 6 ? `<p class="kicker">and ${p.items.length - 6} more in the record</p>` : "";
+      const items = p.items.slice(0, 4).map((it) => `<li><span class="${tagClass(it.tag)}">${esc(it.label)}</span><span>${it.title}${it.when ? ` <span class="kicker">${esc(it.when)}</span>` : ""}</span></li>`).join("");
+      const more = p.items.length > 4 ? `<p class="kicker"><a href="${aboutUrl}#all">and ${p.items.length - 4} more, in the timeline</a></p>` : "";
       card.innerHTML = `${p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.photo_alt)}">` : `<div class="tmap-card-art"><span>${esc(p.name.toUpperCase())}</span><span>${p.lat.toFixed(2)}°, ${p.lon.toFixed(2)}°</span></div>`}
         <div class="card-body"><p class="where">${esc(p.country)}${p.role === "home" ? " · home base" : ` · ${fmt(p.km)} km from Porto`}</p><h3>${esc(p.name)}</h3>${p.blurb ? `<p>${p.blurb}</p>` : ""}${items ? `<ul>${items}</ul>` : ""}${more}${p.photo_credit ? `<p class="credit">Photo: ${p.photo_credit_url ? `<a href="${esc(p.photo_credit_url)}">${esc(p.photo_credit)}</a>` : esc(p.photo_credit)}</p>` : ""}</div>`;
       card.hidden = false;
