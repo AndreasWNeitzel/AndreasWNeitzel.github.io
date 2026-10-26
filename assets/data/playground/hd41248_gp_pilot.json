@@ -1,0 +1,118 @@
+{
+  "description": "Pilot run of the playground's quasi-periodic Gaussian-process model on the HD 41248 HARPS velocities.",
+  "built_utc": "2026-10-26T02:26:05Z",
+  "script": "figures/playground/pilot_hd41248_gp.py",
+  "data": "assets/data/playground/hd41248_harps.json",
+  "n": 223,
+  "rv_mean_subtracted_m_s": 3528.0586,
+  "priors": {
+    "eta1": {
+      "type": "log-uniform",
+      "low": 0.1,
+      "high": 50.0
+    },
+    "eta2": {
+      "type": "log-uniform",
+      "low": 1.0,
+      "high": 1000.0
+    },
+    "eta3": {
+      "type": "uniform",
+      "low": 10.0,
+      "high": 40.0
+    },
+    "eta4": {
+      "type": "log-uniform",
+      "low": 0.1,
+      "high": 10.0
+    },
+    "s": {
+      "type": "log-uniform",
+      "low": 0.1,
+      "high": 20.0
+    }
+  },
+  "start": {
+    "eta1": 5.0,
+    "eta2": 50.0,
+    "eta3": 20.0,
+    "eta4": 1.0,
+    "s": 2.0
+  },
+  "sampler": {
+    "kind": "random-walk Metropolis, Gaussian proposal, diagonal covariance",
+    "steps": 60000,
+    "adapted_during_first_steps": 8000,
+    "discarded_as_burn_in": 8000,
+    "seed": 1,
+    "acceptance_rate": 0.2492,
+    "final_adapted_step": [
+      0.08479,
+      0.2544,
+      0.8479,
+      0.1696,
+      0.08479
+    ],
+    "page_step_sizes_rule": "2.38 / sqrt(5) times the posterior standard deviation in the sampling coordinate (Roberts, Gelman and Gilks 1997)",
+    "page_step_sizes": [
+      0.1268,
+      0.2363,
+      0.5337,
+      0.1678,
+      0.1446
+    ]
+  },
+  "log_posterior": {
+    "mode": -533.794,
+    "median": -536.042,
+    "p16": -537.957,
+    "p84": -534.878
+  },
+  "posterior": {
+    "eta1": {
+      "mode": 2.926,
+      "p16": 2.622,
+      "median": 2.936,
+      "p84": 3.31,
+      "coordinate": "ln",
+      "posterior_sd_in_coordinate": 0.1192,
+      "step_size": 0.1268
+    },
+    "eta2": {
+      "mode": 38.88,
+      "p16": 30.41,
+      "median": 37.89,
+      "p84": 46.62,
+      "coordinate": "ln",
+      "posterior_sd_in_coordinate": 0.222,
+      "step_size": 0.2363
+    },
+    "eta3": {
+      "mode": 25.49,
+      "p16": 25.12,
+      "median": 25.57,
+      "p84": 26.07,
+      "coordinate": "linear",
+      "posterior_sd_in_coordinate": 0.5014,
+      "step_size": 0.5337
+    },
+    "eta4": {
+      "mode": 0.6656,
+      "p16": 0.5784,
+      "median": 0.6716,
+      "p84": 0.7852,
+      "coordinate": "ln",
+      "posterior_sd_in_coordinate": 0.1576,
+      "step_size": 0.1678
+    },
+    "s": {
+      "mode": 1.283,
+      "p16": 1.133,
+      "median": 1.296,
+      "p84": 1.471,
+      "coordinate": "ln",
+      "posterior_sd_in_coordinate": 0.1359,
+      "step_size": 0.1446
+    }
+  }
+}
