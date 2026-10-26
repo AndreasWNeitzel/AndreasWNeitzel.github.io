@@ -411,6 +411,9 @@
     transition: border-color .2s, transform .2s var(--ease); }
   .missions a:hover { border-color: var(--line-strong); transform: translateY(-1px); text-decoration: none; }
   .missions .mi { grid-area: mark; font-size: 2rem; color: var(--accent); }
+  .mi-logo { grid-area: mark; display: grid; place-items: center; inline-size: 48px; block-size: 48px;
+    padding: 3px; border-radius: 6px; background: #fff; }
+  .mi-logo img { max-inline-size: 100%; max-block-size: 100%; object-fit: contain; }
   .mi-name { grid-area: name; font: 520 0.95rem var(--sans); align-self: end; }
   .mi-who { grid-area: who; font: 0.72rem var(--mono); color: var(--muted); align-self: start; }
   .mi-text { grid-area: text; margin-block-start: 6px; font-size: 0.82rem; color: var(--ink-2); line-height: 1.4; }

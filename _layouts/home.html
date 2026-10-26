@@ -89,12 +89,15 @@ body_class: home
 <section class="section" id="missions" aria-labelledby="missions-title">
   <div class="section-head">
     <h2 id="missions-title">Missions and machines</h2>
-    <p>The spacecraft, telescopes and computers the work runs on. The marks are drawn for this site: mission logos belong to their agencies.</p>
+    <p>The spacecraft, telescopes and computers the work runs on. Mission logos are the agencies' own, <i>Gaia</i>, <i>Ariel</i> and <i>PLATO</i> from ESA, <i>Kepler</i> and <i>TESS</i> from NASA; the other marks are drawn for this site.</p>
   </div>
   <ul class="missions">
     {%- for m in H.missions %}
     <li><a href="{{ m.url | relative_url }}">
-      <svg class="i mi" aria-hidden="true"><use href="#{{ m.icon }}"/></svg>
+      {%- assign lf = nil -%}
+      {%- if m.logo -%}{%- assign lf = site.static_files | where: "path", m.logo | first -%}{%- endif -%}
+      {%- if lf %}<span class="mi-logo"><img src="{{ m.logo | relative_url }}" alt="{{ m.logo_alt }}" loading="lazy" decoding="async"></span>
+      {%- else %}<svg class="i mi" aria-hidden="true"><use href="#{{ m.icon }}"/></svg>{% endif %}
       <span class="mi-name">{{ m.name | missions }}</span>
       <span class="mi-who">{{ m.who }}</span>
       <span class="mi-text">{{ m.text | missions }}</span>

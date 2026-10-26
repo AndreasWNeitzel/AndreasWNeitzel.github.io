@@ -33,6 +33,28 @@ an image licence.
 | Deucalion (CNCA) and MACC | [Deucalion logos (zip)](https://deucalion.acnca.pt/wp-content/uploads/2026/02/Logos.zip); MACC has no official file and is now a legacy name | [Deucalion, about (branding)](https://deucalion.acnca.pt/about/) (files, no terms) | Use only with permission |
 | NASA insignia (for context) | not linked | [NASA brand guidelines](https://www.nasa.gov/nasa-brand-center/brand-guidelines/) | Not allowed |
 
+## Mission logos in `missions/` (decision of 2026-10-26)
+
+Andreas asked for the official ESA and NASA mission logos on the site and took the decision
+knowing the terms quoted below: ESA requires prior written authorisation for its logo and for the
+mission patches that contain it, and NASA says mission identifiers are not in the public domain
+and that external use is evaluated by its Associate Administrator for Communications. The marks
+identify the missions whose data the work uses; nothing is altered, recoloured or combined, and
+no endorsement is stated or implied. Write to corporatebranding@esa.int and to NASA
+communications to put the permissions on file.
+
+| File | Mission | Official source |
+|---|---|---|
+| `missions/gaia.png` | *Gaia* (ESA) | [Gaia media gallery](https://www.cosmos.esa.int/documents/29201/9868856/Gaia_logo.png/b17146c2-6fe1-2431-afe7-27004c9eb053) |
+| `missions/ariel.svg` | *Ariel* (ESA) | [cosmos.esa.int](https://www.cosmos.esa.int/documents/10192/23556741/logo.ariel.svg/636f3a90-1646-e764-44be-f34cd845e36d) |
+| `missions/plato.svg` | *PLATO* (ESA) | [cosmos.esa.int](https://www.cosmos.esa.int/documents/10192/23556741/logo.plato.svg/75790f48-35b1-1501-7f94-97ff9383d94b) |
+| `missions/tess.png` | *TESS* (NASA) | [NASA GSFC archive](https://asd.gsfc.nasa.gov/archive/tess/images/tess-logos/tess-logo-transparent-bkgrd-hi-res.png) |
+| `missions/kepler.png` | *Kepler* (NASA) | [Commons copy of the NASA file](https://upload.wikimedia.org/wikipedia/commons/d/d8/Kepler_Logo.png), PD-USGov-NASA with the 14 CFR 1221 insignia notice |
+
+Each file is used as delivered, on a white tile so that it keeps its own background in both
+themes, at 48 px. The home page says whose marks they are. If a file is missing the page falls
+back to the line mark drawn for this site, so nothing breaks.
+
 ## Files in this folder
 
 | File | What it is | Source |
