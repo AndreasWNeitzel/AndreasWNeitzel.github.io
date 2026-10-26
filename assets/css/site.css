@@ -715,8 +715,10 @@
   .line h2 { font-size: 1.35rem; line-height: 1.2; }
   /* the title is the link, and its reach is the whole card; the small links below stay their own targets */
   .line-link { color: inherit; text-decoration: none; }
-  .line-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
-  .line .links { position: relative; z-index: 2; }
+  .line .card-body { position: static; }
+  .line-pic { z-index: 0; }
+  .line-link::after { content: ""; position: absolute; inset: 0; z-index: 2; }
+  .line .links { position: relative; z-index: 3; }
   .line:hover { border-color: var(--line-strong); }
   .line:hover .line-link { color: var(--accent); }
   .line:has(.line-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }

@@ -505,30 +505,3 @@ svg = (
 )
 OUT.write_text(svg)
 
-# ------------------------------------------------------------------ the JANUS figure, from the same stages
-# /research/janus/ shows the same drawing of JANUS as FIG 1: the XP spectrum, the seismic input,
-# the ensemble and the labels with their reliability, with the labels moved to the right of the
-# network so the figure reads left to right. Nothing is redrawn; the stages are reused as built.
-JX, JY = 226.0, -236.0  # the labels stage, moved from under the network to beside it
-jlink = f"M662 140 C700 140 740 {f(ry[0] - 3 + JY)} {f(med[0] + JX)} {f(ry[0] - 3 + JY)}"
-jmask = (f'<mask id="f1jm" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="{H}">'
-         f'<path class="f1-mask b-draw" pathLength="1" {timing(T["l3"], 0.3)} d="{jlink}"/></mask>')
-janus_svg = (
-    f'<svg class="f1-svg f1-janus" data-build="" viewBox="218 0 690 262" xmlns="http://www.w3.org/2000/svg" role="img" '
-    'aria-label="Schematic of JANUS: a real Gaia XP spectrum of a red giant and the seismic input go into an ensemble of '
-    'eight normalising-flow networks, 110 inputs to 6 outputs, which returns six labels with a spread and a miss probability.">'
-    + "<defs>" + masks[1] + masks[2] + jmask + "</defs>"
-    + stage("xp", "XP spectra", (226, 56, 210, 196), xp)
-    + stage("seismo", "Asteroseismology input", (340, 2, 230, 50), sm)
-    + stage("janus", "JANUS neural networks", (456, 62, 212, 196), jn)
-    + f'<g transform="translate({f(JX)} {f(JY)})">' + stage("labels", "Stellar labels with reliability", (456, 292, 212, 186), lb) + "</g>"
-    + '<g class="f1-thread" aria-hidden="true">'
-    + links[1] + links[2] + f'<path class="f1-link" mask="url(#f1jm)" d="{jlink}"/>'
-    + roles[1] + roles[2] + f'<g transform="translate({f(JX)} {f(JY)})">' + roles[3] + "</g>"
-    + "</g></svg>\n"
-).replace(' tabindex="0" role="button"', "")
-(ROOT / "_includes/figures/janus.svg").write_text(janus_svg)
-print(
-    f"wrote {OUT.relative_to(ROOT)}: {len(svg) / 1024:.1f} KB; spectrum {ex['source_id']}, {len(keep)} samples; "
-    f"{len(GROUPS)} schematic groups; {len(links)} connectors"
-)

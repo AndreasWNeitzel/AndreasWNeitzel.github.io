@@ -9,10 +9,12 @@ lede: A neural network that reads a red giant's parameters and chemistry from it
 extra_css: [/assets/css/fig1.css]
 math: true
 ---
-<figure class="panel blueprint guide-wide" data-build>
-  {% include figures/janus.svg %}
-  <figcaption class="credit">The JANUS stages of the pipeline on the home page: a real <i>Gaia</i> XP spectrum of a red giant (DR3 5289554869898620416) and the seismic input from <i>TESS</i> and <i>Kepler</i> go into the ensemble of eight normalising-flow networks, 110 inputs to six outputs, which returns each label with a spread and a calibrated miss probability. On stars withheld from training (IMAS13, October 2026) the robust scatter about APOGEE is 32 K in <span class="tex" data-tex="T_\mathrm{eff}">T_eff</span>, 0.072 dex in <span class="tex" data-tex="\log g">log g</span>, 0.051 dex in [M/H] and 0.021 dex in <span class="tex" data-tex="[\alpha/\mathrm{M}]">[α/M]</span>; the catalogue covers 144,304 <i>TESS</i> red giants, about nine times as many as have APOGEE DR19 values passing the same cuts.</figcaption>
+<figure class="fig1 panel fig1--focus" id="fig1">
+  <div class="fig1-head"><span class="figno">FIG 1</span><span>JANUS in the research pipeline, from the home page</span><span class="fig1-hint">hover a stage</span><span class="fig1-swipe">swipe to see all six stages</span></div>
+  <div class="fig1-scroll">{% include figures/pipeline.svg %}</div>
+  <figcaption class="fig1-cap" aria-live="polite"><b data-cap-title></b> <span data-cap-text></span></figcaption>
 </figure>
+<p class="credit">On stars withheld from training (IMAS13, October 2026) the robust scatter about APOGEE is 32 K in <span class="tex" data-tex="T_\mathrm{eff}">T_eff</span>, 0.072 dex in <span class="tex" data-tex="\log g">log g</span>, 0.051 dex in [M/H] and 0.021 dex in <span class="tex" data-tex="[\alpha/\mathrm{M}]">[α/M]</span>; the catalogue covers 144,304 <i>TESS</i> red giants, about nine times as many as have APOGEE DR19 values passing the same cuts.</p>
 
 <div class="article-layout">
   <article class="stack-m">
