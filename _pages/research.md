@@ -10,7 +10,7 @@ lede: Four lines of work, one chain. Neural networks read red-giant chemistry fr
   <article class="line card" id="janus">
     <div class="line-pic">{% include figures/art-nn.svg %}</div>
     <div class="card-body">
-      <span class="kicker">2025 to 2027 · FCT project ArqueoGal</span>
+      <span class="kicker">2025 to 2027 · PhD work within the FCT project ArqueoGal</span>
       <h2>JANUS: chemistry from <i>Gaia</i> spectra</h2>
       <p><i>Gaia</i> DR3 carries low-resolution spectra of 220 million stars. JANUS, eight normalising-flow networks, reads a red giant's parameters and abundances from them, with a per-star miss probability. Trained where <i>Gaia</i> overlaps APOGEE, validated on open clusters, wide binaries and the first dredge-up. Talks at TASC10/KASC17 and IMAS13; two FCT projects on Deucalion and MareNostrum 5.</p>
       <p class="links"><a href="{{ '/talks/' | relative_url }}">The talks</a> · <a href="{{ '/guide/machine-learning-for-stars/' | relative_url }}">Machine learning for stars, in a minute</a> · <a href="{{ '/playground/neural-network/' | relative_url }}">Train a small one yourself</a></p>

@@ -26,7 +26,7 @@ selected:
     label: paper
     ledger: pub-2025-neitzel-manifold-learning
   - title: JANUS, the chemistry of red giants from Gaia spectra
-    kicker: ArqueoGal, 2025 to 2027
+    kicker: PhD work within the FCT project ArqueoGal, 2025 to 2027
     text: Normalising-flow networks that read stellar parameters and chemistry from Gaia spectra, with a reliability score for every star.
     url: /research/#janus
     art: nn
@@ -163,13 +163,12 @@ record:
       - "<strong>Deucalion</strong>: 299,520 core-hours (99,840 granted, tripled as a bonus) and 1,500 A100 GPU-hours, as responsible investigator, approved 2026"
   - id: leadership
     title: Leadership
-    count: "3"
+    count: "4"
     unit: lead roles
     colour: --t-paper
     items:
       - "<strong>First author</strong>, <a href=\"/papers/neitzel-2025-manifold-learning/\">A&amp;A 695, A243</a> (2025)"
       - "<strong>Responsible investigator</strong>, two FCT advanced-computing projects (2026)"
-      - "<strong>Co-investigator</strong>, FCT project ArqueoGal; developer of its machine-learning pipelines"
       - "<strong>Sole developer</strong> of <a href=\"/software/\">Starfold, Stellar Explorer and Tellurion</a>"
       - "<strong>Chair</strong>, IA Stars Day organising committee (2023); <strong>supervisor</strong>, IA Summer Programme (2024, 2025)"
   - id: international
