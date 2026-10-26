@@ -10,7 +10,7 @@ extra_css: [/assets/css/papers.css]
 ---
 <figure class="panel blueprint guide-wide" data-build>
   {% include figures/arqueogal.svg %}
-  <figcaption class="credit">How the pieces of the project fit. The three surveys are prepared once in the integration repository, with selection, the mandatory corrections, kinematics and provenance on every file; JANUS supplies the stellar labels and Starfold the populations, each from its own repository and called through a checked hand-off; the result is a map of the disc by age, chemistry and motion. After the responsibility boundary in the repository's README.</figcaption>
+  <figcaption class="credit">The project followed by one red giant. Its <i>TESS</i> light curve gives oscillations (task 2, lead Campante) and, with PARAM against a grid of stellar models, a mass and an age (task 4, leads Monteiro and Bossini). Its <i>Gaia</i> astrometry gives an orbit, from the kinematics code of my integration repository (task 3, lead Bossini). Its spectrum gives chemistry: from APOGEE for the one star in ten that has it, from my network JANUS for the rest. The three lanes fill the star's row of the all-sky catalogue, D-Cat; my package Starfold returns its population (task 5, leads Campante and Miglio); the Galactic model, TRILEGAL and a chemo-kinematic model, reads the catalogue and draws the disc (task 6, leads Campante and Miglio, with me as participant). Stages I built are filled in the accent; the team's are in ink. The timeline carries the deliverables, with task 1 (data management, lead Campante) and task 7 (the outreach installation at the Porto Planetarium, lead Pereira) at its ends. From the application 2024.15303.PEX and the kickoff of 16 February 2026.</figcaption>
 </figure>
 
 <div class="article-layout">

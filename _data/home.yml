@@ -137,7 +137,7 @@ missions:
   - icon: i-telescope
     name: Very Large Telescope
     who: ESO, Paranal
-    text: Two nights with ESPRESSO, May 2024.
+    text: Six nights with ESPRESSO, May 2024.
     url: /observing/paranal/
   - icon: i-cpu
     name: Deucalion

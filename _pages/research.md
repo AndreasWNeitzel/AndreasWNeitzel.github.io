@@ -18,7 +18,7 @@ extra_css: [/assets/css/thesis.css]
     </div>
   </article>
   <article class="line card" id="arqueogal">
-    <div class="line-pic"><img src="{{ '/assets/img/guide/supercomputers.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
+    <div class="line-pic"><img src="{{ '/assets/img/guide/galactic-archaeology.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
     <div class="card-body">
       <span class="kicker">2026 to 2027 · FCT exploratory project 2024.15303.PEX · PI T. L. Campante</span>
       <h2><a class="line-link" href="{{ '/research/arqueogal/' | relative_url }}">ArqueoGal: the project the pipelines serve</a></h2>
@@ -41,14 +41,23 @@ extra_css: [/assets/css/thesis.css]
       <span class="kicker">2021 to now · <i>TESS</i>, <i>Kepler</i>, ESPRESSO</span>
       <h2><a class="line-link" href="{{ '/papers/neitzel-2022-msc-thesis/' | relative_url }}">Asteroseismology, the clock</a></h2>
       <p>My MSc dissertation measured how seismology tightens ages of Sun-like planet hosts in the <i>Ariel</i> target list. With ESPRESSO at the VLT I observed on the campaign that detected oscillations in GJ 570 A, and I contributed to <i>Ariel</i> stellar characterisation and the ε Indi detection. <i>TESS</i> and <i>Kepler</i> ages anchor the main chain.</p>
-      <p class="links"><a href="{{ '/observing/paranal/' | relative_url }}">Two nights at Paranal</a> · <a href="{{ '/papers/neitzel-2022-msc-thesis/' | relative_url }}">The dissertation, explained</a> · <a href="{{ '/guide/asteroseismology/' | relative_url }}">Asteroseismology, in a minute</a></p>
+      <p class="links"><a href="{{ '/observing/paranal/' | relative_url }}">Six nights at Paranal</a> · <a href="{{ '/papers/neitzel-2022-msc-thesis/' | relative_url }}">The dissertation, explained</a> · <a href="{{ '/guide/asteroseismology/' | relative_url }}">Asteroseismology, in a minute</a></p>
+    </div>
+  </article>
+  <article class="line card" id="hpc">
+    <div class="line-pic"><img src="{{ '/assets/img/guide/supercomputers.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
+    <div class="card-body">
+      <span class="kicker">2025 to now · Deucalion and MareNostrum 5</span>
+      <h2><a class="line-link" href="{{ '/guide/supercomputers/' | relative_url }}">Supercomputers: where the networks train</a></h2>
+      <p>Two FCT advanced-computing projects with me as responsible investigator: 299,520 ARM core-hours and 1,500 A100 GPU-hours on Deucalion to run JANUS on the <i>Gaia</i> DR3 spectra of about 220 million stars, and 1,002,400 core-hours and 1,000 H100 GPU-hours on MareNostrum 5 for <i>Gaia</i> DR4. Before them, 94,001 core-hours of development access on Deucalion's ARM, x86 and A100 partitions.</p>
+      <p class="links"><a href="{{ '/guide/supercomputers/' | relative_url }}">The supercomputers, in a minute</a> · <a href="{{ '/research/janus/' | relative_url }}">What runs on them</a></p>
     </div>
   </article>
   <article class="line card" id="paranal">
     <div class="line-pic"><img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
     <div class="card-body">
       <span class="kicker">May 2024 · ESO Very Large Telescope, Paranal</span>
-      <h2><a class="line-link" href="{{ '/observing/paranal/' | relative_url }}">Two nights at Paranal</a></h2>
+      <h2><a class="line-link" href="{{ '/observing/paranal/' | relative_url }}">Six nights at Paranal</a></h2>
       <p>Visiting astronomer for the ESPRESSO campaign on GJ 570 A: 571 exposures in one night, 2,250 velocities over five, and the oscillations they revealed, now in A&amp;A. The page follows the starlight from the 8.2 m mirror to one velocity, with the photographs from the run.</p>
       <p class="links"><a href="{{ '/observing/paranal/' | relative_url }}">The observing run</a> · <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">The paper, explained</a> · <a href="{{ '/guide/eso-vlt/' | relative_url }}">ESO and the VLT, in a minute</a></p>
     </div>

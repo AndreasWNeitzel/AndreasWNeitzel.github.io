@@ -17,6 +17,7 @@
   .th-svg .th-hill { stroke-width: 1.8; }
   .th-svg .th-band { fill: currentColor; opacity: 0.12; }
   .th-svg .th-cell { fill: none; stroke: currentColor; stroke-width: 0.8; opacity: 0.8; }
+  .th-svg .th-mark { fill: var(--accent); opacity: 0.75; }
   .th-svg .th-dim { fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-dasharray: 2 2; }
   .th-svg .th-dimline { fill: none; stroke: var(--ink); stroke-width: 0.8; }
   .th-svg .th-node { fill: var(--accent-2); }

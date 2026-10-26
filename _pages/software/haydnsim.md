@@ -28,6 +28,11 @@ extra_css: [/assets/css/haydn.css]
   <figcaption class="credit">The one result the proposal has published: the share of each cluster's stars whose light is mostly its neighbours', that is with a stellar pollution ratio above 0.5, for the seven globular clusters on the TASC10/KASC17 poster (Neitzel et al. 2026, doi:10.5281/zenodo.23263454). It separates the dense clusters from the open ones: 40 per cent in 47 Tucanae against 3 per cent in M4.</figcaption>
 </figure>
 
+<figure class="panel guide-wide">
+  <img src="{{ '/assets/img/haydnsim/candidate-clusters-sky.webp' | relative_url }}" alt="The sky in Galactic coordinates over the Gaia map, with the footprints of the TESS, Kepler, K2, CoRoT and PLATO fields and the candidate globular clusters, open clusters and other fields marked." loading="lazy" decoding="async" width="1600" height="813">
+  <figcaption class="credit">The candidate fields on the sky, from my DFA Week 2026 talk: globular clusters as circles, open clusters as triangles and other fields as squares, over the footprints of the <i>TESS</i> primary mission, <i>Kepler</i>, K2, CoRoT and the planned <i>PLATO</i> field. Background: ESA/Gaia/DPAC.</figcaption>
+</figure>
+
 <section class="section" aria-labelledby="where">
   <div class="section-head"><h2 id="where">Where it was presented</h2></div>
   <ul class="list prose">

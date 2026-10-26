@@ -151,11 +151,22 @@ def method_figure() -> str:
     ax, ay, aw, ah = 396, 76, 140, 40
     p.append(f'<clipPath id="th-hr"><rect x="{ax}" y="{ay - 2}" width="{aw}" height="{ah + 2}"/></clipPath>')
     p.append(draw("th-axis", f"M{ax} {ay} V{ay + ah} H{ax + aw}", T_PIC + 0.3, 0.3))
-    tracks = []
-    for i in range(5):
-        x0 = ax + aw - 14 - i * 24
-        y0 = ay + ah - 4 - i * 2
-        tracks.append(draw("th-pic", f"M{x0} {y0} C{x0 + 3} {y0 - 14 - i}, {x0 - 8} {y0 - 22 - i * 2}, {x0 - 6} {y0 - 28 - i * 2} C{x0 - 4} {y0 - 34 - i * 2}, {x0 - 30} {y0 - 44}, {x0 - 48 - i} {ay - 2}", T_PIC + 0.35 + 0.05 * i, 0.5))
+    # a schematic main sequence and subgiant branch for each mass, drawn in the log Teff, log L plane
+    def model(m, a):
+        tms = 10 / m ** 2.5
+        fr = min(a / tms, 1.7)
+        lum = m ** 3.6 * (0.75 + 0.45 * fr + 2.2 * max(0.0, fr - 1.0) ** 1.3)
+        teff = m ** 0.55 * (1.02 - 0.06 * fr - 0.3 * max(0.0, fr - 1.0) ** 1.1)
+        return ax + aw * (1 - (math.log10(teff) + 0.3) / 0.52), ay + ah * (1 - (math.log10(lum) + 1.2) / 2.6)
+    masses = (0.5, 0.7, 0.9, 1.1, 1.3, 1.5, 1.8)
+    tracks, pts_by_mass = [], []
+    for i, m in enumerate(masses):
+        pts = [model(m, (j / 30) * 1.7 * 10 / m ** 2.5) for j in range(31)]
+        pts_by_mass.append(pts)
+        tracks.append(draw("th-pic", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), T_PIC + 0.35 + 0.04 * i, 0.5))
+    for j in (8, 16, 22, 27):
+        iso = [pts[j] for pts in pts_by_mass]
+        tracks.append(draw("th-guide", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in iso), T_PIC + 0.6, 0.3))
     p.append('<g clip-path="url(#th-hr)">' + "".join(tracks) + "</g>")
     p.append(draw("th-dimline", f"M{ax + 10} {ay + ah + 10} H{ax + aw - 6} M{ax + 10} {ay + ah + 6} v8 M{ax + aw - 6} {ay + ah + 6} v8", T_PIC + 0.6, 0.3))
     p.append(place([("text", "0.5 to 1.8 "), ("tex", r"M_\odot")], ax + aw / 2 + 2, ay + ah + 26, "th-note", 10.5, T_PIC + 0.65, "middle"))
@@ -216,15 +227,25 @@ def method_figure() -> str:
     rows = [[("text", "spec")], [("text", "no "), ("tex", r"\log g")], [("text", "+ "), ("tex", r"L")], [("text", "+ "), ("tex", r"L"), ("text", ", no "), ("tex", r"\log g")]]
     for j, c in enumerate(cols):
         p.append(place(c, sx0 + j * (cell + gap) + cell / 2, sy0 - 8, "th-note", 10.5, T_OUT + 0.5, "middle"))
+    # cell values: the median relative age uncertainty of the ten stars, from the dissertation's tables
+    keys = ("spec", "spec+dnu", "spec+numax", "spec+dnu+numax")
+    sets = (("published_inputs", "spec"), ("published_inputs_no_logg", "spec"), ("published_inputs", "specphot"), ("published_inputs_no_logg", "specphot"))
+    vmax = max(DATA[t][k.replace("spec", pre, 1)]["age"] for t, pre in sets for k in keys)
     for i, r in enumerate(rows):
         yy = sy0 + i * (cell + gap)
+        tab, pre = sets[i]
         p.append(place(r, sx0 - 10, yy + cell / 2 + 4, "th-note", 10.5, T_OUT + 0.55 + 0.05 * i, "end"))
         for j in range(4):
-            p.append(draw("th-cell", f"M{sx0 + j * (cell + gap)} {yy} h{cell} v{cell} h{-cell} Z", T_OUT + 0.55 + 0.03 * (i * 4 + j), 0.25))
+            v = DATA[tab][keys[j].replace("spec", pre, 1)]["age"]
+            side = cell * math.sqrt(v / vmax)
+            x_, y_ = sx0 + j * (cell + gap), yy
+            p.append(draw("th-cell", f"M{x_} {y_} h{cell} v{cell} h{-cell} Z", T_OUT + 0.55 + 0.03 * (i * 4 + j), 0.25))
+            p.append(pop(f'<rect class="th-mark" x="{f(x_ + (cell - side) / 2)}" y="{f(y_ + (cell - side) / 2)}" width="{f(side)}" height="{f(side)}"/>', T_OUT + 0.7 + 0.03 * (i * 4 + j)))
     right = sx0 + 4 * (cell + gap) - gap
     bottom = sy0 + 4 * (cell + gap) - gap
     p.append(draw("th-dimline", f"M{right + 12} {sy0} H{right + 16} V{bottom} H{right + 12}", T_OUT + 0.9, 0.3))
     p.append(text(right + 22, (sy0 + bottom) / 2 + 4, "16", "th-note", T_OUT + 0.95))
+    p.append(text(sx0 - 90, bottom + 22, "mark area: the age uncertainty that set gives", "th-line", T_OUT + 1.0))
     return (
         f'<svg class="bp-svg th-svg th-method" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
         'aria-labelledby="th-m-t"><title id="th-m-t">The method chain of the dissertation as framed stages: spectroscopy, '

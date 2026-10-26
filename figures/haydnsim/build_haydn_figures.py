@@ -175,7 +175,10 @@ def pic_seismic(x: float, y: float, t: float) -> list[str]:
 
 # ------------------------------------------------------------------ figure 1: the pipeline
 def pipeline() -> str:
-    W, H = 1140, 330
+    """The six stages in two rows of three, each box wide enough for its pictogram and its line;
+    the thread snakes from the first row into the second, and the bypass for open clusters drops
+    straight from the threshold to the noise estimator."""
+    W, H = 1140, 596
     p: list[str] = []
     p.append(text(20, 30, "HAYDN, AS PROPOSED", "hy-head", 0.0))
     facts = [("aperture", "1.2 m"), ("field of view", "1 degree"), ("plate scale", "0.5 arcsec per pixel"),
@@ -186,43 +189,59 @@ def pipeline() -> str:
         p.append(text(x, 46, v, "hy-val", 0.15))
         x += 185
     p.append(draw("hy-rule", f"M20 60 H{W - 20}", 0.1, 0.3))
-    y0, h, w = 84, 150, 172
-    xs = [20 + i * 186 for i in range(6)]
+    w, h = 356, 196
+    xs = [20, 392, 764]
+    ys = [84, 324]
     stages = [
-        ("ARCHIVE DATA", "Gaia, HST, four catalogues", pic_archive),
-        ("THRESHOLD", "where both are complete", pic_threshold),
-        ("KING PROFILE", "normalised in the annulus", pic_king),
-        ("TRILEGAL FIELD", "mass-calibrated, then placed", pic_population),
-        ("NOISE ESTIMATOR", "HNE, on Deucalion", pic_detector),
-        ("SEISMIC MODEL", "Mosser et al. 2019", pic_seismic),
+        ("ARCHIVE DATA", "Gaia DR3 to G = 18.5, HST photometry of the core, four catalogues", pic_archive),
+        ("THRESHOLD", "the magnitudes where Gaia and HST are both complete; the members", pic_threshold),
+        ("KING PROFILE", "fitted to the counts, normalised to HST in the 50 to 100 arcsec annulus", pic_king),
+        ("TRILEGAL FIELD", "a synthetic population calibrated to the cluster mass, placed on the sky", pic_population),
+        ("NOISE ESTIMATOR", "HNE on Deucalion: point spread function, mask and crowding, per star", pic_detector),
+        ("SEISMIC MODEL", "Mosser et al. 2019: which stars show oscillations at that noise", pic_seismic),
     ]
+    boxes = []
     for i, (title, line, pic) in enumerate(stages):
-        x = xs[i]
+        x, y = xs[i % 3], ys[i // 3]
         t = 0.2 + 0.12 * i
-        p.append(draw("hy-box", f"M{x} {y0} h{w} v{h} h-{w} Z", t, 0.4))
-        p.append(text(x + 10, y0 + 20, f"{i + 1}  {title}", "hy-title", t + 0.1))
-        p.append(draw("hy-rule", f"M{x + 10} {y0 + 28} h{w - 20}", t + 0.1, 0.2))
-        p += pic(x + 12, y0 + 34, t + 0.15)
-        p.append(text(x + w / 2, y0 + h - 10, line, "hy-line", t + 0.5, "middle"))
-    ym = y0 + h / 2
-    for i in range(5):
+        boxes.append((x, y))
+        p.append(draw("hy-box", f"M{x} {y} h{w} v{h} h-{w} Z", t, 0.4))
+        p.append(text(x + 12, y + 20, f"{i + 1}  {title}", "hy-title", t + 0.1))
+        p.append(draw("hy-rule", f"M{x + 12} {y + 28} h{w - 24}", t + 0.1, 0.2))
+        p += pic(x + 14, y + 40, t + 0.15)
+        # the line, wrapped by hand at the box width
+        words, lines, cur = line.split(), [], ""
+        for wd in words:
+            if len(cur) + len(wd) + 1 > 50:
+                lines.append(cur); cur = wd
+            else:
+                cur = (cur + " " + wd).strip()
+        lines.append(cur)
+        for k, ln in enumerate(lines):
+            p.append(text(x + 12, y + h - 24 + 14 * k - 14 * (len(lines) - 1), ln, "hy-line", t + 0.5))
+    ym = [y + 90 for y in ys]
+    # row one, then the turn down into row two
+    for i in range(2):
         xa, xb = xs[i] + w, xs[i + 1]
         t = 0.35 + 0.12 * i
-        p.append(thread(f"M{xa} {f(ym)} C{xa + 5} {f(ym - 7)}, {xb - 5} {f(ym + 7)}, {xb} {f(ym)}", t))
-        p.append(node(xa, ym, t))
-        p.append(node(xb, ym, t + 0.05))
-    xe = xs[5] + w
-    p.append(thread(f"M{xe} {f(ym)} C{xe + 8} {f(ym)}, {xe + 8} {f(ym)}, {W - 4} {f(ym)}", 1.0))
-    p.append(node(xe, ym, 1.0))
-    yb = y0 + h + 38
-    xa = xs[1] + w / 2
-    xb = xs[4] + w / 2
-    d = (f"M{f(xa)} {y0 + h} C{f(xa)} {y0 + h + 28}, {f(xa + 20)} {yb}, {f(xa + 40)} {yb} "
-         f"H{f(xb - 40)} C{f(xb - 20)} {yb}, {f(xb)} {y0 + h + 28}, {f(xb)} {y0 + h}")
-    p.append(thread(d, 1.05, "ray flowray hy-bypass"))
-    p.append(node(xa, y0 + h, 1.05))
-    p.append(node(xb, y0 + h, 1.1))
-    p.append(text((xa + xb) / 2, yb + 18, "open clusters skip these", "hy-line", 1.15, "middle"))
+        p.append(thread(f"M{xa} {ym[0]} C{xa + 5} {ym[0] - 7}, {xb - 5} {ym[0] + 7}, {xb} {ym[0]}", t))
+        p.append(node(xa, ym[0], t)); p.append(node(xb, ym[0], t + 0.05))
+    xe = xs[2] + w
+    turn = f"M{xe} {ym[0]} C{xe + 24} {ym[0]}, {xe + 24} {ys[0] + h + 22}, {xe - 60} {ys[0] + h + 22} H{xs[0] - 4} C{xs[0] - 24} {ys[0] + h + 22}, {xs[0] - 24} {ym[1]}, {xs[0]} {ym[1]}"
+    p.append(thread(turn, 0.65))
+    p.append(node(xe, ym[0], 0.65)); p.append(node(xs[0], ym[1], 0.8))
+    for i in range(2):
+        xa, xb = xs[i] + w, xs[i + 1]
+        t = 0.85 + 0.12 * i
+        p.append(thread(f"M{xa} {ym[1]} C{xa + 5} {ym[1] - 7}, {xb - 5} {ym[1] + 7}, {xb} {ym[1]}", t))
+        p.append(node(xa, ym[1], t)); p.append(node(xb, ym[1], t + 0.05))
+    xo = xs[2] + w
+    p.append(thread(f"M{xo} {ym[1]} H{W - 6}", 1.1)); p.append(node(xo, ym[1], 1.1))
+    # open clusters skip the profile and the population: straight down from 2 to 5
+    xm = xs[1] + w / 2
+    p.append(thread(f"M{f(xm)} {ys[0] + h} V{ys[1]}", 1.15, "ray flowray hy-bypass"))
+    p.append(node(xm, ys[0] + h, 1.15)); p.append(node(xm, ys[1], 1.2))
+    p.append(text(xm + 8, ys[0] + h + 26, "open clusters skip 3 and 4", "hy-line", 1.25))
     return (
         f'<svg class="bp-svg hy-svg" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
         'aria-labelledby="hy-pt hy-pd"><title id="hy-pt">The HAYDNsim pipeline, in six stages</title>'

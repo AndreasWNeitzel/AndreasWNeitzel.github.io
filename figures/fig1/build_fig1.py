@@ -507,10 +507,12 @@ OUT.write_text(svg)
 
 
 # ------------------------------------------------------------------ the JANUS figure for /research/janus/
-# The same stages at the same scale, composed for a wide figure: the XP spectrum, the seismic input,
-# the ensemble and the labels in one row, with the withheld-star test under the labels and the
-# catalogue it produces on the right. Numbers from the IMAS13 abstract (October 2026).
-JW, JH = 1120, 420
+# The same Gaia, XP and JANUS stages at the same scale, with what the JANUS page needs around
+# them: APOGEE DR19 as the teacher above the networks, the labels beside them, the withheld-star
+# test and the two alpha sequences under them, the inputs under the spectrum, the catalogue of
+# TESS giants at the right with the seismic sample entering it, and the compute rail along the
+# bottom. Numbers from the IMAS13 abstract (October 2026) and the FCT allocations in the ledger.
+JW, JH = 1180, 524
 jmasks: list[str] = []
 jlinks: list[str] = []
 
@@ -524,70 +526,143 @@ def jlink(d: str, t: float, dur: float) -> None:
     jlinks.append(f'<path class="f1-link" mask="url(#f1jm-{k})" d="{d}"/>')
 
 
-# row one: the spectrum, the seismic input and the ensemble keep their relation and move together
-DX1, DY1 = -210.0, 4.0
-# the labels stage comes up beside the ensemble
-DX2, DY2 = 20.0, -232.0
-jlink(f"M{f(662 + DX1)} {f(Y1 + DY1)} C{f(700 + DX1)} {f(Y1 + DY1)} {f(med[0] + DX2 - 40)} {f(ry[0] - 3 + DY2)} {f(med[0] + DX2)} {f(ry[0] - 3 + DY2)}", T["l3"], 0.3)
+LX, LY = 234.0, -230.0  # the labels stage, from row two of FIG 1 up beside the networks
 
-# the withheld-star test, under the labels
+# APOGEE DR19 above the networks: a high-resolution spectrum, a continuum with narrow lines
+ap = [draw("f1-g", "M470 44 H560", 0.2, 0.17)]
+lines_d = " ".join(
+    f"M{f(476 + 2.1 * k)} 24 v{f(3 + 13 * abs(math.sin(k * 1.37) * math.cos(k * 0.41)))}" for k in range(39)
+)
+ap += [
+    draw("f1-o", "M474 24 H558 " + lines_d, tj, 0.35),
+    text(466, 24, "APOGEE DR19", "f1-title f1-small", tj, "end"),
+    text(466, 38, "the training labels", "f1-sub", tj, "end"),
+]
+jlink("M515 46 C515 52 515 57 515 63", tj + 0.2, 0.15)
+
+# the inputs under the spectrum: one star as a row of numbers
+ti = T["xp"] + 0.5
+IX, IY = 248.0, 318.0
+inp = [draw("f1-g", f"M{f(IX)} {f(IY + 46)} H412", 0.2, 0.17)]
+cells = " ".join(f"M{f(IX + 7 * k)} {f(IY)} h5 v5 h-5 Z" for k in range(24))
+aux = " ".join(f"M{f(IX + 7 * k)} {f(IY + 30)} h5 v5 h-5 Z" for k in range(7))
+inp += [
+    draw("f1-o", cells, ti, 0.3),
+    text(IX + 7 * 24 + 4, IY + 5, "…", "f1-tick", ti + 0.2),
+    draw("f1-g", f"M{f(IX)} {f(IY + 12)} H{f(IX + 7 * 24 - 2)} M{f(IX)} {f(IY + 9)} v6 M{f(IX + 7 * 24 - 2)} {f(IY + 9)} v6", ti + 0.2, 0.2),
+    text(IX + 7 * 12, IY + 24, "110 coefficients", "f1-dim", ti + 0.3, "middle"),
+    draw("f1-o", aux, ti + 0.2, 0.2),
+    text(IX, IY + 52, "parallax, photometry, extinction", "f1-tick", ti + 0.3),
+    text(238, TY2, "THE INPUTS", "f1-title", ti),
+    text(238, TY2 + 15, "one star as a row of numbers", "f1-sub", ti),
+]
+jlink("M232 252 C232 268 232 278 232 292", T["xp"] + 0.4, 0.15)
+
+# the two alpha sequences under the networks: resolved with the spectrum, merged without it
+ta = T["post"] + 0.2
+al = []
+for k, (x0, title) in enumerate(((472.0, "with the spectrum"), (584.0, "without it"))):
+    al.append(draw("f1-g", f"M{f(x0)} 318 V398 H{f(x0 + 84)}", 0.2 + 0.05 * k, 0.17))
+    al.append(text(x0 + 42, 312, title, "f1-tick", ta + 0.1 * k, "middle"))
+    al.append(text(x0 + 84, 410, "[M/H]", "f1-tick", ta + 0.1 * k, "end"))
+    al.append(text(x0 + 3, 326, "[α/M]", "f1-tick", ta + 0.1 * k))
+if True:
+    hi = smooth([(480, 336), (500, 334), (522, 339), (542, 347), (552, 356), (540, 360), (518, 354), (496, 348), (478, 344), (476, 339), (480, 336)])
+    lo = smooth([(488, 378), (506, 374), (526, 374), (546, 378), (554, 386), (542, 392), (520, 392), (498, 390), (484, 386), (482, 381), (488, 378)])
+    al.append(draw("f1-o", hi + " Z", ta, 0.3))
+    al.append(draw("f1-o", lo + " Z", ta + 0.1, 0.3))
+    one = smooth([(590, 342), (612, 338), (636, 346), (658, 362), (664, 380), (652, 390), (628, 388), (606, 376), (590, 360), (586, 350), (590, 342)])
+    al.append(draw("f1-o", one + " Z", ta + 0.2, 0.35))
+al += [
+    text(472, TY2, "TWO α SEQUENCES", "f1-title", ta),
+    text(472, TY2 + 15, "the same network, with and without the spectrum", "f1-sub", ta),
+]
+jlink("M464 258 C464 268 464 278 464 292", T["post"] + 0.1, 0.15)
+
+# the labels stage beside the networks, the test on withheld stars under it
+jlink(f"M662 140 C700 140 {f(med[0] + LX - 40)} {f(ry[0] - 3 + LY)} {f(med[0] + LX)} {f(ry[0] - 3 + LY)}", T["l3"], 0.3)
 tt = T["labels"] + 0.3
-TX, TY = 476.0, 286.0
+TX, TY = 696.0, 300.0
 test = [
-    draw("f1-g", f"M{f(TX)} {f(TY - 20)} H688", 0.2, 0.17),
+    draw("f1-g", f"M{f(TX)} {f(TY - 20)} H908", 0.2, 0.17),
     text(TX, TY, "WITHHELD STARS", "f1-title f1-small", tt),
     text(TX, TY + 15, "robust scatter about APOGEE", "f1-sub", tt),
 ]
 for i, (nm, val) in enumerate((("Teff", "32 K"), ("log g", "0.072 dex"), ("[M/H]", "0.051 dex"), ("[α/M]", "0.021 dex"))):
-    cx, cy = TX + (i % 2) * 112, TY + 38 + (i // 2) * 44
+    cx, cy = TX + (i % 2) * 108, TY + 38 + (i // 2) * 44
     test += [
-        draw("f1-g", f"M{f(cx)} {f(cy + 16)} h100 M{f(cx)} {f(cy + 12)} v8 M{f(cx + 100)} {f(cy + 12)} v8", tt + 0.1 + 0.05 * i, 0.2),
+        draw("f1-g", f"M{f(cx)} {f(cy + 16)} h96 M{f(cx)} {f(cy + 12)} v8 M{f(cx + 96)} {f(cy + 12)} v8", tt + 0.1 + 0.05 * i, 0.2),
         text(cx, cy, nm, "f1-tick", tt + 0.15 + 0.05 * i),
-        text(cx + 100, cy + 8, val, "f1-dim", tt + 0.15 + 0.05 * i, "end"),
+        text(cx + 96, cy + 8, val, "f1-dim", tt + 0.15 + 0.05 * i, "end"),
     ]
+jlink(f"M{f(635 + LX)} {f(410 + LY)} C{f(635 + LX)} {f(430 + LY)} 906 {f(TY - 60)} 906 {f(TY - 24)}", T["labels"] + 0.3, 0.2)
 
-# the catalogue: a field of TESS giants, the ones with APOGEE values filled, the rest JANUS only
+# the seismic sample above the catalogue: TESS red giants with measured oscillations
+sm2 = [draw("f1-g", "M936 42 H1026", 0.2, 0.17), pop('<path class="f1-gd" d="M940 40 C960 40 962 14 981 12 C1000 14 1002 40 1022 40"/>', 0.25)]
+comb2 = " ".join(
+    f"M{f(946 + 6 * k)} 42 v-{f(4 + 22 * math.exp(-(((946 + 6 * k - 981) / 16) ** 2)))}" for k in range(13)
+)
 tc = T["starfold"]
-CX0, CY0, CW, CH = 712.0, 70.0, 392.0, 250.0
-rng = __import__("random").Random(11)
-field = []
-for i in range(230):
-    x = CX0 + 10 + rng.random() * (CW - 20)
-    y = CY0 + 10 + rng.random() * (CH - 20)
-    if i % 10 == 0:
-        field.append(f'<circle class="f1-apogee" cx="{f(x)}" cy="{f(y)}" r="2.8"/>')
-    else:
-        field.append(f'<circle cx="{f(x)}" cy="{f(y)}" r="2"/>')
-cat = [
-    draw("f1-g", f"M{f(CX0)} {f(CY0)} H{f(CX0 + CW)} V{f(CY0 + CH)} H{f(CX0)} Z", 0.25, 0.3),
-    pop(f'<g class="f1-marks f1-loose">{"".join(field)}</g>', tc),
-    draw("f1-g", f"M{f(CX0)} {f(CY0 + CH + 16)} H{f(CX0 + CW)} M{f(CX0)} {f(CY0 + CH + 12)} v8 M{f(CX0 + CW)} {f(CY0 + CH + 12)} v8", tc + 0.2, 0.3),
-    text(CX0 + CW / 2, CY0 + CH + 32, "144,304 giants", "f1-dim", tc + 0.3, "middle"),
-    text(CX0, TY, "TESS GIANTS, WITH CHEMISTRY", "f1-title f1-small", tc + 0.3),
-    text(CX0, TY + 15, "filled: the one in ten with APOGEE DR19 values", "f1-sub", tc + 0.35),
+sm2 += [
+    draw("f1-o", comb2, tc, 0.3),
+    text(1034, 24, "TESS GIANTS", "f1-title f1-small", tc),
+    text(1034, 38, "with oscillations", "f1-sub", tc),
 ]
-# place the catalogue titles under the field, like the other stages
-cat[-2] = text(CX0, CY0 + CH + 58, "TESS GIANTS, WITH CHEMISTRY", "f1-title f1-small", tc + 0.3)
-cat[-1] = text(CX0, CY0 + CH + 73, "filled: the one in ten that also have APOGEE DR19 values", "f1-sub", tc + 0.35)
-jlink(f"M{f(med[0] + DX2)} {f(ry[-1] - 3 + DY2)} C{f(med[0] + DX2)} {f(ry[-1] + 40 + DY2)} {f(CX0 - 30)} {f(CY0 + CH / 2)} {f(CX0)} {f(CY0 + CH / 2)}", T["l4"], 0.3)
+jlink("M981 46 C981 54 981 62 981 72", tc + 0.2, 0.15)
+
+# the catalogue: a table, one row per giant, one row in ten with APOGEE values too
+CX0, CY0, CW = 936.0, 72.0, 222.0
+cols = ("Teff", "log g", "[M/H]", "[α/M]", "[X/H]", "P(miss)")
+cat = [draw("f1-g", f"M{f(CX0)} {f(CY0)} H{f(CX0 + CW)} V380 H{f(CX0)} Z M{f(CX0)} 96 H{f(CX0 + CW)}", 0.25, 0.3)]
+for i, nm in enumerate(cols):
+    cat.append(text(CX0 + 6 + 37 * i, 88, nm, "f1-tick", tc + 0.3))
+rows_d, fills = [], []
+for r in range(27):
+    y = 106 + 10.2 * r
+    rows_d.append(" ".join(f"M{f(CX0 + 8 + 37 * i)} {f(y)} h18" for i in range(6)))
+    if r % 10 == 4:
+        fills.append(f'<rect class="f1-fill" x="{f(CX0 + 2)}" y="{f(y - 4)}" width="{f(CW - 4)}" height="8" rx="1"/>')
+cat += [
+    pop("".join(fills), tc + 0.4),
+    draw("f1-g", " ".join(rows_d), tc + 0.3, 0.6),
+    draw("f1-g", f"M{f(CX0)} 396 H{f(CX0 + CW)} M{f(CX0)} 392 v8 M{f(CX0 + CW)} 392 v8", tc + 0.5, 0.3),
+    text(CX0 + CW / 2, 412, "144,304 giants", "f1-dim", tc + 0.6, "middle"),
+    text(CX0, TY2, "THE CATALOGUE", "f1-title", tc + 0.5),
+    text(CX0, TY2 + 15, "one row in ten has APOGEE values too", "f1-sub", tc + 0.55),
+]
+jlink(f"M{f(med[-1] + LX)} {f(ry[-1] - 3 + LY)} C{f(med[-1] + LX)} 220 900 226 {f(CX0 - 2)} 226", T["l4"], 0.3)
+
+# the compute rail, under the first three stages
+rl2 = [
+    node(104, 494, T["gaia"]),
+    node(330, 494, T["xp"]),
+    node(560, 494, T["janus"]),
+    text(20, 513, "RUNS ON", "f1-title f1-small", T["done"]),
+    text(84, 513, "Deucalion, Gaia DR3, about 220 million spectra · MareNostrum 5, Gaia DR4, about 1.8 billion", "f1-sub", T["done"]),
+]
 
 janus_svg = (
     f'<svg class="f1-svg f1-janus" data-build="" viewBox="0 0 {JW} {JH}" xmlns="http://www.w3.org/2000/svg" role="group" '
-    'aria-label="Schematic of JANUS: a real Gaia XP spectrum of a red giant and the seismic input from TESS and Kepler go into '
-    "an ensemble of eight normalising-flow networks, 110 inputs to six outputs, which returns six labels with a spread and a miss "
-    'probability; the test on withheld stars gives the scatter about APOGEE, and the catalogue covers 144,304 TESS giants.">'
-    + "<defs>" + masks[1] + masks[2] + "".join(jmasks) + "</defs>"
-    + f'<g transform="translate({f(DX1)} {f(DY1)})">'
+    'aria-label="Schematic of JANUS: Gaia observes a red giant; its XP spectrum becomes 110 coefficients with parallax, '
+    "photometry and extinction; eight normalising-flow networks trained on APOGEE DR19 return six labels with a spread and a "
+    "miss probability; the test on withheld stars gives the scatter about APOGEE; the same network without the spectrum merges "
+    'the two alpha sequences; the catalogue covers 144,304 TESS red giants; the networks run on Deucalion and MareNostrum 5.">'
+    + "<defs>" + masks[0] + masks[1] + "".join(jmasks) + "</defs>"
+    + draw("f1-g", "M16 494 H900", 0.0, 0.17)
+    + stage("gaia", "Gaia", (12, 56, 192, 196), gaia)
     + stage("xp", "XP spectra", (226, 56, 210, 196), xp)
-    + stage("seismo", "Asteroseismology input", (340, 2, 230, 50), sm)
+    + stage("inputs", "The inputs", (226, 292, 210, 180), inp)
+    + stage("apogee", "APOGEE DR19, the training labels", (340, 2, 230, 50), ap)
     + stage("janus", "JANUS neural networks", (456, 62, 212, 196), jn)
-    + "</g>"
-    + f'<g transform="translate({f(DX2)} {f(DY2)})">' + stage("labels", "Stellar labels with reliability", (456, 292, 212, 186), lb) + "</g>"
-    + stage("test", "The test on withheld stars", (470, 262, 222, 140), test)
-    + stage("catalogue", "The catalogue", (704, 60, 408, 350), cat)
+    + stage("alpha", "The two alpha sequences", (456, 292, 212, 180), al)
+    + f'<g transform="translate({f(LX)} {f(LY)})">' + stage("labels", "Stellar labels with reliability", (456, 292, 212, 186), lb) + "</g>"
+    + stage("test", "The test on withheld stars", (690, 272, 222, 150), test)
+    + stage("sample", "TESS red giants with oscillations", (924, 2, 246, 54), sm2)
+    + stage("catalogue", "The catalogue", (924, 62, 246, 420), cat)
+    + stage("hpc", "Compute: Deucalion and MareNostrum 5", (12, 484, 890, 38), rl2)
     + '<g class="f1-thread" aria-hidden="true">'
-    + f'<g transform="translate({f(DX1)} {f(DY1)})">' + links[1] + links[2] + roles[1] + roles[2] + "</g>"
-    + f'<g transform="translate({f(DX2)} {f(DY2)})">' + roles[3] + "</g>"
+    + links[0] + links[1] + roles[0] + roles[1] + roles[2]
+    + f'<g transform="translate({f(LX)} {f(LY)})">' + roles[3] + "</g>"
     + "".join(jlinks)
     + "</g></svg>\n"
 )
