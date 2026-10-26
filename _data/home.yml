@@ -115,6 +115,8 @@ missions:
     text: Ages and masses for stars in its target list.
     url: /papers/neitzel-2022-msc-thesis/
   - icon: m-haydn
+    logo: /assets/img/logos/missions/haydn-144.png
+    logo_alt: HAYDN mission logo
     name: HAYDN
     who: proposed to ESA
     text: Photometry inside crowded star clusters.

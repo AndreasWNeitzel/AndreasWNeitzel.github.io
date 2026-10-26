@@ -35,7 +35,7 @@ an image licence.
 
 ## Mission logos in `missions/` (decision of 2026-10-26)
 
-Andreas asked for the official ESA and NASA mission logos on the site and took the decision
+Andreas asked for the official mission logos on the site and took the decision
 knowing the terms quoted below: ESA requires prior written authorisation for its logo and for the
 mission patches that contain it, and NASA says mission identifiers are not in the public domain
 and that external use is evaluated by its Associate Administrator for Communications. The marks
@@ -50,6 +50,7 @@ communications to put the permissions on file.
 | `missions/plato.svg` | *PLATO* (ESA) | [cosmos.esa.int](https://www.cosmos.esa.int/documents/10192/23556741/logo.plato.svg/75790f48-35b1-1501-7f94-97ff9383d94b) |
 | `missions/tess.png` | *TESS* (NASA) | [NASA GSFC archive](https://asd.gsfc.nasa.gov/archive/tess/images/tess-logos/tess-logo-transparent-bkgrd-hi-res.png) |
 | `missions/kepler.png` | *Kepler* (NASA) | [Commons copy of the NASA file](https://upload.wikimedia.org/wikipedia/commons/d/d8/Kepler_Logo.png), PD-USGov-NASA with the 14 CFR 1221 insignia notice |
+| `missions/haydn.png` | *HAYDN* (proposal consortium) | the proposal's own logo, as it appears in my DFA Week 2026 talk (`ppt/media/image6.png` of the deck). *HAYDN* is a mission proposal, so the mark belongs to the consortium, not to an agency; no terms are published |
 
 The official files are in the folder as downloaded. The page cannot serve a 1,241 px PNG in a
 60 px tile, so each PNG also has a `-144` copy, scaled on its longest side with a Lanczos filter
@@ -63,8 +64,19 @@ back to the line mark drawn for this site, so nothing breaks.
 | `missions/gaia.png` | `missions/gaia-144.png` | 1,241 x 1,241 |
 | `missions/kepler.png` | `missions/kepler-144.png` | 2,240 x 900 |
 | `missions/tess.png` | `missions/tess-144.png` | 1,660 x 1,054 |
+| `missions/haydn.png` | `missions/haydn-144.png` | 864 x 864 |
 | `missions/ariel.svg` | the same file | vector, 150 x 150 |
 | `missions/plato.svg` | not shown yet; no public PLATO result on the site | vector, 150 x 150 |
+
+### Still words, not marks
+
+- **ESO and the Very Large Telescope.** ESO's copyright notice says in terms that the general
+  permission does not extend to its logo, which "may not be used or reproduced without prior and
+  individual written consent of ESO", and its FAQ answers "No" to overlaying the logo. There is no
+  separate VLT or ESPRESSO mark to use instead. The row keeps the drawn telescope until ESO
+  answers a request to information@eso.org, or his own Paranal photograph takes its place.
+- **Deucalion and MareNostrum 5.** Deucalion publishes a logo pack with no terms attached, which
+  is not a licence, and BSC reserves everything on its site. Both keep the drawn mark.
 
 ## Files in this folder
 
