@@ -21,7 +21,7 @@ selected:
   - title: Stellar populations without labels, from the paper to Starfold
     kicker: A&A 695, A243 (2025), first author · Starfold 0.2.0, open source
     text: Manifold learning separates disc, halo and accreted stars in a simulated Milky Way; Starfold is the package that grew out of it, with 17 named warnings.
-    url: /research/#populations
+    url: /papers/neitzel-2025-manifold-learning/
     img: /assets/img/cards/milky-way.webp
     tag: paper
     label: paper and software
@@ -29,7 +29,7 @@ selected:
   - title: JANUS, the chemistry of red giants from Gaia spectra
     kicker: PhD work within the FCT project ArqueoGal, 2025 to 2027
     text: Normalising-flow networks that read stellar parameters and chemistry from Gaia spectra, with a reliability score for every star.
-    url: /research/#janus
+    url: /research/janus/
     art: nn
     tag: software
     label: research
@@ -37,7 +37,7 @@ selected:
   - title: ArqueoGal, the Milky Way's history with Galactic archaeology
     kicker: FCT exploratory project, 2026 to 2027, co-investigator
     text: The project JANUS and Starfold serve. I develop its machine-learning pipelines and the repository that prepares Gaia DR3 and APOGEE DR19 data with provenance.
-    url: /research/#arqueogal
+    url: /research/arqueogal/
     art: clusters
     tag: grant
     label: project
@@ -81,20 +81,20 @@ try:
 evidence:
   - src: /assets/img/photos/vlt-golden-hour.webp
     alt: Andreas in a hard hat on the Very Large Telescope platform at Paranal at sunset, with the Unit Telescope enclosures behind him.
-    caption: VLT platform, Paranal, May 2024
+    caption: VLT platform, Paranal, May 2024 · the observing run
     url: /observing/paranal/
   - src: /assets/img/photos/ut-dome-interior.webp
     alt: Andreas standing beneath the mirror cell of an 8.2-metre Unit Telescope inside its dome.
-    caption: Inside a Unit Telescope dome, the paper this run produced
-    url: /papers/campante-2026-gj570a/
+    caption: Inside a Unit Telescope dome · ESO and the VLT
+    url: /guide/eso-vlt/
   - src: /assets/img/photos/aarhus-2026-janus-heldout.webp
     alt: Andreas presenting JANUS at TASC10/KASC17 in Aarhus, in front of a slide comparing its labels with APOGEE on held-out stars.
-    caption: JANUS talk, TASC10/KASC17, Aarhus 2026
+    caption: JANUS talk, TASC10/KASC17, Aarhus 2026 · talks
     url: /talks/
   - src: /assets/img/photos/paranal-milky-way.webp
     alt: The Milky Way over the Atacama desert, photographed from Paranal before dawn.
-    caption: The Milky Way from Paranal, the Galaxy the work is about
-    url: /research/#populations
+    caption: The Milky Way from Paranal · what is Galactic archaeology?
+    url: /guide/galactic-archaeology/
 
 now: Building JANUS, a neural network for the chemistry of oscillating red giants from <i>Gaia</i> spectra, for the FCT project ArqueoGal. Thesis due in 2027.
 

@@ -2,8 +2,6 @@
 layout: page
 permalink: /guide/
 title: Field guide
-nav_section: Research
-crumb: {label: Research, url: /research/}
 description: Short explainers of the science, institutions and machines behind my work, from Galactic archaeology to the supercomputers I run on.
 lede: The science, institutions and machines behind my work, one minute each, with sources and the parts I was involved in.
 ---

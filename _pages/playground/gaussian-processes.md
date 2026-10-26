@@ -48,7 +48,7 @@ math: true
     <figure class="pg-panel panel gp-main gp-k-main">
       <figcaption class="pg-head">
         <span class="pg-title gp-k-title">Five functions drawn from the prior</span>
-        <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2σ band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
+        <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
       </figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Random functions drawn from the kernel on 0 to 10, with the mean and the 2 sigma band"></canvas><div class="pg-tip" hidden></div></div>
     </figure>
@@ -96,7 +96,7 @@ math: true
       <figcaption class="pg-head">
         <span class="pg-title gp-s-title">HD 41248, HARPS velocities</span>
         <label class="pg-inline"><span class="pg-label">Window</span><span class="pg-select pg-select--sm"><select class="gp-s-window" aria-label="Part of the series to show"><option>Loading</option></select></span></label>
-        <span class="pg-key gp-key--row"><span><i class="k-data"></i>velocity</span><span><i class="k-mean"></i>marginal mean</span><span><i class="k-band"></i>2σ band</span><span><i class="k-curve"></i>12 posterior samples</span></span>
+        <span class="pg-key gp-key--row"><span><i class="k-data"></i>velocity</span><span><i class="k-mean"></i>marginal mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-curve"></i>12 posterior samples</span></span>
       </figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Radial velocities of HD 41248 in a 150 day window with the marginalised Gaussian-process prediction, and an overview of the whole series"></canvas><div class="pg-tip" hidden></div></div>
       <figcaption class="pg-caption">Velocities about the mean against days since the first observation (31 October 2003), with their catalogue uncertainties. Click in the strip to move the 150 day window; the band is the activity signal alone, without the jitter.</figcaption>

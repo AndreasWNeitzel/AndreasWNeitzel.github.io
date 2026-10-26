@@ -81,7 +81,7 @@ defaults:
       type: guide
     values:
       layout: guide
-      nav_section: Research
+      nav_section: Guide
   - scope:
       path: ""
       type: papers

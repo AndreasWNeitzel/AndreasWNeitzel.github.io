@@ -14,7 +14,7 @@ extra_css: [/assets/css/thesis.css]
       <span class="kicker">2025 to 2027 · PhD work within the FCT project ArqueoGal</span>
       <h2>JANUS: chemistry from <i>Gaia</i> spectra</h2>
       <p><i>Gaia</i> DR3 carries low-resolution spectra of 220 million stars. JANUS, eight normalising-flow networks, reads a red giant's parameters and abundances from them, with a per-star miss probability. Trained where <i>Gaia</i> overlaps APOGEE, validated on open clusters, wide binaries and the first dredge-up. Talks at TASC10/KASC17 and IMAS13; two FCT projects on Deucalion and MareNostrum 5.</p>
-      <p class="links"><a href="{{ '/talks/' | relative_url }}">The talks</a> · <a href="{{ '/guide/machine-learning-for-stars/' | relative_url }}">Machine learning for stars, in a minute</a> · <a href="{{ '/playground/neural-network/' | relative_url }}">Train a small one yourself</a></p>
+      <p class="links"><a href="{{ '/research/janus/' | relative_url }}">JANUS, in full</a> · <a href="{{ '/talks/' | relative_url }}">The talks</a> · <a href="{{ '/guide/machine-learning-for-stars/' | relative_url }}">Machine learning for stars, in a minute</a> · <a href="{{ '/playground/neural-network/' | relative_url }}">Train a small one yourself</a></p>
     </div>
   </article>
   <article class="line card" id="arqueogal">
@@ -23,7 +23,7 @@ extra_css: [/assets/css/thesis.css]
       <span class="kicker">2026 to 2027 · FCT exploratory project 2024.15303.PEX · PI T. L. Campante</span>
       <h2>ArqueoGal: the project the pipelines serve</h2>
       <p>ArqueoGal is an FCT exploratory project to unravel the Milky Way's history with Galactic archaeology, led by Tiago L. Campante. I am a co-investigator (team member) and I develop its machine-learning pipelines: JANUS for the stellar labels, Starfold for the populations, and the integration repository that prepares <i>Gaia</i> DR3 and APOGEE DR19 data with provenance for both. The two FCT computing allocations on Deucalion and MareNostrum 5 run that work.</p>
-      <p class="links"><a href="https://doi.org/10.54499/2024.15303.PEX">The project record</a> · <a href="https://github.com/AndreasWNeitzel/ArqueoGal">The integration repository</a> · <a href="{{ '/guide/supercomputers/' | relative_url }}">The supercomputers, in a minute</a></p>
+      <p class="links"><a href="{{ '/research/arqueogal/' | relative_url }}">ArqueoGal, in full</a> · <a href="https://doi.org/10.54499/2024.15303.PEX">The project record</a> · <a href="https://github.com/AndreasWNeitzel/ArqueoGal">The integration repository</a></p>
     </div>
   </article>
   <article class="line card" id="populations">
@@ -86,19 +86,4 @@ extra_css: [/assets/css/thesis.css]
   </div>
 </section>
 
-<section class="section" id="background" aria-labelledby="background-title">
-  <div class="section-head"><h2 id="background-title">Background, one minute each</h2></div>
-  <div class="guide-grid">
-    {%- assign gs = site.guide | sort: "order" -%}
-    {%- for g in gs %}
-    <a class="card" href="{{ g.url | relative_url }}" data-spotlight>
-      <div class="media">{% if g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% else %}<img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}</div>
-      <div class="card-body">
-        <h3>{{ g.title | missions }}</h3>
-        <p>{{ g.lede | missions }}</p>
-        <span class="go">Read</span>
-      </div>
-    </a>
-    {%- endfor %}
-  </div>
-</section>
+<p class="prose"><a href="{{ '/guide/' | relative_url }}">The field guide</a> explains the science, the institutions and the machines behind this work, one minute each.</p>
