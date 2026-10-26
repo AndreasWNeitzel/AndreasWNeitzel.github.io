@@ -87,21 +87,21 @@ now: Building JANUS, a neural network for the chemistry of oscillating red giant
 
 missions:
   - icon: m-gaia
-    logo: /assets/img/logos/missions/gaia.png
+    logo: /assets/img/logos/missions/gaia-144.png
     logo_alt: Gaia mission logo (ESA)
     name: Gaia
     who: ESA, 2013 to 2025
     text: The spectra and astrometry my research runs on.
     url: /guide/gaia/
   - icon: m-kepler
-    logo: /assets/img/logos/missions/kepler.png
+    logo: /assets/img/logos/missions/kepler-144.png
     logo_alt: Kepler mission logo (NASA)
     name: Kepler
     who: NASA, 2009 to 2018
     text: Four years of oscillations in one patch of sky.
     url: /guide/tess-kepler/
   - icon: m-tess
-    logo: /assets/img/logos/missions/tess.png
+    logo: /assets/img/logos/missions/tess-144.png
     logo_alt: TESS mission logo (NASA)
     name: TESS
     who: NASA, since 2018

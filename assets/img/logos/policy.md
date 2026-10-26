@@ -51,9 +51,20 @@ communications to put the permissions on file.
 | `missions/tess.png` | *TESS* (NASA) | [NASA GSFC archive](https://asd.gsfc.nasa.gov/archive/tess/images/tess-logos/tess-logo-transparent-bkgrd-hi-res.png) |
 | `missions/kepler.png` | *Kepler* (NASA) | [Commons copy of the NASA file](https://upload.wikimedia.org/wikipedia/commons/d/d8/Kepler_Logo.png), PD-USGov-NASA with the 14 CFR 1221 insignia notice |
 
-Each file is used as delivered, on a white tile so that it keeps its own background in both
-themes, at 48 px. The home page says whose marks they are. If a file is missing the page falls
+The official files are in the folder as downloaded. The page cannot serve a 1,241 px PNG in a
+60 px tile, so each PNG also has a `-144` copy, scaled on its longest side with a Lanczos filter
+and nothing else changed; the two SVGs are served as they came. Each logo sits on a white tile,
+so it keeps the background it was drawn for in both themes, and nothing is recoloured, cropped or
+combined with another mark. The home page names the agencies. If a file is missing the page falls
 back to the line mark drawn for this site, so nothing breaks.
+
+| In the folder | Served at 60 px | Original size |
+|---|---|---|
+| `missions/gaia.png` | `missions/gaia-144.png` | 1,241 x 1,241 |
+| `missions/kepler.png` | `missions/kepler-144.png` | 2,240 x 900 |
+| `missions/tess.png` | `missions/tess-144.png` | 1,660 x 1,054 |
+| `missions/ariel.svg` | the same file | vector, 150 x 150 |
+| `missions/plato.svg` | not shown yet; no public PLATO result on the site | vector, 150 x 150 |
 
 ## Files in this folder
 

@@ -410,8 +410,8 @@
     border-radius: 6px; background: var(--surface); color: var(--ink); text-decoration: none;
     transition: border-color .2s, transform .2s var(--ease); }
   .missions a:hover { border-color: var(--line-strong); transform: translateY(-1px); text-decoration: none; }
-  .missions .mi { grid-area: mark; font-size: 2rem; color: var(--accent); }
-  .mi-logo { grid-area: mark; display: grid; place-items: center; inline-size: 48px; block-size: 48px;
+  .missions .mi { grid-area: mark; inline-size: 60px; block-size: 60px; padding: 6px; color: var(--accent); }
+  .mi-logo { grid-area: mark; display: grid; place-items: center; inline-size: 60px; block-size: 60px;
     padding: 3px; border-radius: 6px; background: #fff; }
   .mi-logo img { max-inline-size: 100%; max-block-size: 100%; object-fit: contain; }
   .mi-name { grid-area: name; font: 520 0.95rem var(--sans); align-self: end; }
