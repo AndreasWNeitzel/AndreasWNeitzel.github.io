@@ -6,16 +6,22 @@
   "md5": "4675c3bf88dad84930a654a4422b6199",
   "licence": "CC BY 4.0",
   "creator": "Campante, Tiago L.",
-  "paper": "Campante et al. 2026, accepted in A&A, arXiv:2610.20985",
+  "paper": "Campante et al. 2026, A&A, doi:10.1051/0004-6361/202660350",
   "programme": "ESO 0113.D-0255(B)"
  },
  "paper_values_used": {
   "numax_uHz": 4705,
   "numax_err_uHz": 105,
+  "numax_where": "Sect. 4.1",
   "dnu_uHz": 197.29,
+  "dnu_where": "Table 1",
   "sigma_rv_cms": 46,
-  "white_cms": 1.51,
-  "period_min": "3 to 4"
+  "sigma_rv_where": "Sect. 2",
+  "exposure_s": 25,
+  "exposure_where": "Sect. 2",
+  "amp_cms": 2.57,
+  "amp_where": "Table 1",
+  "white_cms": 1.51
  },
  "selection": "FLUX_CORR_CHECK == 1",
  "n_rows": 2369,
@@ -44,6 +50,7 @@
  ],
  "median_cadence_s": 60.8,
  "mean_rv_err_cms": 45.6,
+ "median_rv_kms": 27.0001,
  "rms_detrended_cms": 55.4,
  "detrend": "per night, minus a weighted triangular smoothing of half-width 1.2 h",
  "spectrum": "weighted least-squares sine fits, weights 1/RV_ERR^2, 1 microhertz grid, power = amplitude^2",

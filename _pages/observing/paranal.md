@@ -40,11 +40,15 @@ extra_css: [/assets/css/observing.css]
   </section>
   <section>
     <figure class="panel blueprint wide-fig vlt-fig" id="light-path" data-build>
-      <div class="vlt-figs">
-        {% include figures/vlt-lightpath.svg %}
-        {% include figures/espresso-output.svg %}
+      <div class="vlt-top">
+        <div class="vlt-scroll vlt-scroll--path">{% include figures/vlt-lightpath.svg %}</div>
+        <div class="vlt-scroll vlt-scroll--exp">{% include figures/espresso-exposure.svg %}</div>
       </div>
-      <figcaption class="credit" style="padding:6px 10px 2px">FIG 2. How the starlight reaches the detector, and what comes out. A spectrograph measures the Doppler shift of the star's absorption lines, so its output is the speed of the stellar surface, one velocity per exposure, not a light curve of brightness. The output panel shows velocities of GJ 570 A from the night of 8 to 9 May 2024 with slow drifts removed, and the power spectrum of all 2,250 usable velocities from the five nights (weighted sine fits; raw power drawn as the highest value in each plotted column; smoothed curve and noise level times three), computed from the public data of Campante et al. 2026 (Zenodo, <a href="https://doi.org/10.5281/zenodo.17236515">doi:10.5281/zenodo.17236515</a>, CC BY 4.0); the dotted line marks their νmax of 4705 μHz.</figcaption>
+      <div class="vlt-bottom">
+        <div class="vlt-scroll vlt-scroll--series">{% include figures/espresso-night.svg %}</div>
+        <div class="vlt-scroll vlt-scroll--series">{% include figures/espresso-spectrum.svg %}</div>
+      </div>
+      <figcaption class="credit" style="padding:6px 10px 2px">FIG 2. How the starlight reaches the detector, and what comes out. A spectrograph measures the Doppler shift of the star's absorption lines, so its output is the speed of the stellar surface, one velocity per exposure, not a light curve of brightness. Top: schematic, not to scale, after ESO's descriptions of the Unit Telescopes and ESPRESSO; M1, M2 and M3 are the primary, secondary and tertiary mirrors; resolving power from Campante et al. 2026, Sect. 2. Bottom: the velocities with slow drifts removed (each night minus a 1.2-hour triangular smoothing, as in the paper) and their power spectrum from weighted sine fits, with the raw power drawn as the highest value in each plotted column, computed from the public data of Campante et al. 2026 (Zenodo, <a href="https://doi.org/10.5281/zenodo.17236515">doi:10.5281/zenodo.17236515</a>, CC BY 4.0). <span class="sym">Δ<i>ν</i></span>, 197.29 μHz, is the large frequency separation and <span class="sym"><i>ν</i><sub>max</sub></span> the frequency of maximum oscillation power (Campante et al. 2026, Table 1 and Sect. 4.1).</figcaption>
     </figure>
   </section>
 

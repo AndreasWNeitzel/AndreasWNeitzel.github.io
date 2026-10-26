@@ -1,8 +1,8 @@
-<svg class="bp-svg vlt-svg" viewBox="0 0 900 436" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lp-t lp-d">
+<svg class="bp-svg vlt-svg" viewBox="0 0 800 436" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lp-t lp-d">
   <title id="lp-t">Light path from a VLT Unit Telescope to ESPRESSO, schematic</title>
   <desc id="lp-d">Starlight reflects off the 8.2 m primary mirror to the secondary and the tertiary, travels down the coudé train to the Combined-Coudé Laboratory, enters ESPRESSO through fibres, and is spread by an échelle grating and a cross-disperser onto the detector as a two-dimensional spectrum, which is read out and passed on as data.</desc>
   <!-- construction: ground, pier, fork, axis, truss (drawn first) -->
-  <path class="bp-thin b-draw" style="--d:0s;--dur:.17s" pathLength="1" d="M20 372 L880 372"/>
+  <path class="bp-thin b-draw" style="--d:0s;--dur:.17s" pathLength="1" d="M20 372 L780 372"/>
   <path class="bp b-draw" style="--d:.03s;--dur:.17s" pathLength="1" d="M112 372 L112 330 L308 330 L308 372"/>
   <path class="bp-thin b-pop" style="--d:.17s" d="M120 372 l8 -8 M136 372 l8 -8 M152 372 l8 -8 M168 372 l8 -8 M184 372 l8 -8 M200 372 l8 -8 M216 372 l8 -8 M232 372 l8 -8 M248 372 l8 -8 M264 372 l8 -8 M280 372 l8 -8 M296 372 l8 -8"/>
   <path class="bp b-draw" style="--d:.06s;--dur:.17s" pathLength="1" d="M138 330 L138 236 M282 330 L282 236"/>
@@ -15,12 +15,12 @@
   <path class="bp mirror b-pop" style="--d:.2s" d="M128 292 Q210 314 292 292"/>
   <path class="bp-thin b-pop" style="--d:.2s" d="M128 304 L128 318 M292 304 L292 318 M128 312 L292 312"/>
   <text class="bp-tick b-pop" style="--d:.2s" x="176" y="328">8.2 m</text>
-  <text class="bp-label2 b-pop" style="--d:.2s" x="300" y="296">M1 primary</text>
+  <text class="bp-label2 b-pop" style="--d:.2s" x="298" y="283">M1 primary</text>
   <path class="bp mirror b-pop" style="--d:.22s" d="M196 66 Q210 60 224 66"/>
   <text class="bp-label2 b-pop" style="--d:.22s" x="280" y="50">M2 secondary</text>
   <path class="bp mirror b-pop" style="--d:.24s" d="M202 228 L218 244"/>
   <text class="bp-label2 b-pop" style="--d:.24s" x="164" y="222">M3</text>
-  <path class="bp mirror b-pop" style="--d:.26s" d="M276 230 L288 242 M276 346 L288 358 M464 346 L476 358 M464 294 L476 306"/>
+  <path class="bp mirror b-pop" style="--d:.26s" d="M276 230 L288 242 M276 346 L288 358 M364 346 L376 358 M364 294 L376 306"/>
   <text class="bp-label2 b-pop" style="--d:.26s" x="300" y="392">coudé train, under the platform</text>
   <text class="bp-tick b-pop" style="--d:.26s" x="300" y="406">to the Combined-Coudé Laboratory</text>
   <!-- the light: starlight down to M1, up to M2, down to M3, along the coudé train -->
@@ -32,35 +32,35 @@
   <path class="ray b-draw" style="--d:.62s;--dur:.18s" pathLength="1" d="M270 296 L216 66"/>
   <path class="ray b-draw" style="--d:.8s;--dur:.15s" pathLength="1" d="M204 66 L210 230"/>
   <path class="ray b-draw" style="--d:.8s;--dur:.15s" pathLength="1" d="M216 66 L210 230"/>
-  <g class="b-pop" style="--d:.95s"><path class="ray flowray" d="M212 236 L282 236 L282 352 L470 352 L470 300 L560 300"/></g>
-  <path class="eo-head b-pop" style="--d:1.33s" d="M552 296.4 L558 300 L552 303.6"/>
+  <g class="b-pop" style="--d:.95s"><path class="ray flowray" d="M212 236 L282 236 L282 352 L370 352 L370 300 L460 300"/></g>
+  <path class="eo-head b-pop" style="--d:1.33s" d="M452 296.4 L458 300 L452 303.6"/>
   <!-- ESPRESSO: vessel and optics appear before the light arrives -->
-  <rect class="bp lab b-pop" style="--d:1s" x="560" y="120" width="320" height="236" rx="4" stroke-dasharray="5 4"/>
-  <text class="bp-label2 b-pop" style="--d:1s" x="572" y="140">ESPRESSO</text>
-  <text class="bp-tick b-pop" style="--d:1s" x="572" y="154">échelle spectrograph, vacuum vessel</text>
-  <path class="bp b-draw" style="--d:1.35s;--dur:.1s" pathLength="1" d="M560 300 C590 300 596 260 610 252"/>
-  <circle class="bp-fill b-pop" style="--d:1.44s" cx="612" cy="251" r="2.5"/>
-  <text class="bp-tick b-pop" style="--d:1.05s" x="572" y="318">front end and fibres</text>
-  <path class="bp mirror b-pop" style="--d:1.1s" d="M660 214 Q668 251 660 288"/>
-  <text class="bp-tick b-pop" style="--d:1.1s" x="640" y="300">collimator</text>
-  <path class="ray b-draw" style="--d:1.45s;--dur:.1s" pathLength="1" d="M612 251 L660 220 M612 251 L660 282"/>
+  <rect class="bp lab b-pop" style="--d:1s" x="460" y="120" width="320" height="236" rx="4" stroke-dasharray="5 4"/>
+  <text class="bp-label2 b-pop" style="--d:1s" x="472" y="140">ESPRESSO</text>
+  <text class="bp-tick b-pop" style="--d:1s" x="472" y="154">échelle spectrograph, vacuum vessel</text>
+  <path class="bp b-draw" style="--d:1.35s;--dur:.1s" pathLength="1" d="M460 300 C490 300 496 260 510 252"/>
+  <circle class="bp-fill b-pop" style="--d:1.44s" cx="512" cy="251" r="2.5"/>
+  <text class="bp-tick b-pop" style="--d:1.05s" x="472" y="318">front end and fibres</text>
+  <path class="bp mirror b-pop" style="--d:1.1s" d="M560 214 Q568 251 560 288"/>
+  <text class="bp-tick b-pop" style="--d:1.1s" x="540" y="300">collimator</text>
+  <path class="ray b-draw" style="--d:1.45s;--dur:.1s" pathLength="1" d="M512 251 L560 220 M512 251 L560 282"/>
   <g class="b-pop" style="--d:1.15s">
-    <rect class="bp" x="736" y="182" width="16" height="72" transform="rotate(-12 744 218)"/>
-    <path class="bp-thin" d="M738 190 l12 -4 M738 202 l12 -4 M738 214 l12 -4 M738 226 l12 -4 M738 238 l12 -4" transform="rotate(-12 744 218)"/>
-    <text class="bp-tick" x="712" y="176">échelle grating</text>
+    <rect class="bp" x="636" y="182" width="16" height="72" transform="rotate(-12 644 218)"/>
+    <path class="bp-thin" d="M638 190 l12 -4 M638 202 l12 -4 M638 214 l12 -4 M638 226 l12 -4 M638 238 l12 -4" transform="rotate(-12 644 218)"/>
+    <text class="bp-tick" x="612" y="176">échelle grating</text>
   </g>
-  <path class="ray b-draw" style="--d:1.55s;--dur:.1s" pathLength="1" d="M664 230 L736 196 M664 272 L736 238"/>
-  <path class="bp b-pop" style="--d:1.2s" d="M790 244 L802 296 L778 296 Z"/>
-  <text class="bp-tick b-pop" style="--d:1.2s" x="752" y="314">cross-disperser</text>
-  <path class="ray warmray b-draw" style="--d:1.65s;--dur:.1s" pathLength="1" d="M740 220 L790 252 M742 232 L790 268 M744 244 L790 284"/>
-  <rect class="bp b-pop" style="--d:1.25s" x="822" y="232" width="44" height="72" rx="2"/>
-  <text class="bp-tick b-pop" style="--d:1.25s" x="822" y="225">detector</text>
-  <path class="ray warmray b-draw" style="--d:1.75s;--dur:.05s" pathLength="1" d="M800 270 L820 268"/>
-  <path class="order b-pop" style="--d:1.8s" d="M826 240 q18 -4 36 2 M826 250 q18 -4 36 2 M826 260 q18 -4 36 2 M826 270 q18 -4 36 2 M826 280 q18 -4 36 2 M826 290 q18 -4 36 2"/>
-  <text class="bp-tick b-pop" style="--d:1.3s" x="572" y="342">R ≈ 138,000, high-resolution mode</text>
-  <!-- the read-out: the data thread leaves the detector for the output panel -->
-  <g class="b-pop eo-thread-out" style="--d:1.8s"><path class="ray flowray eo-link" d="M866 268 C 902 268, 864 60, 900 60"/></g>
-  <rect class="eo-node eo-thread-out b-pop" style="--d:1.8s" x="863" y="265" width="6" height="6"/>
-  <!-- note -->
-  <text class="bp-tick b-pop" style="--d:.1s" x="20" y="426">Schematic, not to scale. After ESO's descriptions of the Unit Telescopes and ESPRESSO; resolving power from Campante et al. 2026, Sect. 2.</text>
+  <path class="ray b-draw" style="--d:1.55s;--dur:.1s" pathLength="1" d="M564 230 L636 196 M564 272 L636 238"/>
+  <path class="bp b-pop" style="--d:1.2s" d="M690 244 L702 296 L678 296 Z"/>
+  <text class="bp-tick b-pop" style="--d:1.2s" x="652" y="314">cross-disperser</text>
+  <path class="ray warmray b-draw" style="--d:1.65s;--dur:.1s" pathLength="1" d="M640 220 L690 252 M642 232 L690 268 M644 244 L690 284"/>
+  <rect class="bp b-pop" style="--d:1.25s" x="722" y="232" width="44" height="72" rx="2"/>
+  <text class="bp-tick b-pop" style="--d:1.25s" x="722" y="225">detector</text>
+  <path class="ray warmray b-draw" style="--d:1.75s;--dur:.05s" pathLength="1" d="M700 270 L720 268"/>
+  <path class="order b-pop" style="--d:1.8s" d="M726 240 q18 -4 36 2 M726 250 q18 -4 36 2 M726 260 q18 -4 36 2 M726 270 q18 -4 36 2 M726 280 q18 -4 36 2 M726 290 q18 -4 36 2"/>
+  <text class="bp-tick b-pop" style="--d:1.3s" x="472" y="342">resolving power ≈ 138,000</text>
+  <!-- generated: data thread (figures/observing/build_espresso_output.py) -->
+  <rect class="eo-node b-pop eo-seam" style="--d:1.80s" x="763.0" y="265.0" width="6" height="6"/>
+  <g class="b-pop eo-seam" style="--d:1.80s"><path class="ray flowray eo-link eo-seam" style="animation-delay:-1.100s" d="M766.0 268.0 C782.2 268.0, 791.5 205.1, 800.0 158.0"/></g>
+  <g class="b-pop eo-seam" style="--d:2.65s"><path class="ray flowray eo-link eo-seam" style="animation-delay:-0.469s" d="M800.0 418.0 C600.0 430.0, 240.0 410.0, 40.0 422.0 C24.0 423.0, 18.0 428.0, 18.0 436.0"/></g>
+  <!-- /generated -->
 </svg>
