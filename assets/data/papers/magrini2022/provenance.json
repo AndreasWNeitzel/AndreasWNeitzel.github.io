@@ -1,0 +1,20 @@
+{
+ "paper": "Magrini, L., Danielski, C., Bossini, D., et al. 2022, A&A 663, A161",
+ "doi": "10.1051/0004-6361/202243405",
+ "arxiv": "2204.08825",
+ "catalogue": "J/A+A/663/A161 (CDS)",
+ "retrieved": "2026-10-26, VizieR TAP through astroquery",
+ "tables": {
+  "tablea1": {
+   "rows": 187,
+   "description": "Stellar properties of the 187 stars (table A.1)"
+  },
+  "tablea2": {
+   "rows": 186,
+   "description": "Orbital properties of the 186 stars (table A.2); Qatar-8 has no orbit row"
+  }
+ },
+ "columns_dropped": "SimbadName, _RA and _DE were added by the CDS and are not part of the paper; they are left out",
+ "missing_values": "none in the kept columns; nothing was filled",
+ "sha256_tables_json": "5cef26f9457e3c939f9c81671eff29c9953dbbee44b2d290e8119c7e73af679e"
+}

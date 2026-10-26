@@ -11,6 +11,17 @@ card_image: "/assets/img/cards/ariel.webp"
 card_credit: "ESA, CC BY-SA 3.0 IGO"
 card_credit_url: "https://www.esa.int/ESA_Multimedia/Images/2024/07/Ariel_key_visual"
 order: 4
+math: true
+extra_css: [/assets/css/kiel.css]
+figure_svg: figures/magrini-2022.svg
+figure_alt: "Kiel diagram of the 187 host stars: surface gravity against effective temperature, each star with error bars, sized by mass and shaded by iron abundance, with the Sun marked."
+figure_caption: >-
+  Where the 187 host stars sit. Each mark is one star of table A.1 at its temperature and surface
+  gravity with the table's error bars, sized by mass and shaded by [Fe/H]. Filled marks are thin-disc
+  stars and open marks thick-disc stars by the paper's rule in Sect. 6.2, applied to table A.2: v is the
+  peculiar velocity from U, V and W, with the 220 km/s rotation of the local standard of rest taken off V.
+  The Sun is marked for reference. Data: Magrini et al. 2022, A&amp;A 663, A161, tables A.1 and A.2 via
+  the CDS (J/A+A/663/A161).
 sources:
   - label: "Article in A&A (open access)"
     url: "https://doi.org/10.1051/0004-6361/202243405"
@@ -26,7 +37,9 @@ ESA's *Ariel* mission will study the atmospheres of about a thousand planets aro
 
 ## What the team did
 
-The *Ariel* consortium's Stellar Characterisation working group applied one method to spectra of 187 known planet hosts of types F, G and K, from the first tier of the mission's target list (Sects. 2 and 3). The method alternates, over three rounds, between the spectra, which give temperature and chemical make-up, and *Gaia* data, which give surface gravity. Masses come from fitting stellar model tracks, called isochrones (Sect. 4). The team checked the method on three star clusters of known age and composition: NGC 2516, NGC 3532 and NGC 6633 (Sect. 5).
+The *Ariel* consortium's Stellar Characterisation working group applied one method to spectra of 187 known planet hosts of types F, G and K, from the first tier of the mission's target list (Sects. 2 and 3). The method runs three times, Run 0 to Run 2 in the paper: the spectra give temperature and chemical make-up, and from Run 1 on the surface gravity comes from the star's luminosity, built from 2MASS photometry and the *Gaia* parallax, together with its mass (Sect. 3).
+
+Masses come from isochrone fitting with PARSEC isochrones, using the temperature and metal content from the spectra and that luminosity (Sect. 4). The team checked the method on three star clusters of known age and composition: NGC 2516, NGC 3532 and NGC 6633 (Sect. 5).
 
 ## What came out
 
