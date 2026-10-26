@@ -86,6 +86,23 @@ body_class: home
   </div>
 </section>
 
+<section class="section" id="missions" aria-labelledby="missions-title">
+  <div class="section-head">
+    <h2 id="missions-title">Missions and machines</h2>
+    <p>The spacecraft, telescopes and computers the work runs on. The marks are drawn for this site: mission logos belong to their agencies.</p>
+  </div>
+  <ul class="missions">
+    {%- for m in H.missions %}
+    <li><a href="{{ m.url | relative_url }}">
+      <svg class="i mi" aria-hidden="true"><use href="#{{ m.icon }}"/></svg>
+      <span class="mi-name">{{ m.name | missions }}</span>
+      <span class="mi-who">{{ m.who }}</span>
+      <span class="mi-text">{{ m.text | missions }}</span>
+    </a></li>
+    {%- endfor %}
+  </ul>
+</section>
+
 <section class="section" id="map" aria-labelledby="map-title">
   <div class="section-head">
     <h2 id="map-title">Where the work took me</h2>

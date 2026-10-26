@@ -403,6 +403,19 @@
   .skill .ev { font: 0.72rem var(--mono); color: var(--muted); }
   .skill .ev a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-strong); }
 
+  /* missions and machines: marks drawn for this site, never an agency logo */
+  .missions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 10px; list-style: none; }
+  .missions a { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "mark name" "mark who" "text text";
+    column-gap: 10px; row-gap: 2px; align-items: center; padding: 12px 14px; border: 1px solid var(--line);
+    border-radius: 6px; background: var(--surface); color: var(--ink); text-decoration: none;
+    transition: border-color .2s, transform .2s var(--ease); }
+  .missions a:hover { border-color: var(--line-strong); transform: translateY(-1px); text-decoration: none; }
+  .missions .mi { grid-area: mark; font-size: 2rem; color: var(--accent); }
+  .mi-name { grid-area: name; font: 520 0.95rem var(--sans); align-self: end; }
+  .mi-who { grid-area: who; font: 0.72rem var(--mono); color: var(--muted); align-self: start; }
+  .mi-text { grid-area: text; margin-block-start: 6px; font-size: 0.82rem; color: var(--ink-2); line-height: 1.4; }
+  .m-field { fill: currentColor; }
+
   /* research pipeline schematic */
   .pipeline { padding: 18px; overflow: hidden; }
   .pipe { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; position: relative; }

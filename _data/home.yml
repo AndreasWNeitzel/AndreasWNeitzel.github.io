@@ -85,6 +85,48 @@ evidence:
 
 now: Building JANUS, a neural network for the chemistry of oscillating red giants from <i>Gaia</i> spectra, for the FCT project ArqueoGal. Thesis due in 2027.
 
+missions:
+  - icon: m-gaia
+    name: Gaia
+    who: ESA, 2013 to 2025
+    text: The spectra and astrometry my research runs on.
+    url: /guide/gaia/
+  - icon: m-kepler
+    name: Kepler
+    who: NASA, 2009 to 2018
+    text: Four years of oscillations in one patch of sky.
+    url: /guide/tess-kepler/
+  - icon: m-tess
+    name: TESS
+    who: NASA, since 2018
+    text: Oscillating giants across the whole sky.
+    url: /guide/tess-kepler/
+  - icon: m-ariel
+    name: Ariel
+    who: ESA, launch 2029
+    text: Ages and masses for stars in its target list.
+    url: /papers/neitzel-2022-msc-thesis/
+  - icon: m-haydn
+    name: HAYDN
+    who: proposed to ESA
+    text: Photometry inside crowded star clusters.
+    url: /guide/haydn/
+  - icon: i-telescope
+    name: Very Large Telescope
+    who: ESO, Paranal
+    text: Two nights with ESPRESSO, May 2024.
+    url: /observing/paranal/
+  - icon: i-cpu
+    name: Deucalion
+    who: Guimarães, Portugal
+    text: 299,520 core-hours for the cluster noise runs.
+    url: /guide/supercomputers/
+  - icon: i-cpu
+    name: MareNostrum 5
+    who: Barcelona, Spain
+    text: 1,002,400 core-hours for training JANUS.
+    url: /guide/supercomputers/
+
 record:
   - id: funding
     title: Funding won
