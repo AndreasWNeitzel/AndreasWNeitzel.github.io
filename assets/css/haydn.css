@@ -35,6 +35,7 @@
   .hy-svg .hy-dot-acc { fill: var(--accent); }
   .hy-svg .hy-mark-h { fill: var(--accent); }
   .hy-svg .hy-mark-g { fill: none; stroke: var(--ink); stroke-width: .9; }
+  .hy-svg .hy-spr2 { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-dasharray: 3 2; }
   .hy-svg .hy-floor { fill: none; stroke: var(--accent-2); stroke-width: 1.1; stroke-dasharray: 4 2; }
   .hy-svg .hy-field-edge { fill: color-mix(in oklab, var(--ink) 4%, transparent); stroke: var(--line-strong); stroke-width: 1; }
   .hy-svg .hy-tidal { fill: none; stroke: var(--muted); stroke-width: .7; stroke-dasharray: 2 3; }

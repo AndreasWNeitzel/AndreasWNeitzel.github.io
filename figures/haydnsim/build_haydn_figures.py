@@ -238,34 +238,36 @@ def pic_detector(x: float, y: float, t: float) -> list[str]:
 
 
 def pic_seismic(x: float, y: float, t: float) -> list[str]:
-    """The same star's power spectrum twice, on log axes: granulation and activity background, the
-    oscillation envelope at nu_max, and a flat white-noise level added on top. Isolated, the noise
-    is low and the envelope stands above it; crowded, the neighbours' light raises the white noise
-    and the envelope sinks into it. The seismic model reads detectability from that contrast."""
-    x0, x1, yb, yt = x + 8, x + 146, y + 76, y + 6
+    """The mean power spectrum of a red giant at nu_max = 30 microhertz, in units of its own flux,
+    with three white-noise levels. Mode height and granulation at nu_max from the red-giant scaling
+    relations of Mosser et al. 2012 (A&A 537, A30): H = 6200 and B = 1750 ppm^2/muHz. White levels
+    from the HAYDN noise estimator for the 47 Tuc run at the adopted pointing-jitter level: 61
+    isolated (SPR < 0.1), about 500 at SPR 0.2 and 10 000 at SPR 0.5. The envelope and the
+    granulation are the same in all three; only the white level rises. Mosser et al. 2019 detect
+    the modes from R = H / (B + white): 3.4, 2.7 and 0.5."""
+    x0, x1, yb, yt = x + 8, x + 140, y + 74, y + 4
+    lnu0, lnu1, lp0, lp1 = 0.0, math.log10(300.0), 1.0, 5.0
+    def X(nu):
+        return x0 + (x1 - x0) * (math.log10(nu) - lnu0) / (lnu1 - lnu0)
+    def Y(pw):
+        return yb - (yb - yt) * (math.log10(pw) - lp0) / (lp1 - lp0)
+    numax, H = 30.0, 6200.0
+    fwhm = 0.66 * numax ** 0.88
+    def mean_psd(nu, white):
+        gran = 52000 / (1 + (nu / 8.6) ** 4) + 3320 / (1 + (nu / 27.7) ** 4)
+        env = H * math.exp(-0.5 * ((nu - numax) / (fwhm / 2.355)) ** 2)
+        return gran + env + white
     p = [draw("hy-axis-thin", f"M{x0} {yt} V{yb} H{x1}", t, 0.3)]
-    def X(lnu):
-        return x0 + (x1 - x0) * lnu / 3.0
-    def Y(lp):
-        return yt + (yb - yt) * (3.1 - lp) / 5.1
-    numax = 2.1
-    def psd(lnu, white):
-        nu = 10 ** lnu
-        v = 2.5e2 / (1 + (nu / 10 ** 0.2) ** 2) + 30 / (1 + (nu / 10 ** 1.15) ** 4)  # activity, granulation
-        for kk in range(-9, 10):
-            c = numax + kk * 0.03
-            v += 9 * math.exp(-0.5 * ((c - numax) / 0.1) ** 2) / (1 + ((lnu - c) / 0.006) ** 2)
-        return math.log10(v + white)
-    for white, cls, lab in ((0.15, "hy-pic", "isolated"), (12.0, "hy-floor", "crowded")):
-        pts = [(X(3.0 * i / 899), Y(psd(3.0 * i / 899, white))) for i in range(900)]
-        p.append(draw(cls, "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + 0.1, 0.6))
-        p.append(text(x1, Y(math.log10(white)) + (-4 if white > 1 else 10), lab, "hy-mini", t + 0.4, "end"))
-    p.append(draw("hy-pic", f"M{f(X(numax))} {yb - 5} V{yb + 3}", t + 0.4, 0.2))
-    p.append(tex(X(numax) - 4, yb - 4, r"\nu_{\max}", 9, t + 0.4, "hy-tex", "end"))
+    nus = [10 ** (lnu0 + (lnu1 - lnu0) * i / 400) for i in range(401)]
+    for white, cls, lab, dt in ((61.0, "hy-pic", "isolated", 0.1), (500.0, "hy-spr2", "SPR 0.2", 0.2), (1.0e4, "hy-floor", "SPR 0.5", 0.3)):
+        pts = [(X(nu), Y(mean_psd(nu, white))) for nu in nus]
+        p.append(draw(cls, "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + dt, 0.6))
+        p.append(text(x1 + 3, Y(mean_psd(300.0, white)) + 3, lab, "hy-mini", t + 0.4))
+    p.append(draw("hy-pic", f"M{f(X(numax))} {yb - 4} V{yb + 3}", t + 0.4, 0.2))
+    p.append(tex(X(numax) + 3, yb - 5, r"\nu_{\max}", 9, t + 0.4, "hy-tex"))
     p.append(text(x1, yb + 11, "frequency", "hy-mini", t + 0.3, "end"))
     p.append(text(x0 - 3, yt + 2, "power", "hy-mini", t + 0.3, "end"))
     return p
-
 
 
 # ------------------------------------------------------------------ figure 1: the pipeline
