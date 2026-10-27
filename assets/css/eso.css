@@ -1,5 +1,5 @@
-/* Field guide, ESO and the VLT: ESO's sites in Chile and the Paranal platform from above
-   (figures/eso/build_eso_figure.py). The one-time build comes from site.css ("figure build"). */
+/* Field guide, ESO and the VLT: ESO's sites in Chile, the station table, and the rendered Paranal
+   site model with its drawn overlay (figures/eso/build_eso_figure.py, paranal_render.py). The one-time build comes from site.css ("figure build"). */
 @layer pages {
   .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
   .guide-wide .eso-svg { inline-size: 100%; block-size: auto; }
@@ -24,4 +24,23 @@
   .eso-svg .eso-dim { fill: none; stroke: var(--ink); stroke-width: 1.1; }
   .eso-svg .eso-th { font: 600 10.5px var(--mono); letter-spacing: 0.08em; fill: var(--muted); }
   .eso-svg .eso-td { font: 500 12px var(--mono); fill: var(--ink-2); }
+}
+@layer pages {
+  .eso-svg .eso-img-dark { display: none; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .eso-svg .eso-img-light { display: none; } :root:not([data-theme="light"]) .eso-svg .eso-img-dark { display: inline; } }
+  :root[data-theme="dark"] .eso-svg .eso-img-light { display: none; }
+  :root[data-theme="dark"] .eso-svg .eso-img-dark { display: inline; }
+  .eso-svg .eso-panel { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+  .eso-svg .eso-halo { paint-order: stroke; stroke: var(--surface); stroke-width: 3.5px; stroke-linejoin: round; }
+  .eso-svg .eso-acc { fill: var(--accent-2); }
+  .eso-svg .eso-lead { opacity: 0.8; }
+  .eso-svg .eso-stn { fill: var(--surface); stroke: currentColor; stroke-width: 1; }
+  .eso-svg .eso-base { stroke: var(--ink-2); stroke-width: 1.1; opacity: 0.8; }
+  .eso-svg .eso-duct, .eso-svg .eso-light { stroke-width: 1.6; opacity: 1; }
+  .eso-svg .eso-hidden { fill: none; stroke: var(--accent-2); stroke-width: 1; stroke-dasharray: 4 3; opacity: 0.85; }
+  .eso-svg .eso-ghost { fill: none; stroke: currentColor; stroke-width: 1; stroke-dasharray: 5 4; opacity: 0.7; }
+}
+@layer pages {
+  .eso-svg .eso-detail { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+  .eso-svg .eso-callout { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0.8; }
 }

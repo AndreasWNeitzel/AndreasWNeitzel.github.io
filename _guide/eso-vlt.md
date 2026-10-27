@@ -6,7 +6,7 @@ order: 4
 hero: false
 extra_css: [/assets/css/eso.css]
 wide_figure: figures/eso-vlt.svg
-wide_caption: "Where ESO observes, and how the four Unit Telescopes of the VLT sit on Paranal. Left, ESO's sites in northern Chile; right, the Paranal platform from above, with each 8.2 m primary mirror drawn to scale at its station and the six baselines between the telescopes. Station positions from ESO's VLTI station table, site positions from ESO, coastline from Natural Earth."
+wide_caption: "Where ESO observes, and Paranal itself. Left, ESO's sites in northern Chile. Right, the summit seen from the west, modelled from a 30 m elevation model, with the telescopes and buildings placed from ESO's station table and site plan. UT2 stands open for the night: its enclosure keeps its shell and opens a slit down the front and across the roof. Under the platform, ducts carry each Unit Telescope's light to the Combined-Coudé Laboratory, where ESPRESSO can take the light of all four. Inset, UT2 with its enclosure removed: the light runs from the primary mirror to the secondary, to the Nasmyth B focus and down to the Coudé room. Ducts and rooms after Pepe et al. 2014 and Grupp et al. 2020; the laboratory's position is inferred from the duct lengths, and the ducts are drawn straight. Terrain from the Copernicus DEM GLO-30, © DLR e.V. 2010 to 2014 and © Airbus Defence and Space GmbH 2014 to 2018, provided under COPERNICUS by the European Union and ESA; coastline from Natural Earth."
 image: ""
 photo: /assets/img/photos/vlt-daylight.webp
 photo_alt: Andreas in a hard hat in front of a Unit Telescope enclosure at Paranal, May 2024.
@@ -20,6 +20,11 @@ sources:
   - {label: "ESO, Paranal Observatory", url: "https://www.eso.org/public/teles-instr/paranal-observatory/"}
   - {label: "ESO, Very Large Telescope", url: "https://www.eso.org/public/teles-instr/paranal-observatory/vlt/"}
   - {label: "ESO, ESPRESSO", url: "https://www.eso.org/public/teles-instr/paranal-observatory/vlt/vlt-instr/espresso/"}
+  - {label: "ESO, VLTI station positions", url: "https://www.eso.org/observing/etc/doc/viscalc/vltistations.html"}
+  - {label: "ESO, VLT enclosure", url: "https://www.eso.org/sci/facilities/paranal/telescopes/ut/enclosure.html"}
+  - {label: "Pepe et al. 2014, ESPRESSO, arXiv:1401.5918", url: "https://arxiv.org/abs/1401.5918"}
+  - {label: "Grupp et al. 2020, the ESPRESSO Coudé train, arXiv:2004.12499", url: "https://arxiv.org/abs/2004.12499"}
+  - {label: "Copernicus DEM GLO-30", url: "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"}
   - {label: "Campante et al. 2026, Astronomy and Astrophysics, doi:10.1051/0004-6361/202660350", url: "https://doi.org/10.1051/0004-6361/202660350"}
 ---
 
