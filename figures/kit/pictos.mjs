@@ -82,33 +82,25 @@ pictogram("gaia", 170, 104, [[-50, -50, 0], [50, 50, 0], [-50, 50, 0], [50, -50,
 
 // a patch of detector: 9 by 9 pixels, the target's mask raised and lit, the target's light as a
 // tall bump and one neighbour's as a lower bump overlapping the mask's edge
-pictogram("detector", 150, 90, [[0, 0, -4], [90, 90, -4], [0, 90, 0], [90, 0, 0], [45, 45, 30]], ({ P, part, at }) => {
-  const PXL = 10, N = 9;
-  part(k.solidSvg(k.slabOf({ x: 0, y: 0, w: N * PXL, d: N * PXL, r: 0.6 }, -4, 4, P, 2, 0.3), { tone: "mid" }), [N * PXL, 0, -4], 0);
-  const grid = [];
-  for (let i = 1; i < N; i++) { grid.push(k.lineOnTop([i * PXL, 0], [i * PXL, N * PXL], 0, P)); grid.push(k.lineOnTop([0, i * PXL], [N * PXL, i * PXL], 0, P)); }
-  part(k.lineSvg(grid.join(""), { tone: "faint" }), [45, 45, 0], 1);
-  const c = 4 * PXL;
-  // every pixel as a tile; the mask (the 13 brightest pixels of a star centred in its pixel, a bright
-  // star's mask) raised and lit, the rest flat
+pictogram("detector", 150, 90, [[0, 0, -4], [90, 90, -4], [0, 90, 0], [90, 0, 0], [45, 45, 34]], ({ P, part }) => {
+  // What the detector records: each pixel's share of the light, as a column. Two stars with the
+  // same PSF (a Gaussian of sigma 0.61 pixel, 90 per cent of its energy within 1.3 arcsec), the
+  // target centred in its pixel and a fainter neighbour 1.8 and 0.8 pixels away. At 0.5 arcsec per
+  // pixel the PSF is undersampled: a third of the target's light falls in its central pixel. The
+  // mask's columns (the target's 13 brightest pixels, a bright star's mask) are lit.
+  const PXL = 10, N = 9, SG = 0.61, HMAX = 30;
+  part(k.solidSvg(k.slabOf({ x: 0, y: 0, w: N * PXL, d: N * PXL, r: 0.6 }, -4, 4, P, 2, 0.3), { tone: "lo" }), [N * PXL, 0, -4], 0);
+  const erf = (x) => { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; };
+  const band = (a, b, m) => 0.5 * (erf((b - m) / (SG * Math.SQRT2)) - erf((a - m) / (SG * Math.SQRT2)));
+  const stars = [{ x: 4.5, y: 4.5, f: 1 }, { x: 6.3, y: 5.3, f: 0.55 }];
+  const flux = (i, j) => stars.reduce((acc, st) => acc + st.f * band(i, i + 1, st.x) * band(j, j + 1, st.y), 0);
+  const fmax = flux(4, 4);
   const M = new Set(["0,0", "1,0", "-1,0", "0,1", "0,-1", "1,1", "1,-1", "-1,1", "-1,-1", "2,0", "-2,0", "0,2", "0,-2"]);
   for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
     const on = M.has(`${i - 4},${j - 4}`);
-    part(k.solidSvg(k.slabOf({ x: i * PXL + 0.6, y: j * PXL + 0.6, w: PXL - 1.2, d: PXL - 1.2, r: 0.2 }, 0, on ? 1.6 : 0.4, P, 1, 0), { tone: on ? "mid" : "lo", lit: on, crease: "none" }), [i * PXL + PXL, j * PXL, on ? 1.6 : 0.4], 2);
+    const h = Math.max(0.4, HMAX * flux(i, j) / fmax);
+    part(k.solidSvg(k.slabOf({ x: i * PXL + 0.8, y: j * PXL + 0.8, w: PXL - 1.6, d: PXL - 1.6, r: 0.2 }, 0, h, P, 1, 0), { tone: on ? "mid" : "lo", lit: on, crease: "none" }), [i * PXL + PXL, j * PXL, 0], 2);
   }
-  // each star's light as a wire profile: two meridians and the half-maximum ring, so the
-  // pixels and the mask stay visible under it
-  const bump = (cx, cy, h, sg, tone) => {
-    const g = (r) => 1.6 + h * Math.exp(-(r * r) / (2 * sg * sg));
-    const mx = [], my = [];
-    for (let i = 0; i <= 24; i++) { const r = (i / 24 - 0.5) * 6.4 * sg; mx.push(at([cx + r, cy, g(r)])); my.push(at([cx, cy + r, g(r)])); }
-    const rh = sg * Math.sqrt(2 * Math.log(2));
-    const ring = k.circleRing(0, 0, rh, 36).map(([u, v]) => at([cx + u, cy + v, g(rh)]));
-    return k.lineSvg(k.pathOf(mx) + k.pathOf(my) + k.pathOf(ring, true), { tone });
-  };
-  // one PSF for every star: sigma 0.61 pixel (a Gaussian with 90 per cent of its energy in 1.3 arcsec)
-  part(bump(c + 23, c + 13, 14, 6.1, "mid"), [c + 23, c + 13, 20], 3);
-  part(bump(c + 5, c + 5, 26, 6.1, "lit"), [c + 5, c + 5, 30], 4);
 });
 
 writeFileSync(new URL("./pictos.json", import.meta.url), JSON.stringify(out));
