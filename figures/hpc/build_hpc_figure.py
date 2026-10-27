@@ -27,6 +27,8 @@ import sys
 from pathlib import Path
 
 W, H = 1120, 492
+PICTOS = __import__("json").loads((Path(__file__).resolve().parents[1] / "kit/pictos.json").read_text())
+
 SQ, PITCH, COLS = 7.4, 10.0, 20  # node squares: side, pitch, squares per row
 PER_SQ = 32  # nodes per square
 
@@ -169,26 +171,9 @@ def run_panel():
         if k < 3:
             parts.append(node(x + bw, mid - 10 if k % 2 == 0 else mid, t + 0.3))
         cx, cy = x + bw / 2, by + bh / 2
-        if kind == "pfs":  # four stacked disks
-            for j in range(4):
-                yy = cy - 30 + 18 * j
-                parts.append(draw("bp", f"M{cx - 32} {yy} a32 9 0 1 0 64 0 a32 9 0 1 0 -64 0 M{cx - 32} {yy} v11 a32 9 0 0 0 64 0 v-11", t + 0.1 + 0.05 * j, 0.3))
-        elif kind == "cpu":  # a 5 x 5 array of nodes under one job-array bracket
-            for j in range(25):
-                r, c = divmod(j, 5)
-                parts.append(pop(f'<rect class="hpc-sq cpu-on" x="{f(cx - 36 + c * 15)}" y="{f(cy - 42 + r * 15)}" width="10.5" height="10.5"/>', t + 0.1 + 0.015 * j))
-            parts.append(draw("bp-thin", f"M{cx - 38} {cy + 38} v5 h76 v-5", t + 0.3, 0.17))
-        elif kind == "gpu":  # three nodes of four GPUs
-            for j in range(12):
-                r, c = divmod(j, 4)
-                parts.append(pop(f'<rect class="hpc-sq gpu-on" x="{f(cx - 36 + c * 19)}" y="{f(cy - 46 + r * 30)}" width="14" height="24"/>', t + 0.1 + 0.02 * j))
-                if c == 0:
-                    parts.append(draw("bp-thin", f"M{cx - 42} {f(cy - 50 + r * 30)} h84 v30 h-84 Z", t + 0.08 + 0.05 * r, 0.2))
-        else:  # a table: rows with a label column and a reliability column
-            for j in range(7):
-                yy = cy - 42 + 14 * j
-                parts.append(draw("bp-thin", f"M{cx - 36} {yy} h50", t + 0.1 + 0.03 * j, 0.17))
-                parts.append(pop(f'<rect class="hpc-sq {"gpu-on" if j in (1, 4) else "cpu-on"}" x="{f(cx + 22)}" y="{f(yy - 5)}" width="10" height="10"/>', t + 0.15 + 0.03 * j))
+        # the object itself, drawn in three dimensions by figures/kit/pictos.mjs
+        pic = PICTOS[{"pfs": "storage", "cpu": "cpu", "gpu": "gpu", "cat": "catalogue"}[kind]]
+        parts.append(pop(f'<g class="iso-svg" transform="translate({f(cx - pic["w"] / 2)} {f(cy - pic["h"] / 2)})">{pic["body"]}</g>', t + 0.15))
         parts.append(text(cx, by + bh + 18, title, "bp-label2", t + 0.2, "middle"))
         parts.append(text(cx, by + bh + 33, line, "bp-tick", t + 0.25, "middle"))
     # CPU time to scale, including the development access that came first
