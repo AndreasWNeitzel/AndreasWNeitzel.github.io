@@ -352,34 +352,89 @@ def pipeline() -> str:
 
 
 # ------------------------------------------------------------------ figure 2: how a field is built
+# Harris (2010) structure for the seven clusters: core radius (arcmin), concentration
+# c = log10(r_t / r_c), distance (kpc); the copy in the HAYDNsim repository (data/catalogs/harris_2010.csv)
+HARRIS = {
+    "47 Tuc": ("NGC 104", 0.36, 2.07, 4.5), "NGC 6752": ("NGC 6752", 0.17, 2.50, 4.0), "M54": ("NGC 6715", 0.09, 2.04, 26.5),
+    "M22": ("NGC 6656", 1.33, 1.38, 3.2), "omega Cen": ("NGC 5139", 2.37, 1.31, 5.2), "NGC 6397": ("NGC 6397", 0.05, 2.50, 2.3),
+    "M4": ("NGC 6121", 1.16, 1.65, 2.2),
+}
+
+
+def cluster_disc(cx: float, cy: float, R: float, rc: float, c: float, seed: int, n: int = 900) -> str:
+    """Stars at radii drawn from the King (1962) surface density of the cluster, at a common angular
+    scale: R pixels for the 30 arcmin radius of the one-degree field."""
+    rt = rc * 10 ** c
+    def sigma(r):
+        if r >= rt:
+            return 0.0
+        return (1 / math.sqrt(1 + (r / rc) ** 2) - 1 / math.sqrt(1 + (rt / rc) ** 2)) ** 2
+    rmax = min(rt, 30.0)
+    grid = [rmax * (i / 2000) ** 2 for i in range(2001)]
+    cdf, acc = [0.0], 0.0
+    for i in range(1, len(grid)):
+        rm = 0.5 * (grid[i] + grid[i - 1])
+        acc += rm * sigma(rm) * (grid[i] - grid[i - 1])
+        cdf.append(acc)
+    rnd = _rng(seed)
+    dots = []
+    for _ in range(n):
+        u = rnd() * acc
+        lo, hi = 0, len(cdf) - 1
+        while hi - lo > 1:
+            mid = (lo + hi) // 2
+            if cdf[mid] < u:
+                lo = mid
+            else:
+                hi = mid
+        r = grid[hi] * R / 30.0
+        a = rnd() * 2 * math.pi
+        dots.append(f'<circle cx="{f(cx + r * math.cos(a))}" cy="{f(cy + r * math.sin(a))}" r="0.75"/>')
+    return "".join(dots)
+
+
 def crowding() -> str:
-    """The poster's per-cluster fractions, the one result the proposal has made public."""
-    W, H = 1140, 318
+    """The poster's per-cluster fractions, each under a drawing of its cluster in the one-degree field."""
+    W, H = 1140, 330
     p: list[str] = []
-    L, T = 40, 30
+    L, T = 24, 30
     p.append(text(L, T, "STARS WHOSE LIGHT IS MOSTLY THEIR NEIGHBOURS'", "hy-head", 0.0))
-    p.append(text(L, T + 18, "share with a stellar pollution ratio above 0.5, per cluster", "hy-line", 0.05))
-    bx0, bx1 = L + 150, W - 150
+    p.append(text(L, T + 18, "share with a stellar pollution ratio above 0.5, under each cluster as it fills the one-degree field", "hy-line", 0.05))
+    cw = (W - 2 * L) / 7
+    R = 62
+    cy = T + 54 + R
+    by = cy + R + 54
+    bmax = cw - 34
     omega, ow = tex_glyphs(r"\omega", 13)
     for i, (name, pc) in enumerate(FRACTIONS):
-        y = T + 62 + 28 * i
-        t = 0.4 + 0.08 * i
+        x0 = L + i * cw
+        cx = x0 + cw / 2
+        t = 0.2 + 0.08 * i
+        ngc, rc, c, dist = HARRIS[name]
+        p.append(f'<circle class="hy-field-edge" cx="{f(cx)}" cy="{f(cy)}" r="{R}"/>')
+        p.append(pop(f'<g class="hy-cluster">{cluster_disc(cx, cy, R, rc, c, 11 + i)}</g>', t))
+        # the tidal radius, where it falls inside the field
+        rt = rc * 10 ** c
+        if rt < 30:
+            p.append(f'<circle class="hy-tidal" cx="{f(cx)}" cy="{f(cy)}" r="{f(R * rt / 30)}"/>')
+        ny = cy + R + 20
         if name.startswith("omega"):
-            p.append(pop(f'<g class="hy-tex-ink" transform="translate({L} {y})">{omega}</g>', t))
-            p.append(text(L + ow + 4, y, "Cen", "hy-line", t))
+            p.append(pop(f'<g class="hy-tex-ink" transform="translate({f(cx - (ow + 4 + 3 * 7.2) / 2)} {f(ny)})">{omega}</g>', t))
+            p.append(text(cx - (ow + 4 + 3 * 7.2) / 2 + ow + 4, ny, "Cen", "hy-title", t))
         else:
-            p.append(text(L, y, name, "hy-line", t))
-        wbar = (bx1 - bx0) * pc / 40.0
-        p.append(pop(f'<rect class="hy-bar" x="{bx0}" y="{y - 13}" width="{f(wbar)}" height="17"/>', t))
-        p.append(text(bx0 + wbar + 10, y, f"{pc} %", "hy-num", t + 0.05))
-    p.append(draw("hy-axis", f"M{bx0} {T + 40} V{T + 62 + 28 * 7 - 10}", 0.3, 0.3))
-    p.append(text(L, H - 12, "FILLED BARS ARE DATA, FROM THE TASC10/KASC17 POSTER.", "hy-head", 0.2))
+            p.append(text(cx, ny, name, "hy-title", t, "middle"))
+        p.append(text(cx, ny + 15, f"{ngc} · {dist:g} kpc", "hy-num", t, "middle"))
+        bx = cx - bmax / 2
+        p.append(f'<rect class="hy-bar-track" x="{f(bx)}" y="{by}" width="{f(bmax)}" height="10"/>')
+        p.append(pop(f'<rect class="hy-bar" x="{f(bx)}" y="{by}" width="{f(bmax * pc / 40.0)}" height="10"/>', t + 0.2))
+        p.append(text(cx, by + 30, f"{pc} %", "hy-val", t + 0.25, "middle"))
     return (
         f'<svg class="bp-svg hy-svg" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
-        'aria-labelledby="hy-ct hy-cd"><title id="hy-ct">Crowding in seven clusters, from HAYDNsim</title>'
-        '<desc id="hy-cd">A bar for each of seven globular clusters giving the share of its stars whose '
-        'light is mostly from neighbouring stars: 40 per cent in 47 Tucanae, 36 in NGC 6752 and M54, 12 in '
-        'M22, 11 in omega Centauri, 7 in NGC 6397 and 3 in M4.</desc>'
+        'aria-labelledby="hy-ct hy-cd"><title id="hy-ct">Crowding in seven clusters</title>'
+        '<desc id="hy-cd">Seven globular clusters drawn as they fill the one-degree field, at a common angular '
+        'scale, each from its King profile in the Harris 2010 catalogue, with a bar beneath for the share of its '
+        'stars whose light is mostly from neighbouring stars: 40 per cent in 47 Tucanae, 36 in NGC 6752 and M54, '
+        '12 in M22, 11 in omega Centauri, 7 in NGC 6397 and 3 in M4.</desc>'
         + "".join(p) + "</svg>\n"
     )
 

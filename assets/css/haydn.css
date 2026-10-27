@@ -36,6 +36,10 @@
   .hy-svg .hy-mark-h { fill: var(--accent); }
   .hy-svg .hy-mark-g { fill: none; stroke: var(--ink); stroke-width: .9; }
   .hy-svg .hy-floor { fill: none; stroke: var(--accent-2); stroke-width: 1.1; stroke-dasharray: 4 2; }
+  .hy-svg .hy-field-edge { fill: color-mix(in oklab, var(--ink) 4%, transparent); stroke: var(--line-strong); stroke-width: 1; }
+  .hy-svg .hy-tidal { fill: none; stroke: var(--muted); stroke-width: .7; stroke-dasharray: 2 3; }
+  .hy-svg .hy-cluster circle { fill: var(--ink); opacity: .7; }
+  .hy-svg .hy-bar-track { fill: color-mix(in oklab, var(--ink) 8%, transparent); }
   .hy-svg .hy-mask { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: miter; }
   /* the field drawing */
   .hy-svg .hy-sample circle { fill: none; stroke: currentColor; stroke-width: .6; opacity: .8; }

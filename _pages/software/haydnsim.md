@@ -30,7 +30,7 @@ extra_css: [/assets/css/haydn.css]
 
 <figure class="panel blueprint guide-wide" data-build>
   {% include figures/haydn-crowding.svg %}
-  <figcaption class="credit">The one result the proposal has published: the share of each cluster's stars whose light is mostly its neighbours', that is with a stellar pollution ratio above 0.5, for the seven globular clusters on the TASC10/KASC17 poster (Neitzel et al. 2026, doi:10.5281/zenodo.23263454). It separates the dense clusters from the open ones: 40 per cent in 47 Tucanae against 3 per cent in M4.</figcaption>
+  <figcaption class="credit">The one result the proposal has published: the share of each cluster's stars whose light is mostly its neighbours', that is with a stellar pollution ratio above 0.5, for the seven globular clusters on the TASC10/KASC17 poster (Neitzel et al. 2026, doi:10.5281/zenodo.23263454). Each cluster is drawn as it fills the one-degree field, all at one angular scale: the same number of stars placed at radii drawn from its King profile, with the core radius and concentration of the Harris (2010) catalogue; the dashed circle is the tidal radius where it falls inside the field. Crowding follows both how compact a cluster is and how far away: 40 per cent in 47 Tucanae, 3 per cent in the loose and nearby M4, while the compact NGC 6397 stays low at 2.3 kpc and the compact M54 is high at 26.5 kpc. Star numbers in the drawings are schematic; the bars are the poster's values.</figcaption>
 </figure>
 
 <figure class="panel guide-wide">
