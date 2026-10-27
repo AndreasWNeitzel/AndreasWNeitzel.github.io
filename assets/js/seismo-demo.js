@@ -205,14 +205,12 @@
     const l = peak.l, q = lmIdx(l, m);
     return { kind: "one", l, m, q, peak, k: 1 / (NORM[q] * PMAX[q]), f: fShow(peak.nu, S.star.numax), ph: 0, rings: nodeRings(l, Math.abs(m)) };
   }
-  // The three peaks of each degree 0 to 2 nearest nu_max and the nearest of degree 3, each with
-  // all 2l + 1 values of m; amplitudes and phases carry over when the star changes.
+  // Every peak the spectrum shows (the window nu_max +- 3 Delta nu, above 2.5 per cent of the
+  // tallest), each with all 2l + 1 values of m; amplitudes and phases carry over when the star
+  // changes and the set of peaks stays the same.
+  const shown = (st) => st.peaks.filter((p) => p.nu >= st.lo && p.nu <= st.hi && p.h > 0.025 * st.top.h);
   function several(old) {
-    const st = S.star, rnd = old ? old.rnd : mulberry(20261025), pick = [], comps = [];
-    for (let l = 0; l <= 3; l += 1) {
-      const own = st.peaks.filter((p) => p.l === l).sort((a, b) => Math.abs(a.nu - st.numax) - Math.abs(b.nu - st.numax));
-      pick.push(...own.slice(0, l < 3 ? 3 : 1));
-    }
+    const st = S.star, rnd = old ? old.rnd : mulberry(20261025), pick = shown(st), comps = [];
     let power = 0;
     for (const p of pick) {
       for (let m = -p.l; m <= p.l; m += 1) {
@@ -532,7 +530,7 @@
     for (const p of st.peaks) {
       if (p.nu < lo || p.nu > hi) continue;
       const x = X(p.nu), on = marked.includes(p);
-      if (p.h > 0.025 * st.top.h) spec.hits.push({ p, x });
+      if (p.h > 0.025 * st.top.h) spec.hits.push({ p, x });  // the same peaks as shown(st)
       if (p.h < 0.12 * st.top.h && !on) continue;
       ctx.fillStyle = on ? C.accent : C.muted;
       ctx.textAlign = p.l === 2 ? "right" : p.l === 0 ? "left" : "center";
@@ -767,19 +765,20 @@
 
   // -------------------------------------------------------------------- loop
   // The star moves only while it is on screen and playing; with reduced motion it starts still.
-  let raf = 0, last = 0, onScreen = false;
+  let raf = 0, last = null, onScreen = false;
   const running = () => S.playing && onScreen;
   function kick() {
     if (!running() || raf) return;
-    last = performance.now();
+    last = null;
     raf = requestAnimationFrame(tick);
   }
-  // Real elapsed time, so the ringing keeps its speed however long a frame takes to draw; the cap
-  // only stops a jump after the tab was in the background. An error in one frame does not stop
-  // the loop.
+  // Elapsed time from one frame's timestamp to the next, never from the clock after drawing: a
+  // browser may stamp a frame with its start, earlier than the clock read at the end of the last
+  // draw, and that difference would come out zero or negative and freeze the star. The cap only
+  // stops a jump after the tab was in the background. An error in one frame does not stop the loop.
   function tick(now) {
     raf = 0;
-    const dt = Math.min((now - last) / 1000, 0.25);
+    const dt = last === null ? 0 : clamp((now - last) / 1000, 0, 0.25);
     last = now;
     try {
       S.t += dt;
@@ -787,7 +786,7 @@
       advance(prev, dt);
       drawStar();
     } finally {
-      kick();
+      if (running()) raf = requestAnimationFrame(tick);
     }
   }
   function fit(o, square) {
