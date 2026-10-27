@@ -5,6 +5,7 @@ title: Observing at the Very Large Telescope
 nav_section: Research
 description: My May 2024 visitor-mode run with ESPRESSO at ESO's Very Large Telescope at Paranal, on the K dwarf GJ 570 A, and what the data showed.
 og_image: /assets/img/og-vlt.jpg
+og_image_alt: Andreas W. Neitzel on the platform of ESO's Very Large Telescope at Paranal at sunset
 extra_css: [/assets/css/observing.css]
 math: true
 ---

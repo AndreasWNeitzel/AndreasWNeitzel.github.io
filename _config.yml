@@ -9,8 +9,8 @@ lang: en
 author:
   name: Andreas W. Neitzel
   email: andreaswneitzel@gmail.com
-og_image: /assets/img/og-vlt.jpg
-og_image_alt: Andreas W. Neitzel on the platform of ESO's Very Large Telescope at Paranal at sunset
+og_image: /assets/img/og-talk.jpg
+og_image_alt: Andreas W. Neitzel giving his talk on photometric simulations of dense star clusters for HAYDN at DFA Week 2026, Porto
 
 # Build
 markdown: kramdown
