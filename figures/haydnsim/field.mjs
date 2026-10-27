@@ -16,6 +16,7 @@ const C = [0, CY, CZ];
 const PX = 10, N = 18, SIDE = PX * N, THICK = 6;
 const PZ0 = CZ - SIDE / 2;
 const MAG = (SIDE / 2) / RC * 0.92;
+const onPlate = (x, z) => [(x - C[0]) * MAG, CZ + (z - CZ) * MAG];
 const extent = [[-RC * 1.15, CY, CZ - RC * 1.15], [RC * 1.15, CY, CZ + RC * 1.15], [-RC * 1.15, CY, CZ - RC * 1.4], [-SIDE / 2 - 8, 0, PZ0 - 8], [SIDE / 2 + 8, 0, PZ0 + SIDE + 8], [SIDE / 2 + 8, -14, PZ0 - 30], [-SIDE / 2 - 8, -14, PZ0 + SIDE + 8]];
 const P = k.fitProjection(extent, W, H, { pad: 28, azimuth: 28, elevation: 22 });
 const at = (p) => k.iso(p, P);
@@ -70,18 +71,20 @@ for (let i = 1; i < N; i++) {
   grid.push(k.pathOf([at([-SIDE / 2, 0.2, PZ0 + i * PX]), at([SIDE / 2, 0.2, PZ0 + i * PX])]));
 }
 part(L(grid.join(""), { tone: "faint" }), [0, 0.2, CZ], 1);
-const landed = stars.map((p) => [T[0] + (p[0] - C[0]) * MAG, CZ + (p[2] - C[2]) * MAG]);
-part(k.dotsSvg(landed.filter((_, i) => !near.includes(i) && i % 2 === 0).map(([x, z]) => at([x, 0.4, z])), { size: 0.7, tone: "mid" }), [0, 0.4, CZ], 2);
+const landed = stars.map((p) => onPlate(p[0], p[2]));
+part(k.dotsSvg(landed.filter((_, i) => !near.includes(i)).map(([x, z]) => at([x, 0.4, z])), { size: 0.75, tone: "hi" }), [0, 0.4, CZ], 2);
 const mask = [[-1, -1], [0, -1], [1, -1], [-1, 0], [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1], [0, -2], [0, 2], [-2, 0], [2, 0]];
-const TPX = [Math.floor((T[0] + SIDE / 2) / PX) * PX - SIDE / 2, Math.floor((T[1] - PZ0) / PX) * PX + PZ0];
+const TP = onPlate(T[0], T[1]);
+const TPX = [Math.floor((TP[0] + SIDE / 2) / PX) * PX - SIDE / 2, Math.floor((TP[1] - PZ0) / PX) * PX + PZ0];
 for (const [dx, dz] of mask) part(plateSolid(TPX[0] + dx * PX, TPX[1] + dz * PX, PX, PX, 0, 1.6, { tone: "mid", lit: true }), [TPX[0] + dx * PX, 1.6, TPX[1] + dz * PX], 3);
 
 // the seven stars near the line of sight, their paths, and their light on the plate
 const lit = near.map((i) => stars[i]);
 part(k.dotsSvg(lit.map((p) => at(p)), { size: 2.0, tone: "hi" }), C, 4);
 part(L(lit.map((p) => ring(...at(p), 4.2 / P.scale, 24)).join(""), { tone: "hi" }), C, 4);
-part(L(lit.map((p) => k.pathOf([at(p), at([T[0] + (p[0] - C[0]) * MAG, 1.8, CZ + (p[2] - C[2]) * MAG])])).join(""), { tone: "mid", dashed: true }), [0, CY / 2, CZ], 2);
-part(L(k.pathOf([at([T[0], CY + RC, T[1]]), at([T[0], 2, T[1]])]), { tone: "blue", flow: true }), [0, CY / 2, CZ], 5);
+part(L(lit.map((p) => { const [x, z] = onPlate(p[0], p[2]); return k.pathOf([at(p), at([x, 1.8, z])]); }).join(""), { tone: "mid", dashed: true }), [0, CY / 2, CZ], 2);
+const ray = (y) => { const u = y / CY; return [TP[0] + (T[0] - TP[0]) * u, y, TP[1] + (T[1] - TP[1]) * u]; };
+part(L(k.pathOf([at(ray(CY + RC)), at(ray(2))]), { tone: "blue", flow: true }), [0, CY / 2, CZ], 5);
 const bump = (x, z, height, sigma) => {
   const g = (r) => 1.8 + height * Math.exp(-(r * r) / (2 * sigma * sigma));
   const mx = [];
@@ -89,7 +92,7 @@ const bump = (x, z, height, sigma) => {
   const rh = sigma * Math.sqrt(2 * Math.log(2));
   return k.pathOf(mx) + k.pathOf(k.circleRing(0, 0, rh, 36).map(([u, v]) => at([x + u, g(rh), z + v])), true);
 };
-const bumps = lit.map((p, j) => ({ x: T[0] + (p[0] - C[0]) * MAG, z: CZ + (p[2] - C[2]) * MAG, h: j === 3 ? 34 : 12 + 10 * rnd(), s: j === 3 ? 7 : 5 + 1.5 * rnd(), main: j === 3 }));
+const bumps = lit.map((p, j) => ({ x: onPlate(p[0], p[2])[0], z: onPlate(p[0], p[2])[1], h: j === 3 ? 34 : 12 + 10 * rnd(), s: j === 3 ? 7 : 5 + 1.5 * rnd(), main: j === 3 }));
 part(L(bumps.filter((b) => !b.main).map((b) => bump(b.x, b.z, b.h, b.s)).join(""), { tone: "mid" }), [T[0], 10, T[1]], 6);
 part(L(bumps.filter((b) => b.main).map((b) => bump(b.x, b.z, b.h, b.s)).join(""), { tone: "hi" }), [T[0], 12, T[1]], 7);
 
@@ -98,8 +101,8 @@ const text = (x, y, s, anchor = "middle") => `<text class="iso-num" x="${f(x)}" 
 const fz = CZ + (PZ0 - CZ) / MAG - 10;
 const fov = [k.pathOf([at([-SIDE / 2 / MAG, CY, fz]), at([SIDE / 2 / MAG, CY, fz])]), k.pathOf([at([-SIDE / 2 / MAG, CY, fz + 3]), at([-SIDE / 2 / MAG, CY, fz - 3])]), k.pathOf([at([SIDE / 2 / MAG, CY, fz + 3]), at([SIDE / 2 / MAG, CY, fz - 3])])];
 part(L(fov.join(""), { tone: "mid" }), [0, CY, fz], 7);
-const fl = at([0, CY, fz - 6]);
-part(text(fl[0], fl[1] + 10, "1 degree"), [0, CY, fz - 6], 8);
+const fl = at([-SIDE / 2 / MAG - 4, CY, fz]);
+part(text(fl[0], fl[1] + 4, "1 degree", "end"), [0, CY, fz - 6], 8);
 const ruler = [k.pathOf([at([-SIDE / 2, 0, PZ0 - 9]), at([SIDE / 2, 0, PZ0 - 9])])];
 for (let i = 0; i <= N; i += 6) ruler.push(k.pathOf([at([-SIDE / 2 + i * PX, 0, PZ0 - 6]), at([-SIDE / 2 + i * PX, 0, PZ0 - 12])]));
 part(L(ruler.join(""), { tone: "mid" }), [0, 0, PZ0 - 9], 7);
