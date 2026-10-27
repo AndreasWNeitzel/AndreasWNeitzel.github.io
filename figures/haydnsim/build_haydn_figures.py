@@ -238,34 +238,50 @@ def pic_detector(x: float, y: float, t: float) -> list[str]:
 
 
 def pic_seismic(x: float, y: float, t: float) -> list[str]:
-    """The mean power spectrum of a red giant at nu_max = 30 microhertz, in units of its own flux,
-    with three white-noise levels. Mode height and granulation at nu_max from the red-giant scaling
-    relations of Mosser et al. 2012 (A&A 537, A30): H = 6200 and B = 1750 ppm^2/muHz. White levels
-    from the HAYDN noise estimator for the 47 Tuc run at the adopted pointing-jitter level: 61
-    isolated (SPR < 0.1), about 500 at SPR 0.2 and 10 000 at SPR 0.5. The envelope and the
-    granulation are the same in all three; only the white level rises. Mosser et al. 2019 detect
-    the modes from R = H / (B + white): 3.4, 2.7 and 0.5."""
+    """The power spectrum of a red giant at nu_max = 30 microhertz around its oscillations, in units
+    of its own flux, with three white-noise levels. Granulation and the smoothed envelope height at
+    nu_max from the red-giant scaling relations of Mosser et al. 2012 (A&A 537, A30): B = 1750 and
+    H = 6200 ppm^2/muHz. The modes are drawn as a comb at the asymptotic spacing (large separation
+    0.28 nu_max^0.75, about 3.6 microhertz; radial, dipole and quadrupole modes with visibilities 1,
+    1.5 and 0.6); their peak heights are illustrative. White levels from the HAYDN noise estimator
+    for the 47 Tuc run at the adopted pointing-jitter level: 61 isolated, about 500 at SPR 0.2 and
+    10 000 at SPR 0.5. Only the white level differs between the curves."""
     x0, x1, yb, yt = x + 8, x + 140, y + 74, y + 4
-    lnu0, lnu1, lp0, lp1 = 0.0, math.log10(300.0), 1.0, 5.0
+    nu0, nu1, lp0, lp1 = 10.0, 70.0, 1.7, 5.3
     def X(nu):
-        return x0 + (x1 - x0) * (math.log10(nu) - lnu0) / (lnu1 - lnu0)
+        return x0 + (x1 - x0) * (nu - nu0) / (nu1 - nu0)
     def Y(pw):
         return yb - (yb - yt) * (math.log10(pw) - lp0) / (lp1 - lp0)
     numax, H = 30.0, 6200.0
-    fwhm = 0.66 * numax ** 0.88
-    def mean_psd(nu, white):
+    sig = 0.66 * numax ** 0.88 / 2.355
+    dnu = 0.28 * numax ** 0.75
+    eps = 0.634 + 0.63 * math.log10(dnu)
+    modes = []
+    for n in range(1, 20):
+        for ell, shift, vis in ((0, 0.0, 1.0), (1, 0.5 - 0.025, 1.5), (2, -0.121, 0.6)):
+            nu = dnu * (n + eps + shift)
+            if nu0 - 2 < nu < nu1 + 2:
+                modes.append((nu, vis))
+    gamma = 0.12
+    def psd(nu, white):
         gran = 52000 / (1 + (nu / 8.6) ** 4) + 3320 / (1 + (nu / 27.7) ** 4)
-        env = H * math.exp(-0.5 * ((nu - numax) / (fwhm / 2.355)) ** 2)
-        return gran + env + white
+        comb = sum(4.0 * H * v * math.exp(-0.5 * ((m - numax) / sig) ** 2) / (1 + ((nu - m) / gamma) ** 2) for m, v in modes)
+        return gran + comb + white
     p = [draw("hy-axis-thin", f"M{x0} {yt} V{yb} H{x1}", t, 0.3)]
-    nus = [10 ** (lnu0 + (lnu1 - lnu0) * i / 400) for i in range(401)]
-    for white, cls, lab, dt in ((61.0, "hy-pic", "isolated", 0.1), (500.0, "hy-spr2", "SPR 0.2", 0.2), (1.0e4, "hy-floor", "SPR 0.5", 0.3)):
-        pts = [(X(nu), Y(mean_psd(nu, white))) for nu in nus]
+    nus = [nu0 + (nu1 - nu0) * i / 1800 for i in range(1801)]
+    labels = []
+    for white, cls, lab, dt in ((1.0e4, "hy-floor", "SPR 0.5", 0.3), (500.0, "hy-spr2", "SPR 0.2", 0.2), (61.0, "hy-pic", "isolated", 0.1)):
+        pts = [(X(nu), Y(psd(nu, white))) for nu in nus]
         p.append(draw(cls, "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + dt, 0.6))
-        p.append(text(x1 + 3, Y(mean_psd(300.0, white)) + 3, lab, "hy-mini", t + 0.4))
-    p.append(draw("hy-pic", f"M{f(X(numax))} {yb - 4} V{yb + 3}", t + 0.4, 0.2))
-    p.append(tex(X(numax) + 3, yb - 5, r"\nu_{\max}", 9, t + 0.4, "hy-tex"))
-    p.append(text(x1, yb + 11, "frequency", "hy-mini", t + 0.3, "end"))
+        ly = Y(psd(nu1, white)) + 3
+        if labels and ly < labels[-1] + 10:
+            ly = labels[-1] + 10
+        labels.append(ly)
+        p.append(text(x1 + 3, ly, lab, "hy-mini", t + 0.4))
+    for nu in (20, 30, 40, 50, 60):
+        p.append(draw("hy-axis-thin", f"M{f(X(nu))} {yb} v3", t + 0.3, 0.2))
+        p.append(text(X(nu), yb + 11, f"{nu}", "hy-mini", t + 0.3, "middle"))
+    p.append(text(x1, yb + 21, "μHz", "hy-mini", t + 0.3, "end"))
     p.append(text(x0 - 3, yt + 2, "power", "hy-mini", t + 0.3, "end"))
     return p
 
