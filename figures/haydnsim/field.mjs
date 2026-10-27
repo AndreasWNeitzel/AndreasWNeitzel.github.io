@@ -49,6 +49,14 @@ cand.sort((a, b) => a.y - b.y);
 const near = [];
 for (let j = 0; j < 7; j++) near.push(cand[Math.round((j / 6) * (cand.length - 1))].i);
 // the target is the fourth of them by depth; the line of sight passes exactly through it
+{
+  // nudge the target (a synthetic star) by under half a pixel so it lands on a pixel centre; its
+  // brightest pixels then form the symmetric mask a centred star gets
+  const tp = [(stars[near[3]][0] - C[0]) * MAG, CZ + (stars[near[3]][2] - CZ) * MAG];
+  const PXs = 10, Z0 = CZ - (PXs * 18) / 2;
+  const sx = (Math.floor((tp[0] + 90) / PXs) + 0.5) * PXs - 90, sz = (Math.floor((tp[1] - Z0) / PXs) + 0.5) * PXs + Z0;
+  stars[near[3]][0] = C[0] + sx / MAG; stars[near[3]][2] = CZ + (sz - CZ) / MAG;
+}
 T[0] = stars[near[3]][0]; T[1] = stars[near[3]][2];
 const depth = stars.map((p) => k.depthOf(p, P));
 const dmin = Math.min(...depth), dmax = Math.max(...depth);
@@ -86,8 +94,14 @@ const SIG = 6.06;
 const pixFlux = (a, c, x, z, sg) => (cdf1(TPX[0] + (a + 1) * PX, x, sg) - cdf1(TPX[0] + a * PX, x, sg)) * (cdf1(TPX[1] + (c + 1) * PX, z, sg) - cdf1(TPX[1] + c * PX, z, sg));
 const pix = [];
 for (let a = -3; a <= 3; a++) for (let c = -3; c <= 3; c++) pix.push({ a, c, v: pixFlux(a, c, TP[0], TP[1], SIG) });
-const mask = pix.sort((u, w) => w.v - u.v).slice(0, 6).map((q) => [q.a, q.c]);
-for (const [dx, dz] of mask) part(plateSolid(TPX[0] + dx * PX, TPX[1] + dz * PX, PX, PX, 0, 1.6, { tone: "mid", lit: true }), [TPX[0] + dx * PX, 1.6, TPX[1] + dz * PX], 3);
+// a large mask, as a bright star gets: its 13 brightest pixels (the 95th percentile of the 47 Tuc run)
+const mask = pix.sort((u, w) => w.v - u.v).slice(0, 13).map((q) => [q.a, q.c]);
+const inM = new Set(mask.map(([a, c]) => `${a},${c}`));
+// every pixel around the target as a tile: the masked ones raised and lit, the others flat
+for (let dx = -3; dx <= 3; dx++) for (let dz = -3; dz <= 3; dz++) {
+  const on = inM.has(`${dx},${dz}`);
+  part(plateSolid(TPX[0] + dx * PX + 0.6, TPX[1] + dz * PX + 0.6, PX - 1.2, PX - 1.2, 0, on ? 1.6 : 0.4, { tone: on ? "mid" : "lo", lit: on }), [TPX[0] + dx * PX, on ? 1.6 : 0.4, TPX[1] + dz * PX], 3);
+}
 
 // the seven stars near the line of sight, their paths, and their light on the plate
 const lit = near.map((i) => stars[i]);

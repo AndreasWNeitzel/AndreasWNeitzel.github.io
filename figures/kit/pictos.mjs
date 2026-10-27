@@ -89,9 +89,13 @@ pictogram("detector", 150, 90, [[0, 0, -4], [90, 90, -4], [0, 90, 0], [90, 0, 0]
   for (let i = 1; i < N; i++) { grid.push(k.lineOnTop([i * PXL, 0], [i * PXL, N * PXL], 0, P)); grid.push(k.lineOnTop([0, i * PXL], [N * PXL, i * PXL], 0, P)); }
   part(k.lineSvg(grid.join(""), { tone: "faint" }), [45, 45, 0], 1);
   const c = 4 * PXL;
-  // a compact mask of six pixels on the target's brightest pixels; the noise estimator chooses it per star
-  for (const [dx, dy] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1], [1, 1]])
-    part(k.solidSvg(k.slabOf({ x: c + dx * PXL, y: c + dy * PXL, w: PXL, d: PXL, r: 0.2 }, 0, 1.4, P, 1, 0), { tone: "mid", lit: true }), [c + dx * PXL + PXL, c + dy * PXL, 1.4], 2);
+  // every pixel as a tile; the mask (the 13 brightest pixels of a star centred in its pixel, a bright
+  // star's mask) raised and lit, the rest flat
+  const M = new Set(["0,0", "1,0", "-1,0", "0,1", "0,-1", "1,1", "1,-1", "-1,1", "-1,-1", "2,0", "-2,0", "0,2", "0,-2"]);
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+    const on = M.has(`${i - 4},${j - 4}`);
+    part(k.solidSvg(k.slabOf({ x: i * PXL + 0.6, y: j * PXL + 0.6, w: PXL - 1.2, d: PXL - 1.2, r: 0.2 }, 0, on ? 1.6 : 0.4, P, 1, 0), { tone: on ? "mid" : "lo", lit: on, crease: "none" }), [i * PXL + PXL, j * PXL, on ? 1.6 : 0.4], 2);
+  }
   // each star's light as a wire profile: two meridians and the half-maximum ring, so the
   // pixels and the mask stay visible under it
   const bump = (cx, cy, h, sg, tone) => {
