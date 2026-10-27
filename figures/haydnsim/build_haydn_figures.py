@@ -25,6 +25,7 @@ sys.path.insert(0, str(ROOT / "figures"))
 from texsvg import tex_glyphs  # noqa: E402
 
 OUT = ROOT / "_includes/figures"
+PICTOS = __import__("json").loads((ROOT / "figures/kit/pictos.json").read_text())
 
 GOLDEN = math.pi * (3 - math.sqrt(5))
 
@@ -75,101 +76,194 @@ def thread(d: str, t: float, cls: str = "ray flowray hy-thread") -> str:
     return pop(f'<path class="{cls}" d="{d}"/>', t)
 
 
+def _rng(seed):
+    st = [seed]
+
+    def r():
+        st[0] = (st[0] * 48271) % 2147483647
+        return st[0] / 2147483647
+    return r
+
+
 def pic_archive(x: float, y: float, t: float) -> list[str]:
-    """A survey cone, an HST tile and catalogue cards."""
+    """The cluster on the sky: Gaia's stars resolved in the outskirts, HST's square field on the
+    crowded core, the catalogue entries beside them."""
     p = []
-    p.append(draw("hy-pic", f"M{x + 10} {y + 70} L{x + 40} {y + 8} L{x + 70} {y + 70} Z", t, 0.3))
-    for i, (dx, dy) in enumerate(((40, 34), (30, 50), (52, 52), (44, 62), (34, 62), (56, 40))):
-        p.append(pop(f'<circle class="hy-dot" cx="{f(x + dx)}" cy="{f(y + dy)}" r="1.6"/>', t + 0.05 + 0.02 * i))
-    p.append(draw("hy-pic", f"M{x + 86} {y + 14} h44 v44 h-44 Z", t + 0.1, 0.3))
-    dots = "".join(f'<circle class="hy-dot" cx="{f(x + 90 + 7 * i)}" cy="{f(y + 18 + 7 * j)}" r="1.2"/>'
-                   for i in range(6) for j in range(6) if (i * 7 + j * 3) % 5 < 3)
-    p.append(pop(dots, t + 0.15))
-    for i in range(3):
-        p.append(draw("hy-pic", f"M{x + 92 - 6 * i} {y + 74 + 6 * i} h40 v10 h-40 Z", t + 0.2 + 0.04 * i, 0.25))
+    cx, cy, R = x + 58, y + 44, 36
+    rnd = _rng(5)
+    out, core = [], []
+    for i in range(260):
+        r = R * (rnd() ** 1.9)
+        a = rnd() * 2 * math.pi
+        px, py = cx + r * math.cos(a), cy + r * math.sin(a)
+        (core if abs(px - cx) < 13 and abs(py - cy) < 13 else out).append((px, py))
+    p.append(pop("".join(f'<circle class="hy-dot" cx="{f(px)}" cy="{f(py)}" r="0.9"/>' for px, py in out if math.hypot(px - cx, py - cy) > 13), t))
+    p.append(pop("".join(f'<circle class="hy-dot-acc" cx="{f(px)}" cy="{f(py)}" r="0.7"/>' for px, py in core), t + 0.1))
+    p.append(draw("hy-pic-dash", f"M{f(cx + R)} {f(cy)} A{R} {R} 0 1 1 {f(cx - R)} {f(cy)} A{R} {R} 0 1 1 {f(cx + R)} {f(cy)}", t, 0.4))
+    p.append(draw("hy-pic-strong", f"M{f(cx - 14)} {f(cy - 14)} h28 v28 h-28 Z", t + 0.15, 0.3))
+    p.append(text(cx - R, y + 4, "Gaia", "hy-mini", t + 0.2))
+    p.append(draw("hy-pic", f"M{f(cx - 14)} {f(cy)} H{f(cx - R - 6)}", t + 0.2, 0.2))
+    p.append(text(cx - R - 8, cy + 3, "HST", "hy-mini", t + 0.2, "end"))
+    # four catalogues as cards
+    for i, lab in enumerate(("Harris", "Baumgardt", "Hunt", "Forbes")):
+        yy = y + 8 + i * 20
+        p.append(draw("hy-pic", f"M{x + 100} {yy} h54 v14 h-54 Z", t + 0.2 + 0.05 * i, 0.25))
+        p.append(text(x + 104, yy + 10, lab, "hy-mini", t + 0.3 + 0.05 * i))
     return p
 
 
 def pic_threshold(x: float, y: float, t: float) -> list[str]:
-    """A magnitude ruler with the window where both surveys are complete."""
-    p = [draw("hy-pic", f"M{x + 8} {y + 50} H{x + 140}", t, 0.3)]
-    for i in range(9):
-        xx = x + 8 + i * 16.5
-        p.append(draw("hy-pic", f"M{f(xx)} {y + 50} v{8 if i % 2 == 0 else 5}", t + 0.02 * i, 0.15))
-    p.append(pop(f'<rect class="hy-window" x="{f(x + 41)}" y="{y + 28}" width="{f(66)}" height="22"/>', t + 0.25))
-    p.append(draw("hy-pic-strong", f"M{x + 41} {y + 28} v22 M{x + 107} {y + 28} v22", t + 0.3, 0.2))
-    p.append(draw("hy-pic", f"M{x + 8} {y + 76} C{x + 40} {y + 76}, {x + 60} {y + 62}, {x + 74} {y + 62}", t + 0.3, 0.3))
-    p.append(draw("hy-pic", f"M{x + 74} {y + 62} C{x + 90} {y + 62}, {x + 110} {y + 76}, {x + 140} {y + 76}", t + 0.35, 0.3))
+    """Star counts against magnitude for Gaia in the outskirts and HST in the core; the window
+    where both are complete is shaded."""
+    x0, x1, yb, yt = x + 6, x + 146, y + 76, y + 6
+    p = [draw("hy-axis-thin", f"M{x0} {yt} V{yb} H{x1}", t, 0.3)]
+    def lf(m, turn):  # rising counts that roll over past the completeness limit
+        return 10 ** (0.32 * m) / (1 + math.exp((m - turn) / 0.35))
+    ms = [10 + 12 * i / 120 for i in range(121)]
+    for turn, cls in ((18.5, "hy-pic"), (21.0, "hy-pic-strong")):
+        vals = [lf(m, turn) for m in ms]
+        top = max(lf(m, 21.0) for m in ms)
+        pts = [(x0 + (x1 - x0) * i / 120, yb - (yb - yt) * math.log10(1 + 9 * v / top)) for i, v in enumerate(vals)]
+        p.append(draw(cls, "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + 0.1, 0.5))
+    wx0 = x0 + (x1 - x0) * (15.0 - 10) / 12
+    wx1 = x0 + (x1 - x0) * (18.0 - 10) / 12
+    p.append(pop(f'<rect class="hy-window" x="{f(wx0)}" y="{yt}" width="{f(wx1 - wx0)}" height="{yb - yt}"/>', t + 0.3))
+    p.append(text(x1, yb + 11, "G", "hy-mini", t + 0.3, "end"))
+    p.append(text(wx0 - 3, y + 66, "Gaia", "hy-mini", t + 0.35, "end"))
+    p.append(text(x0 + 116, y + 10, "HST", "hy-mini", t + 0.35, "end"))
     return p
 
 
 def pic_king(x: float, y: float, t: float) -> list[str]:
-    """A density curve falling with radius, the normalisation annulus shaded."""
-    p = [draw("hy-pic", f"M{x + 12} {y + 10} V{y + 78} H{x + 140}", t, 0.3)]
-    pts = []
-    for i in range(41):
-        u = i / 40
-        r = 2.0 * (900.0 / 2.0) ** u
-        v = king(r) / king(2.0)
-        px = x + 16 + 118 * u
-        py = y + 14 + 58 * (1 - (math.log10(v) + 3.4) / 3.4)
-        pts.append((px, min(py, y + 76)))
-    d = "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts)
-    xa = x + 16 + 118 * (math.log10(50 / 2) / math.log10(450))
-    xb = x + 16 + 118 * (math.log10(100 / 2) / math.log10(450))
-    p.append(pop(f'<rect class="hy-window" x="{f(xa)}" y="{y + 12}" width="{f(xb - xa)}" height="{66}"/>', t + 0.1))
-    p.append(draw("hy-pic-strong", d, t + 0.15, 0.5))
+    """Surface density against radius on log axes: HST counts in the core, Gaia counts outside,
+    the King profile through them, the normalisation annulus shaded."""
+    x0, x1, yb, yt = x + 6, x + 146, y + 76, y + 6
+    p = [draw("hy-axis-thin", f"M{x0} {yt} V{yb} H{x1}", t, 0.3)]
+    lr0, lr1 = math.log10(2.0), math.log10(2500.0)
+    def X(r):
+        return x0 + (x1 - x0) * (math.log10(r) - lr0) / (lr1 - lr0)
+    def Y(v):
+        return yt + (yb - yt) * (-math.log10(v)) / 5.0
+    pts = [(X(10 ** (lr0 + (lr1 - lr0) * i / 80)), Y(king(10 ** (lr0 + (lr1 - lr0) * i / 80)))) for i in range(80)]
+    pts = [(a, b) for a, b in pts if b <= yb]
+    xa, xb = X(50), X(100)
+    p.append(pop(f'<rect class="hy-window" x="{f(xa)}" y="{yt}" width="{f(xb - xa)}" height="{yb - yt}"/>', t + 0.1))
+    p.append(draw("hy-pic-strong", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + 0.15, 0.5))
+    rnd = _rng(9)
+    marks = []
+    for r in (3, 5, 8, 13, 20, 32, 50, 80):  # HST in the core: triangles
+        v = king(r) * (1 + 0.12 * (rnd() - 0.5))
+        xx, yy = X(r), Y(v)
+        marks.append(f'<path class="hy-mark-h" d="M{f(xx)} {f(yy - 2.6)} L{f(xx + 2.4)} {f(yy + 1.6)} L{f(xx - 2.4)} {f(yy + 1.6)} Z"/>')
+    for r in (60, 100, 160, 250, 400, 630, 1000, 1500):  # Gaia outside: circles
+        v = king(r) * (1 + 0.2 * (rnd() - 0.5))
+        if Y(v) < yb - 2:
+            marks.append(f'<circle class="hy-mark-g" cx="{f(X(r))}" cy="{f(Y(v))}" r="2"/>')
+    p.append(pop("".join(marks), t + 0.35))
+    p.append(text(x1, yb + 11, "r", "hy-mini", t + 0.3, "end"))
     return p
 
 
+def _isochrone():
+    """An old cluster's stars in the HR plane, built from the real one-solar-mass MESA track of the
+    Stellar Explorer data: a star of mass m at 12 Gyr sits where the track is at age 12 m^2.5 Gyr,
+    shifted by main-sequence homology (log Teff + 0.55 log m, log L + 3.5 log m); helium-burning
+    stars from the track's own core-helium-burning models at the turn-off mass."""
+    import h5py
+    with h5py.File(Path.home() / "projects/stellar-explorer-data/stellar_data_real.h5", "r") as fh:
+        h = fh["history"]
+        lt, ll, age = h["log_Teff"][:], h["log_L"][:], h["star_age"][:]
+        ph = h["phase"][:].astype(str)
+    i0 = int((ph == "ZAMS").argmax())
+    rgb_end = i0 + int(((ph[i0:] == "HeFlash") | (ph[i0:] == "HeCB")).argmax())
+    pts = []
+    rnd = _rng(4)
+    # masses up to the turn-off, sampled densely near it so the turn-off and subgiant branch show
+    for i in range(320):
+        u = rnd()
+        m = 0.55 + 0.43 * (1 - (1 - u) ** 2.2)
+        a = 12.0 * m ** 2.5
+        j = i0 + int(abs(age[i0:rgb_end] - a).argmin())
+        if ll[j] > 2.2:
+            continue
+        lgm = math.log10(m)
+        pts.append((lt[j] + 0.55 * lgm + 0.003 * (rnd() - 0.5), ll[j] + 3.5 * lgm + 0.02 * (rnd() - 0.5)))
+    # the giant branch, climbed quickly by stars of about the turn-off mass
+    lgm = math.log10(0.98)
+    rows = [j for j in range(i0, rgb_end) if ph[j] in ("SGB", "RGB") and ll[j] < 2.2]
+    lo, hi = min(ll[j] for j in rows), max(ll[j] for j in rows)
+    for q in range(90):  # evenly in luminosity, so the base of the branch is not empty
+        target = lo + (hi - lo) * (q + rnd()) / 90
+        j = min(rows, key=lambda r: abs(ll[r] - target))
+        pts.append((lt[j] + 0.55 * lgm + 0.003 * (rnd() - 0.5), ll[j] + 3.5 * lgm + 0.02 * (rnd() - 0.5)))
+    # the red clump / horizontal branch from the track's own helium-burning models
+    hb = [k for k in range(len(ph)) if ph[k] in ("HeCB", "RC") and ll[k] < 2.2]
+    for k in hb[:: max(1, len(hb) // 30)]:
+        pts.append((lt[k] + 0.006 * (rnd() - 0.5), ll[k] + 0.03 * (rnd() - 0.5)))
+    return pts
+
+
 def pic_population(x: float, y: float, t: float) -> list[str]:
-    """A luminosity-function histogram feeding a sampled field."""
-    p = [draw("hy-pic", f"M{x + 8} {y + 10} V{y + 78} H{x + 70}", t, 0.3)]
-    heights = (8, 12, 16, 22, 30, 40, 56)
-    for i, h in enumerate(heights):
-        p.append(draw("hy-pic", f"M{f(x + 12 + i * 8)} {y + 78} v-{h} h6 v{h}", t + 0.03 * i, 0.2))
-    p.append(draw("hy-pic", f"M{x + 78} {y + 44} h18 M{x + 92} {y + 40} l4 4 l-4 4", t + 0.3, 0.2))
-    cx, cy = x + 120, y + 44
-    p.append(draw("hy-pic", f"M{f(cx + 30)} {f(cy)} A30 30 0 1 1 {f(cx - 30)} {f(cy)} A30 30 0 1 1 {f(cx + 30)} {f(cy)}", t + 0.35, 0.4))
-    dots = []
-    for i in range(70):
-        r = 28 * ((i + 0.5) / 70) ** 1.6
+    """A synthetic old population in the HR plane, from a real MESA track (see _isochrone), and its
+    stars placed on the sky by the radial profile."""
+    p = []
+    x0, x1, yb, yt = x + 4, x + 74, y + 80, y + 2
+    p.append(draw("hy-axis-thin", f"M{x0} {yt} V{yb} H{x1}", t, 0.3))
+    pts = _isochrone()
+    lts = [a for a, _ in pts]
+    lls = [b for _, b in pts]
+    t0, t1 = max(lts) + 0.01, min(lts) - 0.01
+    l0, l1 = min(lls) - 0.1, max(lls) + 0.1
+    dots = "".join(f'<circle class="hy-dot" cx="{f(x0 + 2 + (x1 - x0 - 4) * (t0 - a) / (t0 - t1))}" cy="{f(yb - 2 - (yb - yt - 4) * (b - l0) / (l1 - l0))}" r="0.8"/>' for a, b in pts)
+    p.append(pop(dots, t + 0.15))
+    p.append(text(x1, yb + 11, "Teff", "hy-mini", t + 0.3, "end"))
+    p.append(text(x0 + 3, yt + 8, "L", "hy-mini", t + 0.3))
+    p.append(draw("hy-pic", f"M{x + 80} {y + 44} h12 M{x + 88} {y + 40} l4 4 l-4 4", t + 0.3, 0.2))
+    cx, cy = x + 122, y + 44
+    p.append(draw("hy-pic-dash", f"M{cx + 26} {cy} A26 26 0 1 1 {cx - 26} {cy} A26 26 0 1 1 {cx + 26} {cy}", t + 0.35, 0.4))
+    dd = []
+    for i in range(120):
+        r = 25 * ((i + 0.5) / 120) ** 1.8
         a = i * GOLDEN
-        dots.append(f'<circle class="hy-dot" cx="{f(cx + r * math.cos(a))}" cy="{f(cy + r * math.sin(a))}" r="1.3"/>')
-    p.append(pop("".join(dots), t + 0.45))
+        dd.append(f'<circle class="hy-dot" cx="{f(cx + r * math.cos(a))}" cy="{f(cy + r * math.sin(a))}" r="0.9"/>')
+    p.append(pop("".join(dd), t + 0.45))
     return p
 
 
 def pic_detector(x: float, y: float, t: float) -> list[str]:
-    """A pixel grid with a star, its mask and a neighbour."""
-    p = []
-    g, n = 9, 8
-    for i in range(n + 1):
-        p.append(draw("hy-grid", f"M{f(x + 20 + i * g)} {y + 6} v{n * g}", t + 0.01 * i, 0.15))
-        p.append(draw("hy-grid", f"M{x + 20} {f(y + 6 + i * g)} h{n * g}", t + 0.01 * i, 0.15))
-    cx, cy = x + 20 + 4 * g, y + 6 + 4 * g
-    for r, o in ((14, 0.12), (9, 0.3), (5, 0.7)):
-        p.append(pop(f'<circle class="hy-psf" style="opacity:{o}" cx="{f(cx)}" cy="{f(cy)}" r="{r}"/>', t + 0.2))
-    mask = f"M{f(cx - g)} {f(cy - 2 * g)} h{2 * g} v{g} h{g} v{2 * g} h-{g} v{g} h-{2 * g} v-{g} h-{g} v-{2 * g} h{g} Z"
-    p.append(draw("hy-mask", mask, t + 0.3, 0.4))
-    nx, ny = cx + 2.6 * g, cy - 1.8 * g
-    for r, o in ((9, 0.12), (5, 0.4)):
-        p.append(pop(f'<circle class="hy-psf" style="opacity:{o}" cx="{f(nx)}" cy="{f(ny)}" r="{r}"/>', t + 0.4))
-    p.append(draw("hy-pic", f"M{x + 108} {y + 12} h30 M{x + 108} {y + 24} h30 M{x + 108} {y + 36} h18", t + 0.45, 0.2))
-    return p
+    """A patch of the detector in three dimensions: pixels, the target's light as a bump, its
+    raised mask, a neighbour's light overlapping it (figures/kit/pictos.mjs)."""
+    pic = PICTOS["detector"]
+    return [pop(f'<g class="iso-svg" transform="translate({f(x + 75 - pic["w"] / 2)} {f(y + 42 - pic["h"] / 2)})">{pic["body"]}</g>', t)]
 
 
 def pic_seismic(x: float, y: float, t: float) -> list[str]:
-    """A power spectrum: a comb of peaks under an envelope."""
-    p = [draw("hy-pic", f"M{x + 10} {y + 78} H{x + 140}", t, 0.3)]
-    for i in range(11):
-        xx = x + 22 + i * 10.6
-        env = math.exp(-((i - 5) / 2.6) ** 2)
-        h = 10 + 54 * env
-        p.append(draw("hy-pic-strong", f"M{f(xx)} {y + 78} v-{f(h)}", t + 0.03 * i, 0.2))
-        p.append(draw("hy-pic", f"M{f(xx + 4)} {y + 78} v-{f(h * 0.45)}", t + 0.03 * i, 0.2))
-    env = "M" + " L".join(f"{f(x + 22 + i * 10.6)} {f(y + 70 - 54 * math.exp(-((i - 5) / 2.6) ** 2))}" for i in range(11))
-    p.append(draw("hy-pic-dash", env, t + 0.35, 0.4))
+    """A power spectrum on log axes: granulation background, the oscillation envelope at nu_max,
+    and two white-noise floors; above the lower floor the modes show, under the higher they drown."""
+    x0, x1, yb, yt = x + 6, x + 146, y + 76, y + 6
+    p = [draw("hy-axis-thin", f"M{x0} {yt} V{yb} H{x1}", t, 0.3)]
+    def X(lnu):
+        return x0 + (x1 - x0) * lnu / 3.0
+    def Y(lp):
+        return yt + (yb - yt) * (2.5 - lp) / 5.5
+    numax = 2.15
+    pts = []
+    for i in range(900):
+        lnu = 3.0 * i / 899
+        nu = 10 ** lnu
+        v = 3e2 / (1 + (nu / 10 ** 1.1) ** 3)
+        for kk in range(-9, 10):
+            c = numax + kk * 0.03
+            v += 12 * math.exp(-0.5 * ((c - numax) / 0.1) ** 2) / (1 + ((lnu - c) / 0.006) ** 2)
+        pts.append((X(lnu), Y(max(math.log10(v), -2.9))))
+    p.append(draw("hy-pic", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + 0.1, 0.6))
+    for lp, cls, lab in ((-0.6, "hy-pic-dash", "quiet field"), (1.3, "hy-floor", "crowded")):
+        yy = Y(lp)
+        p.append(draw(cls, f"M{x0} {f(yy)} H{x1}", t + 0.3, 0.3))
+        p.append(text(x0 + 3, yy + 9, lab, "hy-mini", t + 0.35))
+    p.append(draw("hy-pic-dash", f"M{f(X(numax))} {f(Y(1.3) + 2)} V{yb}", t + 0.4, 0.2))
+    p.append(tex(X(numax) - 4, yb - 4, r"\nu_{\max}", 9, t + 0.4, "hy-tex", "end"))
+    p.append(text(x1, yb + 11, "ν", "hy-mini", t + 0.3, "end"))
     return p
 
 
