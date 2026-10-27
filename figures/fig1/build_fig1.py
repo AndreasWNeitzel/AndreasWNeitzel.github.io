@@ -26,6 +26,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = ROOT / "assets/data/playground/gaia_xp_mh.json"
+PICTOS = json.loads((ROOT / "figures/kit/pictos.json").read_text())
 OUT = ROOT / "_includes/figures/pipeline.svg"
 EXAMPLE_ROW = 97  # the 50th-percentile [M/H] star of the three examples
 W, H = 680, 524
@@ -151,24 +152,14 @@ cons = [draw("f1-g", "M16 494 H664", 0.0, 0.17)]
 
 # ------------------------------------------------------------------ stage A1: Gaia
 t = T["gaia"]
+# Gaia in three dimensions (figures/kit/pictos.mjs), placed so the top of the thermal tent is
+# where the starlight enters
+_g = PICTOS["gaia"]
+_gx, _gy = 100 - _g["anchors"]["top"][0], 118 - _g["anchors"]["top"][1]
 gaia = [
-    draw("f1-g", "M100 100 V206 M16 182 H184", 0.06, 0.17),
-    draw("f1-g", "M100 122 L36 70 M100 122 L176 66", 0.1, 0.17),
-    draw(
-        "f1-o",
-        "M80 122 L82 152 M120 122 L118 152 M80 122 A20 5.5 0 0 1 120 122 A20 5.5 0 0 1 80 122",
-        t,
-        0.32,
-    ),
-    draw("f1-o", "M82 152 L76 172 H124 L118 152 Z", t + 0.05, 0.28),
-    draw("f1-o", "M28 182 A72 14 0 0 1 172 182 A72 14 0 0 1 28 182", t + 0.08, 0.35),
-    draw(
-        "f1-o",
-        "M47 173 L63 176 M153 173 L137 176 M47 191 L63 188 M153 191 L137 188",
-        t + 0.14,
-        0.2,
-    ),
-    draw("f1-o", "M88 132 h8 v8 h-8 z M104 132 h8 v8 h-8 z", t + 0.16, 0.17),
+    draw("f1-g", "M100 100 V212 M16 204 H184", 0.06, 0.17),
+    draw("f1-g", "M100 118 L36 70 M100 118 L176 66", 0.1, 0.17),
+    pop(f'<g class="iso-svg" transform="translate({f(_gx)} {f(_gy)})">{_g["body"]}</g>', t),
 ]
 for sx, sy in ((36, 70), (176, 66)):
     gaia.append(
@@ -180,7 +171,7 @@ gaia += [
 ]
 # starlight along the line of sight into the payload, and out of its far wall
 roles.append(
-    draw("f1-t", "M176 66 L108 116.1 C112 124 116 131 122 137", T["light"], 0.25)
+    draw("f1-t", "M176 66 L101 117", T["light"], 0.25)
 )
 
 # ------------------------------------------------------------------ stage B1: the real XP spectrum
@@ -227,7 +218,7 @@ xp += [
 roles.append(draw("f1-t", spec_d, tx, 0.45))
 x0s, y0s = curve[0]
 x1s, y1s = curve[-1]
-link(f"M126 137 C170 137 204 {f(y0s)} {f(x0s - 2)} {f(y0s)}", T["l1"], 0.2)
+link(f"M172 150 C196 150 204 {f(y0s)} {f(x0s - 2)} {f(y0s)}", T["l1"], 0.2)
 
 # ------------------------------------------------------------------ stage C1: JANUS
 tj = T["janus"]
@@ -334,11 +325,11 @@ lb += [
     draw("f1-o", "M612 410 A23 23 0 0 1 658 410", tlab, 0.3),
     pop('<path class="f1-needle" d="M635 410 L648 392"/>', tlab + 0.3),
     pop('<circle class="f1-dot" cx="635" cy="410" r="2.4"/>', tlab + 0.3),
-    text(635, 380, "P(miss)", "f1-tick", tlab + 0.3, "middle"),
+    text(635, 380, "P(H)", "f1-tick", tlab + 0.3, "middle"),
     text(612, 423, "0", "f1-tick", tlab + 0.3, "middle"),
     text(658, 423, "1", "f1-tick", tlab + 0.3, "middle"),
     text(462, TY2, "LABELS + RELIABILITY", "f1-title", tlab),
-    text(462, TY2 + 15, "spread and miss probability", "f1-sub", tlab),
+    text(462, TY2 + 15, "spread and P(H)", "f1-sub", tlab),
 ]
 roles.append(draw("f1-t", f"M{f(med[0])} {f(ry[0] - 3)} V{f(ry[-1] - 3)}", tlab, 0.3))
 link(
@@ -556,7 +547,7 @@ inp += [
     text(238, TY2, "THE INPUTS", "f1-title", ti),
     text(238, TY2 + 15, "one star as a row of numbers", "f1-sub", ti),
 ]
-jlink("M232 252 C232 268 232 278 232 292", T["xp"] + 0.4, 0.15)
+jlink("M232 252 V306", T["xp"] + 0.4, 0.15)
 
 # the two alpha sequences under the networks: resolved with the spectrum, merged without it
 ta = T["post"] + 0.2
@@ -577,10 +568,10 @@ al += [
     text(472, TY2, "TWO α SEQUENCES", "f1-title", ta),
     text(472, TY2 + 15, "the same network, with and without the spectrum", "f1-sub", ta),
 ]
-jlink("M464 258 C464 268 464 278 464 292", T["post"] + 0.1, 0.15)
+jlink("M464 258 V300", T["post"] + 0.1, 0.15)
 
 # the labels stage beside the networks, the test on withheld stars under it
-jlink(f"M662 140 C684 140 690 68 722 68 H{f(med[0] + LX - 16)} C{f(med[0] + LX - 6)} 68 {f(med[0] + LX)} 72 {f(med[0] + LX)} {f(ry[0] - 3 + LY)}", T["l3"], 0.35)
+jlink(f"M662 140 C676 140 674 52 700 52 H{f(med[0] + LX - 16)} C{f(med[0] + LX - 6)} 52 {f(med[0] + LX)} 56 {f(med[0] + LX)} {f(ry[0] - 3 + LY)}", T["l3"], 0.35)
 tt = T["labels"] + 0.3
 TX, TY = 696.0, 300.0
 test = [
@@ -612,7 +603,7 @@ jlink("M981 46 C981 54 981 62 981 72", tc + 0.2, 0.15)
 
 # the catalogue: a table, one row per giant, one row in ten with APOGEE values too
 CX0, CY0, CW = 936.0, 72.0, 222.0
-cols = ("Teff", "log g", "[M/H]", "[α/M]", "[X/H]", "P(miss)")
+cols = ("Teff", "log g", "[M/H]", "[α/M]", "[X/H]", "P(H)")
 cat = [draw("f1-g", f"M{f(CX0)} {f(CY0)} H{f(CX0 + CW)} V380 H{f(CX0)} Z M{f(CX0)} 96 H{f(CX0 + CW)}", 0.25, 0.3)]
 for i, nm in enumerate(cols):
     cat.append(text(CX0 + 6 + 37 * i, 88, nm, "f1-tick", tc + 0.3))
@@ -645,7 +636,7 @@ janus_svg = (
     f'<svg class="f1-svg f1-janus" data-build="" viewBox="0 0 {JW} {JH}" xmlns="http://www.w3.org/2000/svg" role="group" '
     'aria-label="Schematic of JANUS: Gaia observes a red giant; its XP spectrum becomes 110 coefficients with parallax, '
     "photometry and extinction; eight normalising-flow networks trained on APOGEE DR19 return six labels with a spread and a "
-    "miss probability; the test on withheld stars gives the scatter about APOGEE; the same network without the spectrum merges "
+    "the probability P(H) that its atmospheric parameters are jointly off; the test on withheld stars gives the scatter about APOGEE; the same network without the spectrum merges "
     'the two alpha sequences; the catalogue covers 144,304 TESS red giants; the networks run on Deucalion and MareNostrum 5.">'
     + "<defs>" + masks[0] + masks[1] + "".join(jmasks) + "</defs>"
     + draw("f1-g", "M16 494 H900", 0.0, 0.17)

@@ -13,7 +13,7 @@ extra_css: [/assets/css/thesis.css]
     <div class="card-body">
       <span class="kicker">2025 to 2027 · PhD work within the FCT project ArqueoGal</span>
       <h2><a class="line-link" href="{{ '/research/janus/' | relative_url }}">JANUS: chemistry from <i>Gaia</i> spectra</a></h2>
-      <p><i>Gaia</i> DR3 carries low-resolution spectra of 220 million stars. JANUS, eight normalising-flow networks, reads a red giant's parameters and abundances from them, with a per-star miss probability. Trained where <i>Gaia</i> overlaps APOGEE, validated on open clusters, wide binaries and the first dredge-up. Talks at TASC10/KASC17 and IMAS13; two FCT projects on Deucalion and MareNostrum 5.</p>
+      <p><i>Gaia</i> DR3 carries low-resolution spectra of 220 million stars. JANUS, eight normalising-flow networks, reads a red giant's parameters and abundances from them, with a per-star probability, P(H), that its atmospheric parameters are jointly off. Trained where <i>Gaia</i> overlaps APOGEE, validated on open clusters, wide binaries and the first dredge-up. Talks at TASC10/KASC17 and IMAS13; two FCT projects on Deucalion and MareNostrum 5.</p>
       <p class="links"><a href="{{ '/research/janus/' | relative_url }}">JANUS, in full</a> · <a href="{{ '/talks/' | relative_url }}">The talks</a> · <a href="{{ '/guide/machine-learning-for-stars/' | relative_url }}">Machine learning for stars, in a minute</a> · <a href="{{ '/playground/neural-network/' | relative_url }}">Train a small one yourself</a></p>
     </div>
   </article>

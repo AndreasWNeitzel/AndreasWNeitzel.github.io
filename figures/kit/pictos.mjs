@@ -18,8 +18,8 @@ function pictogram(name, w, h, extent, draw) {
     slab: (x, y, z, wd, d, ht, style, r = 0.6) => k.solidSvg(k.slabOf({ x, y, w: wd, d, r }, z, ht, P, 2, 0.2), style),
     line: (pts, style) => k.lineSvg(k.pathOf(pts.map((p) => k.iso(p, P))), style),
   };
-  draw(ctx);
-  out[name] = { w, h, body: parts.sort((a, b) => (a.layer - b.layer) || (a.depth - b.depth)).map((q) => q.svg).join("") };
+  const anchors = draw(ctx) || {};
+  out[name] = { w, h, anchors, body: parts.sort((a, b) => (a.layer - b.layer) || (a.depth - b.depth)).map((q) => q.svg).join("") };
 }
 
 // a storage cabinet: a tall rack with shelves of drive bays across its front
@@ -60,6 +60,23 @@ pictogram("catalogue", 96, 120, [[0, 0, 0], [12, 36, 0], [0, 36, 50], [12, 0, 50
   for (let r = 1; r < 8; r++) rows.push(line([[xf, y0 + 3, z0 + 44 - r * 5.2], [xf, y0 + 22, z0 + 44 - r * 5.2]], { tone: "lo" }));
   part(rows.join(""), [xf + 1, y0 + 15, z0 + 22], 4);
   for (const r of [2, 5]) part(slab(xf, y0 + 23.5, z0 + 44 - r * 5.2 - 1.8, 0.6, 4, 3.6, { tone: "mid", lit: true }, 0.2), [xf + 1, y0 + 23, z0 + 30], 5);
+});
+
+// Gaia: the deployed sunshield (12 panels, about 10 m across), the service module (a short
+// hexagonal prism) and the payload module under its thermal tent, in proportion. The anchor is
+// the top of the tent, where the starlight enters in FIG 1.
+pictogram("gaia", 170, 104, [[-50, -50, 0], [50, 50, 0], [-50, 50, 0], [50, -50, 0], [0, 0, 36]], ({ P, part, line }) => {
+  part(k.solidSvg(k.cylinder(0, 0, 50, 0, 1.2, P, 12, 0), { tone: "mid" }), [0, 0, 0], 0);
+  const ribs = [];
+  for (let i = 0; i < 12; i++) { const a = (i + 0.5) * Math.PI / 6; ribs.push(line([[17 * Math.cos(a), 17 * Math.sin(a), 1.3], [49 * Math.cos(a), 49 * Math.sin(a), 1.3]], { tone: "lo" })); }
+  part(ribs.join(""), [0, 0, 1.3], 1);
+  part(k.solidSvg(k.cylinder(0, 0, 17, 1.2, 9, P, 6, 0), { tone: "mid" }), [0, 0, 1.2], 2);
+  part(k.solidSvg(k.cylinder(0, 0, 14, 10.2, 22, P, 40, 0), { tone: "mid", lit: true }), [0, 0, 10.2], 3);
+  // the two telescope apertures on the tent, 106.5 degrees apart
+  const ap = [];
+  for (const a0 of [-0.93, 0.93]) { const a = Math.PI / 4 + a0; ap.push(line([[14.2 * Math.cos(a), 14.2 * Math.sin(a), 22], [14.2 * Math.cos(a), 14.2 * Math.sin(a), 28]], { tone: "hi" })); }
+  part(ap.join(""), [0, 0, 32], 4);
+  return { top: k.iso([0, 0, 32.2], P) };
 });
 
 writeFileSync(new URL("./pictos.json", import.meta.url), JSON.stringify(out));
