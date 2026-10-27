@@ -856,8 +856,8 @@
   .row-between { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 }
 
-/* Three-dimensional figures drawn with the isometric kit under figures/kit (the node scripts
-   field.mjs and halls.mjs under figures). The kit's tones are mapped here onto the site's tokens; .iso-num is a label. */
+/* Three-dimensional figures drawn with the isometric kit under figures/kit (the node script
+   figures/haydnsim/field.mjs). The kit's tones are mapped here onto the site's tokens; .iso-num is a label. */
 @layer pages {
   .iso-svg {
     --anatomy-paper: var(--surface);
