@@ -199,7 +199,7 @@ async function boot(root) {
       speeds: [[600, "10 min per s"], [1800, "30 min per s"], [3600, "1 h per s"], [10800, "3 h per s"]], speed: 3600,
       trailEvery: 120, sampleEvery: 60, historyEvery: 60,
       title: "Around the Earth", sideTitle: "Visible from the ground",
-      cap: "Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon. At the polar station's starting latitude no line ever reaches the geostationary satellite.",
+      cap: "Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.",
       mainAria: "Three Molniya satellites and a geostationary satellite around the rotating Earth, drawn to scale",
       sideAria: "Timeline of when each satellite is above the horizon of Porto, Moscow and the third station",
       bodies() {

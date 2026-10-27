@@ -4,7 +4,9 @@
 
 ## Pages
 
-- [Home](https://andreaswneitzel.github.io/): profile, highlights, research pipeline, track record, travel map and timeline
+- [Home](https://andreaswneitzel.github.io/): profile, research pipeline, selected work, browser demos, track record, missions and machines
+- [Research](https://andreaswneitzel.github.io/research/): the four lines of work (JANUS, stellar populations and Starfold, asteroseismology, HAYDNsim), the paper explainers and the field guide as background
+- [About](https://andreaswneitzel.github.io/about/): bio, photographs, travel map, skills and the full timeline
 - [Publications](https://andreaswneitzel.github.io/publications/): refereed papers with DOI and arXiv links and the contribution to each
 - [Paper explainers](https://andreaswneitzel.github.io/publications/#explainers): plain-language summaries of each paper
 - [Observing at the Very Large Telescope](https://andreaswneitzel.github.io/observing/paranal/): the May 2024 ESPRESSO run at Paranal

@@ -17,6 +17,7 @@
   .th-svg .th-hill { stroke-width: 1.8; }
   .th-svg .th-band { fill: currentColor; opacity: 0.12; }
   .th-svg .th-cell { fill: none; stroke: currentColor; stroke-width: 0.8; opacity: 0.8; }
+  .th-svg .th-mark { fill: var(--accent); opacity: 0.75; }
   .th-svg .th-dim { fill: none; stroke: var(--muted); stroke-width: 0.8; stroke-dasharray: 2 2; }
   .th-svg .th-dimline { fill: none; stroke: var(--ink); stroke-width: 0.8; }
   .th-svg .th-node { fill: var(--accent-2); }
@@ -38,3 +39,9 @@
   .th-svg .th-line-tex { fill: var(--ink-2); }
   .th-svg .th-title { letter-spacing: 0.01em; }
 }
+  .th-results .th-row, .th-results .th-body { font-size: 13px; fill: var(--ink); }
+  .th-results .th-head { font-size: 12px; fill: var(--ink); }
+  .th-results .th-val, .th-results .th-val2 { font-size: 12px; }
+  .th-results .th-row-tex, .th-results .th-body-tex { fill: var(--ink); }
+  .th-results .th-tickl, .th-results .th-note { font-size: 12px; fill: var(--ink-2); }
+  .th-results .th-note-tex { fill: var(--ink-2); }
