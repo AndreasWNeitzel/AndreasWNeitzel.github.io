@@ -18,7 +18,7 @@ const PX = 10, N = 18, SIDE = PX * N, THICK = 6;
 const PZ0 = CZ - SIDE / 2;
 const MAG = (SIDE / 2) / RC * 0.92;
 const onPlate = (x, z) => [(x - C[0]) * MAG, CZ + (z - CZ) * MAG];
-const extent = [[-RC * 1.15, CY, CZ - RC * 1.15], [RC * 1.15, CY, CZ + RC * 1.15], [-RC * 1.15, CY, CZ - RC * 1.4], [-SIDE / 2 - 8, 0, PZ0 - 8], [SIDE / 2 + 8, 0, PZ0 + SIDE + 8], [SIDE / 2 + 8, -14, PZ0 - 30], [-SIDE / 2 - 8, -14, PZ0 + SIDE + 8]];
+const extent = [[0, CY, CZ - RC * 1.75], [-RC * 1.15, CY, CZ - RC * 1.15], [RC * 1.15, CY, CZ + RC * 1.15], [-RC * 1.15, CY, CZ - RC * 1.4], [-SIDE / 2 - 8, 0, PZ0 - 8], [SIDE / 2 + 8, 0, PZ0 + SIDE + 8], [SIDE / 2 + 8, -14, PZ0 - 30], [-SIDE / 2 - 8, -14, PZ0 + SIDE + 8]];
 const P = k.fitProjection(extent, SW, H, { pad: 20, azimuth: 28, elevation: 22 });
 const at = (p) => k.iso(p, P);
 const parts = [];
@@ -76,9 +76,17 @@ for (let i = 1; i < N; i++) {
 part(L(grid.join(""), { tone: "faint" }), [0, 0.2, CZ], 1);
 const landed = stars.map((p) => onPlate(p[0], p[2]));
 part(k.dotsSvg(landed.filter((_, i) => !near.includes(i)).map(([x, z]) => at([x, 0.4, z])), { size: 0.75, tone: "hi" }), [0, 0.4, CZ], 2);
-const mask = [[-1, -1], [0, -1], [1, -1], [-1, 0], [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1], [0, -2], [0, 2], [-2, 0], [2, 0]];
 const TP = onPlate(T[0], T[1]);
 const TPX = [Math.floor((TP[0] + SIDE / 2) / PX) * PX - SIDE / 2, Math.floor((TP[1] - PZ0) / PX) * PX + PZ0];
+const erf = (x) => { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; };
+const cdf1 = (x, m, sg) => 0.5 * (1 + erf((x - m) / (sg * Math.SQRT2)));
+// the noise estimator picks each star's mask from its brightest pixels: here the six pixels that
+// collect the most of the target's own light (sigma 0.61 pixel, one PSF for every star)
+const SIG = 6.06;
+const pixFlux = (a, c, x, z, sg) => (cdf1(TPX[0] + (a + 1) * PX, x, sg) - cdf1(TPX[0] + a * PX, x, sg)) * (cdf1(TPX[1] + (c + 1) * PX, z, sg) - cdf1(TPX[1] + c * PX, z, sg));
+const pix = [];
+for (let a = -3; a <= 3; a++) for (let c = -3; c <= 3; c++) pix.push({ a, c, v: pixFlux(a, c, TP[0], TP[1], SIG) });
+const mask = pix.sort((u, w) => w.v - u.v).slice(0, 6).map((q) => [q.a, q.c]);
 for (const [dx, dz] of mask) part(plateSolid(TPX[0] + dx * PX, TPX[1] + dz * PX, PX, PX, 0, 1.6, { tone: "mid", lit: true }), [TPX[0] + dx * PX, 1.6, TPX[1] + dz * PX], 3);
 
 // the seven stars near the line of sight, their paths, and their light on the plate
@@ -95,7 +103,8 @@ const bump = (x, z, height, sigma) => {
   const rh = sigma * Math.sqrt(2 * Math.log(2));
   return k.pathOf(mx) + k.pathOf(k.circleRing(0, 0, rh, 36).map(([u, v]) => at([x + u, g(rh), z + v])), true);
 };
-const bumps = lit.map((p, j) => ({ x: onPlate(p[0], p[2])[0], z: onPlate(p[0], p[2])[1], h: j === 3 ? 34 : 12 + 10 * rnd(), s: j === 3 ? 7 : 5 + 1.5 * rnd(), main: j === 3 }));
+// one PSF for every star: sigma 0.61 pixel
+const bumps = lit.map((p, j) => ({ x: onPlate(p[0], p[2])[0], z: onPlate(p[0], p[2])[1], h: j === 3 ? 34 : 12 + 10 * rnd(), s: SIG, main: j === 3 }));
 part(L(bumps.filter((b) => !b.main).map((b) => bump(b.x, b.z, b.h, b.s)).join(""), { tone: "mid" }), [T[0], 10, T[1]], 6);
 part(L(bumps.filter((b) => b.main).map((b) => bump(b.x, b.z, b.h, b.s)).join(""), { tone: "hi" }), [T[0], 12, T[1]], 7);
 
@@ -131,8 +140,6 @@ for (let i = 0; i < NP; i++) for (let j = 0; j < NP; j++) {
   dp.push(`<rect class="${cls}" x="${f(DX0 + i * CELL)}" y="${f(DY0 + j * CELL)}" width="${CELL}" height="${CELL}"/>`);
 }
 // light in the mask: integrate each star's Gaussian over the mask pixels
-const erf = (x) => { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; };
-const cdf1 = (x, m, sg) => 0.5 * (1 + erf((x - m) / (sg * Math.SQRT2)));
 const inMask = (b) => mask.reduce((acc, [a, c]) => {
   const x0 = pc[0] + (a - 0.5) * PX, z0 = pc[1] + (c - 0.5) * PX;
   return acc + (cdf1(x0 + PX, b.x, b.s) - cdf1(x0, b.x, b.s)) * (cdf1(z0 + PX, b.z, b.s) - cdf1(z0, b.z, b.s));
