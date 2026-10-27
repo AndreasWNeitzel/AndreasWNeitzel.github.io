@@ -65,9 +65,9 @@
     return { numax, dnu, sig, bg, H0, lo, hi, peaks, top, white: 0.03 * B, gamma: Math.sqrt(numax / NUMAX_SUN) };
   }
 
-  // On screen a mode at the Sun's nu_max makes 0.55 cycles per second, and stars with a lower
+  // On screen a mode at the Sun's nu_max makes 0.35 cycles per second, and stars with a lower
   // nu_max ring more slowly on screen too.
-  const fShow = (nu, numax) => 0.55 * (nu / numax) * Math.pow(numax / NUMAX_SUN, 0.18);
+  const fShow = (nu, numax) => 0.35 * (nu / numax) * Math.pow(numax / NUMAX_SUN, 0.18);
 
   // ---------------------------------------------------------------- harmonics
   // Associated Legendre P_l^m(x), 0 <= m <= l, by the standard three-term recurrence.
@@ -265,9 +265,11 @@
   }
 
   // --------------------------------------------------------------------- star
-  // Spin axis inclined 70 degrees to the line of sight, drawn displacement 6.5 per cent of the
-  // radius, one turn every 30 s.
-  const INC = (70 * Math.PI) / 180, CA = Math.sin(INC), SA = Math.cos(INC), AMP = 0.065, SPIN = TAU / 30;
+  // Rotation axis inclined 70 degrees to the line of sight, drawn displacement 6.5 per cent of the
+  // radius. The star itself is drawn still: a real star turns thousands of times more slowly than it
+  // rings, so all the motion is the mode's. The arrow marks the sense of rotation, which sets the
+  // direction a mode with m > 0 travels (with the arrow) or m < 0 (against it).
+  const INC = (70 * Math.PI) / 180, CA = Math.sin(INC), SA = Math.cos(INC), AMP = 0.065;
   const VX = new Float64Array(NV), VY = new Float64Array(NV), VZ = new Float64Array(NV), VA = new Float64Array(NV);
   const coef = new Float64Array(20), head = new Int32Array(NXI * NMU), link = new Int32Array(NTH * NPH);
   const star = { cv: $(".sd-stage--star canvas"), w: 0 };
@@ -279,7 +281,7 @@
     const cx = w / 2, cy = w * 0.52, R = w * 0.35, cs = Math.cos(S.spin), ss = Math.sin(S.spin);
     ctx.clearRect(0, 0, w, w);
 
-    // Displace the mesh radially by the field and turn it about the spin axis.
+    // Displace the mesh radially by the field, seen from a fixed angle about the axis.
     coef.fill(0);
     const k = fadeK();
     if (prev) addCoef(prev, 1 - k, coef);
@@ -404,7 +406,7 @@
       ctx.globalAlpha = 1;
     }
 
-    // Visible end of the axis and an arrow for the sense of spin.
+    // Visible end of the axis and an arrow for the sense of rotation.
     axis(1.04, 1.3);
     const arc = [];
     for (let n = 0; n <= 40; n += 1) {
@@ -772,16 +774,21 @@
     last = performance.now();
     raf = requestAnimationFrame(tick);
   }
+  // Real elapsed time, so the ringing keeps its speed however long a frame takes to draw; the cap
+  // only stops a jump after the tab was in the background. An error in one frame does not stop
+  // the loop.
   function tick(now) {
     raf = 0;
-    const dt = Math.min((now - last) / 1000, 0.05);
+    const dt = Math.min((now - last) / 1000, 0.25);
     last = now;
-    S.t += dt;
-    S.spin += SPIN * dt;
-    advance(voice, dt);
-    advance(prev, dt);
-    drawStar();
-    kick();
+    try {
+      S.t += dt;
+      advance(voice, dt);
+      advance(prev, dt);
+      drawStar();
+    } finally {
+      kick();
+    }
   }
   function fit(o, square) {
     const r = o.cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
