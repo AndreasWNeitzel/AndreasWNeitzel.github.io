@@ -238,33 +238,34 @@ def pic_detector(x: float, y: float, t: float) -> list[str]:
 
 
 def pic_seismic(x: float, y: float, t: float) -> list[str]:
-    """A power spectrum on log axes: granulation background, the oscillation envelope at nu_max,
-    and two white-noise floors; above the lower floor the modes show, under the higher they drown."""
-    x0, x1, yb, yt = x + 6, x + 146, y + 76, y + 6
+    """The same star's power spectrum twice, on log axes: granulation and activity background, the
+    oscillation envelope at nu_max, and a flat white-noise level added on top. Isolated, the noise
+    is low and the envelope stands above it; crowded, the neighbours' light raises the white noise
+    and the envelope sinks into it. The seismic model reads detectability from that contrast."""
+    x0, x1, yb, yt = x + 8, x + 146, y + 76, y + 6
     p = [draw("hy-axis-thin", f"M{x0} {yt} V{yb} H{x1}", t, 0.3)]
     def X(lnu):
         return x0 + (x1 - x0) * lnu / 3.0
     def Y(lp):
-        return yt + (yb - yt) * (2.5 - lp) / 5.5
-    numax = 2.15
-    pts = []
-    for i in range(900):
-        lnu = 3.0 * i / 899
+        return yt + (yb - yt) * (3.1 - lp) / 5.1
+    numax = 2.1
+    def psd(lnu, white):
         nu = 10 ** lnu
-        v = 3e2 / (1 + (nu / 10 ** 1.1) ** 3)
+        v = 2.5e2 / (1 + (nu / 10 ** 0.2) ** 2) + 30 / (1 + (nu / 10 ** 1.15) ** 4)  # activity, granulation
         for kk in range(-9, 10):
             c = numax + kk * 0.03
-            v += 12 * math.exp(-0.5 * ((c - numax) / 0.1) ** 2) / (1 + ((lnu - c) / 0.006) ** 2)
-        pts.append((X(lnu), Y(max(math.log10(v), -2.9))))
-    p.append(draw("hy-pic", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + 0.1, 0.6))
-    for lp, cls, lab in ((-0.6, "hy-pic-dash", "quiet field"), (1.3, "hy-floor", "crowded")):
-        yy = Y(lp)
-        p.append(draw(cls, f"M{x0} {f(yy)} H{x1}", t + 0.3, 0.3))
-        p.append(text(x0 + 3, yy + 9, lab, "hy-mini", t + 0.35))
-    p.append(draw("hy-pic-dash", f"M{f(X(numax))} {f(Y(1.3) + 2)} V{yb}", t + 0.4, 0.2))
+            v += 9 * math.exp(-0.5 * ((c - numax) / 0.1) ** 2) / (1 + ((lnu - c) / 0.006) ** 2)
+        return math.log10(v + white)
+    for white, cls, lab in ((0.15, "hy-pic", "isolated"), (12.0, "hy-floor", "crowded")):
+        pts = [(X(3.0 * i / 899), Y(psd(3.0 * i / 899, white))) for i in range(900)]
+        p.append(draw(cls, "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), t + 0.1, 0.6))
+        p.append(text(x1, Y(math.log10(white)) + (-4 if white > 1 else 10), lab, "hy-mini", t + 0.4, "end"))
+    p.append(draw("hy-pic", f"M{f(X(numax))} {yb - 5} V{yb + 3}", t + 0.4, 0.2))
     p.append(tex(X(numax) - 4, yb - 4, r"\nu_{\max}", 9, t + 0.4, "hy-tex", "end"))
-    p.append(text(x1, yb + 11, "ν", "hy-mini", t + 0.3, "end"))
+    p.append(text(x1, yb + 11, "frequency", "hy-mini", t + 0.3, "end"))
+    p.append(text(x0 - 3, yt + 2, "power", "hy-mini", t + 0.3, "end"))
     return p
+
 
 
 # ------------------------------------------------------------------ figure 1: the pipeline
