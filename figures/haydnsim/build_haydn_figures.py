@@ -277,7 +277,7 @@ def pipeline() -> str:
     p: list[str] = []
     p.append(text(20, 30, "HAYDN, AS PROPOSED", "hy-head", 0.0))
     facts = [("aperture", "1.2 m"), ("field of view", "1 degree"), ("plate scale", "0.5 arcsec per pixel"),
-             ("targets", "to G = 17"), ("candidate clusters", "27")]
+             ("targets", "to G = 17"), ("target fields", "26")]
     x = 190
     for k, v in facts:
         p.append(text(x, 30, k.upper(), "hy-key", 0.1))
