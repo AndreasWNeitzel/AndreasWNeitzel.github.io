@@ -50,16 +50,16 @@ SITES = [  # (lon, lat, label, sub, dx, dy, anchor)
     (-(70 + 11 / 60 + 30 / 3600), -(24 + 36 / 60), "Cerro Armazones", "ELT, under construction", 10, 4, "start"),
     (-(70 + 43 / 60 + 52.8 / 3600), -(29 + 15 / 60 + 40.2 / 3600), "La Silla", "", -10, 4, "end"),
 ]
-LON0, LON1, LAT0, LAT1 = -75.2, -66.0, -33.9, -21.2
+LON0, LON1, LAT0, LAT1 = -76.0, -66.0, -57.0, -17.2
 
-W, H = 1200, 690
-MAP = (20, 40, 236, 262)  # x, y, w, h of the map panel
+W, H = 1200, 650
+MAP = (20, 40, 290, 600)  # x, y, w, h of the map panel: the whole of Chile
 ROOT = Path(__file__).resolve().parents[2]
 CAMS = json.loads((ROOT / "figures/eso/paranal_cameras.json").read_text())
 ZP = 2635.0
 CROP = (160.0, 150.0, 1110.0, 800.0)  # the part of the site render shown, render pixels
 PANEL = (330.0, 20.0, 854.0)  # x, y, width of the render panel
-INSET = (20.0, 326.0, 0.8, (150.0, 60.0, 460.0, 500.0))  # x, y, scale and source crop of the UT2 close-up
+INSET = (342.0, 330.0, 0.61, (120.0, 60.0, 580.0, 500.0))  # in the render panel's open lower left  # x, y, scale and source crop of the UT2 close-up
 CCL = (54.7, 3.7)  # Combined-Coude Laboratory, metres east and north (see the sources)
 ZDUCT = ZP - 6.0  # the ducts, drawn below the platform
 STATIONS = {
@@ -92,9 +92,9 @@ def text(x, y, s, cls, t, anchor="start", extra=""):
 
 def map_panel(shp_path):
     mx, my, mw, mh = MAP
-    c = math.cos(math.radians(27.5))
+    c = math.cos(math.radians(37.0))
     k = min(mw / ((LON1 - LON0) * c), mh / (LAT1 - LAT0))
-    ox = mx + (mw - (LON1 - LON0) * c * k) / 2
+    ox = mx + 50
 
     def px(lon, lat):
         return ox + (lon - LON0) * c * k, my + (LAT1 - lat) * k
@@ -106,49 +106,49 @@ def map_panel(shp_path):
     chile = None
     for sr in r.iterShapeRecords():
         if sr.record[iso] == "CHL":
-            chile = shape(sr.shape.__geo_interface__).intersection(clip).simplify(0.012)
+            chile = shape(sr.shape.__geo_interface__).intersection(clip).simplify(0.02)
     polys = [chile] if chile.geom_type == "Polygon" else list(chile.geoms)
     d = " ".join(
         "M" + " L".join(f"{f(a)} {f(b)}" for a, b in (px(x, y) for x, y in poly.exterior.coords)) + " Z"
-        for poly in polys if poly.area > 0.002
+        for poly in polys if poly.area > 0.01
     )
     parts = [text(mx, my - 14, "ESO SITES IN CHILE", "eso-head", 0.0)]
     parts.append(draw("eso-chile", d, 0.05, 0.9))
-    for lat in (-24, -27, -30, -33):
+    for lat in (-20, -30, -40, -50):
         x0, y0 = px(LON0, lat)
-        parts.append(draw("bp-thin", f"M{f(x0)} {f(y0)} h12", 0.1, 0.17))
-        parts.append(text(x0 + 16, y0 + 4, f"{-lat}° S", "bp-tick", 0.2))
+        parts.append(draw("bp-thin", f"M{f(x0)} {f(y0)} h10", 0.1, 0.17))
+        parts.append(text(x0 - 4, y0 + 4, f"{-lat}° S", "bp-tick", 0.2, "end"))
     xt0, yt = px(LON0, -23.4365)
     xt1, _ = px(LON1, -23.4365)
     parts.append(draw("eso-tropic", f"M{f(xt0)} {f(yt)} H{f(xt1)}", 0.15, 0.3))
-    parts.append(text(xt0 + 2, yt - 5, "Tropic of Capricorn", "bp-tick", 0.3, "start"))
-    for lon, lat, lab, anchor in ((-74.2, -26.0, "Pacific Ocean", "middle"), (-67.6, -31.0, "Argentina", "middle"),
-                                  (-66.9, -21.8, "Bolivia", "middle"), (-69.0, -28.6, "Chile", "middle")):
+    parts.append(text(xt1, yt - 5, "Tropic of Capricorn", "bp-tick", 0.3, "end"))
+    for lon, lat, lab, anchor in ((-67.4, -19.0, "Bolivia", "start"), (-67.4, -36.0, "Argentina", "start"),
+                                  (-71.9, -37.6, "Chile", "middle")):
         x, y = px(lon, lat)
-        parts.append(text(x, y, lab, "eso-country", 0.2, anchor))
+        parts.append(text(x, y, lab, "eso-country eso-halo" if lab == "Chile" else "eso-country", 0.2, anchor))
+    x, y = px(-75.4, -34.0)
+    parts.append(text(x, y, "Pacific Ocean", "eso-country", 0.2, "middle", f' transform="rotate(-90 {f(x)} {f(y)})"'))
     sites = [(PARANAL[0], PARANAL[1], "Paranal", "VLT", "end", -9),
              (-(70 + 11 / 60 + 30 / 3600), -(24 + 36 / 60), "Cerro Armazones", "site of the ELT", "start", 9),
              (-(70 + 43 / 60 + 52.8 / 3600), -(29 + 15 / 60 + 40.2 / 3600), "La Silla", "", "end", -9)]
     for i, (lon, lat, lab, sub, anchor, dx) in enumerate(sites):
         x, y = px(lon, lat)
         t = 0.5 + 0.12 * i
-        dy = 4
         parts.append(pop(f'<rect class="eso-site" x="{f(x - 3.5)}" y="{f(y - 3.5)}" width="7" height="7"/>', t))
         if lab == "Cerro Armazones":
-            lx, ly = px(-67.9, -25.3)
+            lx, ly = px(-67.4, -26.4)
             parts.append(draw("bp-thin", f"M{f(x + 3)} {f(y + 3)} L{f(lx - 4)} {f(ly - 4)}", t, 0.17))
             parts.append(text(lx, ly, lab, "bp-label2", t, "start"))
             parts.append(text(lx, ly + 14, sub, "bp-tick", t, "start"))
             continue
-        parts.append(text(x + dx, y + dy, lab, "bp-label2", t, anchor))
+        parts.append(text(x + dx, y + 4, lab, "bp-label2", t, anchor))
         if sub:
-            parts.append(text(x + dx, y + dy + 14, sub, "bp-tick", t, anchor))
-    x0, y0 = px(-75.0, -33.5)
+            parts.append(text(x + dx, y + 18, sub, "bp-tick", t, anchor))
+    x0, y0 = px(-75.6, -56.4)
     km = k * (100 / 111.32)
     parts.append(draw("bp", f"M{f(x0)} {f(y0)} h{f(km)} M{f(x0)} {f(y0 - 4)} v8 M{f(x0 + km)} {f(y0 - 4)} v8", 0.3, 0.2))
-    parts.append(text(x0, y0 + 16, "100 km", "bp-tick", 0.3))
+    parts.append(text(x0 + km + 6, y0 + 4, "100 km", "bp-tick", 0.3))
     return parts, px(*PARANAL)
-
 
 
 def camera(view):
@@ -370,9 +370,9 @@ def ut2_panel(ut2_main):
         parts.append(leader(x, y, ex, iy + ly - 4, t))
         parts.append(label(ix + lx + (8 if anchor == "start" else -8 if anchor == "end" else 0), iy + ly, txt, t, anchor, "bp-tick eso-halo"))
 
-    note(m2, 238, 50, "secondary mirror", "end")
-    note(m1 + e1 * 3.0, 238, 196, "primary mirror, 8.2 m", "end")
-    note(nas, 4, 112, "Nasmyth B focus", "start")
+    note(m2, 274, 62, "secondary mirror", "end")
+    note(m1 + e1 * 3.0, 274, 170, "primary mirror, 8.2 m", "end")
+    note(nas, 4, 76, "Nasmyth B focus", "start")
     x, y = at((e0, n0, room_z - 1.0))
     parts.append(label(x - 26, y + 4, "Coudé room", t + 0.2, "end", "bp-tick eso-halo"))
     parts.append(text(ix + 10, iy + 20, "UT2, ENCLOSURE REMOVED", "eso-head eso-halo", 1.5))
@@ -412,7 +412,7 @@ def main(shp_path, out):
     svg = (
         f'<svg class="bp-svg eso-svg" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
         'aria-labelledby="eso-ft eso-fd"><title id="eso-ft">ESO\'s sites in Chile, and Paranal with the four Unit Telescopes</title>'
-        '<desc id="eso-fd">Left: northern Chile with ESO\'s sites at Paranal, Cerro Armazones, where the ELT is being built, and '
+        '<desc id="eso-fd">Left: Chile with ESO\'s sites at Paranal, Cerro Armazones, where the ELT is being built, and '
         'La Silla. Right: a rendered model of the Paranal summit seen from the west, with the '
         'four Unit Telescopes, VST, the VLTI laboratory, the Auxiliary Telescope stations and tracks and the control building; '
         'UT2 open for the night, and the light ducts under the platform from each Unit Telescope to the '
