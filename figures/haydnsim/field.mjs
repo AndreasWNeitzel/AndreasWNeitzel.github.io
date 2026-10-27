@@ -10,7 +10,8 @@ import * as k from "../kit/iso-kit.mjs";
 import * as la from "../kit/lathe.mjs";
 
 const TAU = Math.PI * 2;
-const W = 1140, H = 600;
+const W = 1140, H = 420;
+const SW = 720; // the 3D scene takes the left part; the mask detail the right
 const RC = 70, CY = 360, CZ = 70;
 const C = [0, CY, CZ];
 const PX = 10, N = 18, SIDE = PX * N, THICK = 6;
@@ -18,7 +19,7 @@ const PZ0 = CZ - SIDE / 2;
 const MAG = (SIDE / 2) / RC * 0.92;
 const onPlate = (x, z) => [(x - C[0]) * MAG, CZ + (z - CZ) * MAG];
 const extent = [[-RC * 1.15, CY, CZ - RC * 1.15], [RC * 1.15, CY, CZ + RC * 1.15], [-RC * 1.15, CY, CZ - RC * 1.4], [-SIDE / 2 - 8, 0, PZ0 - 8], [SIDE / 2 + 8, 0, PZ0 + SIDE + 8], [SIDE / 2 + 8, -14, PZ0 - 30], [-SIDE / 2 - 8, -14, PZ0 + SIDE + 8]];
-const P = k.fitProjection(extent, W, H, { pad: 28, azimuth: 28, elevation: 22 });
+const P = k.fitProjection(extent, SW, H, { pad: 20, azimuth: 28, elevation: 22 });
 const at = (p) => k.iso(p, P);
 const parts = [];
 const part = (svg, anchor, layer = 0) => parts.push({ svg, depth: k.depthOf(anchor, P), layer });
@@ -42,11 +43,13 @@ for (let i = 0; i < 1600; i++) {
   stars.push([C[0] + r * s * Math.cos(ph), C[1] + r * s * Math.sin(ph), C[2] + r * u]);
 }
 // the line of sight: through the core's edge, where single stars still show
-const T = [-14, CZ + 10];
+const T = [-14, CZ + 10]; // where to look; re-centred on the target star below
 const cand = stars.map((p, i) => ({ i, d: Math.hypot(p[0] - T[0], p[2] - T[1]), y: p[1] })).filter((q) => q.d < 4).sort((a, b) => a.d - b.d).slice(0, 40);
 cand.sort((a, b) => a.y - b.y);
 const near = [];
 for (let j = 0; j < 7; j++) near.push(cand[Math.round((j / 6) * (cand.length - 1))].i);
+// the target is the fourth of them by depth; the line of sight passes exactly through it
+T[0] = stars[near[3]][0]; T[1] = stars[near[3]][2];
 const depth = stars.map((p) => k.depthOf(p, P));
 const dmin = Math.min(...depth), dmax = Math.max(...depth);
 part(k.dotsSvg(stars.map((p, i) => [...at(p), 0.25 + 0.6 * (depth[i] - dmin) / (dmax - dmin)]).filter((_, i) => !near.includes(i)), { size: 0.9, tone: "hi" }), C, 3);
@@ -58,7 +61,7 @@ const corners = [[-SIDE / 2, PZ0], [SIDE / 2, PZ0], [SIDE / 2, PZ0 + SIDE], [-SI
 const tube = [];
 for (const [x, z] of corners) tube.push(k.pathOf([at([x, THICK / 2, z]), at([x / MAG, CY, CZ + (z - CZ) / MAG])]));
 tube.push(k.pathOf(corners.map(([x, z]) => at([x / MAG, CY, CZ + (z - CZ) / MAG])), true));
-part(L(tube.join(""), { tone: "lo" }), [0, CY / 2, CZ], 2);
+part(L(tube.join(""), { tone: "faint" }), [0, CY / 2, CZ], 2);
 
 // the plate, standing in the x-z plane; the frame along +y has its first axis toward -x
 const F = la.frameAlong([0, 0, 0], [0, 1, 0]);
@@ -82,7 +85,7 @@ for (const [dx, dz] of mask) part(plateSolid(TPX[0] + dx * PX, TPX[1] + dz * PX,
 const lit = near.map((i) => stars[i]);
 part(k.dotsSvg(lit.map((p) => at(p)), { size: 2.0, tone: "hi" }), C, 4);
 part(L(lit.map((p) => ring(...at(p), 4.2 / P.scale, 24)).join(""), { tone: "hi" }), C, 4);
-part(L(lit.map((p) => { const [x, z] = onPlate(p[0], p[2]); return k.pathOf([at(p), at([x, 1.8, z])]); }).join(""), { tone: "mid", dashed: true }), [0, CY / 2, CZ], 2);
+part(L(lit.map((p) => { const [x, z] = onPlate(p[0], p[2]); return k.pathOf([at(p), at([x, 1.8, z])]); }).join(""), { tone: "lit" }), [0, CY / 2, CZ], 2);
 const ray = (y) => { const u = y / CY; return [TP[0] + (T[0] - TP[0]) * u, y, TP[1] + (T[1] - TP[1]) * u]; };
 part(L(k.pathOf([at(ray(CY + RC)), at(ray(2))]), { tone: "blue", flow: true }), [0, CY / 2, CZ], 5);
 const bump = (x, z, height, sigma) => {
@@ -101,18 +104,69 @@ const text = (x, y, s, anchor = "middle") => `<text class="iso-num" x="${f(x)}" 
 const fz = CZ + (PZ0 - CZ) / MAG - 10;
 const fov = [k.pathOf([at([-SIDE / 2 / MAG, CY, fz]), at([SIDE / 2 / MAG, CY, fz])]), k.pathOf([at([-SIDE / 2 / MAG, CY, fz + 3]), at([-SIDE / 2 / MAG, CY, fz - 3])]), k.pathOf([at([SIDE / 2 / MAG, CY, fz + 3]), at([SIDE / 2 / MAG, CY, fz - 3])])];
 part(L(fov.join(""), { tone: "mid" }), [0, CY, fz], 7);
-const fl = at([-SIDE / 2 / MAG - 4, CY, fz]);
-part(text(fl[0], fl[1] + 4, "1 degree", "end"), [0, CY, fz - 6], 8);
+const f0 = at([-SIDE / 2 / MAG, CY, fz]), f1 = at([SIDE / 2 / MAG, CY, fz]);
+const fang = (Math.atan2(f1[1] - f0[1], f1[0] - f0[0]) * 180) / Math.PI;
+const fm = at([0, CY, fz]);
+part(`<text class="iso-num" transform="translate(${f(fm[0])} ${f(fm[1])}) rotate(${f(fang)})" x="0" y="14" text-anchor="middle">1 degree</text>`, [0, CY, fz - 6], 8);
 const ruler = [k.pathOf([at([-SIDE / 2, 0, PZ0 - 9]), at([SIDE / 2, 0, PZ0 - 9])])];
 for (let i = 0; i <= N; i += 6) ruler.push(k.pathOf([at([-SIDE / 2 + i * PX, 0, PZ0 - 6]), at([-SIDE / 2 + i * PX, 0, PZ0 - 12])]));
 part(L(ruler.join(""), { tone: "mid" }), [0, 0, PZ0 - 9], 7);
 const r0 = at([-SIDE / 2, 0, PZ0 - 9]), r1 = at([SIDE / 2, 0, PZ0 - 9]);
 const rang = (Math.atan2(r1[1] - r0[1], r1[0] - r0[0]) * 180) / Math.PI;
 const rl = at([-SIDE / 2 + 3 * PX, 0, PZ0 - 9]);
-part(`<text class="iso-num" transform="translate(${f(rl[0])} ${f(rl[1])}) rotate(${f(rang)})" x="0" y="14" text-anchor="middle">6 pixels, 3 arcsec</text>`, [0, 0, PZ0 - 20], 8);
+part(`<text class="iso-num" transform="translate(${f(rl[0])} ${f(rl[1])}) rotate(${f(rang)})" x="0" y="14" text-anchor="middle">3 arcsec</text>`, [0, 0, PZ0 - 20], 8);
 
 const body = parts.sort((p, q) => (p.layer - q.layer) || (p.depth - q.depth)).map((p) => p.svg).join("");
-const label = "A globular cluster of synthetic stars far along the telescope's axis, with a tube for the column of sky the one-degree field covers, down to a detector plate of pixels facing it. Seven stars near one line of sight through the core are ringed; dashed lines carry their light to the same spot on the plate, where their profiles pile onto the raised mask of the target.";
-const svg = `<svg class="iso-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}">${body}</svg>\n`;
+
+// ---- the mask in detail, flat: 7 by 7 pixels about the target, the mask's pixels shaded, each
+// star's light as its half-maximum circle, and the light the mask collects split by origin
+const DX0 = 780, DY0 = 46, CELL = 30, NP = 7;
+const pc = [TPX[0] + PX / 2, TPX[1] + PX / 2]; // centre of the target's pixel, plate units
+const toD = (x, z) => [DX0 + (NP / 2) * CELL + ((x - pc[0]) / PX) * CELL, DY0 + (NP / 2) * CELL - ((z - pc[1]) / PX) * CELL];
+const dp = [];
+const mset = new Set(mask.map(([a, b]) => `${a},${b}`));
+for (let i = 0; i < NP; i++) for (let j = 0; j < NP; j++) {
+  const a = i - 3, b = 3 - j;
+  const cls = mset.has(`${a},${b}`) ? "dp-mask" : "dp-px";
+  dp.push(`<rect class="${cls}" x="${f(DX0 + i * CELL)}" y="${f(DY0 + j * CELL)}" width="${CELL}" height="${CELL}"/>`);
+}
+// light in the mask: integrate each star's Gaussian over the mask pixels
+const erf = (x) => { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; };
+const cdf1 = (x, m, sg) => 0.5 * (1 + erf((x - m) / (sg * Math.SQRT2)));
+const inMask = (b) => mask.reduce((acc, [a, c]) => {
+  const x0 = pc[0] + (a - 0.5) * PX, z0 = pc[1] + (c - 0.5) * PX;
+  return acc + (cdf1(x0 + PX, b.x, b.s) - cdf1(x0, b.x, b.s)) * (cdf1(z0 + PX, b.z, b.s) - cdf1(z0, b.z, b.s));
+}, 0);
+let fT = 0, fN = 0;
+for (const b of bumps) { const flux = b.h * b.s * b.s * inMask(b); if (b.main) fT += flux; else fN += flux; }
+const spr = fN / (fT + fN);
+const clip = `<clipPath id="dp-clip"><rect x="${DX0}" y="${DY0}" width="${NP * CELL}" height="${NP * CELL}"/></clipPath>`;
+const circ = [];
+for (const b of bumps) {
+  const [cx, cy] = toD(b.x, b.z);
+  const r = (b.s * Math.sqrt(2 * Math.log(2)) / PX) * CELL;
+  circ.push(`<circle class="${b.main ? "dp-target" : "dp-neigh"}" cx="${f(cx)}" cy="${f(cy)}" r="${f(r)}"/>`);
+  circ.push(`<circle class="${b.main ? "dp-target-c" : "dp-neigh-c"}" cx="${f(cx)}" cy="${f(cy)}" r="2.2"/>`);
+}
+dp.push(clip, `<g clip-path="url(#dp-clip)">${circ.join("")}</g>`);
+dp.push(`<rect class="dp-frame" x="${DX0}" y="${DY0}" width="${NP * CELL}" height="${NP * CELL}"/>`);
+// the split of the mask's light, as one bar under the grid
+const BY = DY0 + NP * CELL + 34, BW = NP * CELL;
+dp.push(`<rect class="dp-bar-t" x="${DX0}" y="${BY}" width="${f(BW * (1 - spr))}" height="12"/>`);
+dp.push(`<rect class="dp-bar-n" x="${f(DX0 + BW * (1 - spr))}" y="${BY}" width="${f(BW * spr)}" height="12"/>`);
+dp.push(`<text class="iso-num" x="${DX0}" y="${BY - 8}">target</text>`);
+dp.push(`<text class="iso-num" x="${DX0 + BW}" y="${BY - 8}" text-anchor="end">neighbours</text>`);
+dp.push(`<text class="dp-spr" x="${DX0 + BW}" y="${BY + 32}" text-anchor="end">SPR = ${spr.toFixed(2)}</text>`);
+dp.push(`<text class="iso-num" x="${DX0}" y="${BY + 32}">light in the mask</text>`);
+// pixel scale beside the grid
+const sx = DX0 + NP * CELL + 14;
+dp.push(`<path class="dp-dim" d="M${sx} ${DY0} v${2 * CELL} M${sx - 4} ${DY0} h8 M${sx - 4} ${DY0 + 2 * CELL} h8"/>`);
+dp.push(`<text class="iso-num" x="${sx + 8}" y="${DY0 + CELL + 4}">1″</text>`);
+// a hairline from the mask on the plate to the detail
+const mtop = at([pc[0], 1.6, pc[1] + 2.5 * PX]);
+const lead = `<path class="dp-lead" d="M${f(mtop[0])} ${f(mtop[1])} L${DX0} ${DY0}"/>`;
+
+const label = `Left, a globular cluster of synthetic stars far along the telescope's axis, the column of sky the one-degree field covers, and the detector facing it with the cluster landed on its pixels; seven stars near one line of sight through the core are ringed and their light paths meet on the target's raised mask. Right, the mask in detail: seven by seven pixels with the mask shaded, the half-maximum circle of the target and of each neighbour, and a bar splitting the light the mask collects into the target's and the neighbours', a stellar pollution ratio of ${spr.toFixed(2)} for this drawing.`;
+const svg = `<svg class="iso-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}">${body}${lead}${dp.join("")}</svg>\n`;
 writeFileSync(new URL("../../_includes/figures/haydn-field.svg", import.meta.url), svg);
-console.log(`wrote _includes/figures/haydn-field.svg (${(svg.length / 1024).toFixed(1)} KB)`);
+console.log(`wrote _includes/figures/haydn-field.svg (${(svg.length / 1024).toFixed(1)} KB), SPR ${spr.toFixed(3)}`);

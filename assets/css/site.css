@@ -902,6 +902,19 @@
   .iso-svg .iso-dots[data-tone="hi"] circle { opacity: .85; }
   .iso-svg .iso-dots[data-tone="mid"] circle { opacity: .45; }
   .iso-svg .iso-num { font: 500 11px var(--mono); fill: var(--muted); }
+  .iso-svg .iso-line[data-tone="lit"] { stroke: var(--accent); stroke-width: 1px; }
+  .iso-svg .dp-px { fill: none; stroke: var(--line-strong); stroke-width: .7; }
+  .iso-svg .dp-mask { fill: color-mix(in oklab, var(--accent) 22%, transparent); stroke: var(--accent); stroke-width: .9; }
+  .iso-svg .dp-frame { fill: none; stroke: var(--ink-2); stroke-width: 1; }
+  .iso-svg .dp-target { fill: color-mix(in oklab, var(--ink) 10%, transparent); stroke: var(--ink); stroke-width: 1.4; }
+  .iso-svg .dp-target-c { fill: var(--ink); }
+  .iso-svg .dp-neigh { fill: none; stroke: var(--accent-2); stroke-width: 1.1; }
+  .iso-svg .dp-neigh-c { fill: var(--accent-2); }
+  .iso-svg .dp-bar-t { fill: var(--ink-2); }
+  .iso-svg .dp-bar-n { fill: var(--accent-2); }
+  .iso-svg .dp-spr { font: 650 12px var(--mono); fill: var(--ink); }
+  .iso-svg .dp-dim { fill: none; stroke: var(--muted); stroke-width: .8; }
+  .iso-svg .dp-lead { fill: none; stroke: var(--muted); stroke-width: .6; stroke-dasharray: 2 3; }
   @keyframes iso-flow { to { stroke-dashoffset: -32; } }
   @media (prefers-reduced-motion: reduce) { .iso-svg .iso-line[data-flow] { animation: none; } }
 }
