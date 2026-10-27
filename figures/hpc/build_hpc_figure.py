@@ -156,20 +156,16 @@ def run_panel():
     xs = [x0 + 4 + k * (bw + gap) for k in range(4)]
     tb = 1.5
     mid = by + bh / 2
-    parts.append(pop(f'<path class="ray flowray hpc-thread" d="M{x0 - 12} {f(mid + 14)} C{x0 - 2} {f(mid + 14)} {x0 - 4} {f(mid)} {xs[0]} {f(mid)}"/>', tb))
+    parts.append(pop(f'<path class="ray flowray hpc-thread" d="M{x0 - 12} {f(mid)} H{xs[0]}"/>', tb))
     for k in range(3):
-        xa, xb = xs[k] + bw, xs[k + 1]
-        xm = (xa + xb) / 2
-        d = (f"M{xa} {f(mid)} C{f(xm)} {f(mid)} {f(xm)} {f(mid - 10)} {xb} {f(mid - 10)}" if k % 2 == 0
-             else f"M{xa} {f(mid - 10)} C{f(xm)} {f(mid - 10)} {f(xm)} {f(mid)} {xb} {f(mid)}")
-        parts.append(pop(f'<path class="ray flowray hpc-thread" d="{d}"/>', tb + 0.35 + 0.35 * k))
+        parts.append(pop(f'<path class="ray flowray hpc-thread" d="M{xs[k] + bw} {f(mid)} H{xs[k + 1]}"/>', tb + 0.35 + 0.35 * k))
     for k, (title, line, kind) in enumerate(stages):
         x = xs[k]
         t = tb + 0.1 + 0.35 * k
         parts.append(draw("bp", f"M{x} {by} h{bw} v{bh} h-{bw} Z", t, 0.3))
-        parts.append(node(x, mid - 10 if k % 2 == 1 else mid, t + 0.05))
+        parts.append(node(x, mid, t + 0.05))
         if k < 3:
-            parts.append(node(x + bw, mid - 10 if k % 2 == 0 else mid, t + 0.3))
+            parts.append(node(x + bw, mid, t + 0.3))
         cx, cy = x + bw / 2, by + bh / 2
         # the object itself, drawn in three dimensions by figures/kit/pictos.mjs
         pic = PICTOS[{"pfs": "storage", "cpu": "cpu", "gpu": "gpu", "cat": "catalogue"}[kind]]

@@ -52,14 +52,14 @@ pictogram("gpu", 96, 120, [[0, 0, 0], [40, 36, 0], [0, 36, 30], [40, 0, 30]], ({
   }
 });
 
-// the catalogue: a stack of three sheets, the top one ruled into rows with two cells lit
-pictogram("catalogue", 96, 120, [[0, 0, 0], [36, 44, 0], [0, 44, 10], [36, 0, 10]], ({ part, slab, line }) => {
-  for (let i = 0; i < 3; i++) part(slab(-i * 1.5, i * 1.5, i * 3, 36, 44, 1.2, { tone: i === 2 ? "mid" : "lo" }, 0.4), [36, 0, i * 3], i);
-  const zt = 2 * 3 + 1.25;
+// the catalogue: three sheets standing upright, the front one ruled into rows with two cells lit
+pictogram("catalogue", 96, 120, [[0, 0, 0], [12, 36, 0], [0, 36, 50], [12, 0, 50]], ({ part, slab, line }) => {
+  for (let i = 0; i < 3; i++) part(slab(i * 4, i * 2.5, i * 2, 1.2, 30, 44, { tone: i === 2 ? "mid" : "lo" }, 0.3), [i * 4 + 1.2, i * 2.5, i * 2], i);
+  const xf = 2 * 4 + 1.25, y0 = 2 * 2.5, z0 = 2 * 2;
   const rows = [];
-  for (let r = 1; r < 8; r++) rows.push(line([[-3 + 2, 3 + r * 5.2, zt], [-3 + 28, 3 + r * 5.2, zt]], { tone: "lo" }));
-  part(rows.join(""), [15, 22, zt], 4);
-  for (const r of [2, 5]) part(slab(-3 + 29, 3 + r * 5.2 + 0.6, zt, 4, 4, 0.6, { tone: "mid", lit: true }, 0.3), [30, 3 + r * 5.2, zt], 5);
+  for (let r = 1; r < 8; r++) rows.push(line([[xf, y0 + 3, z0 + 44 - r * 5.2], [xf, y0 + 22, z0 + 44 - r * 5.2]], { tone: "lo" }));
+  part(rows.join(""), [xf + 1, y0 + 15, z0 + 22], 4);
+  for (const r of [2, 5]) part(slab(xf, y0 + 23.5, z0 + 44 - r * 5.2 - 1.8, 0.6, 4, 3.6, { tone: "mid", lit: true }, 0.2), [xf + 1, y0 + 23, z0 + 30], 5);
 });
 
 writeFileSync(new URL("./pictos.json", import.meta.url), JSON.stringify(out));
