@@ -1,20 +1,20 @@
 """Build the figure for the field-guide page on ESO and the VLT: where ESO's sites are in Chile, and
-Paranal itself as a rendered site model (figures/eso/paranal_render.py) with a drawn overlay: names,
-the station grid and the light ducts under the platform; UT2, open for the night, is boxed and
+Paranal itself as a rendered site model (figures/eso/paranal_render.py) with a drawn overlay: the
+four Unit Telescopes and the light ducts under the platform; UT2, open for the night, is boxed and
 shown in an inset with its enclosure removed and the path of the light down to the Coude room.
 
-Usage: uv run --with pyshp --with shapely --with numpy python figures/eso/build_eso_figure.py \
-    <ne_10m_admin_0_countries.shp> _includes/figures/eso-vlt.svg
+Usage: uv run --with numpy python figures/eso/build_eso_figure.py _includes/figures/eso-vlt.svg
 
 Sources
-- Unit Telescope stations (east and north of the array centre, metres), the array centre
+- Unit Telescopes (east and north of the array centre, metres), the array centre
   (longitude -70.40479659, latitude -24.62794830) and the platform rotation (-18.984 degrees):
   ESO, VLTI Station Position Technical Data, https://www.eso.org/observing/etc/doc/viscalc/vltistations.html
   The UT1 to UT4 baseline they give, 130.2 m (113.2 m east, 64.3 m north), matches the VLTI User
   Manual (VLT-MAN-ESO-15000-4552).
 - La Silla (29 15 40.2 S, 70 43 52.8 W) and Cerro Armazones, site of the ELT (24 36 S, 70 11 30 W):
   ESO, Travel and Contacts, https://www.eso.org/public/about-eso/travel/
-- Coastline and borders: Natural Earth 1:10m admin-0 countries (public domain).
+- Chile: Natural Earth 1:10m admin-0 countries (public domain), clipped, simplified and projected into
+  this figure's map panel; figures/eso/chile_outline.txt holds the resulting path.
 - The light ducts: Pepe et al. 2014 (arXiv:1401.5918) describe the light of each Unit Telescope
   taken from the Nasmyth B focus down to a Coude room under the telescope and on through ducts in
   the rock to the Combined-Coude Laboratory, 48 m (UT2) to 69 m (UT1) long. Grupp et al. 2020
@@ -29,13 +29,9 @@ from __future__ import annotations
 import json
 import math
 import sys
-from itertools import combinations
 from pathlib import Path
 
 import numpy as np
-import shapefile
-from shapely.geometry import Polygon, box, shape
-from shapely.ops import unary_union
 
 UT = {  # station: (east m, north m, name)
     "UT1": (-9.925, -20.335, "Antu"),
@@ -45,11 +41,6 @@ UT = {  # station: (east m, north m, name)
 }
 NU = math.radians(-18.984)  # platform rotation from north
 PARANAL = (-70.40479659, -24.62794830)
-SITES = [  # (lon, lat, label, sub, dx, dy, anchor)
-    (PARANAL[0], PARANAL[1], "Paranal", "Very Large Telescope", -10, 4, "end"),
-    (-(70 + 11 / 60 + 30 / 3600), -(24 + 36 / 60), "Cerro Armazones", "ELT, under construction", 10, 4, "start"),
-    (-(70 + 43 / 60 + 52.8 / 3600), -(29 + 15 / 60 + 40.2 / 3600), "La Silla", "", -10, 4, "end"),
-]
 LON0, LON1, LAT0, LAT1 = -76.0, -66.0, -57.0, -17.2
 
 W, H = 1200, 650
@@ -62,16 +53,6 @@ PANEL = (330.0, 20.0, 854.0)  # x, y, width of the render panel
 INSET = (342.0, 330.0, 0.61, (120.0, 60.0, 580.0, 500.0))  # in the render panel's open lower left  # x, y, scale and source crop of the UT2 close-up
 CCL = (54.7, 3.7)  # Combined-Coude Laboratory, metres east and north (see the sources)
 ZDUCT = ZP - 6.0  # the ducts, drawn below the platform
-STATIONS = {
-    "A0": (-14.642, -55.812), "A1": (-9.434, -70.949), "B0": (-7.065, -53.212), "B1": (-1.863, -68.334),
-    "B2": (0.739, -75.899), "B3": (3.348, -83.481), "B4": (5.945, -91.030), "B5": (8.547, -98.594),
-    "C0": (0.487, -50.607), "C1": (5.691, -65.735), "C2": (8.296, -73.307), "C3": (10.896, -80.864),
-    "D0": (15.628, -45.397), "D1": (26.039, -75.660), "D2": (31.243, -90.787), "E0": (30.760, -40.196),
-    "G0": (45.896, -34.990), "G1": (66.716, -95.501), "G2": (38.063, -12.289), "H0": (76.150, -24.572),
-    "I1": (96.711, -59.789), "J1": (106.648, -39.444), "J2": (114.460, -62.151), "J3": (80.628, 36.193),
-    "J4": (75.424, 51.320), "J5": (67.618, 74.009), "J6": (59.810, 96.706), "K0": (106.397, -14.165),
-    "L0": (113.977, -11.549), "M0": (121.535, -8.951),
-}
 
 
 def f(v):
@@ -90,7 +71,7 @@ def text(x, y, s, cls, t, anchor="start", extra=""):
     return f'<text class="{cls} b-pop" style="--d:{t:.2f}s" x="{f(x)}" y="{f(y)}" text-anchor="{anchor}"{extra}>{s}</text>'
 
 
-def map_panel(shp_path):
+def map_panel():
     mx, my, mw, mh = MAP
     c = math.cos(math.radians(37.0))
     k = min(mw / ((LON1 - LON0) * c), mh / (LAT1 - LAT0))
@@ -99,37 +80,10 @@ def map_panel(shp_path):
     def px(lon, lat):
         return ox + (lon - LON0) * c * k, my + (LAT1 - lat) * k
 
-    clip = box(LON0, LAT0, LON1, LAT1)
-    r = shapefile.Reader(shp_path)
-    fields = [fl[0] for fl in r.fields[1:]]
-    iso = fields.index("ADM0_A3")
-    chile = None
-    for sr in r.iterShapeRecords():
-        if sr.record[iso] == "CHL":
-            chile = shape(sr.shape.__geo_interface__).intersection(clip).simplify(0.02)
-    polys = [chile] if chile.geom_type == "Polygon" else list(chile.geoms)
-    d = " ".join(
-        "M" + " L".join(f"{f(a)} {f(b)}" for a, b in (px(x, y) for x, y in poly.exterior.coords)) + " Z"
-        for poly in polys if poly.area > 0.01
-    )
     parts = [text(mx, my - 14, "ESO SITES IN CHILE", "eso-head", 0.0)]
-    parts.append(draw("eso-chile", d, 0.05, 0.9))
-    for lat in (-20, -30, -40, -50):
-        x0, y0 = px(LON0, lat)
-        parts.append(draw("bp-thin", f"M{f(x0)} {f(y0)} h10", 0.1, 0.17))
-        parts.append(text(x0 - 4, y0 + 4, f"{-lat}° S", "bp-tick", 0.2, "end"))
-    xt0, yt = px(LON0, -23.4365)
-    xt1, _ = px(LON1, -23.4365)
-    parts.append(draw("eso-tropic", f"M{f(xt0)} {f(yt)} H{f(xt1)}", 0.15, 0.3))
-    parts.append(text(xt1, yt - 5, "Tropic of Capricorn", "bp-tick", 0.3, "end"))
-    for lon, lat, lab, anchor in ((-67.4, -19.0, "Bolivia", "start"), (-67.4, -36.0, "Argentina", "start"),
-                                  (-71.9, -37.6, "Chile", "middle")):
-        x, y = px(lon, lat)
-        parts.append(text(x, y, lab, "eso-country eso-halo" if lab == "Chile" else "eso-country", 0.2, anchor))
-    x, y = px(-75.4, -34.0)
-    parts.append(text(x, y, "Pacific Ocean", "eso-country", 0.2, "middle", f' transform="rotate(-90 {f(x)} {f(y)})"'))
+    parts.append(draw("eso-chile", (ROOT / "figures/eso/chile_outline.txt").read_text().strip(), 0.05, 0.9))
     sites = [(PARANAL[0], PARANAL[1], "Paranal", "VLT", "end", -9),
-             (-(70 + 11 / 60 + 30 / 3600), -(24 + 36 / 60), "Cerro Armazones", "site of the ELT", "start", 9),
+             (-(70 + 11 / 60 + 30 / 3600), -(24 + 36 / 60), "Cerro Armazones", "ELT", "start", 9),
              (-(70 + 43 / 60 + 52.8 / 3600), -(29 + 15 / 60 + 40.2 / 3600), "La Silla", "", "end", -9)]
     for i, (lon, lat, lab, sub, anchor, dx) in enumerate(sites):
         x, y = px(lon, lat)
@@ -144,10 +98,6 @@ def map_panel(shp_path):
         parts.append(text(x + dx, y + 4, lab, "bp-label2", t, anchor))
         if sub:
             parts.append(text(x + dx, y + 18, sub, "bp-tick", t, anchor))
-    x0, y0 = px(-75.6, -56.4)
-    km = k * (100 / 111.32)
-    parts.append(draw("bp", f"M{f(x0)} {f(y0)} h{f(km)} M{f(x0)} {f(y0 - 4)} v8 M{f(x0 + km)} {f(y0 - 4)} v8", 0.3, 0.2))
-    parts.append(text(x0 + km + 6, y0 + 4, "100 km", "bp-tick", 0.3))
     return parts, px(*PARANAL)
 
 
@@ -234,11 +184,6 @@ def site_panel():
     for th in ("light", "dark"):
         parts.append(f'<image class="eso-img-{th}" x="{f(px - cx0 * k)}" y="{f(py - cy0 * k)}" width="{f(w * k)}" height="{f(h * k)}" '
                      f'href="/assets/img/guide/paranal-render-{th}.webp"/>')
-    # the station grid: every station, as a small square on the ground
-    for st, (e, n) in STATIONS.items():
-        if not occluded(cam, (e, n, ZP), solids):
-            x, y = at(e, n, ZP)
-            parts.append(f'<rect class="eso-stn" x="{f(x - 2)}" y="{f(y - 2)}" width="4" height="4"/>')
     # the light ducts under the platform, from each Coude room to the Combined-Coude Laboratory
     ccl_c, ccl_s = math.cos(NU), math.sin(NU)
     rect = [(CCL[0] + a * ccl_c - b * ccl_s, CCL[1] + a * ccl_s + b * ccl_c) for a, b in ((-5.35, -10), (5.35, -10), (5.35, 10), (-5.35, 10), (-5.35, -10))]
@@ -260,7 +205,7 @@ def site_panel():
     parts.append(f'<g class="b-pop" style="--d:1.2s">{"".join(duct)}</g>')
     parts.append("</g>")
     parts.append(f'<rect class="eso-panel" x="{f(px)}" y="{f(py)}" width="{f(pw)}" height="{f(ph)}" rx="4"/>')
-    parts.append(text(px + 14, py + 22, "PARANAL FROM THE WEST", "eso-head eso-halo", 0.0))
+    parts.append(text(px + 14, py + 22, "PARANAL", "eso-head eso-halo", 0.0))
 
     # names, with leaders; offsets in figure pixels, chosen to fall in free space
     t = 0.5
@@ -274,23 +219,16 @@ def site_panel():
         if sub:
             parts.append(label(tx_, ty_ + 14, sub, tt, anchor, "bp-tick eso-halo"))
 
-    callout((*UT["UT4"][:2], ZP + 29.5), 0, -20, "UT4 Yepun", t, "middle")
-    callout((*UT["UT3"][:2], ZP + 29.5), -24, -18, "UT3 Melipal", t + 0.08, "end")
-    callout((*UT["UT1"][:2], ZP + 29.5), 16, -18, "UT1 Antu", t + 0.16)
-    callout((*feats["vst"], ZP + 12.5), 0, -20, "VST, 2.6 m", t + 0.2, "middle")
-    lab = feats["lab"]
-    le, ln = sum(q[0] for q in lab) / 4, sum(q[1] for q in lab) / 4
-    callout((le, ln, ZP + 4.5), 10, -36, "VLTI laboratory", t + 0.25)
-    callout((*STATIONS["J2"], ZP + 4.5), 18, -22, "Auxiliary Telescope, 1.8 m", t + 0.3)
-    ce, cn = feats["control"][1]
-    callout((ce, cn, feats["zbench"] + 8.5), 0, 34, "control building", t + 0.4, "middle")
+    callout((*UT["UT4"][:2], ZP + 29.5), 0, -20, "UT4", t, "middle")
+    callout((*UT["UT3"][:2], ZP + 29.5), -24, -18, "UT3", t + 0.08, "end")
+    callout((*UT["UT1"][:2], ZP + 29.5), 16, -18, "UT1", t + 0.16)
     callout((CCL[0], CCL[1], ZDUCT), 40, 138, "Combined-Coudé Laboratory", 1.3, "middle", "bp-label2 eso-halo eso-acc")
     # UT2, open, boxed as the detail shown in the inset
     bx = [at(*UT["UT2"][:2], z) for z in (ZP, ZP + 30)]
     x0_, x1_ = bx[0][0] - 34, bx[0][0] + 34
     y0_, y1_ = bx[1][1] - 8, bx[0][1] + 14
     parts.append(pop(f'<rect class="eso-detail" x="{f(x0_)}" y="{f(y0_)}" width="{f(x1_ - x0_)}" height="{f(y1_ - y0_)}" rx="3"/>', 1.2))
-    parts.append(label(x0_ - 4, y0_ + 12, "UT2 Kueyen", 1.2, "end"))
+    parts.append(label(x0_ - 4, y0_ + 12, "UT2", 1.2, "end"))
     # north
     # north, as it runs on the platform, drawn in the panel's top right corner
     p0, p1 = at(0, 0, ZP), at(0, 20, ZP)
@@ -318,7 +256,6 @@ def ut2_panel(ut2_main):
 
     e0, n0, _ = UT["UT2"]
     # the telescope's pose, as built in figures/eso/paranal_render.py
-    cs = CAMS["site"]["cam"]
     pose = CAMS["features"]["pose"]
     hv = np.array([pose["toward"][0], pose["toward"][1], 0.0])
     hv /= np.linalg.norm(hv)
@@ -332,7 +269,6 @@ def ut2_panel(ut2_main):
     # Nasmyth B: the end of the elevation axis on the side facing the viewer
     sg = 1 if (o + lat * 9 - cam) @ (o + lat * 9 - cam) < (o - lat * 9 - cam) @ (o - lat * 9 - cam) else -1
     nas = o + lat * sg * 6.6
-    floor = np.array([e0, n0, ZP + 10.6])
     room_z = ZP - 6.0
     parts = [
         f'<rect class="eso-frame" x="{f(ix)}" y="{f(iy)}" width="{f(iw)}" height="{f(ih)}" rx="3"/>',
@@ -371,8 +307,7 @@ def ut2_panel(ut2_main):
         parts.append(label(ix + lx + (8 if anchor == "start" else -8 if anchor == "end" else 0), iy + ly, txt, t, anchor, "bp-tick eso-halo"))
 
     note(m2, 274, 62, "secondary mirror", "end")
-    note(m1 + e1 * 3.0, 274, 170, "primary mirror, 8.2 m", "end")
-    note(nas, 4, 76, "Nasmyth B focus", "start")
+    note(m1 + e1 * 3.0, 274, 170, "primary mirror", "end")
     x, y = at((e0, n0, room_z - 1.0))
     parts.append(label(x - 26, y + 4, "Coudé room", t + 0.2, "end", "bp-tick eso-halo"))
     parts.append(text(ix + 10, iy + 20, "UT2, ENCLOSURE REMOVED", "eso-head eso-halo", 1.5))
@@ -398,8 +333,8 @@ def _hull(pts):
     return lower[:-1] + upper[:-1]
 
 
-def main(shp_path, out):
-    m, (pxx, pyy) = map_panel(shp_path)
+def main(out):
+    m, (pxx, pyy) = map_panel()
     site, (px, py, pw, ph), ut2 = site_panel()
     inset = ut2_panel(ut2)
     # the thread from Paranal on the map to the site panel
@@ -413,8 +348,7 @@ def main(shp_path, out):
         f'<svg class="bp-svg eso-svg" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
         'aria-labelledby="eso-ft eso-fd"><title id="eso-ft">ESO\'s sites in Chile, and Paranal with the four Unit Telescopes</title>'
         '<desc id="eso-fd">Left: Chile with ESO\'s sites at Paranal, Cerro Armazones, where the ELT is being built, and '
-        'La Silla. Right: a rendered model of the Paranal summit seen from the west, with the '
-        'four Unit Telescopes, VST, the VLTI laboratory, the Auxiliary Telescope stations and tracks and the control building; '
+        'La Silla. Right: a rendered model of the Paranal summit seen from the west, with the four Unit Telescopes, '
         'UT2 open for the night, and the light ducts under the platform from each Unit Telescope to the '
         'Combined-Coudé Laboratory. Inset: UT2 with its enclosure removed, showing the telescope on its fork and the path of the '
         'light from the primary mirror to the secondary, to the Nasmyth B focus and down to the Coudé room.</desc>'
@@ -425,7 +359,7 @@ def main(shp_path, out):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         print(__doc__)
         sys.exit(2)
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1])

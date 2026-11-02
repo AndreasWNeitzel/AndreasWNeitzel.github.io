@@ -6,15 +6,15 @@ nav_section: Research
 crumb: {label: Research, url: /research/}
 description: JANUS, the neural network Andreas W. Neitzel wrote to read the chemistry of red giants from Gaia's low-resolution spectra, with a reliability score for every star.
 lede: A neural network that reads a red giant's parameters and chemistry from its Gaia spectrum, and says how far to trust each answer.
-extra_css: [/assets/css/fig1.css]
+extra_css: [/assets/css/janus.css]
 math: true
 ---
-<figure class="fig1 panel fig1--wide" id="fig1">
-  <div class="fig1-head"><span class="figno">FIG 1</span><span>JANUS, from one spectrum to a catalogue</span><span class="fig1-hint">hover a stage</span><span class="fig1-swipe">swipe to see all stages</span></div>
-  <div class="fig1-scroll">{% include figures/janus.svg %}</div>
-  <figcaption class="fig1-cap" aria-live="polite"><b data-cap-title></b> <span data-cap-text></span></figcaption>
+{%- assign jf = site.data.copy.research.janus_fig -%}
+<figure class="jn-fig panel" id="janus-fig" data-stagefig>
+  <div class="jn-head"><span class="figno">FIG 1</span><p class="jn-read" aria-live="polite"><b data-read-title></b> <span data-read-line>{{ jf.default }}</span></p></div>
+  <div class="jn-frame" data-build>{% include figures/janus.svg %}</div>
+  <script type="application/json" data-captions>{{ jf.stages | jsonify }}</script>
 </figure>
-<p class="credit">On stars withheld from training (IMAS13, October 2026) the robust scatter about APOGEE is 32 K in <span class="tex" data-tex="T_\mathrm{eff}">T_eff</span>, 0.072 dex in <span class="tex" data-tex="\log g">log g</span>, 0.051 dex in [M/H] and 0.021 dex in <span class="tex" data-tex="[\alpha/\mathrm{M}]">[α/M]</span>; the catalogue covers 144,304 TESS red giants, about nine times as many as have APOGEE DR19 values passing the same cuts.</p>
 
 <div class="article-layout">
   <article class="stack-m">
@@ -26,7 +26,7 @@ math: true
       <h2>What the tests showed</h2>
       <p>On stars withheld from training the robust scatter about APOGEE is 32 K, 0.072 dex, 0.051 dex and 0.021 dex in the four parameters above, with calibrated uncertainties. Repeating every test with a model trained without the spectrum shows that the XP spectra carry information on [M/H], <span class="tex" data-tex="[\alpha/\mathrm{M}]">[α/M]</span>, carbon and nitrogen, and that JANUS separates the two α sequences of the disc, which the model without the spectrum merges.</p>
       <h2>Where it runs</h2>
-      <p>Two FCT advanced-computing projects carry the work, both with me as responsible investigator: 299,520 ARM core-hours and 1,500 A100 GPU-hours on Deucalion to run JANUS on the <i>Gaia</i> DR3 spectra of about 220 million stars, and 1,002,400 core-hours and 1,000 H100 GPU-hours on MareNostrum 5 for <i>Gaia</i> DR4. The catalogue is the chemistry layer of ArqueoGal and will be released through the project.</p>
+      <p>Two FCT advanced-computing projects carry the work, both with me as principal investigator: 299,520 ARM core-hours and 1,500 A100 GPU-hours on Deucalion to run JANUS on the <i>Gaia</i> DR3 spectra of about 220 million stars, and 1,002,400 core-hours and 1,000 H100 GPU-hours on MareNostrum 5 for <i>Gaia</i> DR4. The catalogue is the chemistry layer of ArqueoGal and will be released through the project.</p>
     </div>
   </article>
   <aside class="article-aside">

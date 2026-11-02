@@ -147,6 +147,17 @@ research:
       title: "HAYDNsim: noise forecasts for crowded clusters"
       text: "HAYDN is a proposed ESA mission to study stellar oscillations in dense star clusters. During a six-month secondment in Bologna I wrote HAYDNsim, which builds a synthetic cluster field, runs it through the mission's noise estimator on Deucalion, and returns the noise and the share of borrowed light for every star. I presented a poster at TASC10/KASC17; the paper is in preparation."
   explainers_lead: "Each of my papers explained for readers outside astronomy, with what was found and what I did."
+  janus_fig:
+    default: "Seven stages from <i>Gaia</i> spectra to a catalogue. Hover a stage."
+    aria: "Schematic of the JANUS pipeline in seven stages: <i>Gaia</i> XP spectra and APOGEE DR19 labels feed an ensemble of eight normalising flows, which outputs labelled stars with uncertainties and a reliability probability, collected into a TESS red-giant catalogue and run on two supercomputers."
+    stages:
+      gaia: {title: "<i>Gaia</i>", line: "The <i>Gaia</i> spacecraft; DR3 holds XP spectra of about 220 million stars."}
+      xp: {title: "XP spectrum", line: "One red giant's blue and red spectrum, with Hα and the calcium triplet marked."}
+      apogee: {title: "APOGEE DR19", line: "High-resolution survey labels for training, showing the two α sequences of the disc."}
+      janus: {title: "JANUS", line: "Eight conditional flows turn a Gaussian into each star's label distribution."}
+      labels: {title: "Labels", line: "Temperature, gravity, [M/H] and [α/M] with spreads, plus P(H) to select trustworthy stars."}
+      catalogue: {title: "Catalogue", line: "Labels for TESS red giants with oscillations, the chemistry layer of ArqueoGal."}
+      hpc: {title: "Supercomputers", line: "Deucalion runs DR3 and MareNostrum 5 runs DR4, on FCT allocations I lead."}
   guide_line: "The field guide explains the science, institutions and machines behind this work, one minute each."
 
 software:

@@ -1,7 +1,11 @@
-"""Build the output side of FIG 2 on /observing/paranal/ from the public GJ 570 A velocities.
+"""Build FIG 2 on /observing/paranal/: the light path from a Unit Telescope through the Coude train
+to ESPRESSO, and the power spectrum of the public GJ 570 A velocities that came out of it.
 
 Usage:
-    uv run --with numpy python -I figures/observing/build_espresso_output.py <ts_HD_131977> <repo root>
+    uv run --with numpy python -I figures/observing/build_espresso_output.py <repo root> [<ts_HD_131977>]
+
+With the data file, the arrays are recomputed and written to assets/data/observing/ first; without
+it, the figure is drawn from the recorded assets/data/observing/gj570a_output.json.
 
 Input: the file ts_HD_131977 of the Zenodo record doi:10.5281/zenodo.17236515 (version
 10.5281/zenodo.17236516, CC BY 4.0), the ESPRESSO radial velocities of GJ 570 A (HD 131977) from
@@ -19,20 +23,18 @@ Method, after Sect. 2 and 4.1 of the paper:
   little (1.55 here against 1.51 cm/s in the paper, mean amplitude between 6 and 8 mHz);
 - the smooth curve is the power convolved with a Gaussian of FWHM 4 times the paper's large
   frequency separation (197.29 microhertz), the kernel the paper uses to locate nu_max.
-Display: the raw power is drawn at the panel's resolution, each column showing the highest power
-among the frequencies it covers, which is how the full curve renders at this size. The smooth
-curve and the noise level are multiplied by three, as in Fig. 3 of the paper.
+Display: the raw power at 526 columns over 2 to 8.2 mHz, each column the highest power among the
+frequencies it covers; the smooth curve multiplied by three, as in Fig. 3 of the paper; no power
+ticks, so only the shape is read. nu_max is the paper's value (Sect. 4.1).
 
-Layout of the figure (one coordinate space, 1220 units wide, split into SVGs at the seams):
-top tier 436 high = light path (x 0 to 800, hand-drawn in _includes/figures/vlt-lightpath.svg)
-plus the exposure column (x 800 to 1220); bottom tier 322 high = the night (x 0 to 610) and the
-power spectrum (x 610 to 1220). The data thread is one chain of curves cut at the seams; each piece
-carries the dash phase of the length before it, so the moving dash runs on across seams.
+The light path is a schematic, not to scale, after ESO's descriptions of the Unit Telescopes and
+ESPRESSO (Pepe et al. 2014, arXiv:1401.5918): starlight to the primary mirror, the secondary, the
+tertiary, down the Coude train under the platform, into the spectrograph (collimator, echelle
+grating, cross-disperser, detector). Both SVGs share one scale (800 + 480 units wide, 416 high);
+the flowing dash of the light runs on across the seam into the spectrum.
 
-Outputs: assets/data/observing/gj570a_output.json (the arrays drawn),
-assets/data/observing/gj570a_provenance.json, _includes/figures/espresso-exposure.svg,
-_includes/figures/espresso-night.svg, _includes/figures/espresso-spectrum.svg, and the data-thread
-block between the "generated" markers of _includes/figures/vlt-lightpath.svg.
+Outputs: _includes/figures/vlt-lightpath.svg, _includes/figures/espresso-spectrum.svg and, with the
+data file, assets/data/observing/gj570a_output.json and gj570a_provenance.json.
 """
 
 from __future__ import annotations
@@ -40,7 +42,6 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-import re
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -68,15 +69,15 @@ from texsvg import tex_glyphs  # noqa: E402  (LaTeX glyphs for the symbols)
 
 NIGHT_SHOWN = 2  # 1-based: the longest night of the run
 F0, F1 = 2.0, 8.2  # mHz shown
-CHILE = timezone(timedelta(hours=-4))  # local time at Paranal in May 2024
-# figure geometry
-TOP_H, BOT_H = 436, 322
-X_SEAM_TOP, X_SEAM_BOT = 800, 610
+NCOL = 526  # display columns of the recorded spectrum
+# figure geometry: two SVGs on one scale, side by side
+W_PATH, W_SPEC, H = 800, 480, 416
+X0_SPEC = 44.0  # left axis of the spectrum
 DASH = 11.0  # dash period of the flowing light (6 on, 5 off)
 FLOW_S = 1.1  # seconds per dash period
 
 
-# --------------------------------------------------------------------------- data
+# --------------------------------------------------------------------------- helpers
 def jd_to_utc(jd):
     return datetime(1970, 1, 1, tzinfo=timezone.utc) + timedelta(days=jd - 2440587.5)
 
@@ -124,29 +125,6 @@ def bez_len(p, n=400):
     return sum(math.dist(pts[i], pts[i + 1]) for i in range(n))
 
 
-def bez_split(p, t):
-    (p0, p1, p2, p3) = p
-    lerp = lambda a, b: (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
-    a, b, c = lerp(p0, p1), lerp(p1, p2), lerp(p2, p3)
-    d, e = lerp(a, b), lerp(b, c)
-    f = lerp(d, e)
-    return (p0, a, d, f), (f, e, c, p3)
-
-
-def split_at_x(p, x):
-    lo, hi = 0.0, 1.0
-    f = lambda t: bez(p, t)[0] - x
-    if f(lo) * f(hi) > 0:
-        raise ValueError("curve does not cross the seam")
-    for _ in range(60):
-        mid = (lo + hi) / 2
-        if f(lo) * f(mid) <= 0:
-            hi = mid
-        else:
-            lo = mid
-    return bez_split(p, (lo + hi) / 2)
-
-
 def d_of(curves, dx=0.0, dy=0.0):
     (x0, y0) = curves[0][0]
     s = f"M{x0 - dx:.1f} {y0 - dy:.1f}"
@@ -179,8 +157,9 @@ def svg(cls, w, h, title, desc, body, tid):
             + "".join(body) + "</svg>\n")
 
 
-# --------------------------------------------------------------------------- main
-def main(src: Path, root: Path) -> int:
+# --------------------------------------------------------------------------- data
+def compute(src: Path, root: Path) -> None:
+    """Recompute the recorded arrays from the Zenodo file and write them with their provenance."""
     raw = src.read_bytes()
     md5 = hashlib.md5(raw).hexdigest()
     if md5 != SOURCE["md5"]:
@@ -207,185 +186,20 @@ def main(src: Path, root: Path) -> int:
     a, b = nights[NIGHT_SHOWN - 1]
     hours = (t[a:b] - t[a]) * 24
     start, end = jd_to_utc(t[a]), jd_to_utc(t[b - 1])
-    first_rv, first_err = float(rv_kms[a]), float(e[a])
     median_rv = float(np.median(rv_kms))
-    night_date = f"{start.astimezone(CHILE).day} to {end.astimezone(CHILE).strftime('%-d %B %Y')}"
-
-    # ------------------------------------------------------------- data thread geometry
-    entry = ((766, 268), (792, 268), (800, 107), (816, 107))  # detector to the first stage
-    a1, a2 = split_at_x(entry, X_SEAM_TOP)
-    c_a = ((816, 306), (816, 372), (812, 418), (800, 418))  # last stage down to the corridor
-    c_b = ((800, 418), (600, 430), (240, 410), (40, 422))  # along the foot of the light path
-    c_c = ((40, 422), (24, 423), (18, 428), (18, TOP_H))  # turning down into the night panel
-    c_d = ((18, TOP_H), (18, TOP_H + 34), (10, TOP_H + 104), (18, TOP_H + 139))
-    d_arc = ((596, TOP_H + 145), (626, TOP_H + 95), (646, TOP_H + 145), (680 - 3, TOP_H + 145))
-    d1, d2 = split_at_x(d_arc, X_SEAM_BOT)
-    L = bez_len
-    T_ENTRY, T_DESC, T_ARC = 1.80, 2.65, 3.05
-
-    # ------------------------------------------------------------- exposure column (x 800 to 1220)
-    E = []
-    dx = X_SEAM_TOP
-    E.append(link([a2], L(a1), T_ENTRY, dx=dx, seam=True))
-    for (yy, dl) in ((107, 1.92), (210, 2.2), (300, 2.5)):
-        E.append(node(16, yy, dl))
-    E.append(link([((16, 113), (4, 140), (4, 180), (16, 204))], 0, 2.2))
-    E.append(link([((16, 216), (4, 244), (4, 272), (16, 294))], 0, 2.5))
-    E.append(link([c_a], 0, T_DESC, dx=dx, seam=True))
-    E.append(text(36, 28, f"From one {PAPER['exposure_s']}-second exposure to one velocity", "eo-title", 1.86))
-    # stage 1: extracted spectrum (schematic outline)
-    E.append(text(36, 80, "extracted spectrum", "eo-label", 1.92))
-    spec = ("M36 98 H64 l4 12 l4 -12 H96 l3 6 l3 -6 H128 l4 18 l4 -18 H160 l3 5 l3 -5 H190 l4 10 l4 -10 "
-            "H222 l3 7 l3 -7 H252 l4 16 l4 -16 H284 l3 6 l3 -6 H316 l4 11 l4 -11 H348 l3 5 l3 -5 H400")
-    E.append(f'<path class="bp b-draw" style="--d:1.95s;--dur:.25s" pathLength="1" d="{spec}"/>')
-    # stage 2: cross-correlation dip (schematic outline) and the shift it measures
-    E.append(text(36, 176, "cross-correlation", "eo-label", 2.2))
-    E.append('<path class="bp-thin b-draw" style="--d:2.22s;--dur:.17s" pathLength="1" d="M36 232 H400 M188 186 V236"/>')
-    E.append('<path class="bp b-draw" style="--d:2.25s;--dur:.2s" pathLength="1" d="M36 192 C 200 192, 214 228, 246 228 C 278 228, 292 192, 400 192"/>')
-    E.append('<path class="eo-mark b-pop" style="--d:2.4s" d="M246 184 V236"/>')
-    E.append('<path class="eo-dim b-pop" style="--d:2.42s" d="M192 208 H242 M192 204 v8 M242 204 v8"/>')
-    E.append(text(217, 202, "shift", "eo-num", 2.42, "middle"))
-    E.append(text(36, 254, f"{median_rv:.1f} km/s", "eo-value", 2.42))
-    # stage 3: one velocity, with its uncertainty and the signal it has to reveal
-    E.append(text(36, 304, "one velocity", "eo-label", 2.52))
-    E.append(text(36, 324, f"{first_rv:.4f} km/s ± {first_err:.0f} cm/s", "eo-value", 2.55))
-    E.append(text(36, 346, f"uncertainty {PAPER['sigma_rv_cms']} cm/s", "eo-note", 2.58))
-    E.append(text(36, 362, f"oscillation {PAPER['amp_cms']} cm/s", "eo-note", 2.6))
-    exp_svg = svg("eo-svg eo-exposure", 420, TOP_H, "From one exposure to one radial velocity",
-                  f"Each {PAPER['exposure_s']}-second exposure gives an extracted spectrum; cross-correlating it gives a dip whose shift is the "
-                  f"radial velocity, {median_rv:.1f} km/s for GJ 570 A. One velocity has an average uncertainty of {PAPER['sigma_rv_cms']} cm/s, while "
-                  f"the oscillations reach about {PAPER['amp_cms']} cm/s.", E, "eo-x")
-
-    # ------------------------------------------------------------- light path pieces (between markers)
-    thread = [
-        "  <!-- generated: data thread (figures/observing/build_espresso_output.py) -->",
-        "  " + node(766, 268, T_ENTRY, seam=True),
-        "  " + link([a1], 0, T_ENTRY, seam=True),
-        "  " + link([c_b, c_c], L(c_a), T_DESC, seam=True),
-        "  <!-- /generated -->",
-    ]
-    lp = root / "_includes/figures/vlt-lightpath.svg"
-    lp_text = lp.read_text()
-    lp_text, n = re.subn(r"  <!-- generated: data thread.*?<!-- /generated -->", "\n".join(thread), lp_text, flags=re.S)
-    if n != 1:
-        raise SystemExit("generated markers not found in vlt-lightpath.svg")
-    lp.write_text(lp_text)
-
-    # ------------------------------------------------------------- night panel (x 0 to 610)
-    N = []
-    xp0, xp1, hmax = 70.0, 596.0, 10.0
-    yc, sc = 145.0, 85.0 / 300.0  # zero line; units per cm/s
-    N.append(link([c_d], L(c_a) + L(c_b) + L(c_c), T_DESC, dy=TOP_H, seam=True))
-    N.append(node(18, 145, 2.75, seam=True))
-    N.append(text(xp0, 22, f"Radial velocity during the night of {night_date}", "eo-title", 2.75))
-    N.append(text(xp0, 40, f"{b - a} exposures", "eo-note", 2.75))
-    N.append(text(xp0, 56, "radial velocity, cm/s", "eo-num", 2.85))
-    N.append(f'<path class="bp-thin b-draw" style="--d:2.75s;--dur:.17s" pathLength="1" d="M{xp0} {yc - 85} V{yc + 85} M{xp0} {yc} H{xp1}"/>')
-    ticks = []
-    for cms in (-200, 0, 200):
-        yy = yc - cms * sc
-        lab = f"{cms:+d}".replace("-", "−") if cms else "0"
-        ticks.append(f'<path class="bp-thin" d="M{xp0 - 4} {yy:.1f} h4"/><text class="eo-num" x="{xp0 - 7}" y="{yy + 4:.1f}" text-anchor="end">{lab}</text>')
-    for hh in range(0, 11, 2):
-        xx = xp0 + (xp1 - xp0) * hh / hmax
-        ticks.append(f'<path class="bp-thin" d="M{xx:.1f} {yc + 85} v4"/><text class="eo-num" x="{xx:.1f}" y="{yc + 102:.1f}" text-anchor="middle">{hh}</text>')
-    ticks.append(f'<text class="eo-num" x="{xp1}" y="{yc + 118:.1f}" text-anchor="end">hours since the start of the night</text>')
-    N.append(f'<g class="b-pop" style="--d:2.85s">{"".join(ticks)}</g>')
-    dots = "".join(f"M{xp0 + (xp1 - xp0) * h / hmax:.1f} {yc - r * sc:.1f}h0" for h, r in zip(hours, res[a:b]))
-    N.append(f'<path class="eo-dots b-pop" style="--d:2.95s" d="{dots}"/>')
-    N.append(link([d1], 0, T_ARC, seam=True))
-    doi = "https://doi.org/10.5281/zenodo.17236515"
-    N.append(f'<a href="{doi}">' + text(xp0, 296, f"Data: {CITE}, Zenodo, CC BY 4.0", "eo-note eo-data", 2.95) + "</a>")
-    night_svg = svg("eo-svg eo-night", 610, BOT_H, f"Radial velocity of GJ 570 A during the night of {night_date}",
-                    f"{b - a} radial velocities from one night, with slow drifts removed, scatter by tens of centimetres per second around zero; "
-                    "the oscillations are far smaller than the uncertainty of a single point.", N, "eo-n")
-
-    # ------------------------------------------------------------- power spectrum (x 610 to 1220)
-    S = []
-    xc0, xc1 = 70.0, 596.0
-    yb, ytop, pmax = 230.0, 60.0, 60.0
-    ncol = int(xc1 - xc0)
     cols_max, cols_smooth = [], []
-    for c in range(ncol):
-        lo = F0 + (F1 - F0) * c / ncol
-        up = F0 + (F1 - F0) * (c + 1) / ncol
+    for c in range(NCOL):
+        lo = F0 + (F1 - F0) * c / NCOL
+        up = F0 + (F1 - F0) * (c + 1) / NCOL
         m = (nu * 1e3 >= lo) & (nu * 1e3 < up)
         cols_max.append(float(p[m].max()))
         cols_smooth.append(float(smooth[m].mean()))
-    if max(cols_max) > pmax:
-        raise SystemExit(f"raise pmax: highest column {max(cols_max):.1f}")
-
-    def yp(pw):
-        return yb - (yb - ytop) * min(pw, pmax) / pmax
-
-    S.append(link([d2], L(d1), T_ARC, dx=X_SEAM_BOT, dy=TOP_H, seam=True))
-    S.append(node(70, 145, 3.1, seam=True))
-    S.append(text(xc0, 22, "Power spectrum of the five nights", "eo-title", 3.1))
-    S.append(text(xc0, 40, f"{int(keep.sum()):,} velocities", "eo-note", 3.1))
-    S.append(text(xc0, 56, "power, (cm/s)²", "eo-num", 3.2))
-    S.append(f'<path class="bp-thin b-draw" style="--d:3.1s;--dur:.17s" pathLength="1" d="M{xc0} {ytop} V{yb} H{xc1}"/>')
-    t2 = []
-    for fm in range(2, 9):
-        xx = xc0 + (xc1 - xc0) * (fm - F0) / (F1 - F0)
-        t2.append(f'<path class="bp-thin" d="M{xx:.1f} {yb} v4"/><text class="eo-num" x="{xx:.1f}" y="{yb + 17}" text-anchor="middle">{fm}</text>')
-    for pw in (20, 40, 60):
-        t2.append(f'<path class="bp-thin" d="M{xc0 - 4} {yp(pw):.1f} h4"/><text class="eo-num" x="{xc0 - 7}" y="{yp(pw) + 4:.1f}" text-anchor="end">{pw}</text>')
-    t2.append(f'<text class="eo-num" x="{xc1}" y="{yb + 32}" text-anchor="end">frequency, mHz</text>')
-    S.append(f'<g class="b-pop" style="--d:3.2s">{"".join(t2)}</g>')
-    area = (f"M{xc0} {yb} " + " ".join(f"L{xc0 + c:.0f} {yp(v_):.1f} L{xc0 + c + 1:.0f} {yp(v_):.1f}" for c, v_ in enumerate(cols_max))
-            + f" L{xc1} {yb} Z")
-    S.append(f'<path class="eo-power b-pop" style="--d:3.25s" d="{area}"/>')
-    sm = "M" + " L".join(f"{xc0 + c + 0.5:.1f} {yp(3 * v_):.1f}" for c, v_ in enumerate(cols_smooth))
-    S.append(f'<path class="eo-smooth b-draw" style="--d:3.3s;--dur:.53s" pathLength="1" d="{sm}"/>')
-    S.append(f'<path class="eo-noise b-pop" style="--d:3.6s" d="M{xc0} {yp(3 * white_p):.1f} H{xc1}"/>')
-    xn = xc0 + (xc1 - xc0) * (PAPER["numax_uHz"] / 1e3 - F0) / (F1 - F0)
-    numax_glyphs = tex_glyphs(r"\nu_{\max}", 14)[0]
-    S.append(f'<g class="b-pop" style="--d:3.7s"><path class="eo-numax" d="M{xn:.1f} {ytop} V{yb}"/>'
-             f'<g class="eo-tex" transform="translate({xn + 6:.1f} {ytop + 13})">{numax_glyphs}</g></g>')
-    # legend: every mark on the panel, with its source
-    lg = []
-    def swatch(x, y, kind):
-        if kind == "fill":
-            return f'<rect class="eo-power" x="{x}" y="{y - 8}" width="16" height="9"/>'
-        cls = {"line": "eo-smooth", "dash": "eo-noise", "dot": "eo-numax"}[kind]
-        return f'<path class="{cls}" d="M{x} {y - 4} h16"/>'
-    rows = [
-        (xc0, 284, "fill", "power"),
-        (300, 284, "dash", "white noise ×3"),
-        (xc0, 300, "line", [("text", "smoothed, "), ("tex", r"4\Delta\nu"), ("text", " ≈ 790 μHz")]),
-        (xc0, 316, "dot", [("tex", r"\nu_{\max}"), ("text", f' {PAPER["numax_uHz"]} μHz')]),
-    ]
-    adv = 0.6 * 11  # Geist Mono advance at the 11 px legend size
-    for x, y, kind, label in rows:
-        parts = [("text", label)] if isinstance(label, str) else label
-        cur, out = x + 22, []
-        for kind_, seg in parts:
-            if kind_ == "text":
-                out.append(f'<text class="eo-note" x="{cur:.1f}" y="{y}" style="white-space:pre">{seg}</text>')
-                cur += len(seg) * adv
-            else:
-                body, w = tex_glyphs(seg, 12)
-                out.append(f'<g class="eo-tex-note" transform="translate({cur + 1:.1f} {y})">{body}</g>')
-                cur += w + 2
-        lg.append(swatch(x, y, kind) + "".join(out))
-    S.append(f'<g class="b-pop" style="--d:3.75s">{"".join(lg)}</g>')
-    spec_svg = svg("eo-svg eo-spectrum", 610, BOT_H, "Power spectrum of the radial velocities of GJ 570 A, five nights",
-                   f"The power spectrum of {int(keep.sum()):,} velocities from five nights. Peaks crowd together near "
-                   f"{PAPER['numax_uHz'] / 1e3:.1f} mHz, where the smoothed power rises above the white-noise level: the star's oscillations, "
-                   "with periods of three to four minutes.", S, "eo-s")
-
-    figs = root / "_includes/figures"
-    (figs / "espresso-exposure.svg").write_text(exp_svg)
-    (figs / "espresso-night.svg").write_text(night_svg)
-    (figs / "espresso-spectrum.svg").write_text(spec_svg)
-
-    # ------------------------------------------------------------- data files
     data = {
         "night": {"index": NIGHT_SHOWN, "n": int(b - a), "start_utc": start.isoformat(timespec="minutes"),
-                  "end_utc": end.isoformat(timespec="minutes"), "first_rv_kms": round(first_rv, 5),
-                  "first_rv_err_cms": round(first_err, 1),
+                  "end_utc": end.isoformat(timespec="minutes"), "first_rv_kms": round(float(rv_kms[a]), 5),
+                  "first_rv_err_cms": round(float(e[a]), 1),
                   "hours": [round(float(h), 4) for h in hours], "rv_cms": [round(float(r), 1) for r in res[a:b]]},
-        "spectrum": {"f_mHz": [F0, F1], "columns": ncol, "power_col_max_cms2": [round(x, 2) for x in cols_max],
+        "spectrum": {"f_mHz": [F0, F1], "columns": NCOL, "power_col_max_cms2": [round(x, 2) for x in cols_max],
                      "smooth_col_mean_cms2": [round(x, 3) for x in cols_smooth], "white_power_cms2": round(white_p, 3)},
         "median_rv_kms": round(median_rv, 4),
     }
@@ -405,18 +219,128 @@ def main(src: Path, root: Path) -> int:
         "white_noise": {"mean_amplitude_6_8_mHz_cms": round(white_amp, 3), "mean_power_6_8_mHz_cms2": round(white_p, 3)},
         "smooth": "Gaussian, FWHM = 4 x 197.29 microhertz, edge-corrected",
         "smooth_peak_uHz": round(peak_uHz, 0),
-        "display": "raw power: highest value per display column; smooth curve and noise level x3, as in the paper's Fig. 3",
+        "display": "raw power: highest value per display column; smooth curve x3, as in the paper's Fig. 3",
         "script": "figures/observing/build_espresso_output.py",
     }
     (out_dir / "gj570a_provenance.json").write_text(json.dumps(prov, indent=1) + "\n")
     print(json.dumps({k: prov[k] for k in ("n_used", "median_rv_kms", "rms_detrended_cms", "white_noise", "smooth_peak_uHz")}))
-    print("night", night_date, b - a, "| first", round(first_rv, 4), round(first_err, 1), "| highest column", round(max(cols_max), 1))
-    print("KB:", {n_: round(len(s_) / 1024, 1) for n_, s_ in (("exposure", exp_svg), ("night", night_svg), ("spectrum", spec_svg))})
+
+
+# --------------------------------------------------------------------------- light path
+# Hand-placed schematic in the 800 x 416 space: structure first, then the light, then the instrument.
+LIGHT_PATH = [
+    # ground, pier, fork, truss, top ring
+    '<path class="bp-thin b-draw" style="--d:0s;--dur:.17s" pathLength="1" d="M20 372 L780 372"/>',
+    '<path class="bp b-draw" style="--d:.03s;--dur:.17s" pathLength="1" d="M112 372 L112 330 L308 330 L308 372"/>',
+    '<path class="bp-thin b-pop" style="--d:.17s" d="' + " ".join(f"M{x} 372 l8 -8" for x in range(120, 300, 16)) + '"/>',
+    '<path class="bp b-draw" style="--d:.06s;--dur:.17s" pathLength="1" d="M138 330 L138 236 L205 236 M282 330 L282 236"/>',
+    '<circle class="bp b-pop" style="--d:.2s" cx="210" cy="236" r="5"/>',
+    '<path class="bp-thin b-draw" style="--d:.09s;--dur:.17s" pathLength="1" d="M132 288 L190 60 M288 288 L230 60 M132 288 L230 60 M288 288 L190 60"/>',
+    '<path class="bp b-draw" style="--d:.12s;--dur:.17s" pathLength="1" d="M184 60 L236 60"/>',
+    # mirrors: primary, secondary, tertiary, the Coude train
+    '<path class="bp mirror b-pop" style="--d:.2s" d="M128 292 Q210 314 292 292"/>',
+    '<path class="bp mirror b-pop" style="--d:.22s" d="M196 66 Q210 60 224 66"/>',
+    '<path class="bp mirror b-pop" style="--d:.24s" d="M202 228 L218 244"/>',
+    '<path class="bp mirror b-pop" style="--d:.26s" d="M276 230 L288 242 M276 346 L288 358 M364 346 L376 358 M364 294 L376 306"/>',
+    # the light: down to the primary, up to the secondary, down to the tertiary, along the Coude train
+    '<path class="ray b-draw" style="--d:.3s;--dur:.32s" pathLength="1" d="M150 20 L150 296 M270 20 L270 296"/>',
+    '<path class="eo-head b-pop" style="--d:.6s" d="M146.4 287 L150 293 L153.6 287 M266.4 287 L270 293 L273.6 287"/>',
+    '<path class="ray b-draw" style="--d:.62s;--dur:.18s" pathLength="1" d="M150 296 L204 66 M270 296 L216 66"/>',
+    '<path class="ray b-draw" style="--d:.8s;--dur:.15s" pathLength="1" d="M204 66 L210 230 M216 66 L210 230"/>',
+    '<g class="b-pop" style="--d:.95s"><path class="ray flowray" d="M212 236 L282 236 L282 352 L370 352 L370 300 L460 300"/></g>',
+    '<path class="eo-head b-pop" style="--d:1.33s" d="M452 296.4 L458 300 L452 303.6"/>',
+    # ESPRESSO: fibre in, collimator, echelle grating, cross-disperser, detector with its orders
+    '<rect class="bp lab b-pop" style="--d:1s" x="460" y="120" width="320" height="236" rx="4" stroke-dasharray="5 4"/>',
+    '<path class="bp b-draw" style="--d:1.35s;--dur:.1s" pathLength="1" d="M460 300 C490 300 496 260 510 252"/>',
+    '<circle class="bp-fill b-pop" style="--d:1.44s" cx="512" cy="251" r="2.5"/>',
+    '<path class="bp mirror b-pop" style="--d:1.1s" d="M560 214 Q568 251 560 288"/>',
+    '<path class="ray b-draw" style="--d:1.45s;--dur:.1s" pathLength="1" d="M512 251 L560 220 M512 251 L560 282"/>',
+    '<g class="b-pop" style="--d:1.15s"><rect class="bp" x="636" y="182" width="16" height="72" transform="rotate(-12 644 218)"/>'
+    '<path class="bp-thin" d="M638 190 l12 -4 M638 202 l12 -4 M638 214 l12 -4 M638 226 l12 -4 M638 238 l12 -4" transform="rotate(-12 644 218)"/></g>',
+    '<path class="ray b-draw" style="--d:1.55s;--dur:.1s" pathLength="1" d="M564 230 L636 196 M564 272 L636 238"/>',
+    '<path class="bp b-pop" style="--d:1.2s" d="M690 244 L702 296 L678 296 Z"/>',
+    '<path class="ray warmray b-draw" style="--d:1.65s;--dur:.1s" pathLength="1" d="M640 220 L690 252 M642 232 L690 268 M644 244 L690 284"/>',
+    '<rect class="bp b-pop" style="--d:1.25s" x="722" y="232" width="44" height="72" rx="2"/>',
+    '<path class="ray warmray b-draw" style="--d:1.75s;--dur:.05s" pathLength="1" d="M700 270 L720 268"/>',
+    '<path class="order b-pop" style="--d:1.8s" d="' + " ".join(f"M726 {y} q18 -4 36 2" for y in range(240, 291, 10)) + '"/>',
+    # one title per stage
+    text(300, 44, "Unit Telescope, 8.2 m", "eo-title", 0.2),
+    text(300, 398, "Coudé train", "eo-title", 0.26),
+    text(474, 146, "ESPRESSO", "eo-title", 1.0),
+]
+
+
+# --------------------------------------------------------------------------- figure
+def draw(root: Path) -> None:
+    data = json.loads((root / "assets/data/observing/gj570a_output.json").read_text())
+    spec = data["spectrum"]
+    cols_max, cols_smooth = spec["power_col_max_cms2"], spec["smooth_col_mean_cms2"]
+    if spec["columns"] != NCOL or spec["f_mHz"] != [F0, F1]:
+        raise SystemExit("recorded spectrum does not match the display grid; rerun with the data file")
+
+    # the data thread: out of the detector, across the seam, into the spectrum's axis
+    out1 = ((766, 268), (778, 268), (788, 268), (W_PATH, 268))
+    out2 = ((W_PATH, 268), (W_PATH + 12, 268), (W_PATH + 24, 268), (W_PATH + X0_SPEC, 268))
+    T_OUT = 1.85
+    path_body = LIGHT_PATH + [
+        node(766, 268, T_OUT, seam=True),
+        link([out1], 0, T_OUT, seam=True),
+    ]
+    lp_svg = svg("vlt-svg", W_PATH, H, "Light path from a VLT Unit Telescope to ESPRESSO, schematic",
+                 "Starlight reflects off the 8.2 m primary mirror to the secondary and the tertiary, runs down the Coudé train "
+                 "under the platform into ESPRESSO, and is spread by an échelle grating and a cross-disperser into a spectrum "
+                 "on the detector.", path_body, "lp")
+
+    S = [link([out2], bez_len(out1), T_OUT, dx=W_PATH, seam=True)]
+    x0, x1, yb, ytop = X0_SPEC, 460.0, 340.0, 72.0
+    pmax = max(cols_max) * 1.04
+    S.append(node(x0, 268, 2.0, seam=True))
+    S.append(text(x0, 44, "Oscillations of GJ 570 A", "eo-title", 2.0))
+
+    def yp(pw):
+        return yb - (yb - ytop) * min(pw, pmax) / pmax
+
+    def xf(fm):
+        return x0 + (x1 - x0) * (fm - F0) / (F1 - F0)
+
+    S.append(f'<path class="bp-thin b-draw" style="--d:2.0s;--dur:.17s" pathLength="1" d="M{x0} {ytop} V{yb} H{x1}"/>')
+    ax = [f'<path class="bp-thin" d="M{xf(fm):.1f} {yb} v4"/><text class="eo-num" x="{xf(fm):.1f}" y="{yb + 17}" text-anchor="middle">{fm}</text>'
+          for fm in (2, 4, 6, 8)]
+    ax.append(f'<text class="eo-num" x="{x1}" y="{yb + 34}" text-anchor="end">frequency, mHz</text>')
+    ax.append(f'<text class="eo-num" x="{x0 + 6}" y="{ytop + 4}">power</text>')
+    S.append(f'<g class="b-pop" style="--d:2.1s">{"".join(ax)}</g>')
+    cw = (x1 - x0) / NCOL
+    area = (f"M{x0} {yb} " + " ".join(f"L{x0 + c * cw:.2f} {yp(v_):.1f} L{x0 + (c + 1) * cw:.2f} {yp(v_):.1f}" for c, v_ in enumerate(cols_max))
+            + f" L{x1} {yb} Z")
+    S.append(f'<path class="eo-power b-pop" style="--d:2.15s" d="{area}"/>')
+    sm = "M" + " L".join(f"{x0 + (c + 0.5) * cw:.1f} {yp(3 * v_):.1f}" for c, v_ in enumerate(cols_smooth))
+    S.append(f'<path class="eo-smooth b-draw" style="--d:2.2s;--dur:.53s" pathLength="1" d="{sm}"/>')
+    xn = xf(PAPER["numax_uHz"] / 1e3)
+    numax_glyphs = tex_glyphs(r"\nu_{\max}", 15)[0]
+    S.append(f'<g class="b-pop" style="--d:2.6s"><path class="eo-numax" d="M{xn:.1f} {ytop - 6} V{yb}"/>'
+             f'<g class="eo-tex" transform="translate({xn + 7:.1f} {ytop + 8})">{numax_glyphs}</g></g>')
+    doi = "https://doi.org/10.5281/zenodo.17236515"
+    S.append(f'<a href="{doi}">' + text(x0, 404, f"Data: {CITE}, CC BY 4.0", "eo-note eo-data", 2.6) + "</a>")
+    sp_svg = svg("eo-svg eo-spectrum", W_SPEC, H, "Power spectrum of the radial velocities of GJ 570 A",
+                 "The power spectrum of the ESPRESSO velocities of GJ 570 A from five nights in May 2024. Power gathers in a hump "
+                 "around nu max, near 4.7 millihertz: the star's oscillations, with periods of three to four minutes.", S, "eo-s")
+
+    figs = root / "_includes/figures"
+    (figs / "vlt-lightpath.svg").write_text(lp_svg)
+    (figs / "espresso-spectrum.svg").write_text(sp_svg)
+    print("KB:", {n_: round(len(s_) / 1024, 1) for n_, s_ in (("lightpath", lp_svg), ("spectrum", sp_svg))})
+
+
+def main(argv: list[str]) -> int:
+    if len(argv) not in (2, 3):
+        print(__doc__)
+        return 2
+    root = Path(argv[1])
+    if len(argv) == 3:
+        compute(Path(argv[2]), root)
+    draw(root)
     return 0
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print(__doc__)
-        sys.exit(2)
-    sys.exit(main(Path(sys.argv[1]), Path(sys.argv[2])))
+    sys.exit(main(sys.argv))

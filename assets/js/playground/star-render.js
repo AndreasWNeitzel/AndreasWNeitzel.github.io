@@ -19,6 +19,10 @@ const reduced = typeof matchMedia === "function" ? matchMedia("(prefers-reduced-
 // piecewise-Gaussian fit of Wyman, Sloan and Shirley (2013, JCGT 2, 1), then XYZ to linear sRGB
 // (D65) with negative channels clipped and the largest channel set to one, so the table carries
 // the chromaticity only; the shader sets the brightness. Stored sRGB-encoded in eight bits.
+// The white point stays D65, the white of an sRGB screen. A 5000 K (D50) white was tried and
+// runs the wrong way: adapting it to the screen turns a 5772 K blackbody into (224, 231, 255),
+// a blue-white Sun, because the Sun is hotter than that white. Under D65 the Sun is
+// (255, 241, 234), a faintly warm white, and the limb, cooler, shows warmer.
 function blackbodyTable() {
   const lobe = (l, mu, s1, s2) => {
     const t = (l - mu) / (l < mu ? s1 : s2);
@@ -100,6 +104,7 @@ uniform float uLimb;
 uniform float uCells;
 uniform float uContrast;
 uniform float uDetail;
+uniform float uPix;
 
 // Simplex noise in three dimensions after the MIT-licensed implementation of Gustavson and
 // McEwan (webgl-noise, github.com/ashima/webgl-noise).
@@ -160,12 +165,13 @@ vec3 toSrgb(vec3 c) {
   return mix(lo, hi, step(0.0031308, c));
 }
 
-// chromaticity of a blackbody at T, from the table
-vec3 blackbody(float T) {
+// chromaticity of a blackbody at T, from the table, sRGB-encoded with the largest channel one
+vec3 chroma(float T) {
   float s = (clamp(T, uTableInfo.x, uTableInfo.y) - uTableInfo.x) / (uTableInfo.y - uTableInfo.x);
   float u = (s * (uTableInfo.z - 1.0) + 0.5) / uTableInfo.z;
-  return toLinear(texture2D(uTable, vec2(u, 0.5)).rgb);
+  return texture2D(uTable, vec2(u, 0.5)).rgb;
 }
+vec3 blackbody(float T) { return toLinear(chroma(T)); }
 
 vec3 hash33(vec3 p) {
   p = fract(p * vec3(0.1031, 0.1030, 0.0973));
@@ -195,18 +201,33 @@ vec2 cellular(vec3 p, float t) {
   return sqrt(vec2(f1, f2));
 }
 
-// Granulation: polygonal cells, each brightest at its centre and falling to a dark lane at the
-// boundary, the lattice warped by simplex noise so that no two cells match, a fine texture over
-// the cells, and a slow drift along the line of sight so that cells form and dissolve.
+// Granulation at two scales. A whole-disc image cannot resolve granules (about a thousand fit
+// across the Sun), so where cells would span few pixels the surface is a soft mottle of smooth
+// simplex noise, evolving over about 20 s, with no cell structure in it. Where a cell spans more
+// than about 12 device pixels (uDetail above 0) the cells fade in as white-light images show
+// them (DKIST, SST): bright, slightly domed granules that darken gradually into broad
+// intergranular lanes, about a quarter to a third of a cell wide, with a few bright points in
+// the lanes. F2 minus F1 of the cellular field is zero on a cell boundary and grows towards the
+// centre; a smooth curve of it gives the broad lane, and F1 alone the dome. The lattice is warped
+// by simplex noise so that no two cells match. Returns a relative intensity from 0 on the lane
+// floor to about 1 on a granule top.
 float granules(vec3 q, float t) {
   float warp = snoise(q * 0.33 + vec3(17.0, 0.0, t * 0.015));
   vec3 p = q + vec3(warp * 0.5, warp * -0.4, warp * 0.3 + t * 0.03);
+  float mottle = 0.5 + 0.45 * snoise(p * 1.1 + vec3(0.0, 0.0, t * 0.05)) + 0.25 * snoise(p * 2.3 + vec3(3.0, 8.0, t * 0.07));
+  if (uDetail <= 0.0) return mottle;
   vec2 w = cellular(p, t);
-  // the lane width varies from cell to cell, so some boundaries nearly vanish
-  float lane = 1.0 - smoothstep(0.0, 0.26, (w.y - w.x) * (0.85 + 0.5 * warp));
-  float centre = 1.0 - smoothstep(0.0, 0.8, w.x);
-  float fine = snoise(p * 2.3 + vec3(0.0, 0.0, t * 0.04));
-  return 0.7 * centre - 0.85 * lane + (0.12 + 0.1 * uDetail) * fine;
+  float e = (w.y - w.x) * (0.9 + 0.35 * warp);
+  // a smooth rise out of the lane, widened by one pixel's footprint in units of e, so that a
+  // lane near pixel width is averaged, as a detector would, instead of drawn as a hard line
+  float rise = smoothstep(-0.5 * uPix, 0.42 + uPix, e);
+  // the dome: granule centres a little brighter than their edges
+  float dome = exp(-3.0 * w.x * w.x);
+  float fine = snoise(p * 2.6 + vec3(0.0, 0.0, t * 0.04));
+  // bright points: small, sparse, only on the lane floor
+  float bp = smoothstep(0.78, 0.95, snoise(p * 3.4 + vec3(41.0, 7.0, t * 0.02))) * (1.0 - smoothstep(0.0, 0.1, e));
+  float g = rise * (0.82 + 0.18 * dome) + 0.11 * fine;
+  return mix(mottle, clamp(g, 0.0, 1.05) + 0.75 * bp, uDetail);
 }
 
 // a fixed, very faint field of points behind the star
@@ -231,19 +252,26 @@ void main() {
   float d = length(p);
   float px = 1.0 / uRadius;
 
+  // Display mapping: intensity goes to the screen value linearly, as in scaled solar
+  // continuum images (SDO/HMI intensitygrams), so the limb at 1 - u of the centre shows at that
+  // fraction; the colour of each point is its blackbody chromaticity, sRGB-encoded. The disc
+  // centre sits just below clipping.
+  const float EXPOSURE = 1.0;
+
   // background: the dark plate with a vignette and the star field
   vec2 v = (frag - 0.5 * uRes) / (0.5 * min(uRes.x, uRes.y));
   float vig = smoothstep(0.1, 1.6, length(v));
-  vec3 col = vec3(0.0046, 0.0041, 0.0036) * (1.0 - 0.7 * vig);
-  col += starField(frag / uDpr);
+  vec3 col = toSrgb(vec3(0.0046, 0.0041, 0.0036) * (1.0 - 0.7 * vig) + starField(frag / uDpr));
 
-  // the chromosphere, thin and bright at the limb, and the corona falling away from it
-  vec3 tint = blackbody(uTeff);
-  float ldEdge = (1.0 - uLimb) * 0.92;
+  // the chromosphere, a thin rim at the limb's own brightness, and the corona falling away
+  vec3 tint = chroma(uTeff);
+  float limbI = (1.0 - uLimb) * EXPOSURE;
   float out1 = max(d - 1.0, 0.0);
-  float chromo = exp(-out1 / 0.009) * ldEdge * 0.42;
-  float corona = exp(-out1 / 0.11) * 0.04 + exp(-out1 / 0.5) * 0.012;
-  col += tint * chromo + mix(tint, vec3(1.0), 0.35) * corona;
+  float chromo = exp(-out1 / 0.008) * limbI * 0.55;
+  // bloom: a wide faint glow in the star's colour, a few per cent of the disc centre,
+  // falling off over about a quarter of a radius, so the disc reads as a light source
+  float bloom = EXPOSURE * (0.06 * exp(-out1 / 0.25) + 0.02 * exp(-out1 / 0.08));
+  col += tint * (chromo + bloom);
 
   // the disc
   if (d < 1.0 + 2.0 * px) {
@@ -257,17 +285,21 @@ void main() {
     float g = granules(rn * (uCells * 0.5), uTime);
     // a two per cent variation on the scale of a few granules, slower than the cells
     float big = snoise(rn * 3.0 + vec3(0.0, 0.0, uTime * 0.01)) * 0.02;
-    float vis = smoothstep(0.0, 0.22, mu) * mix(0.6, 1.0, mu);
+    // the granulation contrast falls towards the limb, where the cells are foreshortened
+    float vis = smoothstep(0.0, 0.25, mu) * mix(0.35, 1.0, mu);
     float ld = 1.0 - uLimb * (1.0 - mu);
     // the emergent temperature of a grey atmosphere seen at angle mu (Eddington approximation)
     float Tmu = uTeff * pow(0.75 * (mu + 0.6667), 0.25);
-    vec3 disc = blackbody(Tmu) * ld * (0.92 + uContrast * g * vis + big);
+    // Resolved cells darken from just under the granule tops, with a lane floor about
+    // 2 uContrast below them; the mottle varies about a level just above its mean of 0.5, so
+    // that it does not dim the disc and the centre stays just below clipping.
+    float gran = 1.0 - 2.0 * uContrast * vis * (mix(0.6, 0.9, uDetail) - g);
+    vec3 disc = chroma(Tmu) * EXPOSURE * ld * (gran + big);
     float edge = 1.0 - smoothstep(1.0 - 1.5 * px, 1.0 + 0.5 * px, d);
     col = mix(col, disc, edge);
   }
 
-  col = toSrgb(clamp(col, 0.0, 1.0));
-  col += (hash21(frag + 0.37) - 0.5) / 255.0;
+  col = clamp(col, 0.0, 1.0) + (hash21(frag + 0.37) - 0.5) / 255.0;
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -317,7 +349,7 @@ export function create(canvas, options = {}) {
     gl.deleteShader(vs);
     gl.deleteShader(fs);
     U = {};
-    for (const name of ["uRes", "uDpr", "uCentre", "uRadius", "uTime", "uTable", "uTableInfo", "uTeff", "uLimb", "uCells", "uContrast", "uDetail"]) U[name] = gl.getUniformLocation(prog, name);
+    for (const name of ["uRes", "uDpr", "uCentre", "uRadius", "uTime", "uTable", "uTableInfo", "uTeff", "uLimb", "uCells", "uContrast", "uDetail", "uPix"]) U[name] = gl.getUniformLocation(prog, name);
     buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
@@ -361,12 +393,19 @@ export function create(canvas, options = {}) {
     const h = canvas.height;
     const R = apparentRadius(w, h);
     // granule size against surface gravity in solar units: angular size proportional to
-    // g^-1/2, so the count across the disc grows as g^1/2 from about 36 on the Sun, clamped
-    // and never finer than seven device pixels
+    // g^-1/2, so the count across the disc grows as g^1/2 from about 70 on the Sun, clamped
+    // and never finer than four device pixels. Real granules are far smaller still (about a
+    // thousand across the solar disc), so on a whole-disc view they are a fine mottle.
     const g = state.mass / (state.radius * state.radius);
-    const cells = Math.max(26, Math.min(90, 36 * Math.sqrt(g), (2 * R) / 7));
+    const cells = Math.max(30, Math.min(140, 70 * Math.sqrt(g), (2 * R) / 4));
     const cellPx = (2 * R) / cells;
-    const detail = Math.min(1, Math.max(0, (cellPx - 7) / 8));
+    // the cell structure emerges only where a cell spans more than about 12 device pixels
+    const emerge = Math.min(1, Math.max(0, (cellPx - 9) / 6));
+    const detail = emerge * emerge * (3 - 2 * emerge);
+    // rms granulation contrast: near 15 per cent where cells are resolved, as in white-light
+    // images (DKIST, SST); at whole-disc scale, where a real image shows almost none, a mottle
+    // of 2 to 3 per cent rms, whose darkest patches sit about 6 per cent below the mean
+    const contrast = 0.075 + (0.15 - 0.075) * detail;
     gl.viewport(0, 0, w, h);
     gl.useProgram(prog);
     gl.activeTexture(gl.TEXTURE0);
@@ -379,8 +418,10 @@ export function create(canvas, options = {}) {
     gl.uniform1f(U.uTeff, state.teff);
     gl.uniform1f(U.uLimb, limbCoefficient(state.teff));
     gl.uniform1f(U.uCells, cells);
-    gl.uniform1f(U.uContrast, 0.08);
+    gl.uniform1f(U.uContrast, contrast);
     gl.uniform1f(U.uDetail, detail);
+    // one device pixel spans about 1 / cellPx of a cell; e runs about twice as fast as distance
+    gl.uniform1f(U.uPix, 2 / cellPx);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 

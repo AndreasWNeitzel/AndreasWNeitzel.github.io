@@ -57,7 +57,3 @@
   .fig1.has-active .f1-svg .f1-thread { opacity: .55; }
   .f1-svg .f1-thread { pointer-events: none; transition: opacity .2s; }
 }
-  /* the wide JANUS figure: the stages at the home page's scale, across the page */
-  .fig1--wide { margin-block-end: 10px; }
-  .fig1--wide .f1-svg { max-block-size: none; }
-  .fig1--wide .fig1-cap { position: absolute; inset: auto 0 0 0; }
