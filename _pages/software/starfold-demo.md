@@ -111,7 +111,7 @@ extra_css: [/assets/css/starfold-demo.css, /assets/css/schematics.css]
   <p class="sfd-intro">The recorded run of Starfold 0.2.0 on the APOGEE DR19 example table: a search over 48 settings, one fit on all stars, then 32 refits on random 80 percent subsets.</p>
   <div class="sfd-tables">
     <figure class="sfd-table">
-      <figcaption>The two groups in measured units. Each cell is the median over the 32 refits of the group's median, with its 5 to 95 percent range over the refits in brackets, beside the median of all stars.</figcaption>
+      <figcaption>The two groups in measured units, with the range over refits in brackets.</figcaption>
       <div class="table-wrap"><table>
         <thead><tr><th scope="col">Column</th><th scope="col">Group 0, 1,588 stars</th><th scope="col">Group 1, 6,586 stars</th><th scope="col">All stars</th></tr></thead>
         <tbody>
@@ -127,7 +127,7 @@ extra_css: [/assets/css/starfold-demo.css, /assets/css/schematics.css]
       </table></div>
     </figure>
     <figure class="sfd-table">
-      <figcaption>The setting the search chose, on the 80 percent subsets it was scored on and scaled up for the fit on all stars, beside the library defaults.</figcaption>
+      <figcaption>The setting the search chose, beside the library defaults.</figcaption>
       <div class="table-wrap"><table>
         <thead><tr><th scope="col">Setting</th><th scope="col">Subsets</th><th scope="col">All stars</th><th scope="col">Defaults</th></tr></thead>
         <tbody>

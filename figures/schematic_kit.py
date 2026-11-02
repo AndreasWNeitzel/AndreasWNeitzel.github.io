@@ -93,7 +93,8 @@ def starfold_run() -> dict:
     raw = (base / meta["binary"]).read_bytes()
     out = {}
     for a in meta["arrays"]:
-        if a["name"] in ("features", "map", "group", "support", "unresolved"):
+        if a["name"] in ("features", "map", "group", "support", "unresolved", "n_sampled", "refit_labels"):
             dt = np.dtype(a["dtype"]).newbyteorder("<")
-            out[a["name"]] = np.frombuffer(raw, dtype=dt, count=a["length"], offset=a["offset"]).reshape(a["shape"])
+            shape = (a["shape"][0], -1) if "decode" in a else a["shape"]  # packed rows keep their first axis
+            out[a["name"]] = np.frombuffer(raw, dtype=dt, count=a["length"], offset=a["offset"]).reshape(shape)
     return out

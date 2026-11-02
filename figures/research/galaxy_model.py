@@ -6,19 +6,24 @@ centre, y toward l = 90 degrees, z toward the north Galactic pole), shifted to t
 X = x - R0. The view is from the north side, INC degrees from the disc's axis, turned by AZ degrees
 about it, a proper rotation, so the bar and the sense of rotation keep their handedness.
 
-Structural parameters (all real, from the literature):
-  R0 = 8.21 kpc, the Sun's distance from the centre, as in the potential below (McMillan 2017,
-      MNRAS 465, 76, arXiv:1608.00971; Bland-Hawthorn and Gerhard 2016 give 8.2 +- 0.1 kpc).
-  Thin disc: scale length 2.6 kpc, scale height 0.30 kpc; thick disc: scale length 2.0 kpc,
-      scale height 0.90 kpc (Bland-Hawthorn and Gerhard 2016, ARA&A 54, 529,
-      doi:10.1146/annurev-astro-081915-023441, arXiv:1602.07702, their recommended values).
-  Bar: half-length 5.0 kpc (Wegg, Gerhard and Portail 2015, MNRAS 450, 4050,
-      arXiv:1504.01401) at 27 degrees to the Sun-centre line with its near end at positive
-      longitude, and the box/peanut bulge with axis ratios 1 : 0.63 : 0.26 (Wegg and Gerhard 2013,
-      MNRAS 435, 1874, arXiv:1308.0593). The bulge's half-length (2.0 kpc) and the long bar's
-      width and thickness (1.0 and 0.3 kpc) are chosen for legibility, not measured.
-  Stellar halo: density falling as r^-2.77 with flattening q = 0.64 (Juric et al. 2008, ApJ 673,
-      864, arXiv:astro-ph/0510520), softened inside 1 kpc so the centre stays finite.
+Structural parameters, checked against the papers on 2026-11-02:
+  R0 = 8.21 kpc, the value of the McMillan 2017 potential as galpy implements it (ro = 8.21,
+      vo = 233.1); the paper's abstract gives 8.20 +- 0.09 kpc and 232.8 +- 3.0 km/s (MNRAS 465, 76,
+      doi:10.1093/mnras/stw2759, arXiv:1608.00971). The best estimate of Bland-Hawthorn and Gerhard
+      2016 is 8.2 +- 0.1 kpc (ARA&A 54, 529, arXiv:1602.07702; "BHG16" below).
+  Thin disc: scale length 2.6 +- 0.5 kpc, scale height 300 +- 50 pc; thick disc: scale length
+      2.0 +- 0.2 kpc, scale height 900 +- 180 pc (BHG16, section 5). Juric et al. 2008 find a longer
+      thick-disc scale length, 3.6 kpc; the thick disc here is the high-alpha one of BHG16.
+  Bar: half-length 5.0 +- 0.2 kpc (Wegg, Gerhard and Portail 2015, MNRAS 450, 4050,
+      doi:10.1093/mnras/stv745, arXiv:1504.01401) and the box/peanut bulge with axis ratios
+      10 : 6.3 : 2.6 and isophotes to about 2 kpc on the major axis, at about 27 degrees to the
+      Sun-centre line (Wegg and Gerhard 2013, MNRAS 435, 1874, doi:10.1093/mnras/stt1376,
+      arXiv:1308.0593). The long bar alone lies at 28 to 33 degrees (Wegg et al. 2015); both are
+      drawn on the one axis at 27 degrees, near end at positive longitude. The long bar's width and
+      thickness (1.0 and 0.3 kpc) are chosen for legibility; its scale height is 180 pc (BHG16).
+  Stellar halo: density falling as r^-2.8 with flattening q = 0.64 (Juric et al. 2008, ApJ 673, 864,
+      doi:10.1086/523619, arXiv:astro-ph/0510520; BHG16 give -2.5 +- 0.3 and 0.65 +- 0.05 for the
+      inner halo, inside a break at 25 +- 10 kpc, beyond the 19 kpc drawn), softened inside 1 kpc.
 The discs are softened the same way (radius sqrt(R^2 + 1 kpc^2)), since the bulge replaces their
 central cusp. Each envelope is a set of nested contours of that component's projected density, at
 the levels where its major axis reaches the radii in REACH; the shapes follow from the parameters,
@@ -27,9 +32,10 @@ the levels are chosen for legibility.
 The orbit: Arcturus (alpha Bootis, a K1.5 III red giant 11 pc from the Sun). Position and
 parallax 88.83 mas from van Leeuwen 2007 (A&A 474, 653, arXiv:0708.1752), proper motion
 (-1093.45, -1999.40) mas/yr from the Hipparcos catalogue (Perryman et al. 1997, A&A 323, L49),
-radial velocity -5.19 km/s (Massarotti et al. 2008, AJ 135, 209). Integrated for ORBIT_GYR in the
-McMillan 2017 potential with galpy (Bovy 2015, ApJS 216, 29, arXiv:1412.3451), solar motion of
-Schoenrich, Binney and Dehnen 2010.
+radial velocity -5.19 km/s (Massarotti et al. 2008, AJ 135, 209, doi:10.1088/0004-6256/135/1/209).
+Integrated for ORBIT_GYR in the McMillan 2017 potential with galpy (Bovy 2015, ApJS 216, 29,
+arXiv:1412.3451), solar motion of Schoenrich, Binney and Dehnen 2010, height of the Sun galpy's
+default 20.8 pc.
 """
 
 from __future__ import annotations
@@ -45,7 +51,7 @@ R0 = 8.21
 THIN = (2.6, 0.30)
 THICK = (2.0, 0.90)
 BAR_ANGLE = 27.0
-HALO_N, HALO_Q = 2.77, 0.64
+HALO_N, HALO_Q = 2.8, 0.64
 REACH = {"halo": (19.0, 15.5, 12.0), "thick": (11.5, 9.0, 6.5), "thin": (15.0, 12.0, 9.0, 6.0, 3.5)}
 INC, AZ = 72.0, 52.0
 ORBIT_GYR = 0.8

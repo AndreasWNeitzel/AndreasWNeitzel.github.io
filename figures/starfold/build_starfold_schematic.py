@@ -1,21 +1,33 @@
 """Draw how Starfold works for /software/starfold-demo/: _includes/figures/starfold-how.svg (wide)
 and starfold-how-narrow.svg (phones).
 
-Four stages, after the package's README (github.com/AndreasWNeitzel/starfold): a table of
-measurements; UMAP draws it as a map that keeps close rows close; HDBSCAN cuts the dense clumps and
-leaves sparse rows unassigned; refits on random subsets show how far the groups can be trusted. The
-loop from the groups back to the map is the search over settings, scored without labels.
+More than a UMAP map cut by HDBSCAN, after the package's README and concept pages
+(github.com/AndreasWNeitzel/starfold): the settings of both are searched without labels, each
+scored against the same setting on a structureless copy of the table; the chosen setting is fitted
+on all rows; refits on random subsets, each with a new seed, measure what holds. That is read
+without matching groups, from how often pairs of rows stay together, and per group as recurrence
+with its range; what the evidence does not support comes back as flags.
 
-All marks are real, from the recorded run in assets/data/starfold: the cells are the eight
-measured columns of randomly drawn rows, as each value's rank within its column; the dots are a
-random subsample of the stars at their map positions, in their recorded groups, faded by their
-recorded support. Only the frames, the stack of cards and the arrows are schematic.
+All marks are real, from the recorded run in assets/data/starfold. The table: the eight columns of
+randomly drawn rows, as each value's rank in its column. The search: every completed trial,
+sorted by gap, joining its score on the table (filled) to its score on the copy (open).
+The groups: a random subsample of the stars at their map positions, in their recorded groups. The
+dashed circle holds sqrt(12 n) of the stars around the middle of a group: the package's rule of
+thumb for the size below which groups tend to merge, measured, not derived. The refits: the first
+refits, the stars they drew at their map positions, each refit's groups matched to the fit on all
+stars by largest Jaccard index. The matrix: for 16, 26 and 6 random stars of the two groups and the
+unassigned, the share of refits that put each pair in one group among those that drew and assigned
+both (the unequal shares are chosen so that the small group shows). The rings: the recorded
+recurrence of each group, with ticks at its 5 and 95 percent range.
+Only the frames and the thread are schematic.
 
 Usage: uv run --python 3.11 --with numpy python figures/starfold/build_starfold_schematic.py
 """
 
 from __future__ import annotations
 
+import json
+import math
 import sys
 from pathlib import Path
 
@@ -24,23 +36,26 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 import schematic_kit as k  # noqa: E402
-from schematic_kit import dots_path, draw, f, fits, link, pop, text, thread  # noqa: E402
+from schematic_kit import dots_path, draw, f, fits, link, pop, text  # noqa: E402
 
 OUT = HERE.parents[1] / "_includes/figures"
 SEED = 20261102
-N_DOTS, N_ROWS = 900, 11
+N_DOTS, N_ROWS = 900, 12
 
 STAGES = (
-    ("THE TABLE", "one row per star"),
-    ("THE MAP", "UMAP keeps neighbours close"),
-    ("THE GROUPS", "HDBSCAN cuts the dense clumps"),
-    ("WHAT COMES BACK", "refits on random subsets"),
+    ("THE TABLE", "no labels"),
+    ("THE SEARCH", "score against a structureless copy"),
+    ("THE GROUPS", "UMAP map, HDBSCAN cut"),
+    ("THE REFITS", "random subsets, new seeds"),
+    ("WHAT HOLDS", "pairs, recurrence, flags"),
 )
-LOOP = "settings scored without labels"
-LABEL = ("How Starfold works. A table of measurements, one row per star, is drawn as a map by UMAP. HDBSCAN "
-         "cuts the dense clumps of the map into groups and leaves sparse stars unassigned; settings for both are "
-         "searched and scored without labels. Refits on random subsets show which stars and groups come back: "
-         "stars fade where the refits disagree. The marks are from a recorded run on APOGEE stars.")
+LABEL = ("How Starfold works. A table of measurements with no labels enters a search over the settings of UMAP and "
+         "HDBSCAN, where each setting is scored against the same setting on a structureless copy of the table, and "
+         "the setting with the largest gap is chosen. It gives a map and its groups, with a limit below which groups "
+         "tend to merge. Refits on random subsets with new seeds then show what holds: how often pairs of stars stay "
+         "together, how far each group recurs, and flags for what the evidence does not support. The marks are from "
+         "a recorded run on APOGEE stars.")
+BLUE, INK = "sx-data", "sx-ink"
 
 
 def load() -> dict:
@@ -49,82 +64,187 @@ def load() -> dict:
     feats = np.asarray(run["features"], float)
     n = len(feats)
     rank = feats.argsort(axis=0).argsort(axis=0) / (n - 1)
-    idx = rng.choice(n, size=N_DOTS, replace=False)
     group = np.asarray(run["group"]).astype(int)
-    support = np.asarray(run["support"], float)
-    keep = np.where(group >= 0, support[np.arange(n), np.clip(group, 0, None)], 0.0)
-    return {"cells": rank[rng.choice(n, size=N_ROWS, replace=False)], "map": np.asarray(run["map"], float)[idx],
-            "group": group[idx], "keep": keep[idx]}
+    m = np.asarray(run["map"], float)
+    span = m.max(axis=0) - m.min(axis=0)
+    scaled = (m - m.min(axis=0)) / span
+    packed = np.asarray(run["refit_labels"])  # two 4-bit values per byte, low nibble first
+    refits = np.zeros((packed.shape[0], n), dtype=int)
+    refits[:, 0::2] = packed[:, : (n + 1) // 2] & 15
+    refits[:, 1::2] = packed[:, : n // 2] >> 4
+    refits -= 2  # -2 not drawn in this refit, -1 unassigned
+    idx = rng.choice(n, size=N_DOTS, replace=False)
+
+    # each refit's groups take the colour of the group of the fit on all stars they overlap most
+    aligned = np.full_like(refits, -1)
+    for r in range(refits.shape[0]):
+        for lab in np.unique(refits[r][refits[r] >= 0]):
+            mem = refits[r] == lab
+            jac = [(mem & (group == g)).sum() / (mem | (group == g)).sum() for g in (0, 1)]
+            aligned[r][mem] = int(np.argmax(jac))
+    aligned[refits == -2] = -2
+
+    # the co-association matrix
+    pick = [rng.choice(np.flatnonzero(group == g), size=c, replace=False) for g, c in ((0, 16), (1, 26), (-1, 6))]
+    rows = np.concatenate(pick)
+    lab = refits[:, rows]
+    both = (lab[:, :, None] >= 0) & (lab[:, None, :] >= 0)
+    same = both & (lab[:, :, None] == lab[:, None, :])
+    with np.errstate(invalid="ignore", divide="ignore"):
+        share = same.sum(axis=0) / both.sum(axis=0)
+
+    # the disc of the resolution limit, around the middle of the smaller group
+    limit = int(round(math.sqrt(12 * n)))
+    mem = scaled[group == 0]
+    mid = np.median(mem, axis=0)
+    radius = float(np.sort(np.hypot(*(scaled - mid).T))[limit])
+
+    meta = json.loads((k.ROOT / "assets/data/starfold/apogee_run.json").read_text())
+    tr = json.loads((k.ROOT / "assets/data/starfold/apogee_trials.json").read_text())
+    done = sorted((t for t in tr["trials"] if t["state"] == "complete"), key=lambda t: t["gap"])
+    return {"cells": rank[rng.choice(n, size=N_ROWS, replace=False)], "map": scaled[idx], "group": group[idx],
+            "aligned": aligned[:, idx], "share": share, "limit": (mid, radius),
+            "trials": [(t["score"], t["copy_score"], t["number"] == tr["selected_trial"]) for t in done],
+            "rings": [(g["recurrence"], *g["recurrence_band"]) for g in meta["groups"]]}
 
 
-def to_box(m, x, y, w, h):
-    lo, hi = m.min(axis=0), m.max(axis=0)
-    pad = 6
-    return np.column_stack([x + pad + (m[:, 0] - lo[0]) / (hi[0] - lo[0]) * (w - 2 * pad),
-                            y + h - pad - (m[:, 1] - lo[1]) / (hi[1] - lo[1]) * (h - 2 * pad)])
+def to_box(m, x, y, w, h, pad=6.0):
+    return np.column_stack([x + pad + m[:, 0] * (w - 2 * pad), y + h - pad - m[:, 1] * (h - 2 * pad)])
 
 
 def frame(x, y, w, h, t):
     return draw("sx-line sf-frame", f"M{f(x)} {f(y)} h{f(w)} v{f(h)} h{f(-w)} Z", t, 0.35)
 
 
-def panel(i, x, y, w, h, D, t):
-    if i == 0:
-        cw, ch = w / D["cells"].shape[1], h / D["cells"].shape[0]
-        cells = "".join(f'<rect class="sf-cell" x="{f(x + c * cw + 1)}" y="{f(y + r * ch + 1)}" width="{f(cw - 2)}" height="{f(ch - 2)}" opacity="{0.1 + 0.8 * v:.2f}"/>'
-                        for (r, c), v in np.ndenumerate(D["cells"]))
-        return pop(cells, t)
+def table(x, y, w, h, D, t):
+    cw, ch = w / D["cells"].shape[1], h / D["cells"].shape[0]
+    return pop("".join(f'<rect class="sf-cell" x="{f(x + c * cw + 0.5)}" y="{f(y + r * ch + 0.5)}" width="{f(cw - 1)}" height="{f(ch - 1)}" opacity="{0.1 + 0.8 * v:.2f}"/>'
+                       for (r, c), v in np.ndenumerate(D["cells"])), t)
+
+
+def search(x, y, w, h, D, t):
+    T = D["trials"]
+    top = 0.82
+    px = lambda i: x + 6 + i * (w - 12) / (len(T) - 1)  # noqa: E731
+    py = lambda v: y + h - 4 - v / top * (h - 8)  # noqa: E731
+    stems = "".join(f"M{f(px(i))} {f(py(a))} V{f(py(b))}" for i, (a, b, _) in enumerate(T))
+    on = dots_path([(px(i), py(a)) for i, (a, _, _) in enumerate(T)])
+    off = "".join(f'<circle class="sf-copy" cx="{f(px(i))}" cy="{f(py(b))}" r="1.7"/>' for i, (_, b, _) in enumerate(T))
+    s = next(i for i, c in enumerate(T) if c[2])
+    a, b, _ = T[s]
+    mark = (f'<path class="sf-chosen" d="M{f(px(s))} {f(py(a))} V{f(py(b))}"/><circle class="sf-ring" cx="{f(px(s))}" cy="{f(py(a))}" r="5.5"/>')
+    return (draw("sx-guide", f"M{f(x)} {f(y + h - 4)} H{f(x + w)}", t, 0.3) + pop(f'<path class="sf-stem" d="{stems}"/>', t + 0.1)
+            + pop(f'<path class="sx-data sf-on" d="{on}"/>' + off, t + 0.2)
+            + pop(mark + text(px(s) + 6, py(a) - 11, "chosen", "sx-note", "end"), t + 0.5))
+
+
+def groups(x, y, w, h, D, t):
     q = to_box(D["map"], x, y, w, h)
     g = D["group"]
-    if i == 1:
-        return frame(x, y, w, h, t) + pop(f'<path class="sx-ink sf-dot" d="{dots_path(q)}"/>', t + 0.1)
-    if i == 2:
-        s = "".join(f'<path class="{c} sf-dot" d="{dots_path(q[g == v])}"/>' for v, c in ((-1, "sx-faint"), (1, "sx-ink"), (0, "sx-data")))
-        return frame(x, y, w, h, t) + pop(s, t + 0.1)
-    bins = ((0.85, 1.01, "sf-k3"), (0.6, 0.85, "sf-k2"), (0.0, 0.6, "sf-k1"))
-    s = "".join(f'<path class="sf-dot {c} {b}" d="{dots_path(q[(g == v) & (D["keep"] >= lo) & (D["keep"] < hi)])}"/>'
-                for lo, hi, b in bins for v, c in ((1, "sx-ink"), (0, "sx-data")))
-    cards = "".join(draw("sx-line sf-frame", f"M{f(x + o)} {f(y - o)} h{f(w)} v{f(h)}", t + 0.05 * o, 0.3) for o in (10, 5))
-    return cards + frame(x, y, w, h, t) + pop(s, t + 0.2)
+    s = "".join(f'<path class="{c} sf-dot" d="{dots_path(q[g == v])}"/>' for v, c in ((-1, "sx-faint"), (1, INK), (0, BLUE)))
+    mid, r = D["limit"]
+    c = to_box(mid[None, :], x, y, w, h)[0]
+    rx, ry = r * (w - 12), r * (h - 12)
+    lim = f'<ellipse class="sf-limit" cx="{f(c[0])}" cy="{f(c[1])}" rx="{f(rx)}" ry="{f(ry)}"/>'
+    lab = text(x + w - 5, y + h - 20, "resolution", "sx-note sf-small", "end") + text(x + w - 5, y + h - 7, "limit", "sx-note sf-small", "end")
+    lead = f'<path class="sx-guide-strong" d="M{f(c[0])} {f(c[1] + ry)} V{f(y + h - 32)}"/>'
+    return frame(x, y, w, h, t) + pop(s, t + 0.1) + pop(lim + lead + lab, t + 0.4)
+
+
+def refits(x, y, w, h, D, t, cols=4, rows=3):
+    gap = 4.0
+    tw, th = (w - gap * (cols - 1)) / cols, (h - gap * (rows - 1)) / rows
+    out = []
+    A = D["aligned"]
+    for i in range(rows * cols):
+        c, r = i % cols, i // cols
+        tx, ty = x + c * (tw + gap), y + r * (th + gap)
+        q = to_box(D["map"], tx, ty, tw, th, 3.0)
+        lab = A[i]
+        keep = np.arange(len(lab)) % 3 == 0  # a third of the dots, for weight
+        cell = frame(tx, ty, tw, th, t + 0.02 * i)
+        paths = "".join(f'<path class="{cl} sf-tiny" d="{dots_path(q[keep & (lab == v)])}"/>' for v, cl in ((1, INK), (0, BLUE)))
+        out.append(cell + pop(paths, t + 0.1 + 0.03 * i))
+    return "".join(out)
+
+
+def ring(cx, cy, r, value, lo, hi, cls, t):
+    def at(frac):
+        a = 2 * math.pi * frac - math.pi / 2
+        return cx + r * math.cos(a), cy + r * math.sin(a)
+
+    ax, ay = at(value)
+    arc = f"M{f(cx)} {f(cy - r)} A{f(r)} {f(r)} 0 {1 if value > 0.5 else 0} 1 {f(ax)} {f(ay)}"
+    ticks = "".join(f"M{f(cx + (r - 3) * math.cos(2 * math.pi * v - math.pi / 2))} {f(cy + (r - 3) * math.sin(2 * math.pi * v - math.pi / 2))} L{f(cx + (r + 3) * math.cos(2 * math.pi * v - math.pi / 2))} {f(cy + (r + 3) * math.sin(2 * math.pi * v - math.pi / 2))}" for v in (lo, hi))
+    return (pop(f'<circle class="sf-track" cx="{f(cx)}" cy="{f(cy)}" r="{f(r)}"/>', t) + draw(f"sf-arc {cls}", arc, t, 0.6)
+            + pop(f'<path class="sf-tick" d="{ticks}"/>' + text(cx, cy + 4, f"{value:.2f}", "sx-note sf-small", "middle"), t + 0.3))
+
+
+def holds(x, y, w, h, D, t):
+    S = D["share"]
+    n = S.shape[0]
+    side = min(h, w * 0.62)
+    c = side / n
+    my = y + (h - side) / 2
+    bins = [(0.02, 0.25, 0.15), (0.25, 0.75, 0.4), (0.75, 1.01, 0.72)]
+    cells = ""
+    for lo, hi, op in bins:
+        d = ""
+        for r in range(n):
+            j = 0
+            while j < n:
+                if lo <= S[r, j] < hi:
+                    e = j
+                    while e + 1 < n and lo <= S[r, e + 1] < hi:
+                        e += 1
+                    d += f"M{f(x + j * c)} {f(my + r * c)}h{f((e - j + 1) * c)}v{f(c)}h{f(-(e - j + 1) * c)}z"
+                    j = e + 1
+                else:
+                    j += 1
+        cells += f'<path class="sf-share" fill-opacity="{op}" d="{d}"/>'
+    rr = min(0.5 * h / 2 - 7, (w - side - 20) / 2)
+    rx = x + side + 12 + rr
+    (v0, l0, h0), (v1, l1, h1) = D["rings"]
+    return (frame(x, my, side, side, t) + pop(cells, t + 0.1) + ring(rx, y + h * 0.27, rr, v0, l0, h0, BLUE, t + 0.3)
+            + ring(rx, y + h * 0.73, rr, v1, l1, h1, INK, t + 0.4))
 
 
 def wide(D) -> str:
     k.reset()
-    W, H, Y, PW, PH = 1120.0, 296.0, 66.0, 200.0, 150.0
-    xs = (30.0, 310.0, 590.0, 870.0)
+    W, H, Y, PH = 1120.0, 262.0, 26.0, 158.0
+    cols = ((24.0, 100.0), (168.0, 250.0), (462.0, 170.0), (676.0, 200.0), (920.0, 176.0))
     P = []
-    for i, (title, line) in enumerate(STAGES):
+    panels = (lambda *a: table(*a), lambda *a: search(*a), lambda *a: groups(*a), lambda *a: refits(*a), lambda *a: holds(*a))
+    for i, ((title, line), (x, w)) in enumerate(zip(STAGES, cols)):
         t = 0.1 + 0.3 * i
-        P.append(panel(i, xs[i], Y, PW, PH, D, t))
-        P.append(pop(text(xs[i], Y + PH + 28, fits(title, 12.5, PW), "sx-title") + text(xs[i], Y + PH + 46, fits(line, 11.5, PW + 1), "sx-note"), t + 0.1))
+        P.append(panels[i](x, Y, w, PH, D, t))
+        P.append(pop(text(x, Y + PH + 28, fits(title, 12.5, w), "sx-title") + text(x, Y + PH + 46, fits(line, 11.5, w + 1), "sx-note"), t + 0.1))
         if i:
-            P.append(link(xs[i - 1] + PW, Y + PH / 2, xs[i], Y + PH / 2, t))
-    a, b = xs[2] + PW / 2, xs[1] + PW / 2
-    P.append(thread(f"M{f(a)} {f(Y)} C{f(a)} 18 {f(b)} 18 {f(b)} {f(Y)}", 1.1) + k.node(a, Y, 1.1) + k.node(b, Y, 1.15))
-    P.append(pop(text((a + b) / 2, 22, fits(LOOP, 11.5, 260), "sx-note sf-onbg", "middle"), 1.2))
+            xp, wp = cols[i - 1]
+            P.append(link(xp + wp, Y + PH / 2, x, Y + PH / 2, t))
     print(f"starfold-how.svg: {len(k.WORDS)} words")
     return k.svg("sf-fig sx-wide", W, H, LABEL, P)
 
 
 def narrow(D) -> str:
     k.reset()
-    W, PW, PH, X, GAP = 380.0, 122.0, 98.0, 24.0, 34.0
+    W, PW, PH, X, GAP = 380.0, 150.0, 96.0, 14.0, 22.0
+    ys = [12 + i * (PH + GAP) for i in range(5)]
+    tx = X + PW + 16
     P = []
-    ys = [14 + i * (PH + GAP) for i in range(4)]
-    tx = X + PW + 18
-    for i, (title, line) in enumerate(STAGES):
-        y = ys[i]
-        t = 0.1 + 0.3 * i
-        P.append(panel(i, X, y, PW, PH, D, t))
-        P.append(pop(text(tx, y + 38, fits(title, 13, W - tx), "sx-title") + text(tx, y + 58, fits(line, 12, W - tx), "sx-note"), t + 0.1))
+    panels = (lambda *a: table(a[0] + 25, *a[1:2], 100, *a[3:]), lambda *a: search(*a), lambda *a: groups(*a), lambda *a: refits(*a), lambda *a: holds(*a))
+    lines = (("no labels",), ("score against a", "structureless copy"), ("UMAP map,", "HDBSCAN cut"), ("random subsets,", "new seeds"), ("pairs, recurrence,", "flags"))
+    for i, ((title, _), ln) in enumerate(zip(STAGES, lines)):
+        y, t = ys[i], 0.1 + 0.3 * i
+        P.append(panels[i](X, y, PW, PH, D, t))
+        body = text(tx, y + 34, fits(title, 13, W - tx), "sx-title")
+        for j, s in enumerate(ln):
+            body += text(tx, y + 54 + 17 * j, fits(s, 12, W - tx), "sx-note")
+        P.append(pop(body, t + 0.1))
         if i:
             P.append(link(X + PW / 2, ys[i - 1] + PH, X + PW / 2, y, t))
-    y0, y1 = ys[2] + PH / 2, ys[1] + PH / 2
-    R = X + PW
-    P.append(thread(f"M{f(R)} {f(y0)} C{f(R + 18)} {f(y0)} {f(R + 18)} {f(y1)} {f(R)} {f(y1)}", 1.1) + k.node(R, y0, 1.1) + k.node(R, y1, 1.15))
-    P.append(pop(text(tx, ys[1] + PH + 21, fits(LOOP, 12, 220), "sx-note"), 1.2))
     print(f"starfold-how-narrow.svg: {len(k.WORDS)} words")
-    return k.svg("sf-fig sx-narrow", W, ys[3] + PH + 14, LABEL, P)
+    return k.svg("sf-fig sx-narrow", W, ys[4] + PH + 12, LABEL, P)
 
 
 def main() -> None:
