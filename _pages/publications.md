@@ -11,7 +11,7 @@ extra_css: [/assets/css/thesis.css]
 {%- assign L = site.data.ledger -%}
 {%- assign C = site.data.copy.publications -%}
 {%- assign CP = site.data.copy.plates -%}
-{% include plate.html loop="desk" still="/assets/img/heroes/desk.poster.webp" alt="The published figures as printed sheets on a desk" title="Publications" line=CP.publications %}
+{% include plate.html still="/assets/img/heroes/publications.webp" alt="The published figures as printed sheets on a desk" title="Publications" line=CP.publications %}
 <div class="wrap">
 <section class="section section--tight" id="explainers" aria-labelledby="explainers-title">
   <div class="section-head k-up"><h2 id="explainers-title">Explainers</h2><p>{{ C.explainers_lead }}</p></div>
