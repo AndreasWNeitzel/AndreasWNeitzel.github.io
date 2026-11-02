@@ -6,10 +6,10 @@ What is real. Every point is a star of the recorded Starfold run on the APOGEE D
 frame. On the upright plate each star sits at its own recorded [Fe/H] (across) and [alpha/M] (up), so the two ridges
 are the high-alpha and low-alpha sequences as measured; the plate's rules fall on round values of the two
 abundances, and a few very metal-poor stars lie past its left edge. On the flat map each star sits at its own position
-on the run's two-dimensional map, the two axes scaled by one common factor. The map is given a quarter turn, which
-changes nothing since its axes carry no meaning, so that it stands upright with the smaller group on top, as on the
-plate. The colour of a star is its recorded group throughout: blue for the larger group, brass for the smaller one,
-graphite for the stars the run left unassigned. Nothing is added.
+on the run's two-dimensional map, the two axes scaled by one common factor, with the smaller group to the right and
+the sheet that carries the map a little longer than the map at either end, so that it spans most of the frame. The
+colour of a star is its recorded group throughout: blue for the larger group, brass for the smaller one, graphite for
+the stars the run left unassigned. Nothing is added.
 
 What is schematic. The paths between the plate and the sheet are not data: each star moves alone along an eased
 arc towards the camera, starting a little after its neighbours higher on the plate. The rolled state is not data
@@ -19,7 +19,7 @@ stretched, so every star keeps its place on it and the flat end is exactly the m
 is not drawn, and the map was not made from the two plate columns alone; the roll stands for the idea that the stars
 lie on a curved surface inside a larger space. The hairlines of the sheet are its straight rulings and level lines,
 which become the straight grid of the flat map; plate and sheet are faint glass. Camera, light, floor and timing are
-free choices. All the action stays in the central third of the frame, which is what a three-panel card shows.
+free choices.
 
 Usage:
   python blender_starfold_manifold.py DATA_DIR OUT_DIR --still T [T ...] [--w 640 --h 360 --samples 32]
@@ -53,12 +53,13 @@ mp, grp, feat = arr('map').astype(float), arr('group').astype(int), arr('feature
 names = [c['name'] for c in meta['columns']]
 FE, AL = feat[:, names.index('fe_h')], feat[:, names.index('alpha_m')]
 lo, hi = mp.min(0), mp.max(0)
-L = 5.2                                            # sheet width: the arc length that is rolled
-k = L / (hi[1] - lo[1])                            # one scale for both map axes
-HZ = (hi[0] - lo[0]) * k                           # sheet height, along the roll's vertical axis
+MAP_L, MARGIN = 12.6, 1.5                          # width of the map, and the blank sheet beyond it at either end
+L = MAP_L + 2 * MARGIN                             # sheet width: the arc length that is rolled
+k = MAP_L / (hi[0] - lo[0])                        # one scale for both map axes
+HZ = (hi[1] - lo[1]) * k + 0.25                    # sheet height, along the roll's vertical axis
 sel = np.sort(np.random.default_rng(0).choice(len(mp), args.n, replace=False))
-S = (hi[1] - mp[sel, 1]) * k                       # a quarter turn of the map: arc length from the sheet's left edge
-Z = (mp[sel, 0] - (lo[0] + hi[0]) / 2) * k         # height on the sheet; the smaller group ends on top
+S = MARGIN + (mp[sel, 0] - lo[0]) * k              # arc length from the sheet's left (inner) edge
+Z = (mp[sel, 1] - (lo[1] + hi[1]) / 2) * k         # height on the sheet
 G = grp[sel]
 sizes = {g: int((grp == g).sum()) for g in set(grp.tolist())}
 big = max((g for g in sizes if g >= 0), key=sizes.get)
@@ -68,14 +69,14 @@ COL = np.array([BLUE if g == big else (GRAPH if g < 0 else BRASS) for g in G])
 
 # ---------- the plate: [Fe/H] across, [alpha/M] up ----------
 FE0, FE1, AL0, AL1 = -1.2, 0.5, -0.12, 0.40        # the plate's edges in dex
-PW, PH, PY = 4.8, 6.6, -1.3                        # its size, and its place in front of the roll
+PW, PH, PY = 5.6, 7.7, -2.9                        # its size, and its place in front of the roll
 def plate_x(v): return (np.asarray(v) - (FE0 + FE1) / 2) / (FE1 - FE0) * PW
 def plate_z(v): return (np.asarray(v) - (AL0 + AL1) / 2) / (AL1 - AL0) * PH
 P0 = np.stack([plate_x(FE[sel]), np.full(len(sel), PY), plate_z(AL[sel])], -1)
 rng = np.random.default_rng(1)
 rank = np.argsort(np.argsort(-AL[sel])) / (len(sel) - 1)   # 0 for the highest star on the plate
 DELAY = 0.7 * rank + 0.3 * rng.random(len(sel))    # the stagger, in [0, 1]
-BOW = 0.9 + 0.8 * rng.random(len(sel))             # how far towards the camera a star's path swings
+BOW = 1.2 + 1.0 * rng.random(len(sel))             # how far towards the camera a star's path swings
 
 # ---------- the timetable, in seconds of the first half; the second half is its mirror ----------
 HOLD, TRAVEL, STAGGER = 0.7, 1.4, 1.0              # plate held; one star's journey; spread of the departures
@@ -90,10 +91,10 @@ def clock(t):
     return (0.5 - abs((t % 1.0 if t < 1 else 0.0) - 0.5)) * 2 * T_MID   # seconds, folded at the middle of the loop
 
 # ---------- the sheet: a loose Archimedean roll about a vertical axis ----------
-R0, B = 0.22, 0.078                                # inner radius, and turn spacing over 2 pi (about 1.5 turns)
+R0, B = 0.40, 0.15                                 # inner radius, and turn spacing over 2 pi (about 1.5 turns)
 SS = np.linspace(0, L, 2401)                       # arc length from the inner edge
 KAP = 1 / np.sqrt(R0 ** 2 + 2 * B * SS)
-WF = 0.30                                          # width of the bend's soft front
+WF = 0.60                                          # width of the bend's soft front
 
 def centreline(p):
     """Plan view (x, y) of the sheet's profile at arc lengths SS, for unroll progress p. The bending is released
@@ -109,7 +110,7 @@ def centreline(p):
     z -= z.mean(); y -= y.mean()
     return z, y
 
-TILT = math.radians(float(os.environ.get('SF_TILT', '7')))    # the roll leans its top towards the camera
+TILT = math.radians(float(os.environ.get('SF_TILT', '3')))    # the roll leans its top towards the camera
 LEAN = [0.0]                                       # the sheet's current lean, in radians
 
 def tilt(pts):
@@ -174,7 +175,7 @@ def link(ob): bpy.context.collection.objects.link(ob); return ob
 # points: one octahedron per star in a single mesh
 OCT = np.array([(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)], float)
 FACES = ((0, 2, 4), (2, 1, 4), (1, 3, 4), (3, 0, 4), (2, 0, 5), (1, 2, 5), (3, 1, 5), (0, 3, 5))
-RAD = np.where(G < 0, 0.022, 0.027)
+RAD = np.where(G < 0, 0.026, 0.032)
 bm = bmesh.new()
 for i in range(len(S)):
     vs = [bm.verts.new((0, 0, 0)) for _ in range(6)]
@@ -245,8 +246,8 @@ ct.links.new(ct.nodes['Render Layers'].outputs['Image'], gl_.inputs['Image']); c
 cd = bpy.data.cameras.new('cam'); cd.lens = 40; cd.dof.use_dof = True; cd.dof.aperture_fstop = 8.0
 cam = link(bpy.data.objects.new('cam', cd)); sc.camera = cam
 from mathutils import Vector
-LOOK = Vector((0.0, 0.0, -0.1))
-CAM_D, CAM_H, CAM_AZ = (float(v) for v in os.environ.get('SF_CAM', '19.5 2.2 14').split())
+LOOK = Vector((0.0, 0.0, 0.12))
+CAM_D, CAM_H, CAM_AZ, CAM_BACK = (float(v) for v in os.environ.get('SF_CAM', '19.5 2.2 14 3.5').split())
 
 def pose(t):
     now = clock(t)
@@ -273,7 +274,8 @@ def pose(t):
     for s_ in FADERS['plate']: s_.default_value = 1 - f
     for s_ in FADERS['sheet']: s_.default_value = f
     a = math.radians(CAM_AZ * math.sin(math.pi / 2 * arc) ** 2)   # the camera swings round the roll and back
-    cam.location = Vector((LOOK.x + CAM_D * math.sin(a), -CAM_D * math.cos(a), CAM_H))
+    D = CAM_D + CAM_BACK * arc                            # and stands back while the sheet is rolled, which stands nearer
+    cam.location = Vector((LOOK.x + D * math.sin(a), -D * math.cos(a), CAM_H))
     cam.rotation_euler = (LOOK - cam.location).to_track_quat('-Z', 'Y').to_euler()
     cd.dof.focus_distance = (Vector((0, 0, 0)) - cam.location).length
     bpy.context.view_layer.update()
