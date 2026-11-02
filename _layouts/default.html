@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" id="top">
 <head>
 {% include head.html %}
 </head>
-<body class="{{ page.body_class }}">
+<body class="{{ page.body_class }}{% if page.url == '/' %} intro{% endif %}">
 {% include icons.html %}
 {% include header.html %}
 <main id="main">

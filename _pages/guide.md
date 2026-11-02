@@ -2,14 +2,23 @@
 layout: page
 permalink: /guide/
 title: Field guide
-description: Short explainers of the science, institutions and machines behind my work, from Galactic archaeology to the supercomputers I run on.
-lede: The science, institutions and machines behind my work, one minute each, with sources and the parts I was involved in.
+copy: guide
+cards:
+  gaia: /assets/img/heroes/line_gaia.webp
+  supercomputers: /assets/img/heroes/line_hpc.webp
+  haydn: /assets/img/heroes/software_cluster.webp
+  galactic-archaeology: /assets/img/heroes/research_allsky.webp
+  asteroseismology: /assets/img/heroes/research_seismo.webp
+  machine-learning-for-stars: /assets/img/heroes/line_janus.webp
+  eso-vlt: /assets/img/heroes/eso_daylight.webp
 ---
 <div class="guide-grid">
   {%- assign gs = site.guide | sort: "order" -%}
   {%- for g in gs %}
-  <a class="card" href="{{ g.url | relative_url }}" data-spotlight>
-    <div class="media">{% if g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% else %}<img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}</div>
+  {%- assign slug = g.url | split: "/" | last -%}
+  {%- assign ci = page.cards[slug] -%}
+  <a class="card k-up" href="{{ g.url | relative_url }}">
+    <div class="media">{% if ci %}<img src="{{ ci | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% elsif g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% else %}<img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}</div>
     <div class="card-body">
       <h3>{{ g.title | missions }}</h3>
       <p>{{ g.lede | missions }}</p>

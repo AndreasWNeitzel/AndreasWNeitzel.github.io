@@ -1,0 +1,25 @@
+{%- assign PL = site.data.places -%}
+<div class="globe-wrap k-scale" data-globe data-maps="{{ '/assets/data/map/' | relative_url }}" data-script="{{ '/assets/js/globe.js' | relative_url }}" data-vendor="{{ '/assets/vendor/globe/' | relative_url }}">
+  <div class="stage">
+    <canvas class="map" aria-hidden="true"></canvas>
+    <svg class="globe" role="img" aria-label="Globe with the routes from Porto to every place in the record"></svg>
+    <div class="ctrl" role="group" aria-label="Globe controls">
+      <button type="button" data-z="in" aria-label="Zoom in"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg></button>
+      <button type="button" data-z="out" aria-label="Zoom out"><svg class="i" aria-hidden="true"><use href="#i-minus"/></svg></button>
+      <button type="button" data-z="reset" aria-label="Show the whole globe"><svg class="i" aria-hidden="true"><use href="#i-globe"/></svg></button>
+      <button type="button" data-z="replay" aria-label="Replay the routes"><svg class="i" aria-hidden="true"><use href="#i-replay"/></svg></button>
+    </div>
+    <div class="tip" aria-hidden="true"></div>
+  </div>
+  <div class="places" aria-label="Places"></div>
+  <script type="application/json" data-places>{
+    "home": {{ PL.home | jsonify }},
+    "routes": {{ PL.routes | jsonify }},
+    "places": [
+      {%- for pl in PL.places %}
+      {"id": {{ pl.id | jsonify }}, "name": {{ pl.name | jsonify }}, "country": {{ pl.country | jsonify }}, "lat": {{ pl.lat }}, "lon": {{ pl.lon }},
+       "line": {{ pl.line | default: pl.blurb | default: "" | jsonify }}, "photo": {% if pl.photo %}{{ pl.photo | relative_url | jsonify }}{% else %}null{% endif %}, "credit": {{ pl.photo_credit | default: "" | jsonify }}}{% unless forloop.last %},{% endunless %}
+      {%- endfor %}
+    ]
+  }</script>
+</div>

@@ -1,290 +1,83 @@
-# Curated home-page content. Every fact here restates an entry of the public ledger export
-# (_data/ledger.yml) or a public record linked from it; the ledger id is given for each item.
+# Structure of the home page: which loop, image, logo and link each card carries. The words are in
+# _data/copy.yml; every fact restates an entry of the public ledger export (_data/ledger.yml).
 
-profile:
-  role: PhD researcher in astrophysics and machine learning
-  institute: IA and University of Porto
-  nouns: [Astronomer, Machine learning, Neural networks, Galactic archaeology, Gaia, Asteroseismology, HPC]
-  descriptor: >-
-    I build neural networks and unsupervised methods that read stellar chemistry, ages and
-    populations from <i>Gaia</i> spectra and asteroseismic data, and I run them on European
-    supercomputers.
-
-glance:
-  - {n: "4", label: refereed papers}
-  - {n: "16", label: talks and posters}
-  - {n: "1.3 M", label: core-hours approved}
-  - {n: "5", label: fellowships and allocations}
-
-# Four pieces of work, one card each; the rest of the record is on the Research page.
-selected:
-  - title: Stellar populations without labels, from the paper to Starfold
-    kicker: A&A 695, A243 (2025), first author · Starfold 0.2.0, open source
-    text: Manifold learning separates disc, halo and accreted stars in a simulated Milky Way; Starfold is the package that grew out of it, with 17 named warnings.
-    url: /papers/neitzel-2025-manifold-learning/
-    img: /assets/img/cards/milky-way.webp
-    tag: paper
-    label: paper and software
-    ledger: [pub-2025-neitzel-manifold-learning, sw-2026-starfold]
-  - title: JANUS, the chemistry of red giants from Gaia spectra
-    kicker: PhD work within the FCT project ArqueoGal, 2025 to 2027
-    text: Normalising-flow networks that read stellar parameters and chemistry from Gaia spectra, with a reliability score for every star.
+# Four concept cards under the hero, one looping render each (assets/video, posters in assets/img/heroes).
+concepts:
+  - key: missions
+    loop: gaia
+    url: /guide/gaia/
+  - key: ai
+    loop: ai
     url: /research/janus/
-    art: nn
-    tag: software
-    label: research
-    ledger: [fund-2026-arqueogal-pex-participant, pres-2026-07-tasc10-oral-janus, pres-2026-10-imas13-oral-janus]
-  - title: ArqueoGal, the Milky Way's history with Galactic archaeology
-    kicker: FCT exploratory project, 2026 to 2027, co-investigator
-    text: The project JANUS and Starfold serve. I develop its machine-learning pipelines and the repository that prepares Gaia DR3 and APOGEE DR19 data with provenance.
-    url: /research/arqueogal/
-    art: clusters
-    tag: grant
-    label: project
-    ledger: [fund-2026-arqueogal-pex-participant, sw-2026-arqueogal-repo]
-  - title: HAYDNsim, noise forecasts for crowded clusters
-    kicker: INAF Bologna secondment, 2025 to 2026
-    text: Builds synthetic fields of dense star clusters and forecasts each star's photometric noise for the proposed HAYDN mission.
-    url: /software/haydnsim/
-    img: /assets/img/guide/haydn.webp
-    tag: software
-    label: pipeline
-    ledger: pos-2025-visiting-inaf-bologna
-
-# Things to run in the browser, one row.
-try:
-  - title: Train a neural network
-    text: on Gaia spectra of 4,000 stars
-    url: /playground/neural-network/
-    art: nn
-  - title: Orbits
-    text: satellites, then the Milky Way
-    url: /playground/orbits/
-    art: orbit
-  - title: Build a star
-    text: a polytrope against a MESA model
-    url: /playground/polytropes/
-    art: polytrope
-  - title: Gaussian processes
-    text: on the velocities of HD 41248
-    url: /playground/gaussian-processes/
-    art: gp
-  - title: Stellar Explorer
-    text: one star, birth to white dwarf
-    url: /stellar-explorer/
-    art: hr
-  - title: Starfold demo
-    text: 9,242 stars, 32 refits
-    url: /software/starfold-demo/
-    art: clusters
-
-evidence:
-  - src: /assets/img/photos/vlt-golden-hour.webp
-    alt: Andreas in a hard hat on the Very Large Telescope platform at Paranal at sunset, with the Unit Telescope enclosures behind him.
-    caption: VLT platform, Paranal, May 2024 · the observing run
-    url: /observing/paranal/
-  - src: /assets/img/photos/ut-dome-interior.webp
-    alt: Andreas standing beneath the mirror cell of an 8.2-metre Unit Telescope inside its dome.
-    caption: Inside a Unit Telescope dome · ESO and the VLT
-    url: /guide/eso-vlt/
-  - src: /assets/img/photos/aarhus-2026-janus-heldout.webp
-    alt: Andreas presenting JANUS at TASC10/KASC17 in Aarhus, in front of a slide comparing its labels with APOGEE on held-out stars.
-    caption: JANUS talk, TASC10/KASC17, Aarhus 2026 · talks
-    url: /talks/
-  - src: /assets/img/photos/paranal-milky-way.webp
-    alt: The Milky Way over the Atacama desert, photographed from Paranal before dawn.
-    caption: The Milky Way from Paranal · what is Galactic archaeology?
+  - key: hpc
+    loop: hall
+    url: /guide/supercomputers/
+  - key: sky
+    loop: sky
     url: /guide/galactic-archaeology/
 
-now: Building JANUS, a neural network for the chemistry of oscillating red giants from <i>Gaia</i> spectra, for the FCT project ArqueoGal. Thesis due in 2027.
+# Three wide portals. Photographs are mine or show me; the renders are built from real data or real
+# geometry (figures/heroes, scripts under figures/).
+portals:
+  - key: research
+    url: /research/
+    images:
+      - {src: /assets/img/heroes/research_seismo.webp, pos: "62% 50%"}
+      - {src: /assets/img/heroes/ut-mirror-cell.webp, pos: "46% 50%"}
+      - {src: /assets/img/heroes/research_allsky.webp, pos: "50% 50%"}
+  - key: software
+    url: /software/
+    images:
+      - {src: /assets/img/heroes/software_cluster.webp, pos: "60% 50%"}
+  - key: talks
+    url: /talks/
+    images:
+      - {src: /assets/img/heroes/talk_aarhus.webp, pos: "30% 55%"}
+      - {src: /assets/img/heroes/talk_porto.webp, pos: "62% 50%"}
+      - {src: /assets/img/heroes/talk_dfa_wide.webp, pos: "84% 50%"}
 
+# Missions and machines: official marks where the agency's terms allow (assets/img/logos/policy.md),
+# line marks otherwise.
 missions:
-  - icon: m-gaia
-    logo: /assets/img/logos/missions/gaia-144.png
+  - id: gaia
+    logo: /assets/img/logos/missions/gaia-112.webp
     logo_alt: Gaia mission logo (ESA)
-    name: Gaia
-    who: ESA, 2013 to 2025
-    text: The spectra and astrometry my research runs on.
     url: /guide/gaia/
-  - icon: m-kepler
-    logo: /assets/img/logos/missions/kepler-144.png
+  - id: kepler
+    logo: /assets/img/logos/missions/kepler-112.webp
     logo_alt: Kepler mission logo (NASA)
-    name: Kepler
-    who: NASA, 2009 to 2018
-    text: Four years of oscillations in one patch of sky.
+    wide: true
     url: /guide/tess-kepler/
-  - icon: m-tess
-    logo: /assets/img/logos/missions/tess-144.png
+  - id: tess
+    logo: /assets/img/logos/missions/tess-112.webp
     logo_alt: TESS mission logo (NASA)
-    name: TESS
-    who: NASA, since 2018
-    text: Oscillating giants across the whole sky.
     url: /guide/tess-kepler/
-  - icon: m-ariel
-    logo: /assets/img/logos/missions/ariel.svg
+  - id: plato
+    logo: /assets/img/logos/missions/plato-112.webp
+    logo_alt: PLATO mission logo (ESA)
+    url: /about/#record
+  - id: ariel
+    logo: /assets/img/logos/missions/ariel-112.webp
     logo_alt: Ariel mission logo (ESA)
-    name: Ariel
-    who: ESA, launch 2029
-    text: Ages and masses for stars in its target list.
     url: /papers/neitzel-2022-msc-thesis/
-  - icon: m-haydn
-    logo: /assets/img/logos/missions/haydn-144.png
+  - id: haydn
+    logo: /assets/img/logos/missions/haydn-112.webp
     logo_alt: HAYDN mission logo
-    name: HAYDN
-    who: proposed to ESA
-    text: Photometry inside crowded star clusters.
     url: /guide/haydn/
-  - icon: i-telescope
-    name: Very Large Telescope
-    who: ESO, Paranal
-    text: Six nights with ESPRESSO, May 2024.
+  - id: vlt
+    icon: i-telescope
     url: /observing/paranal/
-  - icon: i-cpu
-    name: Deucalion
-    who: Guimarães, Portugal
-    text: 299,520 core-hours for the cluster noise runs.
+  - id: deucalion
+    icon: i-cpu
     url: /guide/supercomputers/
-  - icon: i-cpu
-    name: MareNostrum 5
-    who: Barcelona, Spain
-    text: 1,002,400 core-hours for training JANUS.
+  - id: marenostrum
+    icon: i-cpu
     url: /guide/supercomputers/
 
-record:
-  - id: funding
-    title: Funding won
-    count: "5"
-    unit: awards
-    colour: --t-grant
-    items:
-      - "<strong>FCT doctoral fellowship</strong>, 2025.01843.BD, 2025 to 2026"
-      - "<strong>ArqueoGal PhD fellowship</strong>, FCT project 2024.15303.PEX, 2026 to 2027"
-      - "<strong>FCT MSc research grant</strong>, BreakStarS project, 2021 to 2022"
-      - "<strong>MareNostrum 5</strong>: 1,002,400 core-hours and 1,000 H100 GPU-hours, as responsible investigator, approved 2026"
-      - "<strong>Deucalion</strong>: 299,520 core-hours (99,840 granted, tripled as a bonus) and 1,500 A100 GPU-hours, as responsible investigator, approved 2026"
-  - id: leadership
-    title: Leadership
-    count: "4"
-    unit: lead roles
-    colour: --t-paper
-    items:
-      - "<strong>First author</strong>, <a href=\"/papers/neitzel-2025-manifold-learning/\">A&amp;A 695, A243</a> (2025)"
-      - "<strong>Responsible investigator</strong>, two FCT advanced-computing projects (2026)"
-      - "<strong>Sole developer</strong> of JANUS, HAYDNsim, <a href=\"/software/\">Starfold, Stellar Explorer and Tellurion</a>"
-      - "<strong>Chair</strong>, IA Stars Day organising committee (2023); <strong>supervisor</strong>, IA Summer Programme (2024, 2025)"
-  - id: international
-    title: International
-    count: "4"
-    unit: countries abroad
-    colour: --t-observing
-    items:
-      - "<strong>INAF-OAS Bologna</strong>, six-month secondment (2025 to 2026), with visits to INAF Padova"
-      - "<strong>ESO Very Large Telescope</strong>, visiting astronomer (2024)"
-      - "<strong>ESA Ariel Science Consortium</strong> member since 2021; KASOC and TASOC"
-      - "<strong>Talks</strong> at TASC10/KASC17 (Aarhus), IMAS13 and IMAS11 (Spain), TASC8/KASC15 (Porto)"
-      - "<strong>Organising committee</strong>, TASC8/KASC15 international workshop (2024)"
-  - id: recognition
-    title: Record
-    count: "4"
-    unit: papers
-    colour: --t-award
-    items:
-      - "<strong>Best Master's Student</strong> in Astronomy and Astrophysics, University of Porto (2023)"
-      - "<strong>4 refereed papers</strong> in A&amp;A, one first-author, the latest published in October 2026"
-      - "<strong>16 talks and posters</strong> since 2022, six of them international"
-      - "<strong>Open source</strong>: Starfold 0.2.0 (MIT, 294 tests); Tellurion, interactive physics simulations (MIT)"
-
-# Title cards sliding along the top of the home page. Third-party images carry their credit line,
-band:
-  - title: Train a neural network on Gaia spectra
-    tag: software
-    label: playground
-    url: /playground/neural-network/
-    art: nn
-  - title: Orbits, from satellites to the Milky Way
-    tag: software
-    label: playground
-    url: /playground/orbits/
-    art: orbit
-  - title: Build a star from a polytrope
-    tag: software
-    label: playground
-    url: /playground/polytropes/
-    art: polytrope
-  - title: Gaussian processes on a star's velocities
-    tag: software
-    label: playground
-    url: /playground/gaussian-processes/
-    art: gp
-  - title: What Gaia measures
-    tag: guide
-    label: guide
-    url: /guide/gaia/
-    img: /assets/img/cards/gaia-sky.webp
-    credit: ESA/Gaia/DPAC, CC BY-SA 3.0 IGO
-    credit_url: https://www.esa.int/ESA_Multimedia/Images/2020/12/The_colour_of_the_sky_from_Gaia_s_Early_Data_Release_3
-  - title: Talk at TASC8/KASC15, Porto
-    tag: talk
-    label: talk, 2024
-    url: /talks/
-    img: /assets/img/photos/tasc8-kasc15-talk.webp
-    pos: 60% 35%
-  - title: HAYDNsim, crowded clusters simulated
-    tag: software
-    label: pipeline
-    url: /software/haydnsim/
-    img: /assets/img/cards/messier-4.webp
-    credit: ESO, CC BY 4.0
-    credit_url: https://www.eso.org/public/images/eso1235a/
-  - title: ESPRESSO, the spectrograph I observed with
-    tag: observing
-    label: Paranal, 2024
-    url: /observing/paranal/#light-path
-    img: /assets/img/cards/espresso.webp
-    credit: ESO/M. Zamani, CC BY 4.0
-    credit_url: https://www.eso.org/public/images/img_3076-cc/
-  - title: Starfold on 9,242 Milky Way stars
-    tag: software
-    label: demo
-    url: /software/starfold-demo/
-    art: clusters
-  - title: Kepler and TESS
-    tag: guide
-    label: guide
-    url: /guide/tess-kepler/
-    img: /assets/img/cards/kepler.webp
-    credit: NASA/Troy Cryder
-    credit_url: https://images.nasa.gov/details/KSC-2009-1649
-  - title: Supercomputers I run on
-    tag: hpc
-    label: HPC
-    url: /guide/supercomputers/
-    img: /assets/img/guide/supercomputers.webp
-    credit: Steve Jurvetson, CC BY 4.0
-    credit_url: https://commons.wikimedia.org/wiki/File:BSC_MareNostrum_5_(54686085845).jpg
-  - title: Six months at INAF
-    tag: abroad
-    label: Bologna and Padova
-    url: /guide/inaf/
-    img: /assets/img/guide/inaf.webp
-    credit: Memi26, CC BY-SA 4.0
-    credit_url: https://commons.wikimedia.org/wiki/File:La_Specola_di_Padova_riflessa_sul_Bacchiglione.jpeg
-  - title: Galactic archaeology in a minute
-    tag: guide
-    label: guide
-    url: /guide/galactic-archaeology/
-    img: /assets/img/cards/milky-way.webp
-    credit: ESO/S. Brunier, CC BY 4.0
-    credit_url: https://www.eso.org/public/images/eso0932a/
-  - title: Stellar Explorer
-    tag: software
-    label: app
-    url: /stellar-explorer/
-    art: hr
-  - title: The laser guide star at Paranal
-    tag: guide
-    label: guide
-    url: /guide/eso-vlt/
-    img: /assets/img/cards/vlt-laser.webp
-    credit: ESO/G. Lombardi (glphoto.it), CC BY 4.0
-    credit_url: https://www.eso.org/public/images/potw1425a/
+# Photographs for the About page strip (assets/img/heroes), captions in copy.yml.
+strip:
+  - {key: golden, src: /assets/img/heroes/eso_golden.webp, pos: "50% 50%"}
+  - {key: dome, src: /assets/img/heroes/eso_dome.webp, pos: "50% 60%"}
+  - {key: aarhus, src: /assets/img/heroes/talk_aarhus.webp, pos: "30% 60%"}
+  - {key: daylight, src: /assets/img/heroes/eso_daylight.webp, pos: "50% 50%"}
+  - {key: porto, src: /assets/img/heroes/talk_porto.webp, pos: "62% 55%"}

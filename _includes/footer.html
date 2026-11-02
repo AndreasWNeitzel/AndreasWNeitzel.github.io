@@ -1,47 +1,35 @@
 {%- assign p = site.data.person -%}
-<footer class="site-footer">
+{%- assign C = site.data.copy -%}
+<footer class="site-footer tone-deep k-up">
+  <span class="rule" aria-hidden="true"></span>
   <div class="wrap">
-    <div class="footer-id">
-      <a class="brand" href="{{ '/' | relative_url }}"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>{{ p.name | initials }}</span></a>
-      <p>PhD researcher in astrophysics and machine learning at IA and the University of Porto. Gaia, asteroseismology, neural networks, HPC.</p>
+    <div class="ft">
+      <div class="me"><h2>{{ p.name | initials }}</h2><p>{{ C.footer.line | missions }}</p>{% include links.html %}</div>
+      <nav aria-label="Work"><h3>Work</h3><ul>
+        <li><a href="{{ '/research/' | relative_url }}">Research</a></li>
+        <li><a href="{{ '/publications/' | relative_url }}">Publications</a></li>
+        <li><a href="{{ '/software/' | relative_url }}">Software</a></li>
+        <li><a href="{{ '/talks/' | relative_url }}">Talks</a></li>
+        <li><a href="{{ '/observing/paranal/' | relative_url }}">Paranal, May 2024</a></li>
+      </ul></nav>
+      <nav aria-label="Guide"><h3>Guide</h3><ul>
+        {%- assign gs = site.guide | sort: "order" -%}
+        {%- for g in gs limit: 6 %}<li><a href="{{ g.url | relative_url }}">{{ g.short | default: g.title | missions }}</a></li>{% endfor %}
+        <li><a href="{{ '/guide/' | relative_url }}">The whole guide</a></li>
+      </ul></nav>
+      <nav aria-label="About"><h3>About</h3><ul>
+        <li><a href="{{ '/about/' | relative_url }}">About</a></li>
+        <li><a href="{{ '/about/#record' | relative_url }}">The record by date</a></li>
+        <li><a href="{{ '/cv/' | relative_url }}">CV</a></li>
+        <li><a href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}">CV (PDF)</a></li>
+        <li><a href="mailto:{{ p.emails.academic }}">{{ p.emails.academic }}</a></li>
+      </ul></nav>
     </div>
-    <nav aria-label="Contact">
-      <h2>Contact and profiles</h2>
-      <ul>
-        <li><a href="mailto:{{ p.emails.personal }}">Email</a></li>
-        <li><a href="https://orcid.org/{{ p.identifiers.orcid }}" rel="me">ORCID</a></li>
-        <li><a href="https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}" rel="me">Google Scholar</a></li>
-        <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc">NASA ADS</a></li>
-        <li><a href="https://github.com/{{ p.identifiers.github }}" rel="me">GitHub</a></li>
-        <li><a href="https://www.linkedin.com/in/{{ p.identifiers.linkedin }}" rel="me">LinkedIn</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Site">
-      <h2>On this site</h2>
-      <ul>
-        <li><a href="{{ '/research/' | relative_url }}">Research</a> · <a href="{{ '/observing/paranal/' | relative_url }}">observing</a></li>
-        <li><a href="{{ '/publications/' | relative_url }}">Publications and explainers</a></li>
-        <li><a href="{{ '/software/' | relative_url }}">Software</a> · <a href="{{ '/software/#playgrounds' | relative_url }}">playgrounds</a></li>
-        <li><a href="{{ '/talks/' | relative_url }}">Talks and posters</a></li>
-        <li><a href="{{ '/guide/' | relative_url }}">Field guide</a></li>
-        <li><a href="{{ '/about/' | relative_url }}">About</a> · <a href="{{ '/about/#map' | relative_url }}">map</a> · <a href="{{ '/about/#all' | relative_url }}">timeline</a></li>
-        <li><a href="{{ '/cv/' | relative_url }}">CV</a> · <a href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}">PDF</a></li>
-      </ul>
-    </nav>
-    <div class="footer-ack">
-      <div class="wordmarks">
-        <p><span class="wm-k">Affiliations</span><span><a href="https://www.iastro.pt/">IA</a> · <a href="https://www.up.pt/">U.Porto</a> · <a href="https://www.fc.up.pt/">FCUP</a> · <a href="https://www.oas.inaf.it/">INAF-OAS</a>, visiting 2025 to 2026</span></p>
-        <p><span class="wm-k">Consortia</span><span><i>Ariel</i> Science Consortium (ESA) · KASC · TASOC</span></p>
-        <p><span class="wm-k">Facilities</span><span>ESO Very Large Telescope with ESPRESSO · <i>Gaia</i> (ESA) · <i>TESS</i> and <i>Kepler</i> (NASA) · Deucalion · MareNostrum 5</span></p>
-      </div>
-      <div class="funding">
-        <a class="fct" href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia">
-          <img class="fct-light" src="{{ '/assets/img/logos/fct-positive-480.png' | relative_url }}" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-          <img class="fct-dark" src="{{ '/assets/img/logos/fct-negative-480.png' | relative_url }}" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-        </a>
-        <p>Funded by FCT, Fundação para a Ciência e a Tecnologia, I.P., through a research fellowship under the project ArqueoGal (2024.15303.PEX) and, from 2025 to 2026, the doctoral fellowship 2025.01843.BD. Computing on Deucalion and MareNostrum 5 through FCT projects 2026.08382.CPCA.A1 and 2026.08362.CPCA.A2.</p>
-      </div>
+    <div class="marks"><span>Funded by</span>
+      <a href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia"><img class="fct on-dark" src="{{ '/assets/img/logos/fct-negative-480.png' | relative_url }}" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"><img class="fct on-light" src="{{ '/assets/img/logos/fct-positive-480.png' | relative_url }}" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"></a>
+      <span>Computing from</span>
+      <a href="https://eurohpc-ju.europa.eu/" aria-label="EuroHPC Joint Undertaking"><img class="ehpc on-dark" src="{{ '/assets/img/logos/eurohpc-ju-negative.svg' | relative_url }}" alt="EuroHPC Joint Undertaking" loading="lazy"><img class="ehpc on-light" src="{{ '/assets/img/logos/eurohpc-ju.svg' | relative_url }}" alt="EuroHPC Joint Undertaking" loading="lazy"></a>
     </div>
-    <p class="colophon"><span>{{ p.location }} · Last updated <time datetime="{{ site.time | date: '%Y-%m-%d' }}">{{ site.time | date: '%Y-%m-%d' }}</time></span></p>
+    <p class="colophon"><span>© {{ site.time | date: '%Y' }} {{ p.name | initials }}</span><span>Instituto de Astrofísica e Ciências do Espaço, Porto</span><span>Updated <time datetime="{{ site.time | date: '%Y-%m-%d' }}">{{ site.time | date: '%B %Y' }}</time></span><a class="top" href="#top">Back to top <svg class="i" aria-hidden="true" style="transform: rotate(-90deg)"><use href="#i-arrow"/></svg></a></p>
   </div>
 </footer>

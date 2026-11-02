@@ -1,12 +1,13 @@
 ---
 layout: default
 ---
+{%- assign CP = site.data.copy[page.copy] -%}
 <div class="wrap">
-  <header class="page-head">
+  <header class="page-head k-up">
     {%- if page.crumb %}<p class="crumbs"><a href="{{ page.crumb.url | relative_url }}">{{ page.crumb.label }}</a></p>{% endif %}
     <h1>{{ page.title | missions }}</h1>
-    {%- if page.lede %}
-    <p class="lede">{{ page.lede | missions }}</p>
+    {%- assign lede = page.lede | default: CP.lede %}{% if lede %}
+    <p class="lede">{{ lede | missions }}</p>
     {%- endif %}
   </header>
   {{ content }}

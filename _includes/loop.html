@@ -1,0 +1,5 @@
+{%- comment -%} One looping render: AV1 with an H.264 fallback, a poster until it plays, paused off screen by site.js. {%- endcomment -%}
+<video autoplay muted loop playsinline preload="metadata" poster="{{ '/assets/img/heroes/' | append: include.name | append: '.poster.webp' | relative_url }}" aria-label="{{ include.alt }}">
+  <source src="{{ '/assets/video/' | append: include.name | append: '.av1.mp4' | relative_url }}" type='video/mp4; codecs="av01.0.05M.08"'>
+  <source src="{{ '/assets/video/' | append: include.name | append: '.h264.mp4' | relative_url }}" type="video/mp4">
+</video>

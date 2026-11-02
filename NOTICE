@@ -1,0 +1,7 @@
+
+Globe on the home page (assets/vendor/globe, assets/data/map)
+- d3-geo 3.1.1 and d3-array 3.2.4, ISC licence, Mike Bostock (LICENSE-d3-geo, LICENSE-d3-array).
+- topojson-client 3.1.0, ISC licence, Mike Bostock (LICENSE-topojson-client).
+- countries-110m.json from world-atlas 2.0.2 (ISC licence, Mike Bostock), built from Natural Earth, which is in the
+  public domain; globe-mid.json and globe-near.json are cut and simplified from Natural Earth 1:10m by
+  figures/map/build_globe_regions.py.

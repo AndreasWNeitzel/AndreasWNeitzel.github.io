@@ -2,58 +2,63 @@
 layout: page
 permalink: /software/
 title: Software and demos
-description: Research software, browser apps and interactive demos by Andreas W. Neitzel, with status, licence and version.
-lede: Research software and browser apps I wrote, each with what it does, its status, and a way to try it.
+copy: software
 extra_links:
   sw-2026-starfold:
     - {label: Interactive demo, url: /software/starfold-demo/}
     - {label: Held-out benchmark, url: /software/starfold-benchmark/}
+codes:
+  - {id: janus, title: JANUS, img: /assets/img/heroes/software_xp.webp, url: /research/janus/, go: "The method"}
+  - {id: starfold, title: Starfold, img: /assets/img/heroes/software_chem.webp, url: /software/starfold-demo/, go: "Run it on 9,242 stars"}
+  - {id: haydnsim, title: HAYDNsim, img: /assets/img/heroes/software_cluster.webp, url: /software/haydnsim/, go: "The pipeline"}
+playgrounds:
+  - {id: nn, art: nn, url: /playground/neural-network/}
+  - {id: orbits, art: orbit, url: /playground/orbits/}
+  - {id: gp, art: gp, url: /playground/gaussian-processes/}
+  - {id: polytropes, art: polytrope, url: /playground/polytropes/}
+demos:
+  - {id: starfold-demo, art: clusters, url: /software/starfold-demo/, go: Open}
+  - {id: stellar-explorer, art: hr, url: /stellar-explorer/, go: Open}
+  - {id: haydnsim, img: /assets/img/heroes/software_cluster.webp, url: /software/haydnsim/, go: Read about it}
+  - {id: tellurion, img: /assets/img/tellurion/blackhole-legend-3d.webp, url: /software/tellurion/, go: What it is}
 ---
 {%- assign L = site.data.ledger -%}
+{%- assign C = site.data.copy.software -%}
+<section class="section section--tight" id="codes" aria-labelledby="codes-title">
+  <div class="section-head k-up"><h2 id="codes-title">{{ C.codes_title }}</h2></div>
+  <div class="mosaic">
+    {%- for cd in page.codes %}{% assign c = C.codes | where: "id", cd.id | first %}
+    <a class="card k-card" href="{{ cd.url | relative_url }}">
+      <div class="media"><img src="{{ cd.img | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
+      <div class="card-body"><span class="kicker">{{ c.kicker | missions }}</span><h3>{{ cd.title }}</h3><p>{{ c.text | missions }}</p><span class="go">{{ cd.go }}</span></div>
+    </a>
+    {%- endfor %}
+  </div>
+</section>
 <section class="section" id="playgrounds" aria-labelledby="pg">
-  <div class="section-head"><h2 id="pg">Playgrounds</h2><p>Methods from my coursework and research, rebuilt to run in the browser on real data.</p></div>
+  <div class="section-head k-up"><h2 id="pg">Playgrounds</h2><p>{{ C.playgrounds_lead | missions }}</p></div>
   <div class="mosaic mosaic--pairs">
-    <a class="card" href="{{ '/playground/neural-network/' | relative_url }}" data-spotlight>
-      <div class="media art">{% include figures/art-nn.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">playground</span><h3>Train a neural network on <i>Gaia</i> spectra</h3><p>Real XP spectra of 4,000 stars; watch the network learn metallicity live.</p><span class="go">Open</span></div>
+    {%- for pg in page.playgrounds %}{% assign c = C.playgrounds | where: "id", pg.id | first %}
+    <a class="card k-up" href="{{ pg.url | relative_url }}">
+      <div class="media art">{% include figures/art-{{ pg.art }}.svg %}</div>
+      <div class="card-body"><span class="tag tag--software">playground</span><h3>{{ c.title | missions }}</h3><p>{{ c.text | missions }}</p><span class="go">Open</span></div>
     </a>
-    <a class="card" href="{{ '/playground/orbits/' | relative_url }}" data-spotlight>
-      <div class="media art">{% include figures/art-orbit.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">playground</span><h3>Orbits, from satellites to the Milky Way</h3><p>Leapfrog against Runge-Kutta and Euler around the Earth, then six <i>Gaia</i> stars through the Galaxy.</p><span class="go">Open</span></div>
-    </a>
-    <a class="card" href="{{ '/playground/gaussian-processes/' | relative_url }}" data-spotlight>
-      <div class="media art">{% include figures/art-gp.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">playground</span><h3>Gaussian processes on a star's velocities</h3><p>Draw functions from a kernel, pin them with observations, then sample the activity of HD 41248 from 223 HARPS velocities.</p><span class="go">Open</span></div>
-    </a>
-    <a class="card" href="{{ '/playground/polytropes/' | relative_url }}" data-spotlight>
-      <div class="media art">{% include figures/art-polytrope.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">playground</span><h3>Build a star</h3><p>Solve the Lane-Emden equation, scale it to a real star and see where a polytrope stops describing one.</p><span class="go">Open</span></div>
-    </a>
+    {%- endfor %}
   </div>
 </section>
 <section class="section" aria-labelledby="try">
-  <div class="section-head"><h2 id="try">Demos and apps</h2></div>
+  <div class="section-head k-up"><h2 id="try">Demos and apps</h2><p>{{ C.demos_lead | missions }}</p></div>
   <div class="mosaic mosaic--pairs">
-    <a class="card" href="{{ '/software/starfold-demo/' | relative_url }}" data-spotlight>
-      <div class="media art">{% include figures/art-clusters.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">demo</span><h3>Starfold on 9,242 Milky Way stars</h3><p>APOGEE chemistry and <i>Gaia</i> orbits: inspect any star and replay the 32 refits.</p><span class="go">Open</span></div>
+    {%- for d in page.demos %}{% assign c = C.demos | where: "id", d.id | first %}
+    <a class="card k-up" href="{{ d.url | relative_url }}">
+      {%- if d.img %}<div class="media"><img src="{{ d.img | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-{{ d.art }}.svg %}</div>{% endif %}
+      <div class="card-body"><span class="tag tag--software">{% if d.id == "tellurion" %}website{% elsif d.id == "haydnsim" %}pipeline{% elsif d.id == "stellar-explorer" %}app{% else %}demo{% endif %}</span><h3>{{ c.title | missions }}</h3><p>{{ c.text | missions }}</p><span class="go">{{ d.go }}</span></div>
     </a>
-    <a class="card" href="{{ '/stellar-explorer/' | relative_url }}" data-spotlight>
-      <div class="media art">{% include figures/art-hr.svg %}</div>
-      <div class="card-body"><span class="tag tag--software">app</span><h3>Stellar Explorer</h3><p>A star of the Sun's mass from birth to white dwarf, from a MESA and GYRE track.</p><span class="go">Open</span></div>
-    </a>
-    <a class="card" href="{{ '/software/haydnsim/' | relative_url }}" data-spotlight>
-      <div class="media"><img src="{{ '/assets/img/guide/haydn.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
-      <div class="card-body"><span class="tag tag--software">pipeline</span><h3>HAYDNsim</h3><p>Synthetic crowded clusters and per-star noise forecasts for the proposed <i>HAYDN</i> mission.</p><span class="go">Read about it</span></div>
-    </a>
-    <a class="card" href="{{ '/software/tellurion/' | relative_url }}" data-spotlight>
-      <div class="media"><img src="{{ '/assets/img/tellurion/blackhole-legend-3d.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async" width="800" height="500"></div>
-      <div class="card-body"><span class="tag tag--software">website</span><h3>Tellurion</h3><p>My separate website of interactive physics and astronomy simulations, written as a teaching resource.</p><span class="go">What it is</span></div>
-    </a>
+    {%- endfor %}
   </div>
 </section>
 <section class="section" aria-labelledby="packages">
-  <div class="section-head"><h2 id="packages">Packages and applications</h2></div>
+  <div class="section-head k-up"><h2 id="packages">{{ C.packages_title }}</h2></div>
   <ol class="entries">
     {%- for e in L.software %}
     {%- if e.kind == "docs" %}{% continue %}{% endif %}

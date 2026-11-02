@@ -2,7 +2,7 @@
 layout: default
 ---
 <div class="wrap">
-  <header class="page-head paper-head">
+  <header class="page-head paper-head k-up">
     <p class="crumbs"><a href="{{ '/publications/' | relative_url }}">Publications</a> · {{ page.year }} · {{ page.role }}</p>
     <h1>{{ page.headline | missions }}</h1>
     <p class="lede">{{ page.title | missions }}</p>
@@ -37,7 +37,7 @@ layout: default
       <section class="card"><div class="card-body">
         <span class="tag tag--paper">{{ page.role }}</span>
         <p class="small">{{ page.citation | missions }}</p>
-        <p class="links">
+        <p class="textlinks">
           {%- if page.doi %}<a href="https://doi.org/{{ page.doi }}">doi:{{ page.doi }}</a>{% endif -%}
           {%- if page.arxiv %}<a href="https://arxiv.org/abs/{{ page.arxiv }}">arXiv:{{ page.arxiv }}</a>{% endif -%}
           {%- if page.handle %}<a href="https://hdl.handle.net/{{ page.handle }}">hdl:{{ page.handle }}</a>{% endif -%}

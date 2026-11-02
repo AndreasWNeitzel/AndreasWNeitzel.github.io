@@ -3,120 +3,65 @@ layout: default
 body_class: home
 ---
 {%- assign p = site.data.person -%}
-{%- assign L = site.data.ledger -%}
+{%- assign C = site.data.copy.home -%}
 {%- assign H = site.data.home -%}
-<div class="wrap">
 <section class="hero" aria-label="Introduction">
-  <div class="profile card">
-    <h1 class="name">{{ p.name | initials }}</h1>
-    <div class="profile-top">
-      <img class="avatar" src="{{ '/assets/img/photos/portrait-2026.webp' | relative_url }}" width="176" height="176" alt="Portrait of {{ p.name }}" fetchpriority="high">
-      <div class="profile-id">
-        <p class="role">{{ H.profile.role }}</p>
-        <p class="inst">{{ H.profile.institute }}</p>
-        <p class="nouns">{% for n in H.profile.nouns %}<span>{{ n | missions }}</span>{% endfor %}</p>
-      </div>
-    </div>
-    <p class="descriptor">{{ H.profile.descriptor }}</p>
-    <nav class="contacts" aria-label="Contact and profiles">
-      <a href="mailto:{{ p.emails.personal }}"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
-      <a href="https://orcid.org/{{ p.identifiers.orcid }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</a>
-      <a href="https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-scholar"/></svg>Scholar</a>
-      <a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc"><svg class="i" aria-hidden="true"><use href="#i-ads"/></svg>ADS</a>
-      <a href="https://github.com/{{ p.identifiers.github }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
-      <a href="https://www.linkedin.com/in/{{ p.identifiers.linkedin }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
-    </nav>
-    <p class="cta"><a class="btn btn--primary" href="{{ '/assets/pdf/cv_neitzel_academic_summary.pdf' | relative_url }}"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Academic CV (PDF)</a><a class="btn" href="{{ '/cv/' | relative_url }}">Full record</a></p>
-  </div>
-
-  <figure class="fig1 panel" id="fig1">
-    <div class="fig1-head"><span class="figno">FIG 1</span><span>Research pipeline, from <i>Gaia</i> spectra to the Milky Way's history</span><span class="fig1-hint">hover a stage</span><span class="fig1-swipe">swipe to see all six stages</span></div>
-    <div class="fig1-scroll">{% include figures/pipeline.svg %}</div>
-    <figcaption class="fig1-cap" aria-live="polite"><b data-cap-title></b> <span data-cap-text></span></figcaption>
-  </figure>
-</section>
-
-{% include band.html %}
-
-<section class="section reveal" id="work" aria-labelledby="work-title">
-  <div class="section-head">
-    <h2 id="work-title">Research</h2>
-    <a class="more" href="{{ '/research/' | relative_url }}">The lines of work</a>
-  </div>
-  <div class="selected">
-    {%- for c in H.selected %}
-    <a class="card sel" href="{{ c.url | relative_url }}" data-spotlight>
-      {%- if c.img %}<div class="media"><img src="{{ c.img | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>
-      {%- else %}<div class="media art">{% include figures/art-{{ c.art }}.svg %}</div>{% endif %}
-      <div class="card-body">
-        <span class="kicker">{{ c.kicker }}</span>
-        <h3>{{ c.title | missions }}</h3>
-        <p>{{ c.text | missions }}</p>
-        <span class="go">Open</span>
-      </div>
-    </a>
-    {%- endfor %}
+  <div class="photo"><img src="{{ '/assets/img/heroes/hero_2000.webp' | relative_url }}" srcset="{{ '/assets/img/heroes/hero_1000.webp' | relative_url }} 1000w, {{ '/assets/img/heroes/hero_2000.webp' | relative_url }} 2000w" sizes="100vw" width="2000" height="857" fetchpriority="high" decoding="async" alt="{{ C.photo_alt }}"></div>
+  <span class="cap">{{ C.photo_caption }}</span>
+  <div class="who">
+    <h1>{{ p.given_names | initials }}<br>{{ p.family_name }}</h1>
+    <p class="role">{{ C.role }}</p>
+    {% include links.html %}
   </div>
 </section>
-
-<section class="section reveal" id="map" aria-labelledby="map-title">
-  <div class="section-head">
-    <h2 id="map-title">Where the work took me</h2>
-  </div>
-  {% include travel-map.html %}
-</section>
-
-<section class="section reveal" id="record" aria-labelledby="record-title">
-  <div class="section-head">
-    <h2 id="record-title">Track record</h2>
-    <a class="more" href="{{ '/cv/' | relative_url }}">The full record</a>
-  </div>
-  <div class="record">
-    {%- for col in H.record %}
-    <article class="record-col card" style="--dot: var({{ col.colour }})" id="rec-{{ col.id }}">
-      <header><h3>{{ col.title }}</h3><span class="big">{{ col.count }} <small>{{ col.unit }}</small></span></header>
-      <ul>{% for it in col.items %}<li>{{ it }}</li>{% endfor %}</ul>
-    </article>
-    {%- endfor %}
-  </div>
-</section>
-
-<section class="section reveal" id="all" aria-labelledby="all-title">
-  <div class="section-head">
-    <h2 id="all-title">By date</h2>
-    <p>Papers, talks, funding, computing, observing, software and service.</p>
-  </div>
-  {% include timeline.html %}
-</section>
-
-<section class="section reveal" id="missions" aria-labelledby="missions-title">
-  <div class="section-head">
-    <h2 id="missions-title">Missions and machines</h2>
-  </div>
-  <ul class="missions">
-    {%- for m in H.missions %}
-    <li><a href="{{ m.url | relative_url }}">
-      {%- assign lf = nil -%}
-      {%- if m.logo -%}{%- assign lf = site.static_files | where: "path", m.logo | first -%}{%- endif -%}
-      {%- if lf %}<span class="mi-logo"><img src="{{ m.logo | relative_url }}" alt="{{ m.logo_alt }}" loading="lazy" decoding="async"></span>
-      {%- else %}<svg class="i mi" aria-hidden="true"><use href="#{{ m.icon }}"/></svg>{% endif %}
-      <span class="mi-name">{{ m.name | missions }}</span>
-      <span class="mi-who">{{ m.who }}</span>
-      <span class="mi-text">{{ m.text | missions }}</span>
-    </a></li>
-    {%- endfor %}
-  </ul>
-</section>
-
-<section class="section reveal" id="field" aria-labelledby="field-title">
-  <div class="section-head">
-    <h2 id="field-title">In the field</h2>
-    <a class="more" href="{{ '/about/' | relative_url }}">About me</a>
-  </div>
-  <ul class="evidence" aria-label="Photographs">
-    {%- for ph in H.evidence %}
-    <li><a href="{{ ph.url | relative_url }}"><img src="{{ ph.src | relative_url }}" alt="{{ ph.alt }}" loading="lazy" decoding="async"><span>{{ ph.caption }}</span></a></li>
-    {%- endfor %}
-  </ul>
+<div class="wrap">
+<section class="concepts" aria-label="What I work with">
+  {%- for c in H.concepts %}
+  {%- assign cc = C.concepts | where: "key", c.key | first %}
+  <a class="concept" href="{{ c.url | relative_url }}">
+    <div class="plate">{% include loop.html name=c.loop alt=cc.alt %}</div>
+    <h2>{{ cc.title }}</h2>
+    <p>{{ cc.line | missions }}</p>
+  </a>
+  {%- endfor %}
 </section>
 </div>
+
+<section class="section portals tone-alt" aria-label="Research, software and talks">
+  <div class="wrap">
+    <div class="flow"><span class="spine" aria-hidden="true"></span>
+    {%- for pt in H.portals %}
+    {%- assign cp = C.portals | where: "key", pt.key | first %}
+    <a class="portal k-card" href="{{ pt.url | relative_url }}"><span class="node" aria-hidden="true"></span>
+      <div class="media">{% if pt.images.size > 1 %}<div class="tri">{% for im in pt.images %}<div><img src="{{ im.src | relative_url }}" alt="{{ cp.alts[forloop.index0] }}" loading="lazy" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}></div>{% endfor %}</div>
+        {%- else %}{% assign im = pt.images[0] %}<img src="{{ im.src | relative_url }}" alt="{{ cp.alts[0] }}" loading="lazy" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}>{% endif %}</div>
+      <p class="glass">{{ cp.glass | missions }}</p>
+      <div class="t"><h2>{{ cp.title }}</h2><span class="more"><span>Learn more</span><span class="go"><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></div>
+    </a>
+    {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="missions" aria-labelledby="missions-title">
+  <div class="wrap">
+    <div class="section-head k-up"><h2 id="missions-title">{{ C.missions_title }}</h2></div>
+    <ul class="mi">
+      {%- for m in H.missions %}
+      {%- assign cm = C.missions | where: "id", m.id | first %}
+      <li class="k-left"><a href="{{ m.url | relative_url }}">
+        {%- if m.logo %}<span class="logo{% if m.wide %} wide{% endif %}"><img src="{{ m.logo | relative_url }}" width="48" height="48" alt="{{ m.logo_alt }}" loading="lazy" decoding="async"></span>
+        {%- else %}<span class="logo glyph"><svg class="i" aria-hidden="true"><use href="#{{ m.icon }}"/></svg></span>{% endif %}
+        <span class="nm">{{ cm.name }}</span><span class="who">{{ cm.who }}</span><span class="tx">{{ cm.line | missions }}</span>
+      </a></li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section tone-alt" id="travel" aria-labelledby="travel-title">
+  <div class="wrap">
+    <div class="section-head k-up"><h2 id="travel-title">{{ C.travel_title }}</h2></div>
+    {% include globe.html %}
+  </div>
+</section>

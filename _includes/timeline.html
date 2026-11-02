@@ -1,28 +1,29 @@
+{%- comment -%} The record by date: filters by kind, then one block per year with its entries (site.js folds empty years when a filter is on). {%- endcomment -%}
 {%- assign rows = site.data.ledger | timeline -%}
 {%- assign counts = rows | timeline_counts -%}
-{%- assign filters = "paper:Papers,talk:Talks and posters,grant:Funding,hpc:HPC,observing:Observing,software:Software,position:Positions and degrees,service:Service and teaching,award:Awards" | split: "," -%}
-<div class="filters no-print" role="group" aria-label="Filter by type">
+{%- assign filters = "paper:Papers,talk:Talks and posters,grant:Funding,hpc:Computing,observing:Observing,software:Software,position:Positions and degrees,service:Service and teaching,award:Awards" | split: "," -%}
+<div class="filters no-print" role="group" aria-label="Show entries of one kind">
   <button type="button" data-filter="all" aria-pressed="true">All <span class="n">{{ rows.size }}</span></button>
   {%- for f in filters %}{% assign kv = f | split: ":" %}{% assign key = kv[0] %}{% assign n = counts[key] %}{% if n and n > 0 %}
   <button type="button" class="tag--{{ key }}" data-filter="{{ key }}" aria-pressed="false">{{ kv[1] }} <span class="n">{{ n }}</span></button>
   {%- endif %}{% endfor %}
 </div>
-<p class="tl-legend no-print"><span class="tl-legend-lead">Lines of work</span>
-  {%- for t in site.data.threads %}<span class="tl-key" data-thread="{{ t.key }}" style="--th: var({{ t.colour }})" tabindex="0">{{ t.label | missions }}</span>{% endfor %}</p>
-<div class="tl-wrap" data-threads-root>
-  <svg class="tl-gutter" aria-hidden="true" data-threads-svg></svg>
-  <ol class="timeline is-folded" data-timeline>
-    <li class="tl-head" aria-hidden="true"><span>When</span><span>Type</span><span>Entry</span><span></span></li>
-    {%- for r in rows %}
-    <li class="tl-row" data-kind="{{ r.kind }}" data-id="{{ r.id }}">
+<div class="years" data-timeline>
+  {%- assign year = "" -%}
+  {%- for r in rows %}
+    {%- assign y = r.sort | slice: 0, 4 -%}
+    {%- if y != year %}
+      {%- unless year == "" %}</ol></section>{% endunless %}
+      {%- assign year = y -%}
+      {%- assign n = 0 -%}{%- for q in rows %}{% assign qy = q.sort | slice: 0, 4 %}{% if qy == y %}{% assign n = n | plus: 1 %}{% endif %}{% endfor %}
+  <section class="year"><h3>{{ y }}<small>{{ n }} {% if n == 1 %}entry{% else %}entries{% endif %}</small></h3><ol>
+    {%- endif %}
+    <li class="tl-row k-row" data-kind="{{ r.kind }}" data-id="{{ r.id }}">
       <span class="tl-date">{{ r.start }}{% if r.end != "" %}<span class="tl-to">to {{ r.end }}</span>{% endif %}</span>
       <span><span class="tag tag--{{ r.tag }}">{{ r.label }}</span></span>
       <span class="tl-title">{{ r.title | missions }}{% if r.meta != "" %}<small>{{ r.meta | missions }}</small>{% endif %}</span>
       <span class="tl-links">{% if r.url %}<a href="{{ r.url | relative_url }}">{{ r.link }}</a>{% endif %}</span>
     </li>
-    {%- endfor %}
-  </ol>
-  <button type="button" class="btn tl-more no-print" data-tl-more>Show all {{ rows.size }} entries</button>
-  <script type="application/json" data-threads-json>{{ site.data.threads | jsonify }}</script>
+  {%- endfor %}
+  </ol></section>
 </div>
-<script defer src="{{ '/assets/js/timeline-threads.js' | relative_url }}"></script>

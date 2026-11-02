@@ -1,21 +1,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{%- assign C = site.data.copy -%}
+{%- assign CP = site.data.copy[page.copy] -%}
 {%- assign ptitle = page.title | default: site.title -%}
 {%- if page.url == "/" -%}
-<title>{{ site.title }}: astrophysics, machine learning, HPC</title>
+<title>{{ site.title }}</title>
 {%- else -%}
 <title>{{ ptitle | strip_html }}, {{ site.title }}</title>
 {%- endif %}
-<meta name="description" content="{{ page.description | default: site.description | strip_html | strip_newlines | strip }}">
+<meta name="description" content="{{ page.description | default: CP.description | default: C.site.description | default: site.description | strip_html | strip_newlines | strip }}">
 <link rel="canonical" href="{{ page.url | absolute_url }}">
 <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="48x48">
 <link rel="icon" href="{{ '/assets/img/favicon.svg' | relative_url }}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{{ '/assets/img/apple-touch-icon.png' | relative_url }}">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1012">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f3f1">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131210">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ef">
+<link rel="preload" href="{{ '/assets/fonts/geist-serif-wght-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ '/assets/fonts/geist-latin-wght-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ '/assets/fonts/geist-mono-latin-wght-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ '/assets/fonts/source-serif-4-latin-wght-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+{%- if page.url == "/" %}
+<link rel="preload" as="image" href="{{ '/assets/img/heroes/hero_2000.webp' | relative_url }}" imagesrcset="{{ '/assets/img/heroes/hero_1000.webp' | relative_url }} 1000w, {{ '/assets/img/heroes/hero_2000.webp' | relative_url }} 2000w" imagesizes="100vw" fetchpriority="high">
+{%- endif %}
+<link rel="stylesheet" href="{{ '/assets/css/fonts.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
 {%- for css in page.extra_css %}
 <link rel="stylesheet" href="{{ css | relative_url }}">
@@ -27,7 +32,7 @@
 {%- assign ogimg = page.og_image | default: site.og_image -%}
 <meta property="og:type" content="{% if page.url == '/' %}profile{% else %}article{% endif %}">
 <meta property="og:title" content="{{ ptitle | strip_html }}">
-<meta property="og:description" content="{{ page.description | default: site.description | strip_html | strip_newlines | strip }}">
+<meta property="og:description" content="{{ page.description | default: CP.description | default: C.site.description | default: site.description | strip_html | strip_newlines | strip }}">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
 <meta property="og:site_name" content="{{ site.title }}">
 <meta property="og:image" content="{{ ogimg | absolute_url }}">
@@ -52,7 +57,7 @@
     "image": "{{ '/assets/img/photos/portrait-2026.webp' | absolute_url }}",
     "email": "mailto:{{ p.emails.personal }}",
     "jobTitle": "PhD researcher in astrophysics and machine learning",
-    "description": "{{ site.description | strip_newlines | strip }}",
+    "description": "{{ C.site.description | default: site.description | strip_newlines | strip }}",
     "nationality": [{"@type": "Country", "name": "Portugal"}, {"@type": "Country", "name": "Germany"}],
     "knowsLanguage": ["pt", "en", "de", "es"],
     "identifier": {"@type": "PropertyValue", "propertyID": "ORCID", "value": "{{ p.identifiers.orcid }}"},

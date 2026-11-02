@@ -1,0 +1,65 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#121418} canvas{display:block;width:1200px;height:800px}</style></head><body>
+<canvas id="c" width="2400" height="1600"></canvas>
+<script>
+// A neural network in depth: a real Gaia XP spectrum enters on the left, layers of nodes recede in
+// perspective, chemistry leaves on the right. ?t= sets the pulse phase (0..1) for still frames.
+const SPEC = __SPEC__, MH = __MH__;
+const t = parseFloat(new URLSearchParams(location.search).get('t') || '0.35');
+const c = document.getElementById('c').getContext('2d'); c.scale(2, 2);
+const W = 1200, H = 800;
+let seed = 3; const rnd = () => (seed = (seed * 48271) % 2147483647) / 2147483647;
+// layers: x position, node count; perspective: nodes lie on planes tilted towards the viewer
+const layers = [{ n: 12 }, { n: 16 }, { n: 16 }, { n: 12 }, { n: 6 }];
+const X0 = 330, X1 = 1040;
+function proj(li, j, n) {
+  const x = X0 + (X1 - X0) * li / (layers.length - 1);
+  const u = n === 1 ? 0 : j / (n - 1) - 0.5;          // -0.5..0.5 across the layer
+  const depth = 0.5 + 0.5 * Math.sin(u * Math.PI);   // centre nodes nearer
+  const y = H / 2 + u * (n > 8 ? 560 : 300) * (0.8 + 0.2 * depth);
+  return { x: x - 40 * u, y, z: depth };
+}
+const nodes = layers.map((L, i) => Array.from({ length: L.n }, (_, j) => proj(i, j, L.n)));
+// connections; a few carry the signal
+const edges = [];
+for (let i = 0; i < layers.length - 1; i++) for (const a of nodes[i]) for (const b of nodes[i + 1]) edges.push({ a, b, w: rnd(), hot: false });
+// six continuous routes, one per output
+const routes = []; for (let k = 0; k < 6; k++) { let j = Math.floor(rnd() * layers[0].n); const path = [nodes[0][j]]; for (let i = 1; i < layers.length; i++) { j = i === layers.length - 1 ? k : Math.floor(rnd() * layers[i].n); path.push(nodes[i][j]); } routes.push(path); }
+for (const r of routes) for (let i = 0; i < r.length - 1; i++) { const e = edges.find(e => e.a === r[i] && e.b === r[i + 1]); e.hot = true; e.w = (i / (r.length - 1) + routes.indexOf(r) * 0.13) % 1; }
+c.lineCap = 'round';
+for (const e of edges) {
+  c.strokeStyle = `rgba(170,178,190,${0.035 + 0.06 * e.w * (0.5 + 0.5 * (e.a.z + e.b.z) / 2)})`; c.lineWidth = 0.7;
+  c.beginPath(); c.moveTo(e.a.x, e.a.y); c.bezierCurveTo((e.a.x + e.b.x) / 2, e.a.y, (e.a.x + e.b.x) / 2, e.b.y, e.b.x, e.b.y); c.stroke();
+}
+for (const e of edges) if (e.hot) {
+  c.strokeStyle = 'rgba(224,164,88,0.55)'; c.lineWidth = 1.3;
+  c.beginPath(); c.moveTo(e.a.x, e.a.y); c.bezierCurveTo((e.a.x + e.b.x) / 2, e.a.y, (e.a.x + e.b.x) / 2, e.b.y, e.b.x, e.b.y); c.stroke();
+  // a pulse travelling along the connection
+  const s = (t + e.w) % 1, mt = 1 - s;
+  const bx = mt ** 3 * e.a.x + 3 * mt * mt * s * (e.a.x + e.b.x) / 2 + 3 * mt * s * s * (e.a.x + e.b.x) / 2 + s ** 3 * e.b.x;
+  const by = mt ** 3 * e.a.y + 3 * mt * mt * s * e.a.y + 3 * mt * s * s * e.b.y + s ** 3 * e.b.y;
+  const g = c.createRadialGradient(bx, by, 0, bx, by, 9); g.addColorStop(0, 'rgba(255,214,150,0.95)'); g.addColorStop(1, 'rgba(255,214,150,0)');
+  c.fillStyle = g; c.beginPath(); c.arc(bx, by, 9, 0, 6.28); c.fill();
+}
+for (const L of nodes) for (const p of L) {
+  const r = 4.2 + 3.2 * p.z;
+  const g = c.createRadialGradient(p.x - r * 0.35, p.y - r * 0.35, 0.5, p.x, p.y, r);
+  g.addColorStop(0, '#D9DDE3'); g.addColorStop(0.55, '#8C939D'); g.addColorStop(1, '#3A3F47');
+  c.fillStyle = g; c.beginPath(); c.arc(p.x, p.y, r, 0, 6.28); c.fill();
+}
+// input: the real spectrum, wavelength-coloured, entering the first layer
+nodes[0].forEach((p, k) => { const sxp = 280, syp = H / 2 - 120 + 240 * k / (nodes[0].length - 1); c.strokeStyle = 'rgba(170,178,190,0.10)'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(sxp + 6, syp); c.bezierCurveTo(sxp + 30, syp, p.x - 30, p.y, p.x - 6, p.y); c.stroke(); });
+const f = SPEC, n = f.length, mx = Math.max(...f), mn = Math.min(...f);
+const sx0 = 40, sx1 = 280, sy0 = H / 2 + 120, sy1 = H / 2 - 120;
+function wl(l) { let r = 0, g = 0, b = 0; if (l < 440) { r = -(l - 440) / 60; b = 1 } else if (l < 490) { g = (l - 440) / 50; b = 1 } else if (l < 510) { g = 1; b = -(l - 510) / 20 } else if (l < 580) { r = (l - 510) / 70; g = 1 } else if (l < 645) { r = 1; g = -(l - 645) / 65 } else r = 1;
+  const s = l > 700 ? Math.max(.45, 1 - (l - 700) / 400) : 1; return [r, g, b].map(v => Math.round(255 * Math.pow(Math.max(0, v) * s, .8) * .75 + 40)); }
+c.lineWidth = 2.6;
+for (let i = 1; i < n; i++) { const x0 = sx0 + (sx1 - sx0) * (i - 1) / (n - 1), x1 = sx0 + (sx1 - sx0) * i / (n - 1);
+  c.strokeStyle = `rgb(${wl(336 + 2 * i)})`; c.beginPath(); c.moveTo(x0, sy0 + (sy1 - sy0) * (f[i - 1] - mn) / (mx - mn)); c.lineTo(x1, sy0 + (sy1 - sy0) * (f[i] - mn) / (mx - mn)); c.stroke(); }
+// output labels
+const outs = ['Teff', 'log g', '[M/H]', '[α/M]', '[Fe/H]', 'reliability'];
+c.font = '500 17px "IBM Plex Sans", sans-serif'; c.textBaseline = 'middle';
+nodes[nodes.length - 1].forEach((p, k) => { c.fillStyle = k === 5 ? '#E0A458' : '#C9CED5'; c.fillText(outs[k], p.x + 22, p.y); });
+c.fillStyle = '#9AA0A8'; c.font = '15px "IBM Plex Sans", sans-serif'; c.fillText('Gaia XP spectrum, red giant', sx0, sy0 + 46);
+document.body.dataset.ready = 1;
+</script></body></html>

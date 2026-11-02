@@ -1,0 +1,9 @@
+{%- assign p = site.data.person -%}
+<nav class="links" aria-label="Contact and profiles">
+  <a href="mailto:{{ p.emails.academic }}"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
+  <a href="https://orcid.org/{{ p.identifiers.orcid }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</a>
+  <a href="https://scholar.google.com/citations?user={{ p.identifiers.google_scholar }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-scholar"/></svg>Scholar</a>
+  <a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc"><svg class="i" aria-hidden="true"><use href="#i-ads"/></svg>ADS</a>
+  <a href="https://github.com/{{ p.identifiers.github }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+  <a href="https://www.linkedin.com/in/{{ p.identifiers.linkedin }}" rel="me"><svg class="i" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+</nav>
