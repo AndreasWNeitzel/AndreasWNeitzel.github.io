@@ -37,4 +37,4 @@ Small, cool stars oscillate more weakly than the rule for Sun-like stars predict
 
 ## My part
 
-I carried out the GJ 570 A observations in visitor mode, meaning on site at the telescope. I was at ESO's Paranal Observatory from 4 May 2024 and observed from 6 to 12 May on behalf of the principal investigator, Tiago Campante, under his programme 0113.D-0255(B). Wind and overcast skies kept the telescope closed on the first night and for half of the fourth, leaving five usable nights and 2369 spectra (Sect. 2).
+I carried out the GJ 570 A observations in visitor mode, meaning on site at the telescope. I was at ESO's Paranal Observatory from 4 May 2024 and observed from 6 to 12 May on behalf of the principal investigator, Tiago Campante, under his programme 0113.D-0255(B). Wind and overcast skies kept the telescope closed on the first night and for half of the fourth, leaving five usable nights and 2,369 spectra (Sect. 2).

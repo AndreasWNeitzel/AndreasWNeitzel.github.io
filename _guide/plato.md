@@ -27,6 +27,6 @@ ESA runs a Guest Observers Programme through which astronomers outside the missi
 
 ## Where I come in
 
-In May 2026 I was a co-investigator on three PLATO guest-observer proposals. These are proposals, and none has funding or observing time attached. Each asks to observe a different kind of star: red giants in the globular cluster NGC 1851 (principal investigator A. Miglio), blue stragglers in open clusters (L. Briganti), and stars that the Milky Way captured from other galaxies (Leitinger).
+In May 2026 I was a co-investigator on three PLATO guest-observer proposals. These are proposals, and none has funding or observing time attached. Each asks to observe a different kind of star: red giants in the globular cluster NGC 1851 (principal investigator A. Miglio), blue stragglers in open clusters (L. Briganti), and stars that the Milky Way captured from other galaxies (E. Leitinger).
 
 For all three I ran the noise simulations, which forecast how well PLATO could measure the brightness of each target. I used the HAYDNsim pipeline that I wrote at INAF-OAS Bologna and the HAYDN noise estimator set to PLATO's camera configuration.

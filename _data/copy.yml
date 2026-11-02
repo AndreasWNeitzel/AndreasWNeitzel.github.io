@@ -141,7 +141,7 @@ research:
     - id: "paranal"
       kicker: "May 2024 · ESO Very Large Telescope, Paranal"
       title: "Six nights at Paranal"
-      text: "As visiting astronomer I carried out the ESPRESSO observations of GJ 570 A, a nearby star somewhat cooler than the Sun. We took 571 exposures in one night and 2,250 velocity measurements over five, and the star's oscillations emerged from them. The paper is now published in Astronomy and Astrophysics."
+      text: "As visiting astronomer I carried out the ESPRESSO observations of GJ 570 A, a nearby star somewhat cooler than the Sun. Over five usable nights, from six allocated, we took 2,369 spectra, of which 2,250 gave usable velocity measurements, and the star's oscillations emerged from them. The paper is now published in Astronomy and Astrophysics."
     - id: "haydn"
       kicker: "2025 to 2026 · INAF-OAS Bologna"
       title: "HAYDNsim: noise forecasts for crowded clusters"
