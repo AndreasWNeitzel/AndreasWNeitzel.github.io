@@ -1018,8 +1018,10 @@ async function boot(root) {
     ctx.font = `500 13px ${F.mono}`;
     const long = ctx.measureText(`BP coefficients 0 to ${K - 1}`).width < K * slot - 12;
     const names = long ? ["BP coefficients", "RP coefficients"] : ["BP", "RP"];
-    ctx.fillText(`${names[0]} 0 to ${K - 1}`, m.l + (K * slot) / 2, s.h - 6);
-    ctx.fillText(`${names[1]} 0 to ${K - 1}`, m.l + K * slot + groupGap + (K * slot) / 2, s.h - 6);
+    // the coefficient range goes when even the short form would touch its neighbour
+    const span = ctx.measureText(`RP 0 to ${K - 1}`).width < K * slot - 10 ? ` 0 to ${K - 1}` : "";
+    ctx.fillText(`${names[0]}${span}`, m.l + (K * slot) / 2, s.h - 6);
+    ctx.fillText(`${names[1]}${span}`, m.l + K * slot + groupGap + (K * slot) / 2, s.h - 6);
   }
 
   // ------------------------------------------------------------ spectra
@@ -1053,8 +1055,8 @@ async function boot(root) {
     }
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    // as many wavelength ticks as fit: 400 to 1000 in steps of 100, 200 or 300 nm
-    const nmStep = W >= 300 ? 100 : W >= 170 ? 200 : 300;
+    // as many wavelength ticks as fit: 400 to 1000 in steps of 100, 200, 300 or 600 nm
+    const nmStep = W >= 300 ? 100 : W >= 170 ? 200 : W >= 125 ? 300 : 600;
     for (let w = 400; w <= 1000; w += nmStep) ctx.fillText(String(w), X(w), m.t + H + 6);
     const order = [0, 1, 2].sort((a, b) => (examples[a] === selected) - (examples[b] === selected));
     ctx.lineJoin = "round";

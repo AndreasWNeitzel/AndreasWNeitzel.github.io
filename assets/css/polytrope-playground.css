@@ -105,7 +105,7 @@
 }
 @media (min-width: 1000px) and (min-height: 620px) {
   /* four stacked panels and three captioned charts need this much height, whatever the window */
-  .pt .pg-app, .pg-app.pt { --main-min: 600px; --strip: clamp(300px, 34dvh, 340px); }
+  .pt .pg-app, .pg-app.pt { --main-min: 600px; --strip: clamp(400px, 44dvh, 440px); }
   .pg-app .pg-stage2 { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); min-block-size: 0; }
   .pg-app .pt-render { grid-template-rows: minmax(0, 1fr); min-block-size: 0; }
   .pg-app .pt-main { min-block-size: 0; }

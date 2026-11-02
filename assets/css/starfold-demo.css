@@ -99,13 +99,13 @@
 }
 .sfd-and { margin-inline: 0.35em; font: 500 0.8125rem var(--mono); letter-spacing: 0; color: var(--muted); }
 .sfd-calib { display: grid; gap: 4px; padding-block-start: 8px; border-block-start: 1px solid var(--line); }
-.sfd-calib-plot { block-size: 30px; }
+.sfd-calib-plot { block-size: 48px; }
 .sfd-calib-plot svg { display: block; inline-size: 100%; block-size: 100%; overflow: visible; }
 .sfd-calib-plot .ax { stroke: var(--line-strong); stroke-width: 1; }
 .sfd-calib-plot .copy { fill: var(--muted); }
 .sfd-calib-plot .copy.is-up { fill: var(--accent-2); }
 .sfd-calib-plot .obs { stroke: var(--ink); stroke-width: 1.5; }
-.sfd-calib-plot text { font: 500 9.5px var(--mono); fill: var(--muted); }
+.sfd-calib-plot text { font: 500 12px var(--mono); fill: var(--muted); }
 .sfd-calib-plot text.obs-t { fill: var(--ink-2); }
 .sfd-flags { display: grid; gap: 1px; padding-block-start: 8px; border-block-start: 1px solid var(--line); }
 .sfd-flags .sfd-label { margin-block-end: 2px; }
@@ -337,7 +337,8 @@
 @media (min-width: 1000px) { .sfd-tables { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } }
 .sfd-table { margin: 0; display: grid; gap: 8px; align-content: start; min-inline-size: 0; }
 .sfd-table figcaption { font-size: 0.82rem; line-height: 1.45; color: var(--muted); }
-.sfd-table td small, .sfd-table th small { color: var(--muted); font-size: 0.86em; }
+.sfd-table td small, .sfd-table th small { color: var(--muted); font-size: 0.8125rem; }
+.sfd-table code { font-size: 0.8125rem; }
 .sfd-table th[scope="row"] { font-weight: 500; color: var(--ink-2); background: none; }
 .sfd-table td { font-variant-numeric: tabular-nums; }
 .sfd-list { margin: 0; padding-inline-start: 1.1em; display: grid; gap: 5px; font-size: 0.86rem; line-height: 1.45; color: var(--ink-2); }

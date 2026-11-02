@@ -338,8 +338,7 @@
 /* the scatter needs a real square: a taller strip, and more of its width than the loss curve */
 @media (min-width: 1000px) and (min-height: 620px) {
   .pg-app.nn { --strip: clamp(276px, 31dvh, 300px); }
-  .pg-app.nn .pg-chart.pg-parity { flex-grow: 1.7; }
-  .pg-app.nn .pg-chart.pg-loss { flex-grow: .8; }
+  .pg-app.nn .pg-chart.pg-parity { flex-grow: 1.5; }
 }
 .nn .pg-plate {
   --bg: #0b0d12; --surface: #0b0d12; --surface-2: #171a22;

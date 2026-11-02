@@ -38,7 +38,7 @@
 .gp-table td { padding: 5px 6px 5px 0; border-block-start: 1px solid var(--line); vertical-align: top; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .gp-table td:last-child, .gp-table th:last-child { padding-inline-end: 0; }
 .gp-table b { font-weight: 600; color: var(--ink); }
-.gp-table small { font-size: 0.9em; color: var(--muted); }
+.gp-table small { font-size: 0.8125rem; color: var(--muted); }
 .gp-table .prior { color: var(--muted); }
 .gp-s-note { margin: 0; font-size: 0.8125rem; line-height: 1.5; color: var(--muted); }
 .gp-axes { display: inline-flex; gap: 12px; }

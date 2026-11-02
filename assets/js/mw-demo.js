@@ -185,8 +185,8 @@ void main() {
     above: { yaw: Math.PI, pitch: 1.55, dist: 11.5 },
     edge: { yaw: -Math.PI / 2, pitch: 0, dist: 12 },
   };
-  const cam = { ...VIEWS.sun };
-  const S = { mode: "feh", view: "sun", playing: false, tour: 0, trans: null, w: 0, h: 0, dpr: 1 };
+  const cam = { ...VIEWS.edge };
+  const S = { mode: "feh", view: "edge", playing: false, tour: 0, trans: null, w: 0, h: 0, dpr: 1 };
   const RAMP = { feh: [-1.1, -0.4], dist: [5, 0] };
   const TOUR = 20;
   let moved = true, raf = 0, last = null, onScreen = false, frameMs = 0;
