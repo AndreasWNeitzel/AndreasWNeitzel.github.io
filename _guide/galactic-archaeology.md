@@ -22,6 +22,8 @@ sources:
 
 The Milky Way was built up over billions of years, partly from smaller galaxies that it absorbed. Stars born at different times and places differ in chemical make-up and in the way they orbit the Galaxy, and many of these differences persist for most of a star's life. Galactic archaeology measures these properties, and ages where possible, for large samples of stars, then sorts the stars into the populations that record how the Galaxy was put together.
 
+{% include mw-demo.html %}
+
 Using the second *Gaia* data release, Helmi and colleagues showed in 2018 that the inner stellar halo is dominated by debris from one galaxy, Gaia-Enceladus, whose merger with the Milky Way ESA dates to about 10 billion years ago. Ages can come from asteroseismology. Combining *Kepler* oscillations with APOGEE spectra for almost 5,400 red giants, Miglio and colleagues (2021) found that the nearly 400 alpha-rich giants of the chemically defined thick disc are about 11 billion years old, with 95 per cent of them formed within about 1.5 billion years.
 
 ## Where I come in

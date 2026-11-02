@@ -108,6 +108,18 @@ function siteTokens() {
   };
 }
 
+// Colours read from inside an element: the stage is always dark, whatever the page's theme, so
+// the canvases on it take their palette from a probe inside the plate rather than from the page.
+function tokensIn(el) {
+  const probe = document.createElement("span");
+  probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none";
+  el.appendChild(probe);
+  return (name) => {
+    probe.style.color = `var(${name})`;
+    return getComputedStyle(probe).color;
+  };
+}
+
 const pixel = (() => {
   const c = document.createElement("canvas");
   c.width = c.height = 1;
@@ -290,14 +302,23 @@ async function boot(root) {
   const autorun = query.get("autorun") === "1";
 
   let C = null;
+  let CP = null;
   let F = null;
   let CAT = [];
+  const plateColour = tokensIn(root.querySelector(".pg-plate"));
+  const palette = (c) => ({
+    surface: c("--surface"), surface2: c("--surface-2"), line: c("--line"), lineStrong: c("--line-strong"),
+    ink: c("--ink"), ink2: c("--ink-2"), muted: c("--muted"), accent: c("--accent"), accent2: c("--accent-2"),
+  });
+  // The stage is drawn with the plate's palette, everything else with the page's.
+  function onPlate(draw) {
+    const page = C;
+    C = CP;
+    try { draw(); } finally { C = page; }
+  }
   function readTheme() {
-    const c = (name) => T.colour(name);
-    C = {
-      surface: c("--surface"), surface2: c("--surface-2"), line: c("--line"), lineStrong: c("--line-strong"),
-      ink: c("--ink"), ink2: c("--ink-2"), muted: c("--muted"), accent: c("--accent"), accent2: c("--accent-2"),
-    };
+    C = palette((name) => T.colour(name));
+    CP = palette(plateColour);
     const cs = getComputedStyle(document.documentElement);
     F = { mono: cs.getPropertyValue("--mono").trim() || "monospace", sans: cs.getPropertyValue("--sans").trim() || "sans-serif" };
     CAT = T.categorical();
@@ -479,7 +500,7 @@ async function boot(root) {
     const ctx = s.begin();
     if (s.w < 60) return;
     const f = kMainFrame();
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
@@ -500,7 +521,7 @@ async function boot(root) {
       ctx.fillText(String(v), x, f.m.t + f.H + 6);
     }
     ctx.fillStyle = C.ink2;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillText("x", f.m.l + f.W + 10, f.m.t + f.H + 6);
@@ -583,7 +604,7 @@ async function boot(root) {
     const top = ks.sf * ks.sf;
     const X = (t) => m.l + (t / X_MAX) * W;
     const Y = (v) => m.t + H - (v / top) * H * 0.92;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
@@ -601,7 +622,7 @@ async function boot(root) {
       ctx.fillText(String(v), X(v), m.t + H + 6);
     }
     ctx.fillStyle = C.ink2;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.fillText("τ", m.l + W + 10, m.t + H + 6);
     ctx.textAlign = "right";
@@ -650,7 +671,7 @@ async function boot(root) {
     if (s.w < 60) return;
     const f = lmlFrame();
     const map = lmlGrid();
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     if (map) {
       const mix = ramp(C.surface2, C.accent);
@@ -676,7 +697,7 @@ async function boot(root) {
     ctx.textBaseline = "middle";
     for (const v of [0.01, 0.1, 1]) ctx.fillText(axisNumber(v), f.m.l - 6, f.Y(v));
     ctx.fillStyle = C.ink2;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillText("ℓ", f.m.l + f.W + 10, f.m.t + f.H + 6);
@@ -684,7 +705,7 @@ async function boot(root) {
     ctx.fillText("σn", f.m.l - 6, 0);
     if (!map) {
       ctx.fillStyle = C.muted;
-      ctx.font = `500 12px ${F.sans}`;
+      ctx.font = `500 13px ${F.sans}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("Add observations to map it", f.m.l + f.W / 2, f.m.t + f.H / 2);
@@ -712,7 +733,7 @@ async function boot(root) {
     dot(ctx, x, y, 2);
     ctx.fillStyle = C.ink;
     dot(ctx, x, y, 1.5);
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.fillStyle = C.muted;
     ctx.textAlign = "right";
     ctx.textBaseline = "bottom";
@@ -1060,7 +1081,7 @@ async function boot(root) {
     const ctx = s.begin();
     if (s.w < 60) return;
     const f = sMainFrame();
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
@@ -1082,7 +1103,7 @@ async function boot(root) {
       ctx.fillText(grouped(v), xx, f.m.t + f.H + 6);
     }
     ctx.fillStyle = C.ink2;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "right";
     ctx.textBaseline = "top";
     ctx.fillText("m/s", f.m.l - 6, 0);
@@ -1127,7 +1148,7 @@ async function boot(root) {
     ctx.strokeRect(Math.round(f.SX(win.x0)) + 0.5, st.t + 0.5, Math.round(f.SX(x1) - f.SX(win.x0)), st.h - 1);
     ctx.fillStyle = C.ink2;
     for (let i = 0; i < n; i++) ctx.fillRect(f.SX(t[i]) - 0.75, f.SY(y[i]) - 0.75, 1.5, 1.5);
-    ctx.font = `10px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.fillStyle = C.muted;
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
@@ -1218,7 +1239,7 @@ async function boot(root) {
     const xMax = niceCount(Math.max(100, steps));
     const X = (k) => m.l + (k / xMax) * W;
     const burn = burnSteps();
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     which.forEach((d, row) => {
       const top = m.t + row * (H + gap);
@@ -1233,11 +1254,11 @@ async function boot(root) {
       ctx.strokeStyle = C.line;
       ctx.strokeRect(m.l + 0.5, top + 0.5, W, H);
       ctx.fillStyle = C.ink2;
-      ctx.font = `500 11px ${F.mono}`;
+      ctx.font = `500 13px ${F.mono}`;
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       ctx.fillText(SYMBOL[prior[d].name], m.l - 6, top + H / 2);
-      ctx.font = `10px ${F.mono}`;
+      ctx.font = `13px ${F.mono}`;
       ctx.fillStyle = C.muted;
       ctx.textBaseline = "top";
       ctx.fillText(sig3(prior[d].log ? 10 ** hi : hi), m.l - 6, top);
@@ -1273,7 +1294,7 @@ async function boot(root) {
       ctx.stroke();
     });
     ctx.fillStyle = C.muted;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     const base = m.t + 2 * H + gap;
@@ -1338,7 +1359,7 @@ async function boot(root) {
     const [ylo, yhi] = pairRange(P.yv, P.dy, cy);
     const X = (v) => m.l + ((v - xlo) / (xhi - xlo)) * W;
     const Y = (v) => m.t + H - ((v - ylo) / (yhi - ylo)) * H;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.fillStyle = C.surface2;
     ctx.fillRect(m.l, m.t, W, H);
@@ -1390,7 +1411,7 @@ async function boot(root) {
       ring(ctx, X(cx), Y(cy), 5.5);
     }
     ctx.fillStyle = C.ink2;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
     ctx.fillText(axisLabel(P.dx), m.l + W / 2, s.h - 4);
@@ -1402,7 +1423,7 @@ async function boot(root) {
     ctx.restore();
     if (!P.count) {
       ctx.fillStyle = C.muted;
-      ctx.font = `500 12px ${F.sans}`;
+      ctx.font = `500 13px ${F.sans}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(steps ? "Waiting for states after burn-in" : "Press Run to sample", m.l + W / 2, m.t + H / 2);
@@ -1432,12 +1453,12 @@ async function boot(root) {
     if (!C) readTheme();
     if (mode === "kernels") {
       for (const s of Object.values(kcv)) if (s.fit()) kdirty.main = kdirty.kernel = kdirty.lml = true;
-      if (kdirty.main) { drawKMain(); kdirty.main = false; }
+      if (kdirty.main) { onPlate(drawKMain); kdirty.main = false; }
       if (kdirty.kernel) { drawKKernel(); kdirty.kernel = false; }
       if (kdirty.lml) { drawKLml(); kdirty.lml = false; }
     } else {
       for (const s of Object.values(scv)) if (s.fit()) sdirty.main = sdirty.trace = sdirty.pair = true;
-      if (sdirty.main) { drawSMain(); sdirty.main = false; }
+      if (sdirty.main) { onPlate(drawSMain); sdirty.main = false; }
       if (sdirty.trace) { drawTrace(); sdirty.trace = false; }
       if (sdirty.pair) { drawPair(); sdirty.pair = false; }
     }

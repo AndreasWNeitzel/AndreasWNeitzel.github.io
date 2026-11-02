@@ -2,57 +2,49 @@
 layout: default
 ---
 {%- assign L = site.data.ledger -%}
+{%- assign slug = page.url | split: "/" | last -%}
+{%- assign loops = site.data.home.guide_loops -%}
+{%- assign lp = loops[slug] -%}
+{%- assign pic = page.image -%}{%- if pic == "" or pic == nil %}{% assign pic = page.photo %}{% endif -%}
+{%- assign alt = page.image_alt | default: page.photo_alt -%}
+{% include plate.html loop=lp still=pic alt=alt title=page.title line=page.lede crumb="Field guide" crumb_url="/guide/" credit=page.image_credit credit_url=page.image_source %}
 <div class="wrap">
-  <header class="page-head k-up">
-    <p class="crumbs"><a href="{{ '/guide/' | relative_url }}">Field guide</a></p>
-    <h1>{{ page.title | missions }}</h1>
-    {%- if page.lede %}<p class="lede">{{ page.lede | missions }}</p>{% endif %}
-  </header>
   {%- if page.wide_figure %}
-  <figure class="panel blueprint guide-wide" data-build>
+  <figure class="panel blueprint guide-wide k-up" data-build>
     {% include {{ page.wide_figure }} %}
     {%- if page.wide_caption %}<figcaption class="credit">{{ page.wide_caption | missions }}</figcaption>{% endif %}
   </figure>
   {%- endif %}
   {%- for wf in page.wide_figures %}
-  <figure class="panel blueprint guide-wide" data-build>
+  <figure class="panel blueprint guide-wide k-up" data-build>
     {% include {{ wf.include }} %}
     {%- if wf.caption %}<figcaption class="credit">{{ wf.caption | missions }}</figcaption>{% endif %}
   </figure>
   {%- endfor %}
-  <div class="article-layout">
-    <article class="stack-m">
-      {%- if page.hero != false and page.image and page.image != "" %}
-      <figure class="article-hero"><img src="{{ page.image | relative_url }}" alt="{{ page.image_alt }}" loading="eager" decoding="async">
-        <figcaption class="credit" style="padding:8px 10px">{{ page.image_credit }}, <a href="{{ page.image_source }}">{{ page.image_licence }}</a></figcaption></figure>
-      {%- elsif page.hero != false and page.photo %}
-      <figure class="article-hero"><img src="{{ page.photo | relative_url }}" alt="{{ page.photo_alt }}" loading="eager" decoding="async"></figure>
-      {%- endif %}
+  <div class="article-layout section section--tight">
+    <article class="stack-m k-up">
       <div class="prose article">{{ content }}</div>
     </article>
-    <aside class="article-aside">
+    <aside class="article-aside k-up">
       {%- if page.related %}
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">In my record</h2>
+      <section><h2 class="zone-title">In my record</h2>
         <ul class="plain stack-s">
           {%- for rid in page.related %}
             {%- assign hit = nil -%}
-            {%- for cat in L %}{% for e in cat[1] %}{% if e.id == rid %}{% assign hit = e %}{% assign hitcat = cat[0] %}{% endif %}{% endfor %}{% endfor -%}
+            {%- for cat in L %}{% for e in cat[1] %}{% if e.id == rid %}{% assign hit = e %}{% endif %}{% endfor %}{% endfor -%}
             {%- if hit %}<li class="small"><span class="kicker">{{ hit.date | month_year }}</span><br>{{ hit.title | missions | truncate: 120 }}</li>{% endif -%}
           {%- endfor %}
         </ul>
-      </div></section>
+      </section>
       {%- endif %}
       {%- if page.sources %}
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">Sources</h2>
+      <section><h2 class="zone-title">Sources</h2>
         <ol class="sources">{% for s in page.sources %}<li><a href="{{ s.url }}">{{ s.label | missions }}</a></li>{% endfor %}</ol>
-      </div></section>
+      </section>
       {%- endif %}
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">More in the guide</h2>
-        <ul class="plain stack-s">{% assign gs = site.guide | sort: "order" %}{% for g in gs %}{% if g.url != page.url %}<li><a href="{{ g.url | relative_url }}">{{ g.short | default: g.title }}</a></li>{% endif %}{% endfor %}</ul>
-      </div></section>
+      <section><h2 class="zone-title">More in the guide</h2>
+        <ul class="plain stack-s">{% assign gs = site.guide | sort: "order" %}{% for g in gs %}{% if g.url != page.url %}<li><a href="{{ g.url | relative_url }}">{{ g.short | default: g.title | missions }}</a></li>{% endif %}{% endfor %}</ul>
+      </section>
     </aside>
   </div>
 </div>

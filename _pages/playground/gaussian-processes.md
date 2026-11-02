@@ -12,106 +12,113 @@ math: true
 <div class="pg-page">
 <section class="pg gp" id="gp-playground" aria-label="Gaussian-process playground" data-rv="{{ '/assets/data/playground/hd41248_harps.json' | relative_url }}" data-worker="{{ '/assets/js/playground/gp-worker.js' | relative_url }}">
   <div class="gp-modes">
-    <div class="gp-switch" role="tablist" aria-label="Mode">
-      <button type="button" class="btn btn--sm" role="tab" id="gp-tab-kernels" aria-selected="true" aria-controls="gp-kernels" data-mode="kernels">Kernels</button>
-      <button type="button" class="btn btn--sm" role="tab" id="gp-tab-star" aria-selected="false" aria-controls="gp-star" data-mode="star">A star: HD 41248</button>
+    <div class="gp-switch pg-buttons" role="tablist" aria-label="Mode">
+      <button type="button" class="btn" role="tab" id="gp-tab-kernels" aria-selected="true" aria-controls="gp-kernels" data-mode="kernels">Kernels</button>
+      <button type="button" class="btn" role="tab" id="gp-tab-star" aria-selected="false" aria-controls="gp-star" data-mode="star">A star: HD 41248</button>
     </div>
     <p class="gp-mode-text" data-for="kernels">Random functions from four covariance functions, pinned down by observations you add; the marginal likelihood says which length scale and noise the points prefer.</p>
     <p class="gp-mode-text" data-for="star" hidden>A quasi-periodic Gaussian process for the activity in 223 HARPS velocities of HD 41248, its four kernel parameters and a jitter sampled by a Metropolis chain.</p>
   </div>
 
   <div class="gp-dash" id="gp-kernels" role="tabpanel" aria-labelledby="gp-tab-kernels">
-    <div class="gp-ctrl">
-      <div class="pg-panel pg-run">
-        <div class="pg-buttons">
-          <button type="button" class="btn btn--primary btn--sm gp-k-draw" title="Draw five new random functions">New draws</button>
-          <button type="button" class="btn btn--sm gp-k-clear" title="Remove every observation">Clear points</button>
+    <div class="pg-top">
+      <div class="pg-rail">
+        <div class="pg-group pg-run">
+          <div class="pg-buttons">
+            <button type="button" class="btn btn--primary gp-k-draw" title="Draw five new random functions">New draws</button>
+            <button type="button" class="btn gp-k-clear" title="Remove every observation">Clear points</button>
+          </div>
+          <div class="pg-live" aria-live="polite" aria-atomic="true">
+            <dl class="pg-readout">
+              <div><dt>Observations</dt><dd><span class="gp-k-count">0</span></dd></div>
+              <div><dt>log marginal likelihood</dt><dd><span class="gp-k-lml">n/a</span></dd></div>
+            </dl>
+            <p class="pg-state gp-k-state">Click in the figure to add an observation, and on a point to remove it.</p>
+          </div>
         </div>
-        <div class="pg-live" aria-live="polite" aria-atomic="true">
-          <dl class="pg-readout">
-            <div><dt>Observations</dt><dd><span class="gp-k-count">0</span></dd></div>
-            <div><dt>log marginal likelihood</dt><dd><span class="gp-k-lml">n/a</span></dd></div>
-          </dl>
-          <p class="pg-state gp-k-state">Click in the figure to add an observation, and on a point to remove it.</p>
-        </div>
+        <form class="pg-group pg-settings gp-k-settings" aria-label="Kernel settings">
+          <label class="pg-field pg-field--wide"><span class="pg-label">Kernel</span><span class="pg-select"><select name="kernel"><option value="se" selected>Squared exponential</option><option value="per">Periodic</option><option value="qp">Quasi-periodic</option><option value="m32">Matérn 3/2</option></select></span></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="l"><span class="pg-label"><span>Length scale ℓ</span><output name="l-out">1.00</output></span><input type="range" name="l" min="-1" max="1" step="0.02" value="0" aria-label="Length scale, logarithmic"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="P" hidden><span class="pg-label"><span>Period P</span><output name="P-out">2.0</output></span><input type="range" name="P" min="0.5" max="5" step="0.1" value="2" aria-label="Period"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="lam" hidden><span class="pg-label"><span>Smoothing λ</span><output name="lam-out">1.00</output></span><input type="range" name="lam" min="-1" max="1" step="0.02" value="0" aria-label="Smoothing within a period, logarithmic"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sf"><span class="pg-label"><span>Amplitude σ<sub>f</sub></span><output name="sf-out">1.00</output></span><input type="range" name="sf" min="-0.6" max="0.6" step="0.02" value="0" aria-label="Amplitude, logarithmic"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sn"><span class="pg-label"><span>Noise σ<sub>n</sub></span><output name="sn-out">0.10</output></span><input type="range" name="sn" min="-2" max="0.3" step="0.02" value="-1" aria-label="Observation noise, logarithmic"></label>
+          <p class="pg-hint">Length scales, amplitude and noise move on logarithmic scales. The period and the smoothing appear for the periodic kernels.</p>
+        </form>
       </div>
-      <form class="pg-panel pg-settings gp-k-settings" aria-label="Kernel settings">
-        <label class="pg-field pg-field--wide"><span class="pg-label">Kernel</span><span class="pg-select"><select name="kernel"><option value="se" selected>Squared exponential</option><option value="per">Periodic</option><option value="qp">Quasi-periodic</option><option value="m32">Matérn 3/2</option></select></span></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="l"><span class="pg-label"><span>Length scale ℓ</span><output name="l-out">1.00</output></span><input type="range" name="l" min="-1" max="1" step="0.02" value="0" aria-label="Length scale, logarithmic"></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="P" hidden><span class="pg-label"><span>Period P</span><output name="P-out">2.0</output></span><input type="range" name="P" min="0.5" max="5" step="0.1" value="2" aria-label="Period"></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="lam" hidden><span class="pg-label"><span>Smoothing λ</span><output name="lam-out">1.00</output></span><input type="range" name="lam" min="-1" max="1" step="0.02" value="0" aria-label="Smoothing within a period, logarithmic"></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="sf"><span class="pg-label"><span>Amplitude σ<sub>f</sub></span><output name="sf-out">1.00</output></span><input type="range" name="sf" min="-0.6" max="0.6" step="0.02" value="0" aria-label="Amplitude, logarithmic"></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="sn"><span class="pg-label"><span>Noise σ<sub>n</sub></span><output name="sn-out">0.10</output></span><input type="range" name="sn" min="-2" max="0.3" step="0.02" value="-1" aria-label="Observation noise, logarithmic"></label>
-        <p class="pg-hint">Length scales, amplitude and noise move on logarithmic scales. The period and the smoothing appear for the periodic kernels.</p>
-      </form>
+      <figure class="pg-plate gp-main gp-k-main">
+        <figcaption class="pg-legend">
+          <span class="pg-title gp-k-title">Five functions drawn from the prior</span>
+          <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
+        </figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Random functions drawn from the kernel on 0 to 10, with the mean and the 2 sigma band"></canvas><div class="pg-tip" hidden></div></div>
+      </figure>
     </div>
-    <figure class="pg-panel panel gp-main gp-k-main">
-      <figcaption class="pg-head">
-        <span class="pg-title gp-k-title">Five functions drawn from the prior</span>
-        <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
-      </figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Random functions drawn from the kernel on 0 to 10, with the mean and the 2 sigma band"></canvas><div class="pg-tip" hidden></div></div>
-    </figure>
-    <figure class="pg-panel gp-a gp-k-kernel">
-      <figcaption class="pg-head"><span class="pg-title">Covariance against separation</span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="The kernel as a function of the separation between two inputs, from 0 to 10"></canvas></div>
-    </figure>
-    <figure class="pg-panel gp-b gp-k-lml">
-      <figcaption class="pg-head"><span class="pg-title">log marginal likelihood over ℓ and σ<sub>n</sub></span><span class="pg-key">click to set</span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Map of the log marginal likelihood of the observations over the length scale and the noise, with the current values ringed"></canvas><div class="pg-tip" hidden></div></div>
-    </figure>
+    <div class="pg-row">
+      <figure class="pg-chart gp-k-kernel">
+        <figcaption class="pg-head"><span class="pg-title">Covariance against separation</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="The kernel as a function of the separation between two inputs, from 0 to 10"></canvas></div>
+      </figure>
+      <figure class="pg-chart gp-k-lml">
+        <figcaption class="pg-head"><span class="pg-title">log marginal likelihood over ℓ and σ<sub>n</sub></span><span class="pg-key">click to set</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Map of the log marginal likelihood of the observations over the length scale and the noise, with the current values ringed"></canvas><div class="pg-tip" hidden></div></div>
+      </figure>
+    </div>
   </div>
 
   <div class="gp-dash" id="gp-star" role="tabpanel" aria-labelledby="gp-tab-star" hidden>
-    <div class="gp-ctrl">
-      <div class="pg-panel pg-run">
-        <div class="pg-buttons">
-          <button type="button" class="btn btn--primary btn--sm gp-s-run" disabled>Run</button>
-          <button type="button" class="btn btn--sm gp-s-step" title="Make 100 proposals" disabled>100 steps</button>
-          <button type="button" class="btn btn--sm gp-s-reset" title="Start the chain again" disabled>Reset</button>
+    <div class="pg-top">
+      <div class="pg-rail">
+        <div class="pg-group pg-run">
+          <div class="pg-buttons">
+            <button type="button" class="btn btn--primary gp-s-run" disabled>Run</button>
+            <button type="button" class="btn gp-s-step" title="Make 100 proposals" disabled>100 steps</button>
+            <button type="button" class="btn gp-s-reset" title="Start the chain again" disabled>Reset</button>
+          </div>
+          <div class="pg-live" aria-live="polite" aria-atomic="true">
+            <dl class="pg-readout">
+              <div><dt>Steps</dt><dd><span class="gp-s-steps">0</span></dd></div>
+              <div><dt>Accepted</dt><dd><span class="gp-s-acc">n/a</span></dd></div>
+            </dl>
+            <p class="pg-state gp-s-state">Loading 223 velocities.</p>
+          </div>
         </div>
-        <div class="pg-live" aria-live="polite" aria-atomic="true">
-          <dl class="pg-readout">
-            <div><dt>Steps</dt><dd><span class="gp-s-steps">0</span></dd></div>
-            <div><dt>Accepted</dt><dd><span class="gp-s-acc">n/a</span></dd></div>
-          </dl>
-          <p class="pg-state gp-s-state">Loading 223 velocities.</p>
-        </div>
+        <form class="pg-group pg-settings gp-s-settings" aria-label="Sampler settings">
+          <label class="pg-field"><span class="pg-label">Proposal scale</span><span class="pg-select"><select name="scale"><option value="0.25">0.25</option><option value="0.5">0.5</option><option value="1" selected>1</option><option value="2">2</option><option value="4">4</option></select></span></label>
+          <label class="pg-field"><span class="pg-label">Burn-in discarded</span><span class="pg-select"><select name="burn"><option value="0">none</option><option value="0.1">10%</option><option value="0.25" selected>25%</option><option value="0.5">50%</option></select></span></label>
+          <label class="pg-field pg-field--wide"><span class="pg-label">Start the chain</span><span class="pg-select"><select name="start"><option value="fixed" selected>at the fixed point</option><option value="prior">at a random draw from the prior</option></select></span></label>
+          <p class="pg-hint">Scale and burn-in apply at once; the start applies at the next Reset.</p>
+        </form>
+        <section class="pg-group gp-params gp-s-params" aria-label="Parameters, priors and posterior">
+          <table class="gp-table">
+            <thead><tr><th scope="col"><span class="sr-only">Parameter</span></th><th scope="col">Now</th><th scope="col">Posterior</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <p class="gp-s-note">Median and 16 to 84% interval after burn-in; priors below.</p>
+        </section>
       </div>
-      <form class="pg-panel pg-settings gp-s-settings" aria-label="Sampler settings">
-        <label class="pg-field"><span class="pg-label">Proposal scale</span><span class="pg-select"><select name="scale"><option value="0.25">0.25</option><option value="0.5">0.5</option><option value="1" selected>1</option><option value="2">2</option><option value="4">4</option></select></span></label>
-        <label class="pg-field"><span class="pg-label">Burn-in discarded</span><span class="pg-select"><select name="burn"><option value="0">none</option><option value="0.1">10%</option><option value="0.25" selected>25%</option><option value="0.5">50%</option></select></span></label>
-        <label class="pg-field pg-field--wide"><span class="pg-label">Start the chain</span><span class="pg-select"><select name="start"><option value="fixed" selected>at the fixed point</option><option value="prior">at a random draw from the prior</option></select></span></label>
-        <p class="pg-hint">Scale and burn-in apply at once; the start applies at the next Reset.</p>
-      </form>
-      <section class="pg-panel gp-params gp-s-params" aria-label="Parameters, priors and posterior">
-        <table class="gp-table">
-          <thead><tr><th scope="col"><span class="sr-only">Parameter</span></th><th scope="col">Now</th><th scope="col">Posterior</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <p class="gp-s-note">Median and 16 to 84% interval after burn-in; priors below.</p>
-      </section>
+      <figure class="pg-plate gp-main gp-s-main">
+        <figcaption class="pg-legend">
+          <span class="pg-title gp-s-title">HD 41248, HARPS velocities</span>
+          <span class="pg-key gp-key--row"><span><i class="k-data"></i>velocity</span><span><i class="k-mean"></i>marginal mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-curve"></i>12 posterior samples</span><label class="pg-inline"><span class="pg-label">Window</span><span class="pg-select pg-select--sm"><select class="gp-s-window" aria-label="Part of the series to show"><option>Loading</option></select></span></label></span>
+        </figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Radial velocities of HD 41248 in a 150 day window with the marginalised Gaussian-process prediction, and an overview of the whole series"></canvas><div class="pg-tip" hidden></div></div>
+        <p class="pg-foot">Velocities about the mean against days since the first observation (31 October 2003), with their catalogue uncertainties. Click in the strip to move the 150 day window; the band is the activity signal alone, without the jitter.</p>
+      </figure>
     </div>
-    <figure class="pg-panel panel gp-main gp-s-main">
-      <figcaption class="pg-head">
-        <span class="pg-title gp-s-title">HD 41248, HARPS velocities</span>
-        <label class="pg-inline"><span class="pg-label">Window</span><span class="pg-select pg-select--sm"><select class="gp-s-window" aria-label="Part of the series to show"><option>Loading</option></select></span></label>
-        <span class="pg-key gp-key--row"><span><i class="k-data"></i>velocity</span><span><i class="k-mean"></i>marginal mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-curve"></i>12 posterior samples</span></span>
-      </figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Radial velocities of HD 41248 in a 150 day window with the marginalised Gaussian-process prediction, and an overview of the whole series"></canvas><div class="pg-tip" hidden></div></div>
-      <figcaption class="pg-caption">Velocities about the mean against days since the first observation (31 October 2003), with their catalogue uncertainties. Click in the strip to move the 150 day window; the band is the activity signal alone, without the jitter.</figcaption>
-    </figure>
-    <figure class="pg-panel gp-a gp-s-trace">
-      <figcaption class="pg-head"><span class="pg-title gp-s-trace-title">Trace</span><span class="pg-key">burn-in shaded</span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Trace plots of the two parameters chosen for the pair plot"></canvas></div>
-    </figure>
-    <figure class="pg-panel gp-b gp-s-pair">
-      <figcaption class="pg-head"><span class="pg-title gp-s-pair-title">Pair plot</span><span class="gp-axes"><label class="pg-inline"><span class="pg-label">x</span><span class="pg-select pg-select--sm"><select class="gp-s-px" aria-label="Parameter on the x axis"><option value="eta3">η3</option></select></span></label><label class="pg-inline"><span class="pg-label">y</span><span class="pg-select pg-select--sm"><select class="gp-s-py" aria-label="Parameter on the y axis"><option value="eta1">η1</option></select></span></label></span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Scatter of two parameters over the posterior states after burn-in, with marginal histograms"></canvas><div class="pg-tip" hidden></div></div>
-    </figure>
+    <div class="pg-row">
+      <figure class="pg-chart gp-s-trace">
+        <figcaption class="pg-head"><span class="pg-title gp-s-trace-title">Trace</span><span class="pg-key">burn-in shaded</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Trace plots of the two parameters chosen for the pair plot"></canvas></div>
+      </figure>
+      <figure class="pg-chart gp-s-pair">
+        <figcaption class="pg-head"><span class="pg-title gp-s-pair-title">Pair plot</span><span class="gp-axes"><label class="pg-inline"><span class="pg-label">x</span><span class="pg-select pg-select--sm"><select class="gp-s-px" aria-label="Parameter on the x axis"><option value="eta3">η3</option></select></span></label><label class="pg-inline"><span class="pg-label">y</span><span class="pg-select pg-select--sm"><select class="gp-s-py" aria-label="Parameter on the y axis"><option value="eta1">η1</option></select></span></label></span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Scatter of two parameters over the posterior states after burn-in, with marginal histograms"></canvas><div class="pg-tip" hidden></div></div>
+      </figure>
+    </div>
   </div>
 
-  <section class="pg-panel gp-details" aria-label="The model">
+  <section class="pg-details gp-details" aria-label="The model">
     <div class="gp-cols" data-for="kernels">
       <div class="gp-col">
         <span class="pg-title">The kernel</span>

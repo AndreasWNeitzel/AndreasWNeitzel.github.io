@@ -1,0 +1,15 @@
+{%- comment -%} The paper explainers as wide pictures with a short title; the finding is the sentence under each. {%- endcomment -%}
+{%- assign ps = site.papers | sort: "order" -%}
+<div class="explainers">
+  {%- for x in ps %}
+  {%- assign slug = x.url | split: "/" | last -%}
+  {%- assign cp = site.data.copy.papers | where: "id", slug | first -%}
+  <a class="explainer k-up" href="{{ x.url | relative_url }}">
+    {%- if x.card_wide and x.wide_figure %}<div class="pic art" data-build>{% include {{ x.wide_figure }} %}</div>
+    {%- elsif x.card_image %}<div class="pic{% if x.card_light %} light{% endif %}"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"><span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>{% if x.card_credit %}<span class="ccredit">{{ x.card_credit }}</span>{% endif %}</div>
+    {%- else %}<div class="pic art">{% include figures/art-hr.svg %}<span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span></div>{% endif %}
+    <h3>{{ cp.short | default: x.title | missions }}</h3>
+    <p>{{ cp.line | default: x.headline | missions }}</p>
+  </a>
+  {%- endfor %}
+</div>

@@ -73,6 +73,18 @@ function siteTokens() {
   };
 }
 
+// Colours read from inside an element: the stage is always dark, whatever the page's theme, so
+// the canvases on it take their palette from a probe inside the plate rather than from the page.
+function tokensIn(el) {
+  const probe = document.createElement("span");
+  probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none";
+  el.appendChild(probe);
+  return (name) => {
+    probe.style.color = `var(${name})`;
+    return getComputedStyle(probe).color;
+  };
+}
+
 // ---------------------------------------------------------------- canvas
 function surface(canvas) {
   const s = { canvas, ctx: canvas.getContext("2d"), w: 0, h: 0, dpr: 1 };
@@ -170,14 +182,23 @@ async function boot(root) {
 
   // ------------------------------------------------------------ colours and fonts
   let C = null;
+  let CP = null;
   let F = null;
+  const plateColour = tokensIn(root.querySelector(".pg-plate"));
+  const palette = (c) => ({
+    surface: c("--surface"), surface2: c("--surface-2"), line: c("--line"), lineStrong: c("--line-strong"),
+    ink: c("--ink"), ink2: c("--ink-2"), muted: c("--muted"), accent: c("--accent"), accent2: c("--accent-2"),
+    cat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => c(`--cat-${i}`)),
+  });
+  // The stage is drawn with the plate's palette, everything else with the page's.
+  function onPlate(draw) {
+    const page = C;
+    C = CP;
+    try { draw(); } finally { C = page; }
+  }
   function readTheme() {
-    const c = (name) => T.colour(name);
-    C = {
-      surface: c("--surface"), surface2: c("--surface-2"), line: c("--line"), lineStrong: c("--line-strong"),
-      ink: c("--ink"), ink2: c("--ink-2"), muted: c("--muted"), accent: c("--accent"), accent2: c("--accent-2"),
-      cat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => c(`--cat-${i}`)),
-    };
+    C = palette((name) => T.colour(name));
+    CP = palette(plateColour);
     const cs = getComputedStyle(document.documentElement);
     F = { mono: cs.getPropertyValue("--mono").trim() || "monospace", sans: cs.getPropertyValue("--sans").trim() || "sans-serif" };
   }
@@ -724,7 +745,7 @@ async function boot(root) {
     // stations
     const stationPts = [];
     ctx.globalAlpha = 1;
-    ctx.font = `500 10px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textBaseline = "middle";
     for (const st of stations) {
       const u = stationVector(st, t, [0, 0, 0]);
@@ -759,7 +780,7 @@ async function boot(root) {
     }
     spreadLabels(stLabels, 11);
     ctx.globalAlpha = 1;
-    ctx.font = `500 10px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     for (const l of stLabels) {
       ctx.strokeStyle = C.line;
       ctx.lineWidth = 1;
@@ -786,7 +807,7 @@ async function boot(root) {
       labels.push({ x: p.sx, y: p.sy, text: b.short, hidden: p.hidden });
     });
     spreadLabels(labels, 12);
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     for (const l of labels) {
       ctx.globalAlpha = l.hidden ? 0.4 : 1;
@@ -796,7 +817,7 @@ async function boot(root) {
     // scale note
     ctx.globalAlpha = 1;
     ctx.fillStyle = C.muted;
-    ctx.font = `500 10px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
     const bar = 10000 * P.scale;
@@ -833,7 +854,7 @@ async function boot(root) {
     const ctx = s.begin();
     if (s.w < 60 || !visibility) return;
     const nb = bodies.length;
-    ctx.font = `500 10px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     // The movable station is labelled by the latitude it is at, not by a fixed name.
     const label = (st) => (st.adjustable_latitude ? `${Math.round(st.lat)}\u00b0 N` : st.name);
     const left = 8 + Math.ceil(Math.max(...stations.map((st) => ctx.measureText(label(st)).width)));
@@ -917,7 +938,7 @@ async function boot(root) {
     const X = (x) => cx + x * scale;
     const Y = (y) => cy - y * scale;
     ctx.lineWidth = 1;
-    ctx.font = `500 10px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textBaseline = "bottom";
     ctx.textAlign = "left";
     for (let R = 5; R <= W; R += 5) {
@@ -953,7 +974,7 @@ async function boot(root) {
     const s = cv.side;
     const ctx = s.begin();
     if (s.w < 60) return;
-    ctx.font = `10px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     const m = { l: 34, r: 10, t: 8, b: 26 };
     const W = s.w - m.l - m.r;
     const H = s.h - m.t - m.b;
@@ -1032,7 +1053,7 @@ async function boot(root) {
       if (labelAll || i === follow) labels.push({ x, y, text: b.short });
     });
     spreadLabels(labels, 12);
-    ctx.font = `500 10px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     for (const l of labels) {
@@ -1068,7 +1089,7 @@ async function boot(root) {
     const ctx = s.begin();
     if (s.w < 60 || !bodies.length) return;
     const fr = energyFrame();
-    ctx.font = `10px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
@@ -1119,7 +1140,7 @@ async function boot(root) {
     ctx.globalAlpha = 1;
     if (t === 0) {
       ctx.fillStyle = C.muted;
-      ctx.font = `500 12px ${F.sans}`;
+      ctx.font = `500 13px ${F.sans}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("Press Run to start", fr.m.l + fr.W / 2, fr.m.t + fr.H / 2);
@@ -1283,7 +1304,7 @@ async function boot(root) {
         updateReadout();
       }
     }
-    if (dirty.main) { (mode === "earth" ? drawEarth : drawFaceOn)(); dirty.main = false; }
+    if (dirty.main) { onPlate(mode === "earth" ? drawEarth : drawFaceOn); dirty.main = false; }
     if (dirty.side) { (mode === "earth" ? drawVisibility : drawMeridional)(); dirty.side = false; }
     if (dirty.energy) { drawEnergy(); dirty.energy = false; }
     if (running) schedule();

@@ -56,6 +56,18 @@ function siteTokens() {
   };
 }
 
+// Colours read from inside an element: the stage is always dark, whatever the page's theme, so
+// the canvases on it take their palette from a probe inside the plate rather than from the page.
+function tokensIn(el) {
+  const probe = document.createElement("span");
+  probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none";
+  el.appendChild(probe);
+  return (name) => {
+    probe.style.color = `var(${name})`;
+    return getComputedStyle(probe).color;
+  };
+}
+
 const pixel = (() => {
   const c = document.createElement("canvas");
   c.width = c.height = 1;
@@ -246,12 +258,21 @@ async function boot(root) {
   let parityDomain = [-1, 1];
   let teffDomain = [4000, 6500];
 
+  let CP = null;
+  const plateColour = tokensIn(root.querySelector(".pg-plate"));
+  const palette = (c) => ({
+    surface: c("--surface"), surface2: c("--surface-2"), line: c("--line"), lineStrong: c("--line-strong"),
+    ink: c("--ink"), ink2: c("--ink-2"), muted: c("--muted"), accent: c("--accent"), accent2: c("--accent-2"),
+  });
+  // The stage is drawn with the plate's palette, everything else with the page's.
+  function onPlate(draw) {
+    const page = C;
+    C = CP;
+    try { draw(); } finally { C = page; }
+  }
   function readTheme() {
-    const c = (name) => T.colour(name);
-    C = {
-      surface: c("--surface"), surface2: c("--surface-2"), line: c("--line"), lineStrong: c("--line-strong"),
-      ink: c("--ink"), ink2: c("--ink-2"), muted: c("--muted"), accent: c("--accent"), accent2: c("--accent-2"),
-    };
+    C = palette((name) => T.colour(name));
+    CP = palette(plateColour);
     const cs = getComputedStyle(document.documentElement);
     F = { mono: cs.getPropertyValue("--mono").trim() || "monospace", sans: cs.getPropertyValue("--sans").trim() || "sans-serif" };
     const mix = ramp(C.accent2, C.accent);
@@ -455,7 +476,7 @@ async function boot(root) {
     const span = bottom - top;
     const x0 = small ? 30 : 46;
     const ctx = s.ctx;
-    ctx.font = `500 ${small ? 10 : 11}px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     const labelW = Math.max(ctx.measureText("[M/H] estimate").width, ctx.measureText(`GSP-Spec ${MINUS}0.00`).width);
     const x1 = s.w - labelW - 9 - 12 - 8;
     const cols = sizes.length;
@@ -610,7 +631,7 @@ async function boot(root) {
     // Labels.
     ctx.globalAlpha = 1;
     ctx.fillStyle = C.muted;
-    ctx.font = `500 ${L.small ? 10 : 11}px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textBaseline = "middle";
     ctx.textAlign = "right";
     ctx.fillText("BP", bandX - bandW / 2 - 8, L.top + L.bandH / 2);
@@ -636,13 +657,13 @@ async function boot(root) {
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ctx.fillStyle = C.muted;
-    ctx.font = `500 ${L.small ? 10 : 11}px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.fillText("[M/H] estimate", ox, oy - (L.small ? 15 : 18));
     ctx.fillStyle = C.ink;
     ctx.font = `600 ${L.small ? 14 : 17}px ${F.mono}`;
     ctx.fillText(S.sample.row === selected ? signed(S.sample.prediction) : "…", ox, oy);
     ctx.fillStyle = C.muted;
-    ctx.font = `500 ${L.small ? 10 : 11}px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.fillText(`GSP-Spec ${signed(A.mh_gspspec[selected])}`, ox, oy + (L.small ? 15 : 18));
   }
 
@@ -675,7 +696,7 @@ async function boot(root) {
     const ctx = s.begin();
     if (s.w < 60 || !history.length) return;
     const f = lossFrame();
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.fillStyle = C.muted;
     ctx.textAlign = "right";
@@ -719,7 +740,7 @@ async function boot(root) {
     }
     if (history.length === 1) {
       ctx.fillStyle = C.muted;
-      ctx.font = `500 12px ${F.sans}`;
+      ctx.font = `500 13px ${F.sans}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("Press Train to start", f.m.l + f.W / 2, f.m.t + f.H / 2);
@@ -782,14 +803,14 @@ async function boot(root) {
   // ------------------------------------------------------------ parity plot
   function parityFrame() {
     const s = cv.parity;
-    s.ctx.font = `11px ${F.mono}`;
+    s.ctx.font = `13px ${F.mono}`;
     const [lo0, hi0] = parityDomain;
     const tick = (v) => s.ctx.measureText(axisNumber(v)).width;
     const legend = 10 + 8 + Math.ceil(s.ctx.measureText(`\u2265${grouped(teffDomain[1])} K`).width);
     const m = { l: Math.ceil(Math.max(tick(lo0), tick(hi0))) + 28, r: legend + 22, t: 10, b: 40 };
     const size = Math.max(20, Math.min(s.w - m.l - m.r, s.h - m.t - m.b));
     const x0 = m.l + Math.max(0, (s.w - m.l - m.r - size) / 2);
-    const y0 = m.t;
+    const y0 = m.t + Math.max(0, (s.h - m.t - m.b - size) / 2);
     const [lo, hi] = parityDomain;
     return {
       m, size, x0, y0, lo, hi,
@@ -804,7 +825,7 @@ async function boot(root) {
     if (!S || !valRows || s.w < 60) return;
     const f = parityFrame();
     const step = f.size > 420 ? 0.25 : 0.5;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     for (let v = Math.ceil(f.lo / step) * step; v <= f.hi + 1e-9; v += step) {
       const x = Math.round(f.sx(v)) + 0.5;
@@ -850,10 +871,10 @@ async function boot(root) {
       ctx.stroke();
     }
     ctx.fillStyle = C.ink2;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
-    ctx.fillText("GSP-Spec [M/H] (dex)", f.x0 + f.size / 2, s.h - 4);
+    ctx.fillText("GSP-Spec [M/H] (dex)", f.x0 + f.size / 2, f.y0 + f.size + f.m.b - 4);
     ctx.save();
     ctx.translate(11, f.y0 + f.size / 2);
     ctx.rotate(-Math.PI / 2);
@@ -869,7 +890,7 @@ async function boot(root) {
       ctx.fillRect(bx, f.y0 + (i * f.size) / steps, 8, f.size / steps + 0.5);
     }
     ctx.fillStyle = C.muted;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillText(`\u2265${grouped(teffDomain[1])} K`, bx + 13, f.y0);
@@ -962,7 +983,7 @@ async function boot(root) {
     }
     const zero = m.t + H / 2;
     const Y = (v) => zero - fy(v) * (H / 2);
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
     ctx.lineWidth = 1;
@@ -991,7 +1012,7 @@ async function boot(root) {
     ctx.fillStyle = C.ink2;
     ctx.textBaseline = "alphabetic";
     ctx.textAlign = "center";
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     const long = ctx.measureText(`BP coefficients 0 to ${K - 1}`).width < K * slot - 12;
     const names = long ? ["BP coefficients", "RP coefficients"] : ["BP", "RP"];
     ctx.fillText(`${names[0]} 0 to ${K - 1}`, m.l + (K * slot) / 2, s.h - 6);
@@ -1003,7 +1024,7 @@ async function boot(root) {
     const s = cv.spectrum;
     const ctx = s.begin();
     if (s.w < 60) return;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     const endLabel = (i) => `[M/H] ${signed(A.mh_gspspec[examples[i]])}`;
     const labelW = Math.max(...[0, 1, 2].map((i) => ctx.measureText(endLabel(i)).width));
     const m = { l: 36, r: labelW + 14, t: 10, b: 24 };
@@ -1016,7 +1037,7 @@ async function boot(root) {
     top = Math.ceil(top * 4) / 4;
     const X = (w) => m.l + ((w - w0) / (w1 - w0)) * W;
     const Y = (v) => m.t + H - (v / top) * H;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `13px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
@@ -1053,7 +1074,7 @@ async function boot(root) {
     for (let k = 1; k < placed.length; k++) placed[k] = Math.max(placed[k], placed[k - 1] + gapY);
     const overflow = placed[placed.length - 1] - (m.t + H);
     if (overflow > 0) for (let k = 0; k < placed.length; k++) placed[k] -= overflow;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ends.forEach((e, k) => {
@@ -1068,7 +1089,7 @@ async function boot(root) {
     ctx.fillStyle = C.muted;
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("nm", m.l + W + 10, m.t + H + 6);
+    ctx.fillText("nm", m.l + W + 26, m.t + H + 6);
   }
 
   // ------------------------------------------------------------ frame loop
@@ -1086,7 +1107,7 @@ async function boot(root) {
     if (dirty.spectrum) { drawSpectrum(); dirty.spectrum = false; }
     const animate = S && netVisible && !motion.matches && !document.hidden;
     if (dirty.net || (animate && now - lastNetDraw >= FRAME_MS)) {
-      drawNet(now);
+      onPlate(() => drawNet(now));
       lastNetDraw = now;
       dirty.net = false;
     }

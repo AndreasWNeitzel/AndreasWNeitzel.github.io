@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: default
 permalink: /guide/
 title: Field guide
 copy: guide
@@ -10,20 +10,37 @@ cards:
   galactic-archaeology: /assets/img/heroes/research_allsky.webp
   asteroseismology: /assets/img/heroes/research_seismo.webp
   machine-learning-for-stars: /assets/img/heroes/line_janus.webp
-  eso-vlt: /assets/img/heroes/eso_daylight.webp
+  eso-vlt: /assets/img/photos/vlt-daylight.webp
+loops:
+  gaia: gaia
+  supercomputers: hall
+  haydn: cluster
+  machine-learning-for-stars: ai
 ---
-<div class="guide-grid">
-  {%- assign gs = site.guide | sort: "order" -%}
-  {%- for g in gs %}
-  {%- assign slug = g.url | split: "/" | last -%}
-  {%- assign ci = page.cards[slug] -%}
-  <a class="card k-up" href="{{ g.url | relative_url }}">
-    <div class="media">{% if ci %}<img src="{{ ci | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% elsif g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% else %}<img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}</div>
-    <div class="card-body">
-      <h3>{{ g.title | missions }}</h3>
-      <p>{{ g.lede | missions }}</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  {%- endfor %}
+{%- assign CP = site.data.copy.plates -%}
+{% include plate.html loop="paranal" still="/assets/img/photos/vlt-golden-hour.webp" alt="The Milky Way rising over the hills at Paranal, drawn from Gaia red giants" title="Field guide" line=CP.guide %}
+<div class="wrap">
+<section class="section section--tight">
+  <div class="rows">
+    {%- assign gs = site.guide | sort: "order" -%}
+    {%- for g in gs %}
+    {%- assign slug = g.url | split: "/" | last -%}
+    {%- assign ci = page.cards[slug] -%}
+    {%- assign lp = page.loops[slug] -%}
+    {%- assign vf = nil -%}{% if lp %}{% assign vpath = "/assets/video/" | append: lp | append: ".av1.mp4" %}{% assign vf = site.static_files | where: "path", vpath | first %}{% endif %}
+    <article class="row-item k-up">
+      <div class="pic">
+        {%- if vf %}{% include loop.html name=lp alt="" %}
+        {%- elsif ci %}<img src="{{ ci | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">
+        {%- elsif g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">
+        {%- elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}
+      </div>
+      <div class="words">
+        <h2><a href="{{ g.url | relative_url }}">{{ g.title | missions }}</a></h2>
+        <p>{{ g.lede | missions }}</p>
+      </div>
+    </article>
+    {%- endfor %}
+  </div>
+</section>
 </div>

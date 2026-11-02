@@ -37,6 +37,8 @@ home:
       title: "Software"
       glass: "I wrote JANUS, Starfold and HAYDNsim, and built demos that run in the browser."
       alts:
+        - "Light passing through the layers of the JANUS networks"
+        - "The 9,242 stars of the Starfold run in the chemistry plane, drawn as light"
         - "Schematic of a simulated telescope image of a crowded globular cluster"
     - key: "talks"
       title: "Talks"
@@ -209,3 +211,17 @@ publications:
 guide:
   description: "Short explainers of the science, institutions and machines behind the research of Andreas W. Neitzel, from Galactic archaeology to supercomputers."
   lede: "The science, institutions and machines behind my work, one minute each, with sources and the parts I was involved in."
+
+papers:
+  - {id: "campante-2024-eps-indi", short: "Oscillations of the dwarf ε Indi", line: "The ESPRESSO spectrograph detected three-minute oscillations in ε Indi, a nearby star cooler than any other dwarf whose oscillations had been measured."}
+  - {id: "campante-2026-gj570a", short: "K-dwarf oscillations with ESPRESSO", line: "Two nearby stars smaller and cooler than the Sun oscillate more weakly than the rule for Sun-like stars predicts, and 3D simulations do not reproduce this."}
+  - {id: "magrini-2022-ariel", short: "<i>Ariel</i> host-star parameters", line: "One method gave consistent temperatures, gravities and metal content for 187 planet-host stars, and roughly halved the uncertainty on their masses."}
+  - {id: "neitzel-2022-msc-thesis", short: "Masses and ages of <i>Ariel</i> stars", line: "Adding a star's oscillation frequencies, or an accurate luminosity, tightens the mass and age that stellar models give for Sun-like planet hosts, by an amount that depends on how well their temperature and metal content are known."}
+  - {id: "neitzel-2025-manifold-learning", short: "Manifold learning for stellar populations", line: "In a simulated Milky Way, a method that needs no labels told disc from halo stars and, in error-free data, found the debris of two swallowed galaxies."}
+
+plates:
+  research: "I turn <i>Gaia</i> spectra into the chemistry, ages and populations of the Milky Way."
+  software: "I write research software for stellar astrophysics and browser apps that run on real data."
+  publications: "Four refereed papers in Astronomy and Astrophysics, with my contribution to each stated."
+  talks: "Talks and posters since 2022, with slides and posters on Zenodo where deposited."
+  guide: "The science, institutions and machines behind my work, one minute each, with sources."

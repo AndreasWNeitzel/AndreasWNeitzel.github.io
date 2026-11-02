@@ -13,85 +13,87 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
 <p class="pg-intro">A geostationary satellite sits over the equator, so above 81.3 degrees of latitude it never rises: at the pole there is no signal from it at all. The Molniya orbit is the answer to that, and this page is the demonstration.</p>
 
 <section class="pg ob" id="orbits-playground" aria-label="Orbits playground" data-mode="earth" data-src="{{ '/assets/data/playground/orbits.json' | relative_url }}">
-  <div class="ob-dash">
-    <div class="pg-ctrl">
-    <div class="pg-panel pg-run ob-run">
-      <div class="ob-mode" role="group" aria-label="Problem">
-        <button type="button" data-mode="earth" aria-pressed="true">Earth</button>
-        <button type="button" data-mode="galaxy" aria-pressed="false">Galaxy</button>
+  <div class="pg-top">
+    <div class="pg-rail">
+      <div class="pg-group ob-run">
+        <div class="pg-buttons ob-mode" role="group" aria-label="Problem">
+          <button type="button" class="btn" data-mode="earth" aria-pressed="true">Earth</button>
+          <button type="button" class="btn" data-mode="galaxy" aria-pressed="false">Galaxy</button>
+        </div>
+        <div class="pg-buttons">
+          <button type="button" class="btn btn--primary ob-run-btn" disabled>Run</button>
+          <button type="button" class="btn ob-step" title="Advance by one step" disabled>Step</button>
+          <button type="button" class="btn ob-reset" title="Return every body to its starting point" disabled>Reset</button>
+        </div>
+        <div class="pg-live" aria-live="polite" aria-atomic="true">
+          <dl class="pg-readout ob-readout">
+            <div><dt>Time</dt><dd><span class="ob-time">0</span></dd></div>
+            <div data-mode="earth"><dt>Altitude</dt><dd><span class="ob-alt">&hellip;</span> <small>km</small></dd></div>
+            <div data-mode="galaxy"><dt>Eccentricity</dt><dd><span class="ob-ecc">&hellip;</span><small class="ob-ref ob-ecc-ref"></small></dd></div>
+            <div class="minor" data-mode="earth"><dt>Speed</dt><dd><span class="ob-speed">&hellip;</span> <small>km/s</small></dd></div>
+            <div class="minor" data-mode="galaxy"><dt><i>z</i><sub>max</sub></dt><dd><span class="ob-zmax">&hellip;</span><small class="ob-ref ob-zmax-ref">kpc</small></dd></div>
+            <div class="minor" data-mode="galaxy"><dt><i>L</i><sub>z</sub></dt><dd><span class="ob-lz">&hellip;</span><small class="ob-ref ob-lz-ref">kpc km/s</small></dd></div>
+            <div class="minor" data-mode="galaxy"><dt>Energy <i>E</i></dt><dd><span class="ob-energy-value">&hellip;</span><small class="ob-ref ob-e-ref">km²/s²</small></dd></div>
+            <div class="minor"><dt>Energy error</dt><dd><span class="ob-err">&hellip;</span><small class="ob-ref ob-stepnow"></small></dd></div>
+          </dl>
+          <p class="pg-state">Loading the orbits (15 KB).</p>
+        </div>
       </div>
-      <div class="pg-buttons">
-        <button type="button" class="btn btn--primary btn--sm ob-run-btn" disabled>Run</button>
-        <button type="button" class="btn btn--sm ob-step" title="Advance by one step" disabled>Step</button>
-        <button type="button" class="btn btn--sm ob-reset" title="Return every body to its starting point" disabled>Reset</button>
-      </div>
-      <div class="pg-live" aria-live="polite" aria-atomic="true">
-        <dl class="pg-readout ob-readout">
-          <div><dt>Time</dt><dd><span class="ob-time">0</span></dd></div>
-          <div data-mode="earth"><dt>Altitude</dt><dd><span class="ob-alt">&hellip;</span> <small>km</small></dd></div>
-          <div data-mode="earth"><dt>Speed</dt><dd><span class="ob-speed">&hellip;</span> <small>km/s</small></dd></div>
-          <div data-mode="galaxy"><dt>Eccentricity</dt><dd><span class="ob-ecc">&hellip;</span><small class="ob-ref ob-ecc-ref"></small></dd></div>
-          <div data-mode="galaxy"><dt><i>z</i><sub>max</sub></dt><dd><span class="ob-zmax">&hellip;</span><small class="ob-ref ob-zmax-ref">kpc</small></dd></div>
-          <div data-mode="galaxy"><dt><i>L</i><sub>z</sub></dt><dd><span class="ob-lz">&hellip;</span><small class="ob-ref ob-lz-ref">kpc km/s</small></dd></div>
-          <div data-mode="galaxy"><dt>Energy <i>E</i></dt><dd><span class="ob-energy-value">&hellip;</span><small class="ob-ref ob-e-ref">km²/s²</small></dd></div>
-          <div><dt>Energy error</dt><dd><span class="ob-err">&hellip;</span><small class="ob-ref ob-stepnow"></small></dd></div>
-        </dl>
-        <p class="pg-state">Loading the orbits (15 KB).</p>
-      </div>
+
+      <form class="pg-group pg-settings ob-settings" aria-label="Integration settings">
+        <label class="pg-field pg-field--wide"><span class="pg-label">Integrator</span><span class="pg-select"><select name="integrator">
+          <option value="leapfrog" selected>Leapfrog, symplectic</option>
+          <option value="rk4">RK4, adaptive step</option>
+          <option value="euler">Euler, first order</option>
+        </select></span></label>
+        <label class="pg-field"><span class="pg-label">Step</span><span class="pg-select"><select name="step"><option>Loading</option></select></span></label>
+        <label class="pg-field"><span class="pg-label">Speed</span><span class="pg-select"><select name="speed"><option>Loading</option></select></span></label>
+        <label class="pg-field pg-field--wide"><span class="pg-label">Follow</span><span class="pg-select"><select name="follow"><option>Loading</option></select></span></label>
+        <div class="ob-only" data-mode="earth">
+          <label class="ob-slider ob-station"><span class="pg-label">Polar station, latitude north</span><output name="latout">85.0°</output><input type="range" name="lat" min="60" max="90" step="0.5" value="85"></label>
+        </div>
+        <div class="ob-only" data-mode="galaxy">
+          <details class="ob-tp">
+            <summary>Launch a test particle, not a star</summary>
+            <div class="ob-tp-grid">
+              <label class="ob-slider"><span class="pg-label"><i>R</i></span><output name="tpRout">8.0 kpc</output><input type="range" name="tpR" min="0.5" max="40" step="0.1" value="8"></label>
+              <label class="ob-slider"><span class="pg-label"><i>z</i></span><output name="tpZout">0.0 kpc</output><input type="range" name="tpZ" min="-5" max="5" step="0.1" value="0"></label>
+              <label class="ob-slider"><span class="pg-label"><i>v</i><sub>R</sub></span><output name="tpVRout">0 km/s</output><input type="range" name="tpVR" min="-300" max="300" step="5" value="0"></label>
+              <label class="ob-slider"><span class="pg-label"><i>v</i><sub>φ</sub></span><output name="tpVPout">220 km/s</output><input type="range" name="tpVP" min="-300" max="300" step="5" value="220"></label>
+              <label class="ob-slider"><span class="pg-label"><i>v</i><sub>z</sub></span><output name="tpVZout">0 km/s</output><input type="range" name="tpVZ" min="-200" max="200" step="5" value="0"></label>
+              <button type="button" class="btn btn--sm ob-launch" disabled>Launch</button>
+            </div>
+          </details>
+        </div>
+      </form>
     </div>
 
-    <form class="pg-panel pg-settings ob-settings" aria-label="Integration settings">
-      <label class="pg-field pg-field--wide"><span class="pg-label">Integrator</span><span class="pg-select"><select name="integrator">
-        <option value="leapfrog" selected>Leapfrog, symplectic</option>
-        <option value="rk4">RK4, adaptive step</option>
-        <option value="euler">Euler, first order</option>
-      </select></span></label>
-      <label class="pg-field"><span class="pg-label">Step</span><span class="pg-select"><select name="step"><option>Loading</option></select></span></label>
-      <label class="pg-field"><span class="pg-label">Speed</span><span class="pg-select"><select name="speed"><option>Loading</option></select></span></label>
-      <label class="pg-field pg-field--wide"><span class="pg-label">Follow</span><span class="pg-select"><select name="follow"><option>Loading</option></select></span></label>
-      <div class="ob-only" data-mode="earth">
-        <label class="ob-slider ob-station"><span class="pg-label">Polar station, latitude north</span><output name="latout">85.0°</output><input type="range" name="lat" min="60" max="90" step="0.5" value="85"></label>
-      </div>
-      <div class="ob-only" data-mode="galaxy">
-        <details class="ob-tp">
-          <summary>Launch a test particle, not a star</summary>
-          <div class="ob-tp-grid">
-            <label class="ob-slider"><span class="pg-label"><i>R</i></span><output name="tpRout">8.0 kpc</output><input type="range" name="tpR" min="0.5" max="40" step="0.1" value="8"></label>
-            <label class="ob-slider"><span class="pg-label"><i>z</i></span><output name="tpZout">0.0 kpc</output><input type="range" name="tpZ" min="-5" max="5" step="0.1" value="0"></label>
-            <label class="ob-slider"><span class="pg-label"><i>v</i><sub>R</sub></span><output name="tpVRout">0 km/s</output><input type="range" name="tpVR" min="-300" max="300" step="5" value="0"></label>
-            <label class="ob-slider"><span class="pg-label"><i>v</i><sub>φ</sub></span><output name="tpVPout">220 km/s</output><input type="range" name="tpVP" min="-300" max="300" step="5" value="220"></label>
-            <label class="ob-slider"><span class="pg-label"><i>v</i><sub>z</sub></span><output name="tpVZout">0 km/s</output><input type="range" name="tpVZ" min="-200" max="200" step="5" value="0"></label>
-            <button type="button" class="btn btn--sm ob-launch" disabled>Launch</button>
-          </div>
-        </details>
-      </div>
-    </form>
-    </div>
-
-    <figure class="pg-panel panel ob-main">
-      <figcaption class="pg-head"><span class="pg-title ob-main-title">Around the Earth</span><span class="pg-key ob-main-key"></span></figcaption>
+    <figure class="pg-plate ob-main">
+      <figcaption class="pg-legend"><span class="pg-title ob-main-title">Around the Earth</span><span class="pg-key ob-main-key"></span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Three Molniya satellites and a geostationary satellite around the rotating Earth, drawn to scale"></canvas></div>
-      <p class="pg-caption ob-main-cap">Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.</p>
+      <p class="pg-foot ob-main-cap">Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.</p>
     </figure>
+  </div>
 
-    <figure class="pg-panel ob-side">
+  <div class="pg-row">
+    <figure class="pg-chart ob-side">
       <figcaption class="pg-head"><span class="pg-title ob-side-title">Visible from the ground</span><span class="pg-key ob-side-key"></span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Timeline of when each satellite is above the horizon of Porto, Moscow and the third station"></canvas></div>
     </figure>
 
-    <figure class="pg-panel ob-energy">
+    <figure class="pg-chart ob-energy">
       <figcaption class="pg-head"><span class="pg-title">Energy error</span><span class="pg-key"><span class="tex" data-tex="|E - E_0| / |E_0|">|E − E₀| / |E₀|</span></span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Relative energy error of every body against time, on a log scale"></canvas><div class="pg-tip" hidden></div></div>
     </figure>
   </div>
 
-  <section class="pg-panel ob-details" data-mode="earth" aria-label="The satellites and the stations">
+  <section class="pg-details ob-details" data-mode="earth" aria-label="The satellites and the stations">
     <h2>The satellites and the stations</h2>
     <div class="table-wrap ob-table-sats"></div>
     <div class="table-wrap ob-table-stations"></div>
     <p class="pg-caption">Elements of the Molniya orbit from Kidder and Vonder Haar (1990) and the NASA orbit catalogue; the semi-major axes follow from the periods by Kepler's third law with GM = 398,600.4418 km³/s² (IERS Conventions 2010). The Earth is a sphere of radius 6,378.137 km turning once a sidereal day; the Greenwich meridian lies along the inertial <i>x</i> axis at <i>t</i> = 0. Visibility uses the geometric horizon, an elevation above 0 degrees.</p>
   </section>
-  <section class="pg-panel ob-details" data-mode="galaxy" aria-label="The stars and the potential">
+  <section class="pg-details ob-details" data-mode="galaxy" aria-label="The stars and the potential">
     <h2>The six stars</h2>
     <div class="table-wrap ob-table-stars"></div>
     <p class="pg-caption">Catalogue values from <em>Gaia</em> DR3 at epoch J2016.0, with their published uncertainties; distances are 1 / parallax. Galactocentric coordinates with the Sun at (−8.0, 0, 0.0208) kpc moving at (11.10, 232.24, 7.25) km/s; their uncertainties are standard deviations over 20,000 draws from the Gaia errors and correlations. The reference eccentricity, <span class="tex" data-tex="z_\mathrm{max}"><i>z</i><sub>max</sub></span>, pericentre and apocentre come from a 10 Gyr galpy integration of the same starting point, for comparison with the live values.</p>

@@ -1,0 +1,80 @@
+{
+  "format": "mw_giants 1",
+  "binary": "giants.bin",
+  "bytes": 1120000,
+  "byte_order": "little",
+  "n": 160000,
+  "layout": [
+    {
+      "field": "x",
+      "dtype": "float16",
+      "unit": "kpc",
+      "offset": 0
+    },
+    {
+      "field": "y",
+      "dtype": "float16",
+      "unit": "kpc",
+      "offset": 320000
+    },
+    {
+      "field": "z",
+      "dtype": "float16",
+      "unit": "kpc",
+      "offset": 640000
+    },
+    {
+      "field": "feh",
+      "dtype": "int8",
+      "unit": "dex times 50",
+      "offset": 960000
+    }
+  ],
+  "frame": "heliocentric Galactic Cartesian: x toward the Galactic centre, y toward l = 90 degrees (the direction of rotation), z toward the north Galactic pole; distance is the inverse parallax",
+  "feh_decode": "[Fe/H] = feh / 50, after clipping to [-2.5, 0.5]",
+  "selection": {
+    "catalogue": "Andrae et al. 2023 red giants with XP metallicities (Gaia DR3)",
+    "cuts": "parallax > 0.2 mas and parallax/error > 5 in the intermediate file; parallax/error > 10 here",
+    "n_catalogue_file": 7812818,
+    "n_after_snr_cut": 6870693,
+    "n_kept": 160000,
+    "draw": "uniform random subsample without replacement, numpy default_rng seed 20261102",
+    "summary": "160,000 of 6,870,693 stars with parallax/error > 10"
+  },
+  "distance_kpc_percentiles": {
+    "1": 0.468,
+    "5": 0.848,
+    "25": 1.707,
+    "50": 2.498,
+    "75": 3.384,
+    "95": 4.478,
+    "99": 4.875
+  },
+  "feh_percentiles": {
+    "1": -1.282,
+    "5": -0.946,
+    "25": -0.716,
+    "50": -0.619,
+    "75": -0.546,
+    "95": -0.472,
+    "99": -0.432
+  },
+  "provenance": {
+    "source_file": "~/data/janus_store/gaia/xp_parameters_andrae2023/andrae2023_rgb.parquet",
+    "intermediate": "giants3d_snr.npz",
+    "script": "figures/map/build_mw_points.py",
+    "built_utc": "2026-11-02T04:00:29Z"
+  },
+  "references": [
+    {
+      "label": "Andrae, Rix and Chandra 2023, ApJS 267, 8: robust data-driven metallicities for 175 million stars from Gaia XP spectra",
+      "doi": "10.3847/1538-4365/acd53e",
+      "arxiv": "2302.02611"
+    },
+    {
+      "label": "Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1: Gaia Data Release 3",
+      "doi": "10.1051/0004-6361/202243940",
+      "arxiv": "2208.00211"
+    }
+  ]
+}

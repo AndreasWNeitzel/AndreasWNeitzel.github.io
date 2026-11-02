@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: default
 permalink: /publications/
 title: Publications
 copy: publications
@@ -9,7 +9,15 @@ extra_links:
 extra_css: [/assets/css/thesis.css]
 ---
 {%- assign L = site.data.ledger -%}
-<section class="section section--tight" aria-labelledby="first">
+{%- assign C = site.data.copy.publications -%}
+{%- assign CP = site.data.copy.plates -%}
+{% include plate.html loop="desk" still="/assets/img/papers/neitzel-2025-manifold-learning.webp" alt="The published figures as printed sheets on a desk" title="Publications" line=CP.publications %}
+<div class="wrap">
+<section class="section section--tight" id="explainers" aria-labelledby="explainers-title">
+  <div class="section-head k-up"><h2 id="explainers-title">Explainers</h2><p>{{ C.explainers_lead }}</p></div>
+  {% include explainers.html %}
+</section>
+<section class="section" aria-labelledby="first">
   <div class="section-head k-up"><h2 id="first">First author</h2></div>
   <div class="bib-list">{% bibliography --query @*[lead=first] %}</div>
 </section>
@@ -17,29 +25,6 @@ extra_css: [/assets/css/thesis.css]
   <div class="section-head k-up"><h2 id="co">Co-author</h2></div>
   <div class="bib-list">{% bibliography --query @*[lead=co] %}</div>
 </section>
-
-<section class="section" id="explainers" aria-labelledby="explainers-title">
-  <div class="section-head k-up"><h2 id="explainers-title">Explainers</h2><p>{{ site.data.copy.publications.explainers_lead }}</p></div>
-  <div class="mosaic mosaic--pairs">
-    {%- assign ps = site.papers | sort: "order" -%}
-    {%- for x in ps %}
-    <div class="card-wrap{% if x.card_wide %} wide{% endif %} k-up">
-      <a class="card" href="{{ x.url | relative_url }}">
-        {%- if x.card_wide and x.wide_figure %}<div class="media art" data-build>{% include {{ x.wide_figure }} %}</div>
-        {%- elsif x.card_image %}<div class="media{% if x.card_light %} light{% endif %}"><img src="{{ x.card_image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="media art">{% include figures/art-hr.svg %}</div>{% endif %}
-        <div class="card-body">
-          <span class="tag tag--paper">{{ x.year }} · {{ x.role }}</span>
-          <h3>{{ x.headline | missions }}</h3>
-          <p>{{ x.title | missions | truncate: 120 }}</p>
-          <span class="go">Read the explainer</span>
-        </div>
-      </a>
-      {%- if x.card_credit %}<a class="ccredit" href="{{ x.card_credit_url }}">{{ x.card_credit }}</a>{% endif %}
-    </div>
-    {%- endfor %}
-  </div>
-</section>
-
 {%- assign other = L.publications | where_exp: "e", "e.kind == 'data' or e.kind == 'thesis'" -%}
 {%- if other.size > 0 %}
 <section class="section" aria-labelledby="other">
@@ -49,7 +34,7 @@ extra_css: [/assets/css/thesis.css]
   </ol>
 </section>
 {%- endif %}
-
+</div>
 {%- assign refereed = L.publications | where_exp: "e", "e.kind == 'article' or e.kind == 'letter'" %}
 <script type="application/ld+json">
 [

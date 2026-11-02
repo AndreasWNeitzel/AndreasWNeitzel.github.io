@@ -1,0 +1,20 @@
+{%- comment -%}
+The plate that opens a page: a full-width dark picture (a loop when assets/video/<loop>.av1.mp4 exists, else a still)
+with the title and one line at its lower left. Parameters: loop (name), still (path), alt, title, line, crumb,
+crumb_url, tri (a list of {src, pos} for three panels), pos (object-position for the still).
+{%- endcomment -%}
+{%- assign has_loop = false -%}
+{%- if include.loop -%}{%- assign vpath = "/assets/video/" | append: include.loop | append: ".av1.mp4" -%}{%- assign vf = site.static_files | where: "path", vpath | first -%}{%- if vf %}{% assign has_loop = true %}{% endif -%}{%- endif -%}
+<section class="plate k-scale" aria-label="{{ include.title | strip_html }}">
+  <div class="plate-media">
+    {%- if include.tri %}<div class="tri">{% for im in include.tri %}<div><img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}></div>{% endfor %}</div>
+    {%- elsif has_loop %}{% include loop.html name=include.loop alt=include.alt %}
+    {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}" fetchpriority="high" decoding="async"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}>{% endif %}
+  </div>
+  {%- if include.credit %}<a class="plate-credit" href="{{ include.credit_url }}">{{ include.credit }}</a>{% endif %}
+  <div class="plate-text">
+    {%- if include.crumb %}<p class="crumbs"><a href="{{ include.crumb_url | relative_url }}">{{ include.crumb }}</a></p>{% endif %}
+    <h1>{{ include.title | missions }}</h1>
+    {%- if include.line %}<p class="lede">{{ include.line | missions }}</p>{% endif %}
+  </div>
+</section>

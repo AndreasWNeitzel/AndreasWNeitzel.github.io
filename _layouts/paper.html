@@ -1,26 +1,21 @@
 ---
 layout: default
 ---
+{%- assign slug = page.url | split: "/" | last -%}
+{%- assign cp = site.data.copy.papers | where: "id", slug | first -%}
+{%- assign pic = page.card_image | default: page.figure -%}
+{% include plate.html still=pic alt=page.figure_alt title=cp.short line=cp.line crumb="Publications" crumb_url="/publications/" credit=page.card_credit credit_url=page.card_credit_url %}
 <div class="wrap">
-  <header class="page-head paper-head k-up">
-    <p class="crumbs"><a href="{{ '/publications/' | relative_url }}">Publications</a> · {{ page.year }} · {{ page.role }}</p>
-    <h1>{{ page.headline | missions }}</h1>
-    <p class="lede">{{ page.title | missions }}</p>
-  </header>
   {%- if page.wide_figure %}
-  <figure class="panel blueprint paper-wide" data-build>
+  <figure class="panel blueprint paper-wide k-up" data-build>
     {% include {{ page.wide_figure }} %}
     {%- if page.wide_caption %}<figcaption class="credit">{{ page.wide_caption | missions }}</figcaption>{% endif %}
   </figure>
-  {%- elsif page.figure %}
-  <figure class="figure paper-fig paper-fig-top">
-    <div class="paper-fig-img"><img src="{{ page.figure | relative_url }}" alt="{{ page.figure_alt }}" loading="eager" decoding="async"></div>
-    <figcaption>{{ page.figure_caption | missions }}</figcaption>
-  </figure>
   {%- endif %}
-  <div class="article-layout">
-    <article class="stack-m">
-      {%- if page.figure and page.wide_figure %}
+  <div class="article-layout section section--tight">
+    <article class="stack-m k-up">
+      <p class="lede">{{ page.title | missions }}</p>
+      {%- if page.figure %}
       <figure class="figure paper-fig">
         <div class="paper-fig-img"><img src="{{ page.figure | relative_url }}" alt="{{ page.figure_alt }}" loading="eager" decoding="async"></div>
         <figcaption>{{ page.figure_caption | missions }}</figcaption>
@@ -33,30 +28,23 @@ layout: default
       {%- endif %}
       <div class="prose article">{{ content }}</div>
     </article>
-    <aside class="article-aside">
-      <section class="card"><div class="card-body">
-        <span class="tag tag--paper">{{ page.role }}</span>
-        <p class="small">{{ page.citation | missions }}</p>
+    <aside class="article-aside k-up">
+      <section>
+        <span class="tag tag--paper">{{ page.year }} · {{ page.role }}</span>
+        <p class="small" style="margin-block-start:8px">{{ page.citation | missions }}</p>
         <p class="textlinks">
           {%- if page.doi %}<a href="https://doi.org/{{ page.doi }}">doi:{{ page.doi }}</a>{% endif -%}
           {%- if page.arxiv %}<a href="https://arxiv.org/abs/{{ page.arxiv }}">arXiv:{{ page.arxiv }}</a>{% endif -%}
           {%- if page.handle %}<a href="https://hdl.handle.net/{{ page.handle }}">hdl:{{ page.handle }}</a>{% endif -%}
         </p>
-      </div></section>
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">My contribution</h2>
-        <p class="contribution">{{ page.contribution | missions }}</p>
-      </div></section>
+      </section>
+      <section><h2 class="zone-title">My contribution</h2><p class="contribution small">{{ page.contribution | missions }}</p></section>
       {%- if page.sources %}
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">Sources</h2>
-        <ol class="sources">{% for s in page.sources %}<li><a href="{{ s.url }}">{{ s.label | missions }}</a></li>{% endfor %}</ol>
-      </div></section>
+      <section><h2 class="zone-title">Sources</h2><ol class="sources">{% for s in page.sources %}<li><a href="{{ s.url }}">{{ s.label | missions }}</a></li>{% endfor %}</ol></section>
       {%- endif %}
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">Other explainers</h2>
-        <ul class="plain stack-s">{% assign ps = site.papers | sort: "order" %}{% for x in ps %}{% if x.url != page.url %}<li><a href="{{ x.url | relative_url }}">{{ x.title | missions | truncate: 80 }}</a></li>{% endif %}{% endfor %}</ul>
-      </div></section>
+      <section><h2 class="zone-title">Other explainers</h2>
+        <ul class="plain stack-s">{% assign ps = site.papers | sort: "order" %}{% for x in ps %}{% if x.url != page.url %}{% assign xs = x.url | split: "/" | last %}{% assign xc = site.data.copy.papers | where: "id", xs | first %}<li><a href="{{ x.url | relative_url }}">{{ xc.short | default: x.title | missions }}</a></li>{% endif %}{% endfor %}</ul>
+      </section>
     </aside>
   </div>
 </div>

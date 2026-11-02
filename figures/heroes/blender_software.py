@@ -152,7 +152,55 @@ elif variant == 'haydn':
     world(haze=0.004); bloom(6, -0.55)
     camera((-3.9, -4.6, 2.2), (0.1, 0.3, 0.2), 44, 6.0, 2.4)
 
-if variant == 'seismo':
+if variant == 'starfold_glass':
+    # Starfold's map on a hairline glass plate, in the look of the JANUS panels: the 9,242 real stars as points of light
+    # standing a little above the plate, each group in its own colour, with a few threads tying each group's points to its
+    # centre. Real positions and groups; the heights are the stars' [alpha/M] values, scaled.
+    meta = json.load(open(ROOT + 'assets/data/starfold/apogee_run.json')); raw = open(ROOT + 'assets/data/starfold/apogee_run.bin', 'rb').read()
+    A = {a['name']: a for a in meta['arrays']}
+    def arr(n):
+        a = A[n]; dt = np.dtype(a['dtype']).newbyteorder('<'); cnt = int(np.prod(a['shape']))
+        return np.frombuffer(raw, dt, count=cnt, offset=a['offset']).reshape(a['shape'])
+    mp, feat, grp = arr('map').astype(float), arr('features').astype(float), arr('group').astype(int)
+    mp = (mp - mp.mean(0)) / mp.std(0) * 1.9
+    am = feat[:, 1]; z = np.clip((am - np.percentile(am, 2)) / (np.percentile(am, 98) - np.percentile(am, 2)), 0, 1) * 0.9 + 0.04
+    GLASS = bpy.data.materials.new('glass'); GLASS.use_nodes = True; gnt = GLASS.node_tree; gnt.nodes.remove(gnt.nodes['Principled BSDF'])
+    tr = gnt.nodes.new('ShaderNodeBsdfTransparent'); gl_ = gnt.nodes.new('ShaderNodeBsdfGlossy'); gl_.inputs['Roughness'].default_value = 0.05
+    tint = gnt.nodes.new('ShaderNodeEmission'); tint.inputs['Color'].default_value = (0.2, 0.4, 0.9, 1); tint.inputs['Strength'].default_value = 0.02
+    m1 = gnt.nodes.new('ShaderNodeMixShader'); m1.inputs['Fac'].default_value = 0.06; m2 = gnt.nodes.new('ShaderNodeAddShader')
+    gnt.links.new(tr.outputs[0], m1.inputs[1]); gnt.links.new(gl_.outputs[0], m1.inputs[2]); gnt.links.new(m1.outputs[0], m2.inputs[0]); gnt.links.new(tint.outputs[0], m2.inputs[1])
+    gnt.links.new(m2.outputs[0], gnt.nodes['Material Output'].inputs['Surface'])
+    for i in range(2):
+        y0 = -2.4 + 4.8 * i
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0.0)); g = bpy.context.object; g.scale = (6.4, 4.4, 1); g.data.materials.append(GLASS)
+    E = Mesh(); e = 3.2; f_ = 2.2
+    for (x0, y0), (x1, y1) in (((-e, -f_), (e, -f_)), ((e, -f_), (e, f_)), ((e, f_), (-e, f_)), ((-e, f_), (-e, -f_))):
+        E.box((min(x0, x1) - 0.006, min(y0, y1) - 0.006, -0.004), (max(x0, x1) + 0.006, max(y0, y1) + 0.006, 0.004), (0.35, 0.6, 1.0), (0.35, 0.6, 1.0))
+    E.obj(vcol_emission('edge', 0.9), 'edge')
+    gs = sorted(set(grp[grp >= 0])); hiA = max(gs, key=lambda g: np.median(am[grp == g]))
+    ICE, DIM, AMB = (0.55, 0.78, 1.0), (0.10, 0.20, 0.38), (1.0, 0.55, 0.15)
+    P_ = Mesh(); T_ = Mesh(); cen = {}
+    for g in gs: cen[g] = (mp[grp == g].mean(0), z[grp == g].mean())
+    for i in range(len(mp)):
+        g = grp[i]
+        if g < 0: col = (0.18, 0.22, 0.3); r = 0.005
+        else: col = mix(AMB, (1.0, 0.8, 0.5), 0.3) if g == hiA else ICE; r = 0.0065
+        P_.octa((mp[i, 0], mp[i, 1], z[i]), r, col)
+    P_.obj(vcol_emission('stars', 2.2), 'stars')
+    rng2 = random.Random(5)
+    for g in gs:
+        idx = [i for i in range(len(mp)) if grp[i] == g]; c = cen[g]; colt = mix(AMB, (1.0, 0.8, 0.5), 0.3) if g == hiA else ICE
+        for i in rng2.sample(idx, 10):
+            a_ = Vector((mp[i, 0], mp[i, 1], z[i])); b_ = Vector((c[0][0], c[0][1], c[1] + 0.9))
+            pts = [a_ + (b_ - a_) * (k / 19) + Vector((0, 0, 0.35 * math.sin(math.pi * k / 19))) for k in range(20)]
+            T_.box((0, 0, 0), (0.001, 0.001, 0.001), colt, colt)   # keep the mesh non-empty
+            cl = Cloud() if 'Cloud' in globals() else None
+    T_.obj(vcol_emission('thr', 0.5), 'thr')
+    floor(-0.02, base=(0.004, 0.005, 0.007), rough=0.12)
+    world(haze=0.005); bloom(7, -0.5)
+    camera((-4.2, -5.4, 2.6), (0.2, 0.4, 0.45), 40, 7.0, 3.2)
+
+elif variant == 'seismo':
     # the oscillation power spectrum of KIC 6144777, a red giant, from 12 quarters of Kepler long-cadence photometry
     # (lightkurve, PDCSAP); each filament is one bin of the smoothed spectrum, its height the power. Real data.
     d = np.load(sys.argv[6]); f, p = d['f'], d['p']

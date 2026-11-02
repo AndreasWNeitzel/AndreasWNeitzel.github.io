@@ -11,45 +11,50 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
 <p class="pg-intro">A multilayer perceptron maps the first 24 Hermite coefficients of each star's <em>Gaia</em> DR3 BP and RP spectra, divided by its brightness, to its <span class="pg-nb">GSP-Spec</span> metallicity [M/H]; it learns from 3,200 stars and is checked on 800 that it never trains on.</p>
 
 <section class="pg" id="nn-playground" aria-label="Neural-network playground" data-header="{{ '/assets/data/playground/gaia_xp_mh.json' | relative_url }}" data-worker="{{ '/assets/js/playground/nn-worker.js' | relative_url }}">
-  <div class="pg-dash">
-    <div class="pg-ctrl">
-    <div class="pg-panel pg-run">
-      <div class="pg-buttons">
-        <button type="button" class="btn btn--primary btn--sm pg-train" disabled>Train</button>
-        <button type="button" class="btn btn--sm pg-step" title="Train for one epoch" disabled>Step</button>
-        <button type="button" class="btn btn--sm pg-reset" title="Start again from the same initial weights" disabled>Reset</button>
+  <div class="pg-top">
+    <div class="pg-rail">
+      <div class="pg-group pg-run">
+        <div class="pg-buttons">
+          <button type="button" class="btn btn--primary pg-train" disabled>Train</button>
+          <button type="button" class="btn pg-step" title="Train for one epoch" disabled>Step</button>
+          <button type="button" class="btn pg-reset" title="Start again from the same initial weights" disabled>Reset</button>
+        </div>
+        <div class="pg-live" aria-live="polite" aria-atomic="true">
+          <dl class="pg-readout">
+            <div><dt>Epoch</dt><dd><span class="pg-epoch">0</span></dd></div>
+            <div><dt>Validation RMSE</dt><dd><span class="pg-rmse">&hellip;</span> <small>dex</small></dd></div>
+          </dl>
+          <p class="pg-state">Loading 4,000 stars (0.5 MB).</p>
+        </div>
       </div>
-      <div class="pg-live" aria-live="polite" aria-atomic="true">
-        <dl class="pg-readout">
-          <div><dt>Epoch</dt><dd><span class="pg-epoch">0</span></dd></div>
-          <div><dt>Validation RMSE</dt><dd><span class="pg-rmse">&hellip;</span> <small>dex</small></dd></div>
-        </dl>
-        <p class="pg-state">Loading 4,000 stars (0.5 MB).</p>
+
+      <form class="pg-group pg-settings" aria-label="Network settings">
+        <label class="pg-field"><span class="pg-label">Hidden layers</span><span class="pg-select"><select name="layers"><option>1</option><option selected>2</option><option>3</option></select></span></label>
+        <label class="pg-field"><span class="pg-label">Units per layer</span><span class="pg-select"><select name="units"><option>4</option><option>8</option><option selected>16</option><option>24</option><option>32</option><option>48</option><option>64</option></select></span></label>
+        <label class="pg-field"><span class="pg-label">Activation</span><span class="pg-select"><select name="activation"><option value="tanh" selected>tanh</option><option value="relu">ReLU</option><option value="gelu">GELU</option></select></span></label>
+        <label class="pg-field"><span class="pg-label">Learning rate</span><span class="pg-select"><select name="lr"><option>0.0001</option><option>0.0003</option><option>0.001</option><option selected>0.003</option><option>0.01</option><option>0.03</option><option>0.1</option></select></span></label>
+        <label class="pg-field"><span class="pg-label">Batch size</span><span class="pg-select"><select name="batch"><option>16</option><option>32</option><option selected>64</option><option>128</option><option>256</option></select></span></label>
+        <label class="pg-field"><span class="pg-label">L2 penalty</span><span class="pg-select"><select name="l2"><option value="0" selected>0</option><option value="0.00001">0.00001</option><option value="0.0001">0.0001</option><option value="0.001">0.001</option><option value="0.01">0.01</option></select></span></label>
+        <p class="pg-hint">Layers, units and activation build a new network; the other three apply at once.</p>
+      </form>
+
+      <div class="pg-group pg-follow">
+        <label class="pg-field"><span class="pg-label">Star to follow</span><span class="pg-select"><select name="star" class="pg-star" disabled><option>Loading</option></select></span></label>
+        <p class="pg-facts"></p>
       </div>
     </div>
 
-    <form class="pg-panel pg-settings" aria-label="Network settings">
-      <label class="pg-field"><span class="pg-label">Hidden layers</span><span class="pg-select"><select name="layers"><option>1</option><option selected>2</option><option>3</option></select></span></label>
-      <label class="pg-field"><span class="pg-label">Units per layer</span><span class="pg-select"><select name="units"><option>4</option><option>8</option><option selected>16</option><option>24</option><option>32</option><option>48</option><option>64</option></select></span></label>
-      <label class="pg-field"><span class="pg-label">Activation</span><span class="pg-select"><select name="activation"><option value="tanh" selected>tanh</option><option value="relu">ReLU</option><option value="gelu">GELU</option></select></span></label>
-      <label class="pg-field"><span class="pg-label">Learning rate</span><span class="pg-select"><select name="lr"><option>0.0001</option><option>0.0003</option><option>0.001</option><option selected>0.003</option><option>0.01</option><option>0.03</option><option>0.1</option></select></span></label>
-      <label class="pg-field"><span class="pg-label">Batch size</span><span class="pg-select"><select name="batch"><option>16</option><option>32</option><option selected>64</option><option>128</option><option>256</option></select></span></label>
-      <label class="pg-field"><span class="pg-label">L2 penalty</span><span class="pg-select"><select name="l2"><option value="0" selected>0</option><option value="0.00001">0.00001</option><option value="0.0001">0.0001</option><option value="0.001">0.001</option><option value="0.01">0.01</option></select></span></label>
-      <p class="pg-hint">Layers, units and activation build a new network; the other three apply at once.</p>
-      <label class="pg-field pg-field--wide"><span class="pg-label">Star to follow</span><span class="pg-select"><select name="star" class="pg-star" disabled><option>Loading</option></select></span></label>
-    </form>
-    </div>
-
-    <figure class="pg-panel panel pg-net">
-      <figcaption class="pg-head">
+    <figure class="pg-plate pg-net">
+      <figcaption class="pg-legend">
         <span class="pg-title">The network</span>
         <span class="pg-key"><span><i class="k-pos"></i>positive weight</span><span><i class="k-neg"></i>negative weight</span></span>
       </figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Diagram of the network"></canvas></div>
     </figure>
+  </div>
 
-
-    <figure class="pg-panel pg-loss">
+  <div class="pg-row">
+    <figure class="pg-chart pg-loss">
       <figcaption class="pg-head">
         <span class="pg-title">Mean squared error per epoch</span>
         <span class="pg-key"><span><i class="k-train"></i>training</span><span><i class="k-val"></i>validation</span></span>
@@ -57,29 +62,26 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
       <div class="pg-stage"><canvas role="img" aria-label="Mean squared error of the training and validation stars after each epoch, in dex squared on a log scale"></canvas><div class="pg-tip" hidden></div></div>
     </figure>
 
-    <figure class="pg-panel pg-parity">
+    <figure class="pg-chart pg-parity">
       <figcaption class="pg-head"><span class="pg-title">Estimate against catalogue [M/H]</span><span class="pg-key">800 validation stars</span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Network estimate of [M/H] against the GSP-Spec value for the 800 validation stars, coloured by temperature"></canvas><div class="pg-tip" hidden></div></div>
     </figure>
-  </div>
 
-  <section class="pg-panel pg-input" aria-label="One star's input">
-    <div class="pg-head">
-      <span class="pg-title">The star being followed, as the network receives it</span>
-      <label class="pg-inline"><span class="pg-label">Bars</span><span class="pg-select pg-select--sm"><select class="pg-scale"><option value="network" selected>network input</option><option value="flux">divided by brightness</option></select></span></label>
-    </div>
-    <p class="pg-facts"></p>
-    <div class="pg-pair">
-      <figure class="pg-sub pg-bars">
-        <div class="pg-stage"><canvas role="img" aria-label="The selected star's 24 BP and 24 RP coefficients as bars"></canvas></div>
-        <figcaption class="pg-caption"><span class="pg-bars-note">Each coefficient divided by the star's brightness, then rescaled so that 0 is the training average and 1 its spread.</span> Faded bars lie beyond the coefficients the catalogue lists as relevant for this star.</figcaption>
-      </figure>
-      <figure class="pg-sub pg-spectrum">
-        <div class="pg-stage"><canvas role="img" aria-label="Spectra of the three example giants, flux against wavelength from 336 to 1020 nm"></canvas></div>
-        <figcaption class="pg-caption">Spectra of the three example giants, flux relative to each star's mean, sampled from all 110 coefficients with GaiaXPy.<span class="pg-spec-note" hidden> The star being followed is not one of the three.</span></figcaption>
-      </figure>
-    </div>
-  </section>
+    <figure class="pg-chart pg-bars">
+      <figcaption class="pg-head">
+        <span class="pg-title">The star being followed, as the network receives it</span>
+        <label class="pg-inline"><span class="pg-label">Bars</span><span class="pg-select pg-select--sm"><select class="pg-scale"><option value="network" selected>network input</option><option value="flux">divided by brightness</option></select></span></label>
+      </figcaption>
+      <div class="pg-stage"><canvas role="img" aria-label="The selected star's 24 BP and 24 RP coefficients as bars"></canvas></div>
+      <p class="pg-caption"><span class="pg-bars-note">Each coefficient divided by the star's brightness, then rescaled so that 0 is the training average and 1 its spread.</span> Faded bars lie beyond the coefficients the catalogue lists as relevant for this star.</p>
+    </figure>
+
+    <figure class="pg-chart pg-spectrum">
+      <figcaption class="pg-head"><span class="pg-title">Spectra of the three example giants</span></figcaption>
+      <div class="pg-stage"><canvas role="img" aria-label="Spectra of the three example giants, flux against wavelength from 336 to 1020 nm"></canvas></div>
+      <p class="pg-caption">Spectra of the three example giants, flux relative to each star's mean, sampled from all 110 coefficients with GaiaXPy.<span class="pg-spec-note" hidden> The star being followed is not one of the three.</span></p>
+    </figure>
+  </div>
   <noscript><p class="pg-state">The playground needs JavaScript. The data it uses are described below.</p></noscript>
 </section>
 

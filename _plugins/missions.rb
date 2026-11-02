@@ -91,7 +91,9 @@ module SiteFilters
       lab += " · co-author" if e["role"] == "co-author"
       ["talk", poster ? "poster" : "talk", lab]
     when "funding"
-      k == "computing" ? ["hpc", "hpc", "HPC"] : ["grant", "grant", k == "grant" ? "project" : "fellowship"]
+      return ["hpc", "hpc", "HPC"] if k == "computing"
+      return ["proposal", "proposal", "proposal · co-investigator"] if k == "proposal"
+      ["grant", "grant", k == "grant" ? "project" : "fellowship"]
     when "events"
       return ["observing", "observing", "observing"] if k == "observing-run"
       ["service", "event", k.empty? ? "event" : k]

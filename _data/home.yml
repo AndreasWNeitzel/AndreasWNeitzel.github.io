@@ -23,12 +23,14 @@ portals:
     url: /research/
     images:
       - {src: /assets/img/heroes/research_seismo.webp, pos: "62% 50%"}
-      - {src: /assets/img/heroes/ut-mirror-cell.webp, pos: "46% 50%"}
+      - {src: /assets/img/photos/ut-frame.webp, pos: "50% 50%"}
       - {src: /assets/img/heroes/research_allsky.webp, pos: "50% 50%"}
   - key: software
     url: /software/
     images:
-      - {src: /assets/img/heroes/software_cluster.webp, pos: "60% 50%"}
+      - {src: /assets/img/heroes/line_janus.webp, pos: "50% 50%"}
+      - {src: /assets/img/heroes/software_starfold.webp, pos: "50% 55%"}
+      - {src: /assets/img/heroes/software_cluster.webp, pos: "62% 50%"}
   - key: talks
     url: /talks/
     images:
@@ -77,7 +79,15 @@ missions:
 # Photographs for the About page strip (assets/img/heroes), captions in copy.yml.
 strip:
   - {key: golden, src: /assets/img/heroes/eso_golden.webp, pos: "50% 50%"}
-  - {key: dome, src: /assets/img/heroes/eso_dome.webp, pos: "50% 60%"}
+  - {key: dome, src: /assets/img/photos/ut-under-mirror-cell.webp, pos: "50% 60%"}
   - {key: aarhus, src: /assets/img/heroes/talk_aarhus.webp, pos: "30% 60%"}
   - {key: daylight, src: /assets/img/heroes/eso_daylight.webp, pos: "50% 50%"}
   - {key: porto, src: /assets/img/heroes/talk_porto.webp, pos: "62% 55%"}
+
+# Guide articles that open with a loop instead of their photograph (the loop's name under assets/video).
+guide_loops:
+  gaia: gaia
+  supercomputers: hall
+  haydn: cluster
+  machine-learning-for-stars: ai
+  galactic-archaeology: sky

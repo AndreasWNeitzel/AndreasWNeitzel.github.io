@@ -1,7 +1,7 @@
 {%- comment -%} The record by date: filters by kind, then one block per year with its entries (site.js folds empty years when a filter is on). {%- endcomment -%}
 {%- assign rows = site.data.ledger | timeline -%}
 {%- assign counts = rows | timeline_counts -%}
-{%- assign filters = "paper:Papers,talk:Talks and posters,grant:Funding,hpc:Computing,observing:Observing,software:Software,position:Positions and degrees,service:Service and teaching,award:Awards" | split: "," -%}
+{%- assign filters = "paper:Papers,talk:Talks and posters,grant:Funding,proposal:Proposals,hpc:Computing,observing:Observing,software:Software,position:Positions and degrees,service:Service and teaching,award:Awards" | split: "," -%}
 <div class="filters no-print" role="group" aria-label="Show entries of one kind">
   <button type="button" data-filter="all" aria-pressed="true">All <span class="n">{{ rows.size }}</span></button>
   {%- for f in filters %}{% assign kv = f | split: ":" %}{% assign key = kv[0] %}{% assign n = counts[key] %}{% if n and n > 0 %}
