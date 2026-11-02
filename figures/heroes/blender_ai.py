@@ -229,7 +229,7 @@ cam = bpy.data.objects.new('cam', cam_d); bpy.context.collection.objects.link(ca
 cam.location = cam_loc; cam.rotation_euler = (look - cam_loc).to_track_quat('-Z', 'Y').to_euler()
 # bloom-like glow in the compositor
 sc.use_nodes = True; ct = sc.node_tree; rl = ct.nodes['Render Layers']; comp = ct.nodes['Composite']
-gl = ct.nodes.new('CompositorNodeGlare'); gl.glare_type = 'FOG_GLOW'; gl.quality = 'HIGH'; gl.size = 8; gl.threshold = 0.6; gl.mix = -0.55
+gl = ct.nodes.new('CompositorNodeGlare'); gl.glare_type = 'FOG_GLOW'; gl.quality = 'HIGH'; gl.size = int(os.environ.get('AI_GLARE_SIZE', '8')); gl.threshold = 0.6; gl.mix = float(os.environ.get('AI_GLARE_MIX', '-0.55'))
 ct.links.new(rl.outputs['Image'], gl.inputs['Image']); ct.links.new(gl.outputs['Image'], comp.inputs['Image'])
 vl = sc.view_layers[0]
 if len(sys.argv) > 8 and sys.argv[8].startswith('anim'):
