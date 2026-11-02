@@ -1,27 +1,32 @@
-"""Title-card loop for Starfold: a folded sheet of stars unrolls into the flat map on which the groups separate,
-then rolls back up (Blender, Cycles).
+"""Title-card loop for Starfold: stars leave the plane of [alpha/M] against [Fe/H], settle on a rolled sheet, the sheet
+unrolls into the flat map on which the groups stand apart, and everything returns (Blender, Cycles).
 
 What is real. Every point is a star of the recorded Starfold run on the APOGEE DR19 example table
-(assets/data/starfold, 9,242 stars); a fixed random subsample of 4,000 is drawn. In the flat state each point sits
-at its own position on the run's two-dimensional map (the two map axes, scaled by one common factor so the map keeps
-its shape), and its colour is its recorded group: blue for the larger group, brass for the smaller one, graphite for
-the stars the run left unassigned. The two groups and the unassigned stars are the run's own; nothing is added.
+(assets/data/starfold, 9,242 stars); a fixed random subsample of 4,000 is drawn, and the same stars are drawn in every
+frame. On the upright plate each star sits at its own recorded [Fe/H] (across) and [alpha/M] (up), so the two ridges
+are the high-alpha and low-alpha sequences as measured; the plate's rules fall on round values of the two
+abundances, and a few very metal-poor stars lie past its left edge. On the flat map each star sits at its own position
+on the run's two-dimensional map, the two axes scaled by one common factor. The map is given a quarter turn, which
+changes nothing since its axes carry no meaning, so that it stands upright with the smaller group on top, as on the
+plate. The colour of a star is its recorded group throughout: blue for the larger group, brass for the smaller one,
+graphite for the stars the run left unassigned. Nothing is added.
 
-What is schematic. The rolled state is not data. It is the same flat map rolled about its vertical axis into a
-loose spiral of about one and a half turns, leaning a little towards the camera. The sheet opens from its outer
-edge inwards, like a carpet, and the bending is only ever moved along the sheet, never stretched, so every star
-keeps its place on it and the flat end is exactly the map. The real eight-dimensional space the stars come from is
-not drawn; the roll stands for the idea that the stars lie on a curved surface inside a larger space. On the rolled
-part the points are drawn in one neutral ivory, and each star takes its group colour once its part of the sheet
-lies flat, because the groups are read off the flat map. The hairlines are the sheet's straight rulings and level
-lines, which become the straight grid of the flat map; the sheet itself is faint glass. Camera, light, floor and
-timing are free choices.
+What is schematic. The paths between the plate and the sheet are not data: each star moves alone along an eased
+arc towards the camera, starting a little after its neighbours higher on the plate. The rolled state is not data
+either. It is the same flat map rolled about its vertical axis into a loose spiral of about one and a half turns. The
+sheet opens from its outer edge inwards, like a carpet, and the bending is only ever moved along the sheet, never
+stretched, so every star keeps its place on it and the flat end is exactly the map. The real eight-dimensional space
+is not drawn, and the map was not made from the two plate columns alone; the roll stands for the idea that the stars
+lie on a curved surface inside a larger space. The hairlines of the sheet are its straight rulings and level lines,
+which become the straight grid of the flat map; plate and sheet are faint glass. Camera, light, floor and timing are
+free choices. All the action stays in the central third of the frame, which is what a three-panel card shows.
 
 Usage:
   python blender_starfold_manifold.py DATA_DIR OUT_DIR --still T [T ...] [--w 640 --h 360 --samples 32]
-  python blender_starfold_manifold.py DATA_DIR OUT_DIR --frames 0 360 [--w 1280 --h 720 --samples 32]
-DATA_DIR holds apogee_run.json and apogee_run.bin. T is the loop phase in [0, 1): 0 rolled, 0.5 flat.
-Frames are numbered from 0; the loop is 360 frames at 30 per second and frame 360 repeats frame 0.
+  python blender_starfold_manifold.py DATA_DIR OUT_DIR --frames 0 199 [--w 1280 --h 720 --samples 32]
+DATA_DIR holds apogee_run.json and apogee_run.bin. T is the loop phase in [0, 1]: 0 the plate, 0.23 the roll, 0.5 the
+flat map. The loop is 397 frames at 30 per second, numbered from 0. The second half plays the first backwards, so
+frame 396 - f is frame f and only frames 0 to 198 need rendering; frame 396 equals frame 0.
 Set CYCLES_DEVICE=GPU to render on the graphics card."""
 import argparse, json, math, os
 import numpy as np
@@ -34,7 +39,8 @@ ap.add_argument('--w', type=int, default=640); ap.add_argument('--h', type=int, 
 ap.add_argument('--samples', type=int, default=32); ap.add_argument('--n', type=int, default=4000)
 args = ap.parse_args()
 os.makedirs(args.out, exist_ok=True)
-NF = 360
+NF = 397
+FPS = 30
 
 # ---------- the recorded run ----------
 meta = json.load(open(os.path.join(args.data, 'apogee_run.json')))
@@ -43,46 +49,58 @@ A = {a['name']: a for a in meta['arrays']}
 def arr(n):
     a = A[n]; dt = np.dtype(a['dtype']).newbyteorder('<')
     return np.frombuffer(raw, dt, count=int(np.prod(a['shape'])), offset=a['offset']).reshape(a['shape'])
-mp, grp = arr('map').astype(float), arr('group').astype(int)
+mp, grp, feat = arr('map').astype(float), arr('group').astype(int), arr('features').astype(float)
+names = [c['name'] for c in meta['columns']]
+FE, AL = feat[:, names.index('fe_h')], feat[:, names.index('alpha_m')]
 lo, hi = mp.min(0), mp.max(0)
-L = 8.6                                            # sheet width: the arc length that is rolled
-k = L / (hi[0] - lo[0])                            # one scale for both map axes
-HZ = (hi[1] - lo[1]) * k                           # sheet height, along the roll's vertical axis
+L = 5.2                                            # sheet width: the arc length that is rolled
+k = L / (hi[1] - lo[1])                            # one scale for both map axes
+HZ = (hi[0] - lo[0]) * k                           # sheet height, along the roll's vertical axis
 sel = np.sort(np.random.default_rng(0).choice(len(mp), args.n, replace=False))
-S = (mp[sel, 0] - lo[0]) * k                       # arc length from the sheet's left (inner) edge
-Z = (mp[sel, 1] - (lo[1] + hi[1]) / 2) * k         # height on the sheet
+S = (hi[1] - mp[sel, 1]) * k                       # a quarter turn of the map: arc length from the sheet's left edge
+Z = (mp[sel, 0] - (lo[0] + hi[0]) / 2) * k         # height on the sheet; the smaller group ends on top
 G = grp[sel]
 sizes = {g: int((grp == g).sum()) for g in set(grp.tolist())}
 big = max((g for g in sizes if g >= 0), key=sizes.get)
 
-IVORY = np.array((0.96, 0.92, 0.84)); BLUE = np.array((0.45, 0.62, 1.0)); BRASS = np.array((1.0, 0.70, 0.30))
-GRAPH = np.array((0.16, 0.17, 0.20))
-C1 = np.array([BLUE if g == big else (GRAPH if g < 0 else BRASS) for g in G])
-C0 = np.array([IVORY * (0.45 if g < 0 else 0.62) for g in G])
+BLUE = np.array((0.16, 0.36, 1.0)); BRASS = np.array((1.0, 0.55, 0.14)); GRAPH = np.array((0.24, 0.25, 0.29))   # as light, before the view transform
+COL = np.array([BLUE if g == big else (GRAPH if g < 0 else BRASS) for g in G])
+
+# ---------- the plate: [Fe/H] across, [alpha/M] up ----------
+FE0, FE1, AL0, AL1 = -1.2, 0.5, -0.12, 0.40        # the plate's edges in dex
+PW, PH, PY = 4.8, 6.6, -1.3                        # its size, and its place in front of the roll
+def plate_x(v): return (np.asarray(v) - (FE0 + FE1) / 2) / (FE1 - FE0) * PW
+def plate_z(v): return (np.asarray(v) - (AL0 + AL1) / 2) / (AL1 - AL0) * PH
+P0 = np.stack([plate_x(FE[sel]), np.full(len(sel), PY), plate_z(AL[sel])], -1)
+rng = np.random.default_rng(1)
+rank = np.argsort(np.argsort(-AL[sel])) / (len(sel) - 1)   # 0 for the highest star on the plate
+DELAY = 0.7 * rank + 0.3 * rng.random(len(sel))    # the stagger, in [0, 1]
+BOW = 0.9 + 0.8 * rng.random(len(sel))             # how far towards the camera a star's path swings
+
+# ---------- the timetable, in seconds of the first half; the second half is its mirror ----------
+HOLD, TRAVEL, STAGGER = 0.7, 1.4, 1.0              # plate held; one star's journey; spread of the departures
+UNROLL0, UNROLL1 = 2.9, 5.4                        # the sheet opens; the flat map then holds to the middle of the loop
+FADE = (0.9, 2.1)                                  # plate gives way to sheet
+T_MID = (NF - 1) / FPS / 2
+
+def smooth(x):
+    x = np.clip(x, 0.0, 1.0); return x * x * x * (x * (6 * x - 15) + 10)
+
+def clock(t):
+    return (0.5 - abs((t % 1.0 if t < 1 else 0.0) - 0.5)) * 2 * T_MID   # seconds, folded at the middle of the loop
 
 # ---------- the sheet: a loose Archimedean roll about a vertical axis ----------
-R0, B = 0.35, 0.124                                # inner radius, and turn spacing over 2 pi (about 1.5 turns)
+R0, B = 0.22, 0.078                                # inner radius, and turn spacing over 2 pi (about 1.5 turns)
 SS = np.linspace(0, L, 2401)                       # arc length from the inner edge
 KAP = 1 / np.sqrt(R0 ** 2 + 2 * B * SS)
-WF = 0.45                                          # width of the bend's soft front
-
-def ease(x): x = min(max(x, 0.0), 1.0); return x * x * x * (x * (6 * x - 15) + 10)
-
-def progress(t):
-    t = t % 1.0
-    if t < 0.08: return 0.0
-    if t < 0.44: return ease((t - 0.08) / 0.36)
-    if t < 0.58: return 1.0
-    if t < 0.94: return 1 - ease((t - 0.58) / 0.36)
-    return 0.0
+WF = 0.30                                          # width of the bend's soft front
 
 def centreline(p):
     """Plan view (x, y) of the sheet's profile at arc lengths SS, for unroll progress p. The bending is released
     from the outer edge inwards, like a carpet unrolling, so arc length is kept at every stage."""
-    front = (L + 3 * WF) * (1 - p) - 3 * WF * p
+    front = (L + 3 * WF) * (1 - p) - 6 * WF * p
     bend = 1 / (1 + np.exp(-(front - SS) / WF))  # 1 where the sheet is still rolled, 0 where it lies flat
-    BEND[:] = bend
-    kap = KAP * bend * (1 - 0.25 * p)
+    kap = KAP * bend
     cum = np.concatenate([[0], np.cumsum((kap[1:] + kap[:-1]) / 2 * np.diff(SS))])
     th = cum - cum[-1]                             # tangent angle, zero at the outer edge
     dz, dy = np.cos(th), np.sin(th); ds = np.diff(SS)
@@ -91,17 +109,15 @@ def centreline(p):
     z -= z.mean(); y -= y.mean()
     return z, y
 
-BEND = np.zeros_like(SS)
-TILT = math.radians(float(os.environ.get('SF_TILT', '16')))   # the rolled sheet leans its top towards the camera
+TILT = math.radians(float(os.environ.get('SF_TILT', '7')))    # the roll leans its top towards the camera
+LEAN = [0.0]                                       # the sheet's current lean, in radians
 
-def place(s, z, cx, cy, p=1.0):
-    x, y = np.interp(s, SS, cx), np.interp(s, SS, cy)
-    a = TILT * (1 - p); c, n = math.cos(a), math.sin(a)
+def tilt(pts):
+    c, n = math.cos(LEAN[0]), math.sin(LEAN[0]); x, y, z = pts.T
     return np.stack([x, y * c - z * n, y * n + z * c], -1)
 
-def place_line(pts, p):
-    a = TILT * (1 - p); c, n = math.cos(a), math.sin(a); x, y, z = pts.T
-    return np.stack([x, y * c - z * n, y * n + z * c], -1)
+def place(s, z, cx, cy):
+    return tilt(np.stack([np.interp(s, SS, cx), np.interp(s, SS, cy), z], -1))
 
 # ---------- scene ----------
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -111,8 +127,8 @@ if os.environ.get('CYCLES_DEVICE') == 'GPU':
     pr = bpy.context.preferences.addons['cycles'].preferences; pr.compute_device_type = 'CUDA'; pr.get_devices()
     for dv in pr.devices: dv.use = dv.type == 'CUDA'
     sc.cycles.device = 'GPU'; sc.cycles.denoising_use_gpu = True
-sc.cycles.seed = 7; sc.cycles.max_bounces = 4; sc.cycles.glossy_bounces = 2; sc.cycles.transparent_max_bounces = 16
-sc.render.use_persistent_data = True; sc.cycles.volume_step_rate = 4.0
+sc.cycles.seed = 7; sc.cycles.use_animated_seed = False; sc.cycles.max_bounces = 4; sc.cycles.glossy_bounces = 2; sc.cycles.transparent_max_bounces = 16
+sc.render.use_persistent_data = True
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = args.w, args.h, 100
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
 sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGB'
@@ -145,23 +161,33 @@ def glass(name):
     ad = N('ShaderNodeAddShader'); Lk(m1.outputs[0], ad.inputs[0]); Lk(em.outputs[0], ad.inputs[1])
     Lk(ad.outputs[0], out.inputs['Surface']); return m
 
+FADERS = {'plate': [], 'sheet': []}
+def fades(m, who):
+    """Put a mix with transparency before the output of a material, so that it can be faded."""
+    nt = m.node_tree; out = nt.nodes['Material Output']; src = out.inputs['Surface'].links[0].from_socket
+    mx = nt.nodes.new('ShaderNodeMixShader'); tr = nt.nodes.new('ShaderNodeBsdfTransparent')
+    nt.links.new(tr.outputs[0], mx.inputs[1]); nt.links.new(src, mx.inputs[2]); nt.links.new(mx.outputs[0], out.inputs['Surface'])
+    FADERS[who].append(mx.inputs['Fac']); return m
+
 def link(ob): bpy.context.collection.objects.link(ob); return ob
 
 # points: one octahedron per star in a single mesh
 OCT = np.array([(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)], float)
 FACES = ((0, 2, 4), (2, 1, 4), (1, 3, 4), (3, 0, 4), (2, 0, 5), (1, 2, 5), (3, 1, 5), (0, 3, 5))
-RAD = np.where(G < 0, 0.016, 0.0195)
+RAD = np.where(G < 0, 0.022, 0.027)
 bm = bmesh.new()
 for i in range(len(S)):
     vs = [bm.verts.new((0, 0, 0)) for _ in range(6)]
     for f in FACES: bm.faces.new([vs[j] for j in f])
 me = bpy.data.meshes.new('stars'); bm.to_mesh(me); bm.free()
 col_attr = me.color_attributes.new('col', 'FLOAT_COLOR', 'POINT')
-stars = link(bpy.data.objects.new('stars', me)); me.materials.append(vcol_emission('stars', 2.1))
+stars = link(bpy.data.objects.new('stars', me)); me.materials.append(vcol_emission('stars', 1.5))
+col_attr.data.foreach_set('color', np.concatenate([np.repeat(COL, 6, 0), np.ones((len(COL) * 6, 1))], 1).ravel())
 OFFS = (OCT[None, :, :] * RAD[:, None, None]).reshape(-1, 3)
+ON_PLATE = 0.75                                    # a star is drawn smaller on the plate, so that the two ridges keep their density
 
 # sheet: a grid of faint glass
-NU, NV = 400, 16
+NU, NV = 300, 16
 us = np.linspace(0, L, NU); vz = np.linspace(-HZ / 2, HZ / 2, NV)
 bm = bmesh.new()
 for j in range(NV):
@@ -172,7 +198,7 @@ for j in range(NV - 1):
         bm.faces.new([bm.verts[j * NU + i], bm.verts[j * NU + i + 1], bm.verts[(j + 1) * NU + i + 1], bm.verts[(j + 1) * NU + i]])
 sme = bpy.data.meshes.new('sheet'); bm.to_mesh(sme); bm.free()
 for poly in sme.polygons: poly.use_smooth = True
-sheet = link(bpy.data.objects.new('sheet', sme)); sme.materials.append(glass('glass'))
+sheet = link(bpy.data.objects.new('sheet', sme)); sme.materials.append(fades(glass('glass'), 'sheet'))
 GU, GV = np.meshgrid(us, vz)
 
 # hairlines: rulings (vertical) and level lines (horizontal) of the sheet, plus its edge
@@ -182,19 +208,30 @@ def curve_obj(name, splines, depth, mat):
         sp = cu.splines.new('POLY'); sp.points.add(npts - 1)
     ob = link(bpy.data.objects.new(name, cu)); cu.materials.append(mat); return ob
 RUL = np.linspace(0, L, 10)[1:-1]; LEV = np.linspace(-HZ / 2, HZ / 2, 7)[1:-1]; NL = 400
-lines = curve_obj('lines', [2] * len(RUL) + [NL] * len(LEV), 0.004, emission('lines', (0.42, 0.52, 0.70), 0.4))
-edge = curve_obj('edge', [2, 2, NL, NL], 0.0065, emission('edge', (0.45, 0.62, 1.0), 0.9))
+lines = curve_obj('lines', [2] * len(RUL) + [NL] * len(LEV), 0.006, fades(emission('lines', (0.42, 0.52, 0.70), 0.4), 'sheet'))
+edge = curve_obj('edge', [2, 2, NL, NL], 0.009, fades(emission('edge', (0.45, 0.62, 1.0), 0.9), 'sheet'))
 SL = np.linspace(0, L, NL)
 
 def set_spline(sp, pts):
-    pts = place_line(np.asarray(pts, float), PCUR[0])
+    pts = tilt(np.asarray(pts, float))
     sp.points.foreach_set('co', np.concatenate([pts, np.ones((len(pts), 1))], 1).ravel())
+
+# the plate: faint glass, a frame, and rules at round values of the two abundances
+pme = bpy.data.meshes.new('plate')
+pme.from_pydata([(-PW / 2, PY, -PH / 2), (PW / 2, PY, -PH / 2), (PW / 2, PY, PH / 2), (-PW / 2, PY, PH / 2)], [], [(0, 1, 2, 3)])
+link(bpy.data.objects.new('plate', pme)); pme.materials.append(fades(glass('pglass'), 'plate'))
+RFE, RAL = (-1.0, -0.5, 0.0), (0.0, 0.1, 0.2, 0.3)
+prules = curve_obj('prules', [2] * (len(RFE) + len(RAL)), 0.006, fades(emission('prules', (0.42, 0.52, 0.70), 0.4), 'plate'))
+pframe = curve_obj('pframe', [5], 0.009, fades(emission('pframe', (0.45, 0.62, 1.0), 0.9), 'plate'))
+def flat_spline(sp, pts): sp.points.foreach_set('co', np.concatenate([np.array(pts, float), np.ones((len(pts), 1))], 1).ravel())
+for i, v in enumerate(RFE): x = float(plate_x(v)); flat_spline(prules.data.splines[i], [(x, PY, -PH / 2), (x, PY, PH / 2)])
+for i, v in enumerate(RAL):
+    z = float(plate_z(v)); flat_spline(prules.data.splines[len(RFE) + i], [(-PW / 2, PY, z), (PW / 2, PY, z)])
+flat_spline(pframe.data.splines[0], [(-PW / 2, PY, -PH / 2), (PW / 2, PY, -PH / 2), (PW / 2, PY, PH / 2), (-PW / 2, PY, PH / 2), (-PW / 2, PY, -PH / 2)])
 
 # stage
 w = bpy.data.worlds.new('w'); sc.world = w; w.use_nodes = True
 w.node_tree.nodes['Background'].inputs['Color'].default_value = (0.003, 0.0035, 0.005, 1)
-vol = w.node_tree.nodes.new('ShaderNodeVolumePrincipled'); vol.inputs['Density'].default_value = float(os.environ.get('SF_HAZE', '0.004'))
-w.node_tree.links.new(vol.outputs['Volume'], w.node_tree.nodes['World Output'].inputs['Volume'])
 fm = bpy.data.materials.new('floor'); fm.use_nodes = True; bs = fm.node_tree.nodes['Principled BSDF']
 bs.inputs['Base Color'].default_value = (0.006, 0.007, 0.009, 1); bs.inputs['Roughness'].default_value = 0.2
 fme = bpy.data.meshes.new('floor'); fme.from_pydata([(-60, -60, 0), (60, -60, 0), (60, 60, 0), (-60, 60, 0)], [], [(0, 1, 2, 3)])
@@ -205,25 +242,24 @@ sc.use_nodes = True; ct = sc.node_tree
 gl_ = ct.nodes.new('CompositorNodeGlare'); gl_.glare_type = 'FOG_GLOW'; gl_.quality = 'HIGH'; gl_.size = 6; gl_.threshold = 0.6; gl_.mix = -0.6
 ct.links.new(ct.nodes['Render Layers'].outputs['Image'], gl_.inputs['Image']); ct.links.new(gl_.outputs['Image'], ct.nodes['Composite'].inputs['Image'])
 
-cd = bpy.data.cameras.new('cam'); cd.lens = 40; cd.dof.use_dof = True; cd.dof.aperture_fstop = 2.8
+cd = bpy.data.cameras.new('cam'); cd.lens = 40; cd.dof.use_dof = True; cd.dof.aperture_fstop = 8.0
 cam = link(bpy.data.objects.new('cam', cd)); sc.camera = cam
 from mathutils import Vector
-LOOK = Vector((-0.3, 0.0, -0.1))                   # aim a little right and up of the sheet's centre: the lower left stays quiet
-
-CA0, CA1, CD0, CD1, CH0, CH1 = (float(v) for v in os.environ.get('SF_CAM', '0 8 15.0 1.0 3.8 2.6').split())
-
-PCUR = [1.0]
+LOOK = Vector((0.0, 0.0, -0.1))
+CAM_D, CAM_H, CAM_AZ = (float(v) for v in os.environ.get('SF_CAM', '19.5 2.2 14').split())
 
 def pose(t):
-    p = progress(t); PCUR[0] = p; cx, cy = centreline(p)
-    P = place(S, Z, cx, cy, p)
-    me.vertices.foreach_set('co', (np.repeat(P, 6, 0) + OFFS).ravel())
-    q = np.clip((1 - np.interp(S, SS, BEND) - 0.1) / 0.85, 0, 1)   # a star takes its group colour once its part of the sheet lies flat
-    q = q * q * (3 - 2 * q)
-    col = C0 + (C1 - C0) * q[:, None]
-    col_attr.data.foreach_set('color', np.concatenate([np.repeat(col, 6, 0), np.ones((len(col) * 6, 1))], 1).ravel())
-    me.update()
-    sme.vertices.foreach_set('co', place(GU.ravel(), GV.ravel(), cx, cy, p).ravel()); sme.update()
+    now = clock(t)
+    q = smooth((now - HOLD - STAGGER * DELAY) / TRAVEL)   # each star's own progress from plate to sheet
+    p = float(smooth((now - UNROLL0) / (UNROLL1 - UNROLL0)))
+    mid = float(smooth((now - HOLD) / (HOLD + TRAVEL)))
+    arc = mid * (1 - p)                                   # 0 at the plate and at the map, 1 at the roll
+    LEAN[0] = TILT * arc
+    cx, cy = centreline(p)
+    P = P0 + (place(S, Z, cx, cy) - P0) * q[:, None]
+    P[:, 1] -= BOW * np.sin(np.pi * q)
+    me.vertices.foreach_set('co', (np.repeat(P, 6, 0) + OFFS * np.repeat(ON_PLATE + (1 - ON_PLATE) * q, 6)[:, None]).ravel()); me.update()
+    sme.vertices.foreach_set('co', place(GU.ravel(), GV.ravel(), cx, cy).ravel()); sme.update()
     ex, ey = np.interp(SL, SS, cx), np.interp(SL, SS, cy)
     sp = lines.data.splines
     for i, u in enumerate(RUL):
@@ -233,9 +269,11 @@ def pose(t):
     for j, i in ((0, 0), (1, -1)): set_spline(se[j], np.array([(cx[i], cy[i], -HZ / 2), (cx[i], cy[i], HZ / 2)]))
     set_spline(se[2], np.stack([ex, ey, np.full(NL, -HZ / 2)], -1)); set_spline(se[3], np.stack([ex, ey, np.full(NL, HZ / 2)], -1))
     lines.data.update_tag(); edge.data.update_tag()
-    c2 = math.cos(2 * math.pi * t)                                        # 1 rolled, -1 flat; periodic, so the loop is seamless
-    a = math.radians(CA0 + CA1 * c2); D = CD0 - CD1 * c2; h = CH0 + CH1 * c2
-    cam.location = Vector((LOOK.x + D * math.sin(a), -D * math.cos(a), h))
+    f = float(smooth((now - FADE[0]) / (FADE[1] - FADE[0])))
+    for s_ in FADERS['plate']: s_.default_value = 1 - f
+    for s_ in FADERS['sheet']: s_.default_value = f
+    a = math.radians(CAM_AZ * math.sin(math.pi / 2 * arc) ** 2)   # the camera swings round the roll and back
+    cam.location = Vector((LOOK.x + CAM_D * math.sin(a), -CAM_D * math.cos(a), CAM_H))
     cam.rotation_euler = (LOOK - cam.location).to_track_quat('-Z', 'Y').to_euler()
     cd.dof.focus_distance = (Vector((0, 0, 0)) - cam.location).length
     bpy.context.view_layer.update()
@@ -246,5 +284,5 @@ if args.still:
         bpy.ops.render.render(write_still=True)
 if args.frames:
     for f in range(*args.frames):
-        pose(f / NF); sc.render.filepath = os.path.join(args.out, 'f_%04d.png' % f)
+        pose(f / (NF - 1)); sc.render.filepath = os.path.join(args.out, 'f_%04d.png' % f)
         bpy.ops.render.render(write_still=True)

@@ -77,6 +77,14 @@
     p.style.setProperty("--mx", (e.clientX - r.left) + "px"); p.style.setProperty("--my", (e.clientY - r.top) + "px");
   }, { passive: true }));
 
+  // ---- home portals: their loops play only while the card is hovered ------------------
+  if (!reduced.matches) document.querySelectorAll(".portal").forEach((card) => {
+    const vs = [...card.querySelectorAll("video[data-hover]")];
+    if (!vs.length) return;
+    card.addEventListener("pointerenter", () => vs.forEach((v) => { v.classList.add("on"); v.play().catch(() => {}); }));
+    card.addEventListener("pointerleave", () => vs.forEach((v) => { v.classList.remove("on"); v.pause(); }));
+  });
+
   // ---- every card that links somewhere says so on hover, as the home portals do ------
   document.querySelectorAll(".concept .plate, .explainer .pic, .row-item .pic, .mi a").forEach((pic) => {
     const more = document.createElement("span");

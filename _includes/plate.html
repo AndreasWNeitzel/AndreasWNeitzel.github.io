@@ -10,7 +10,7 @@ crumb_url, tri (a list of {src, pos} for three panels), pos (object-position for
 {%- assign hdpath = "/assets/video/" | append: include.loop | append: "-hd.av1.mp4" -%}{%- assign hf = site.static_files | where: "path", hdpath | first -%}{%- if hf %}{% assign loop_name = include.loop | append: "-hd" %}{% endif -%}{%- endif -%}
 <section class="plate k-scale" aria-label="{{ include.title | strip_html }}">
   <div class="plate-media">
-    {%- if include.tri %}<div class="tri">{% for im in include.tri %}<div><img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}></div>{% endfor %}</div>
+    {%- if include.tri %}<div class="tri">{% for im in include.tri %}<div{% if im.pos %} style="--pos: {{ im.pos }}"{% endif %}>{% if im.loop %}{% assign lalt = include.alts[forloop.index0] %}{% include loop.html name=im.loop alt=lalt %}{% else %}<img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}>{% endif %}</div>{% endfor %}</div>
     {%- elsif has_loop %}{% include loop.html name=loop_name alt=include.alt %}
     {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}" fetchpriority="high" decoding="async"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}>{% endif %}
   </div>

@@ -882,3 +882,6 @@
 .mi a:is(:hover, :focus-visible) .card-more { opacity: 1; }
 .mi a:is(:hover, :focus-visible) .card-more > span:first-child { transform: none; }
 .mi a:is(:hover, :focus-visible) .card-more .go { background: color-mix(in oklab, var(--ink) 12%, transparent); transform: translateX(3px); }
+/* a title card's loop: fills its panel, and on the home page fades in over the still while hovered */
+.tri video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+.portal .tri video { opacity: 0; transition: opacity .4s var(--ease); } .portal .tri video.on { opacity: 1; }
