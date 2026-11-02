@@ -14,7 +14,7 @@ enlarged and raised, so a person low in the frame stands above the text).
   <div class="plate-media">
     {%- if include.tri %}<div class="tri">{% for im in include.tri %}<div{% if im.pos %} style="--pos: {{ im.pos }}"{% endif %}>{% if im.loop %}{% assign lalt = include.alts[forloop.index0] %}{% include loop.html name=im.loop alt=lalt %}{% else %}<img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}>{% endif %}</div>{% endfor %}</div>
     {%- elsif has_loop %}{% include loop.html name=loop_name alt=include.alt %}
-    {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}" fetchpriority="high" decoding="async"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}>{% endif %}
+    {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}"{% unless include.alt %} role="presentation"{% endunless %} fetchpriority="high" decoding="async"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}>{% endif %}
   </div>
   {%- if include.credit %}<a class="plate-credit" href="{{ include.credit_url }}">{{ include.credit }}</a>{% endif %}
   <div class="plate-text"{% if include.textw %} style="--plate-w: {{ include.textw }}"{% endif %}>
