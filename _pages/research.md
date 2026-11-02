@@ -61,7 +61,7 @@ lines:
 ---
 {%- assign C = site.data.copy.research -%}
 {%- assign CP = site.data.copy.plates -%}
-{% include plate.html loop="pipeline" still="/assets/img/heroes/research_allsky.webp" alt="The research pipeline rendered as a scene, from Gaia to the Milky Way" title="Research" line=CP.research %}
+{% include plate.html stage=true loop="pipeline" still="/assets/img/heroes/research_allsky.webp" alt="The research pipeline rendered as a scene, from Gaia to the Milky Way" title="Research" line=CP.research %}
 <div class="wrap">
 <section class="section section--tight">
   <div class="rows">
