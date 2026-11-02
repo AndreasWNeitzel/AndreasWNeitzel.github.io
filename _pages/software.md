@@ -6,11 +6,11 @@ copy: software
 tri:
   - {src: /assets/img/heroes/line_janus.webp, pos: "50% 50%", loop: ai}
   - {src: /assets/img/heroes/software_starfold.webp, pos: "42% 50%", loop: starfold}
-  - {src: /assets/img/heroes/software_cluster.webp, pos: "50% 50%", loop: cluster}
+  - {src: /assets/img/heroes/software_haydn.webp, pos: "100% 45%", loop: haydn}
 tri_alts:
   - "Light passing through the layers of the JANUS networks"
   - "A sheet of real stars from the Starfold run unrolls, and two groups appear as it flattens"
-  - "A dense, roughly spherical cluster of stars, packed into a bright core and thinning towards the edges, against a dark background scattered with field stars."
+  - "HAYDNsim's noisy light curve leads to an oscillation spectrum that rises out of the noise"
 extra_links:
   sw-2026-starfold:
     - {label: Interactive demo, url: /software/starfold-demo/}
@@ -18,7 +18,7 @@ extra_links:
 codes:
   - {id: janus, title: JANUS, loop: ai, img: /assets/img/heroes/line_janus.webp, url: /research/janus/, links: [{label: "The method", url: /research/janus/}, {label: "The talks", url: /talks/}]}
   - {id: starfold, title: Starfold, loop: starfold, img: /assets/img/heroes/software_starfold.webp, url: /software/starfold-demo/, links: [{label: "Run it on 9,242 stars", url: /software/starfold-demo/}, {label: "The held-out benchmark", url: /software/starfold-benchmark/}, {label: "Source code", url: "https://github.com/AndreasWNeitzel/starfold"}]}
-  - {id: haydnsim, title: HAYDNsim, loop: cluster, img: /assets/img/heroes/software_cluster.webp, url: /software/haydnsim/, links: [{label: "The pipeline", url: /software/haydnsim/}, {label: "What is HAYDN?", url: /guide/haydn/}]}
+  - {id: haydnsim, title: HAYDNsim, loop: haydn, img: /assets/img/heroes/software_haydn.webp, url: /software/haydnsim/, links: [{label: "The pipeline", url: /software/haydnsim/}, {label: "What is HAYDN?", url: /guide/haydn/}]}
 playgrounds:
   - {id: nn, art: nn, img: /assets/img/heroes/card_nn.webp, url: /playground/neural-network/}
   - {id: orbits, art: orbit, img: /assets/img/heroes/card_orbits.webp, url: /playground/orbits/}

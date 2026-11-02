@@ -60,6 +60,7 @@
 
   // ---- loops play only while on screen and while the tab is visible -----------------
   const vids = [...document.querySelectorAll("video[autoplay]")];
+  document.querySelectorAll("video[data-start]").forEach((v) => { const seek = () => { v.currentTime = +v.dataset.start; }; v.readyState ? seek() : v.addEventListener("loadedmetadata", seek, { once: true }); });
   if (vids.length) {
     if (reduced.matches) vids.forEach((v) => { v.removeAttribute("autoplay"); v.pause(); });
     else {
