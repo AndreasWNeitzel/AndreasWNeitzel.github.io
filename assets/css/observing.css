@@ -53,4 +53,12 @@
   .story-hero::before { background: linear-gradient(180deg, rgb(3 6 12 / 0.05) 30%, rgb(3 6 12 / 0.7)), linear-gradient(270deg, rgb(3 6 12 / 0.62), transparent 58%); }
   .story-hero .card-body { justify-self: end; inline-size: 50%; }
 }
-@media (max-width: 640px) { .story-hero img { inset-block-start: -38%; block-size: 138%; object-position: 43% 100% !important; } }
+/* on a phone the words sit under him, never across him */
+@media (max-width: 640px) {
+  .story-hero { display: block; min-block-size: 0; padding: 0; background: var(--raised); }
+  .story-hero::before { display: none; }
+  .story-hero img { position: static; inline-size: 100%; block-size: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 43% 100% !important; }
+  .story-hero .tag { color: var(--ink); }
+  .story-hero .card-body { padding: 16px; color: var(--ink); }
+  .story-hero .card-body h1, .story-hero .card-body p, .story-hero .card-body .kicker { color: var(--ink) !important; text-shadow: none; }
+}
