@@ -37,7 +37,6 @@ education:
   - quant
   degree: MSc
   field: Astronomy and Astrophysics
-  grade: 16/20
   thesis: Determination of Age and Mass for Seismic Stars in the Ariel Input Catalog
 - id: edu-2017-bsc-physics
   title: BSc in Physics (Astrophysics branch)
@@ -362,7 +361,7 @@ presentations:
 - id: pres-2026-04-dfa-week-haydn
   title: Simulação fotométrica de enxames estelares densos para o HAYDN
   tagline: Photometric simulation of dense star clusters for the HAYDN mission (in Portuguese).
-  kind: seminar
+  kind: oral
   role: oral
   venue: DFA Week 2026, Departamento de Física e Astronomia, FCUP
   location: Porto, Portugal
@@ -485,7 +484,7 @@ presentations:
 - id: pres-2022-04-dfa-week-oral
   title: Determinação da idade e da massa de estrelas sísmicas no catálogo Ariel
   tagline: Ages and masses of oscillating stars in the Ariel catalogue (in Portuguese).
-  kind: seminar
+  kind: oral
   role: oral
   venue: DFA Week, Departamento de Física e Astronomia, FCUP
   location: Porto, Portugal
