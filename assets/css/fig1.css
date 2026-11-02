@@ -19,7 +19,7 @@
 
   /* connectors between stages: curved and dashed, the dashes flowing in the direction of the data.
      A mask that draws on reveals each one during the build; under reduced motion they stay still. */
-  .f1-svg .f1-link { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 4; stroke-linecap: round; }
+  .f1-svg .f1-link { fill: none; stroke: var(--accent-2); stroke-width: 2; stroke-dasharray: 5 4; stroke-linecap: round; }
   .f1-svg .f1-mask { fill: none; stroke: #fff; stroke-width: 14; stroke-linecap: round; }
   @media (prefers-reduced-motion: no-preference) {
     .f1-svg .f1-link { animation: f1-flow 1.6s linear infinite; }

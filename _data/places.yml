@@ -123,6 +123,7 @@ places:
     lon: 10.2030
     blurb: TASC10/KASC17, the joint TESS and Kepler asteroseismology workshop.
   - id: santiago
+    line: ESO Guesthouse, before and after the Paranal run, May 2024.
     photo: /assets/img/places/santiago.webp
     photo_alt: Sanhattan, the eastern business district of Santiago, below the snow-covered Andes.
     photo_credit: Hector Garcia, Wikimedia Commons, CC BY-SA 2.0
@@ -131,8 +132,7 @@ places:
     country: Chile
     lat: -33.4489
     lon: -70.6693
-    role: waypoint
-    blurb: Transit to Paranal.
+    blurb: Stationed at the ESO Guesthouse in Santiago before and after the Paranal run.
   - id: paranal
     line: ESPRESSO observing run at the VLT, May 2024.
     name: Cerro Paranal

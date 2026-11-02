@@ -49,19 +49,28 @@
     --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     --serif: "Source Serif 4", Georgia, serif;
 
-    --bg: light-dark(#f4f6fa, #05070d);
-    --bg-raised: light-dark(#ffffff, #090d16);
-    --surface: light-dark(#ffffff, #0c111c);
-    --surface-2: light-dark(#eef2f8, #121a2a);
-    --line: light-dark(#dfe5ee, #1a2333);
-    --line-strong: light-dark(#c3ccda, #2b3850);
-    --ink: light-dark(#0a1220, #e8edf6);
-    --ink-2: light-dark(#29354d, #c3ccdc);
-    --muted: light-dark(#5a6780, #8a96ab);
+    --bg: light-dark(#f3f3f1, #0f1012);
+    --bg-raised: light-dark(#ffffff, #131416);
+    --surface: light-dark(#fafaf8, #16171a);
+    --surface-2: light-dark(#ececea, #1c1d21);
+    --line: light-dark(#e2e2df, #232428);
+    --line-strong: light-dark(#cfd0cc, #2f3135);
+    --ink: light-dark(#121417, #ebedf0);
+    --ink-2: light-dark(#2f3236, #cfd1d4);
+    --muted: light-dark(#5f6266, #9a9da2);
     --accent: light-dark(#1b5fd6, #7cb8ff);
     --accent-2: light-dark(#b25a06, #ffb65e);
     --accent-soft: color-mix(in oklab, var(--accent) 13%, transparent);
-    --grid: light-dark(rgb(27 95 214 / 0.07), rgb(124 184 255 / 0.055));
+    /* figures: graphite linework (--fig); blue (--mark) for the parts I built and for real data;
+       amber (--accent-2) for the flow between stages */
+    --fig: light-dark(#3d434c, #c8ccd2);
+    --mark: light-dark(#1b5fd6, #7cb8ff);
+    /* maps: marine sea, stone land, ochre for countries visited */
+    --sea: light-dark(#27415f, #0e1b2d);
+    --land: light-dark(#e8e3d5, #34312b);
+    --land-edge: light-dark(#c4bba5, #423d35);
+    --visit: light-dark(#b07a35, #c99550);
+    --grid: light-dark(rgb(40 44 52 / 0.065), rgb(200 204 210 / 0.045));
     --glow: light-dark(rgb(27 95 214 / 0.10), rgb(124 184 255 / 0.13));
     --shadow: none;
     --shadow-lg: light-dark(0 14px 34px -20px rgb(10 18 32 / 0.28), 0 18px 44px -22px rgb(0 0 0 / 0.75));
@@ -398,17 +407,17 @@
 
   /* travel map */
   .tmap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: clamp(460px, 62vh, 640px); gap: 0; overflow: hidden; padding: 0; }
-  .tmap-stage { position: relative; min-block-size: 0; background: radial-gradient(90% 80% at 62% 30%, color-mix(in oklab, var(--accent) 8%, transparent), transparent 70%), var(--bg); }
+  .tmap-stage { position: relative; min-block-size: 0; background: radial-gradient(90% 80% at 62% 30%, color-mix(in oklab, #ffffff 6%, transparent), transparent 70%), var(--sea); }
   .tmap-canvas { position: absolute; inset: 0; }
   .tmap-canvas > svg { display: block; inline-size: 100%; block-size: 100%; }
-  .tmap-svg .grat path { fill: none; stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; opacity: .9; }
-  .tmap-svg .land { fill: light-dark(#e2e8f1, #111a2b); stroke: light-dark(#ffffff, #1f2b42); stroke-width: 0.8; vector-effect: non-scaling-stroke; }
-  .tmap-svg .visited { fill: color-mix(in oklab, var(--accent) 34%, light-dark(#e2e8f1, #111a2b)); stroke: color-mix(in oklab, var(--accent) 70%, transparent); stroke-width: 1; vector-effect: non-scaling-stroke; }
-  .tmap-svg .visited.lvl-1 { fill: color-mix(in oklab, var(--accent) 16%, light-dark(#e2e8f1, #111a2b)); }
-  .tmap-svg .visited.lvl-2 { fill: color-mix(in oklab, var(--accent) 26%, light-dark(#e2e8f1, #111a2b)); }
-  .tmap-svg .visited.lvl-3 { fill: color-mix(in oklab, var(--accent) 38%, light-dark(#e2e8f1, #111a2b)); }
-  .tmap-svg .visited.lvl-4 { fill: color-mix(in oklab, var(--accent) 50%, light-dark(#e2e8f1, #111a2b)); }
-  .tmap-svg .visited.lvl-5 { fill: color-mix(in oklab, var(--accent) 64%, light-dark(#e2e8f1, #111a2b)); }
+  .tmap-svg .grat path { fill: none; stroke: color-mix(in oklab, #ffffff 9%, transparent); stroke-width: 1; vector-effect: non-scaling-stroke; opacity: .9; }
+  .tmap-svg .land { fill: var(--land); stroke: var(--land-edge); stroke-width: 0.8; vector-effect: non-scaling-stroke; }
+  .tmap-svg .visited { fill: color-mix(in oklab, var(--visit) 34%, var(--land)); stroke: color-mix(in oklab, var(--visit) 70%, transparent); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .tmap-svg .visited.lvl-1 { fill: color-mix(in oklab, var(--visit) 30%, var(--land)); }
+  .tmap-svg .visited.lvl-2 { fill: color-mix(in oklab, var(--visit) 42%, var(--land)); }
+  .tmap-svg .visited.lvl-3 { fill: color-mix(in oklab, var(--visit) 54%, var(--land)); }
+  .tmap-svg .visited.lvl-4 { fill: color-mix(in oklab, var(--visit) 66%, var(--land)); }
+  .tmap-svg .visited.lvl-5 { fill: color-mix(in oklab, var(--visit) 80%, var(--land)); }
   .tmap-legend .ramp { display: inline-flex; vertical-align: middle; margin-inline: 4px; }
   .tmap-legend .ramp b { inline-size: 14px; block-size: 9px; }
   .tmap-svg .lod { display: none; }
@@ -416,7 +425,7 @@
   .tmap-svg[data-lod="europe"] .lod-world, .tmap-svg[data-lod="portugal"] .lod-europe { display: inline; }
   .tmap-svg[data-lod="portugal"] .lod-world { display: none; }
   .tmap-svg .ring { fill: none; stroke: var(--accent); stroke-opacity: .28; stroke-width: 1; stroke-dasharray: 3 6; vector-effect: non-scaling-stroke; }
-  .tmap-svg .ring-label { font: 500 11px var(--mono); fill: var(--muted); }
+  .tmap-svg .ring-label { font: 500 11px var(--mono); fill: color-mix(in oklab, #ffffff 62%, var(--sea)); }
   .tmap-svg .route { fill: none; stroke: var(--accent-2); stroke-width: 1.8; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: .9; }
   .tmap-svg .route.is-dim { opacity: .2; }
   .tmap-svg .route-glow { fill: none; stroke: var(--accent-2); stroke-width: 6; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: .12; }
@@ -440,11 +449,11 @@
     border: 1px solid var(--line); backdrop-filter: blur(8px); }
   .seg button { border: 0; background: none; padding: 6px 12px; border-radius: 999px; font: 500 0.8rem var(--sans); color: var(--ink-2); }
   .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-  .tmap-legend { position: absolute; inset: auto 14px 12px 14px; z-index: 3; display: flex; flex-wrap: wrap; gap: 6px 16px; font: 0.72rem var(--mono); color: var(--muted); pointer-events: none; }
+  .tmap-legend { position: absolute; inset: auto 14px 12px 14px; z-index: 3; display: flex; flex-wrap: wrap; gap: 6px 16px; font: 0.72rem var(--mono); color: color-mix(in oklab, #ffffff 74%, var(--sea)); pointer-events: none; }
   .tmap-legend span { display: inline-flex; align-items: center; gap: 6px; }
   .tmap-legend i { inline-size: 18px; block-size: 2px; background: var(--accent-2); display: inline-block; border-radius: 2px; }
   .tmap-legend i.home { inline-size: 9px; block-size: 9px; border-radius: 50%; background: var(--accent); }
-  .tmap-legend i.country { inline-size: 12px; block-size: 9px; border-radius: 2px; background: color-mix(in oklab, var(--accent) 34%, var(--surface-2)); }
+  .tmap-legend i.country { inline-size: 12px; block-size: 9px; border-radius: 2px; background: color-mix(in oklab, var(--visit) 34%, var(--land)); }
   .tmap-card { position: absolute; z-index: 5; inline-size: min(320px, calc(100% - 28px)); max-block-size: calc(100% - 68px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line-strong);
     border-radius: 14px; box-shadow: var(--shadow-lg); overflow: hidden; pointer-events: auto; opacity: 0; transform: translateY(6px) scale(.98);
     transition: opacity .18s var(--ease), transform .18s var(--ease); }
@@ -767,6 +776,10 @@
   .paper-fig-img img { border: 0; }
   /* blueprint figures (light path) */
   .bp-svg { inline-size: 100%; block-size: auto; color: var(--accent); }
+  .bp-svg, .f1-svg, .iso-svg { --accent: var(--fig); }
+  :is(.f1-t, .f1-apogee, .f1-fill, .hy-dot-acc, .hy-data circle, .hy-data-key, .hy-mark-h, .hy-psf-n, .hy-bar,
+      .nw-dot, .nw-dot-o, .nw-me, .nw-box-me, .nw-line-me, .nw-box-part, .nw-hatch-line, .nw-key-part, .nw-band-me,
+      .nw-key-me, .nw-dash-me, .nw-bar, .th-mark, .th-dot, .th-val, .hpc-sq.cpu-on) { --accent: var(--mark); }
   .bp-svg .ray { fill: none; stroke: var(--accent-2); stroke-width: 1.2; vector-effect: non-scaling-stroke; opacity: .9; }
   .bp-svg .warmray { stroke: var(--accent-2); }
   .bp-svg .mirror { stroke-width: 3; }
@@ -867,13 +880,13 @@
     --anatomy-shade-1: color-mix(in oklab, var(--surface) 90%, var(--ink) 10%);
     --anatomy-shade-2: color-mix(in oklab, var(--surface) 86%, var(--ink) 14%);
     --anatomy-shade-3: color-mix(in oklab, var(--surface) 82%, var(--ink) 18%);
-    --anatomy-lit-top: color-mix(in oklab, var(--accent) 45%, var(--surface));
-    --anatomy-lit-shade: color-mix(in oklab, var(--accent) 25%, var(--surface));
+    --anatomy-lit-top: color-mix(in oklab, var(--mark) 45%, var(--surface));
+    --anatomy-lit-shade: color-mix(in oklab, var(--mark) 25%, var(--surface));
     --anatomy-hi: var(--ink);
     --anatomy-mid: var(--ink-2);
     --anatomy-lo: var(--muted);
     --anatomy-faint: var(--line-strong);
-    --anatomy-lit: var(--accent);
+    --anatomy-lit: var(--mark);
     --anatomy-dot: var(--ink);
     --anatomy-blue: var(--accent-2);
     --anatomy-weight: .7px;

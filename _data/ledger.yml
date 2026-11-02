@@ -570,6 +570,71 @@ funding:
   - academic
   funder: FCT, through project 2024.15303.PEX, hosted at IA
   pi: Tiago L. Campante
+- id: fund-2026-05-plato-go-bss-noise
+  title: PLATO noise estimates for a blue-straggler guest-observer proposal (34 open clusters)
+  tagline: Co-investigator on a PLATO Guest Observer proposal for blue stragglers, and ran its noise simulations.
+  kind: proposal
+  role: co-investigator
+  date: 2026-05
+  people:
+  - L. Briganti (PI)
+  summary: Computed single-camera PLATO noise-to-signal ratios with the HAYDN Noise Estimator for blue stragglers in their host clusters, using Gaia DR3 fields and the PLATO camera configuration.
+  details:
+  - 124 blue stragglers in 34 host clusters, plus two anchor globular clusters; the target list came from the proposing collaborator.
+  - 'The same Deucalion sweep covered all 36 clusters (34 hosts plus the anchors NGC 1851 and NGC 2298): one HNE run per cluster, 108 Slurm submissions including resubmissions.'
+  - Delivered as a data package with per-cluster dashboards and combined Gaia, StarHorse and noise tables.
+  - Ran noise-to-signal simulations with the HAYDNsim pipeline, with the HAYDN Noise Estimator in its PLATO configuration.
+  tags:
+  - PLATO
+  - guest-observer
+  - blue-stragglers
+  - HPC
+  weight: 2
+  audiences:
+  - academic
+  numbers:
+    blue_stragglers: 124
+    host_clusters: 34
+    clusters: 36
+    submissions: 108
+- id: fund-2026-05-plato-go-ngc1851-noise
+  title: PLATO noise estimates for the NGC 1851 red-giant guest-observer proposal
+  tagline: Co-investigator on a PLATO Guest Observer proposal for NGC 1851 red giants, and ran its noise simulations.
+  kind: proposal
+  role: co-investigator
+  date: 2026-05
+  people:
+  - A. Miglio (PI)
+  summary: Computed PLATO noise-to-signal ratios for the red giants of the globular cluster NGC 1851 with the HAYDNsim pipeline and the HAYDN Noise Estimator in its PLATO configuration.
+  details:
+  - Ran noise-to-signal simulations with the HAYDNsim pipeline, with the HAYDN Noise Estimator in its PLATO configuration.
+  tags:
+  - PLATO
+  - guest-observer
+  - HPC
+  weight: 2
+  audiences:
+  - academic
+  - industry-tech
+- id: fund-2026-05-plato-go-accreted-noise
+  title: PLATO noise estimates for accreted-star candidates for a guest-observer proposal
+  tagline: Co-investigator on a PLATO Guest Observer proposal for accreted halo stars, and ran its noise simulations.
+  kind: proposal
+  role: co-investigator
+  date: 2026-05
+  people:
+  - Leitinger (PI)
+  summary: Computed per-candidate PLATO noise-to-signal ratios and flux contamination for accreted-star candidates, each with its own Gaia DR3 field of contaminants.
+  details:
+  - 4 086 candidates, each with a 63 arcsec Gaia DR3 cone to G = 18.5, StarHorse and GSP-Phot parameters and a dedicated noise run.
+  - Ran noise-to-signal simulations with the HAYDNsim pipeline, with the HAYDN Noise Estimator in its PLATO configuration.
+  tags:
+  - PLATO
+  - guest-observer
+  - galactic-archaeology
+  weight: 2
+  audiences:
+  - academic
 - id: fund-2026-arqueogal-pex-participant
   title: 'FCT Exploratory Research Project ArqueoGal: Unraveling the evolutionary history of the Milky Way with Galactic Archaeology'
   tagline: FCT exploratory project on the Milky Way's history. Developer of its machine-learning pipelines.
@@ -580,7 +645,7 @@ funding:
   identifiers:
     reference: 2024.15303.PEX
     doi: 10.54499/2024.15303.PEX
-  summary: Co-Investigator (team member) and developer of the project's machine-learning pipelines, with allocations on the Stellar Population Classification and Galactic Modeling tasks. PI T. L. Campante.
+  summary: Co-Investigator (team member) and developer of the project's machine-learning pipelines (Tasks 3, 5 and 6). PI T. L. Campante.
   weight: 5
   audiences:
   - academic
@@ -599,7 +664,7 @@ funding:
   end_date: 2026-09
   identifiers:
     reference: 2025.00007.HPCVLAB.UPORTO
-  summary: 'Development work on the ARM, x86 and A100 partitions for JANUS and for the HAYDNsim noise simulations behind the HAYDN mission proposal: 94,001 core-hours in about 250 jobs.'
+  summary: 'JANUS development and HAYDNsim runs for the HAYDN proposal: 94,001 core-hours in about 250 jobs.'
   tags:
   - hpc
   - deucalion
