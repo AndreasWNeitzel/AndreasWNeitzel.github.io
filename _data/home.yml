@@ -29,8 +29,8 @@ portals:
     url: /software/
     images:
       - {src: /assets/img/heroes/line_janus.webp, pos: "50% 50%"}
-      - {src: /assets/img/heroes/software_starfold.webp, pos: "50% 55%"}
-      - {src: /assets/img/heroes/software_cluster.webp, pos: "62% 50%"}
+      - {src: /assets/img/heroes/software_starfold.webp, pos: "42% 50%"}
+      - {src: /assets/img/heroes/software_haydn.webp, pos: "100% 45%"}
   - key: talks
     url: /talks/
     images:

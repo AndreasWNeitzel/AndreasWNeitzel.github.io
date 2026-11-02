@@ -326,7 +326,7 @@ if ANIM:
     for fr, x in ((1, XA), (ANIM, XB)):
         aim((x, -5.8, 1.7), (x + 1.2, 0.3, 0.45))
         cam.keyframe_insert('location', frame=fr); cam.keyframe_insert('rotation_euler', frame=fr); cam_d.keyframe_insert('dof.focus_distance', frame=fr)
-        vl['phase'] = 0.0 if fr == 1 else 30.0; vl.keyframe_insert   # the dashes outrun the dolly, so the flow reads left to right('["phase"]', frame=fr)
+        vl['phase'] = 0.0 if fr == 1 else 30.0; vl.keyframe_insert('["phase"]', frame=fr)   # the dashes outrun the dolly, so the flow reads left to right
     for ad in (cam.animation_data, cam_d.animation_data, sc.animation_data):
         for fc in ad.action.fcurves:
             for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
@@ -336,7 +336,7 @@ if ANIM:
     bpy.ops.render.render(animation=True)
 else:
     import os
-    cv = [float(v) for v in os.environ.get('CAM', '-2.2,-7.8,2.0,5.9,0.3,0.45,40,5.6').split(',')]   # a framing override for tests
+    cv = [float(v) for v in os.environ.get('CAM', '-3.2,-8.8,2.0,5.2,0.3,0.45,35,5.6').split(',')]   # a framing override for tests
     cam_d.lens = cv[6]; cam_d.dof.aperture_fstop = cv[7]
     aim(tuple(cv[:3]), tuple(cv[3:6]))
     sc.render.filepath = out

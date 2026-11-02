@@ -1,26 +1,31 @@
-"""The published figures as printed sheets on a dark desk, a slow camera dolly across them (Blender, Cycles).
+"""Printed pages of the published papers in a loose pile on a dark desk, a camera breathing over them (Blender, Cycles).
 
-The sheets carry the figures exactly as they appear on the site, under assets/img/papers: Neitzel et al. 2025
-(the four samples of the manifold learning paper, the first author paper, on top and nearest the camera),
-Campante et al. 2026 (oscillation amplitude against luminosity over mass for GJ 570 A and the other K dwarfs),
-Campante et al. 2024 (the epsilon Indi sample in radius against effective temperature) and the MSc dissertation
-(the Kippenhahn diagrams). Each image is placed at its own aspect ratio, centred with white margins on a sheet of
-A4 proportion (0.21 by 0.297, 1.5 mm thick, with a 2 mm sine arch so it reads as paper). Nothing is added to
-the sheets: no text, no logos, no marks. The Magrini et al. 2022 figure has no published image in the repository
-(the paper page draws a Kiel diagram from the CDS tables), so it is not on the desk.
+The sheets are real typeset pages rasterised from the documents themselves, nothing composed by hand: the title
+page of Neitzel et al. 2025 (A&A 695, A243) on top, sharp, with the title block in focus; three inner pages of the
+same paper (pages 3, 5 and 9, each with a figure inside the two-column text) fanned out beneath it; the first
+page of Campante et al. 2024 (the A&A Letter on epsilon Indi, arXiv typesetting) at the left, its near corner
+under the top sheet; the title page of the MSc dissertation and its page with the Kippenhahn diagrams (page 44
+of the file, printed page 16) lowest in the pile. Every sheet is A4 (0.21 by 0.297, 1.5 mm thick, with a 2 mm
+sine arch so it reads as paper) and carries its page at full size. No text, logos, marks or props are added:
+paper, desk and light only.
 
-One warm desk lamp from the upper left (an area light, 2700 K), one weak cool fill, a faint vignette in the
-compositor. The camera (50 mm, f/2.8, focus on the top sheet) sits about half a unit above the desk, pitched
-55 degrees down, and dollies from right to left over 300 frames at 30 fps. The loop closes with a 30 frame
-crossfade of the last frame into the first, blended with Pillow and appended as frames 300 to 329.
+One warm desk lamp from the far left (an area light, about 2700 K), one weak cool fill from the near right, a
+faint vignette in the compositor, so the near left of the frame stays dark for the title the page sets there.
+The camera (50 mm, f/3.2, focus on the title block) looks down at 55 degrees and moves on a small ellipse
+around its rest position while tracking a fixed point on the desk, over 300 frames at 30 fps. The path is
+periodic, so frame 300 equals frame 0 and the loop closes without a crossfade.
 
-Usage, from the repository root, with DIR the working directory for the textures and frames:
+Usage, from the repository root, with DIR a working directory that holds the three source documents under
+DIR/pdf as neitzel2025.pdf, campante2024.pdf and neitzel2022_msc.pdf:
   uv run --python 3.11 --with bpy==4.2.0 --with pillow python figures/heroes/blender_desk.py DIR prep
   uv run --python 3.11 --with bpy==4.2.0 --with pillow python figures/heroes/blender_desk.py DIR still FRAME [samples] [W] [H]
   uv run --python 3.11 --with bpy==4.2.0 --with pillow python figures/heroes/blender_desk.py DIR anim [samples] [W] [H] [first] [last]
   uv run --python 3.11 --with pillow python figures/heroes/blender_desk.py DIR post
-The still and anim modes run prep themselves when the textures are missing. The post mode writes the crossfade
-frames and the poster (frame 100 as desk.poster.webp). Encoding to video is done with ffmpeg afterwards:
+Prep rasterises the pages with pdftoppm (annotation borders hidden, so the arXiv link boxes do not print). The
+still and anim modes run prep themselves when the textures are missing. Set DESK_GPU=1 in the environment
+to render on the graphics card instead of the processor. The post mode writes the poster
+(frame 0 as desk.poster.webp) and prints the seam check, the mean difference between frames 299 and 0 against
+that between frames 0 and 1. Encoding to video is done with ffmpeg afterwards:
   ffmpeg -y -framerate 30 -i DIR/frames/f_%04d.png -vf "scale=1280:-2,format=yuv420p" -c:v libsvtav1 -crf 42 \\
     -preset 5 -g 120 -movflags +faststart DIR/desk.av1.mp4
   ffmpeg -y -framerate 30 -i DIR/frames/f_%04d.png -vf "scale=1280:-2,format=yuv420p" -c:v libx264 -crf 28 \\
@@ -28,62 +33,66 @@ frames and the poster (frame 100 as desk.poster.webp). Encoding to video is done
 """
 import math
 import os
+import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PAPERS = os.path.join(ROOT, 'assets', 'img', 'papers')
-
-# bottom of the pile first; (file, centre x, centre y, rotation in degrees about the vertical)
-# x runs to the right of the camera, y away from it; the desk is z = 0
+# bottom of the pile first; (document, page, centre x, centre y, rotation in degrees about the vertical)
+# x runs to the right of the camera, y away from it; the desk is z = 0 and the camera aims at the origin
 SHEETS = [
-    ('neitzel-2022-kippenhahn.webp', 0.03, 0.27, -3.0),
-    ('campante-2024-eps-indi.webp', 0.175, 0.13, 8.0),
-    ('campante-2026-gj570a.webp', -0.165, 0.11, -7.0),
-    ('neitzel-2025-manifold-learning.webp', 0.0, -0.02, 3.5),
+    ('neitzel2022_msc', 44, 0.24, -0.03, -8.0),
+    ('neitzel2022_msc', 1, 0.02, 0.22, 6.0),
+    ('neitzel2025', 5, -0.30, 0.16, 24.0),
+    ('neitzel2025', 9, -0.40, 0.03, 32.0),
+    ('neitzel2025', 3, 0.26, 0.14, -8.0),
+    ('campante2024', 1, -0.17, 0.11, 20.0),
+    ('neitzel2025', 1, 0.03, -0.05, -5.0),
 ]
+DPI, TOP_DPI = 150, 220                  # raster resolution of the pages; the top sheet gets more
 SHEET_W, SHEET_H, THICK, ARCH = 0.21, 0.297, 0.0015, 0.002
-LAYER = THICK + ARCH + 0.0002        # sheets never cut into each other
-CANVAS_W = 1240                      # texture pixels across a sheet; A4 at about 150 dpi
-MARGIN = 0.075                       # white margin as a fraction of the sheet width
-FRAMES, FPS, FADE = 300, 30, 30
-DOLLY = 0.12                         # camera x from +DOLLY to -DOLLY
-CAM_H, CAM_PITCH, CAM_LENS, CAM_FSTOP = 0.5, 55.0, 50.0, 2.8
+LAYER = THICK + ARCH + 0.0002            # sheets never cut into each other
+FRAMES, FPS = 300, 30
+CAM_DIST, CAM_PITCH, CAM_LENS, CAM_FSTOP = 0.64, 55.0, 50.0, 3.2
+SWAY_X, SWAY_D = 0.010, 0.012            # half amplitude of the lateral sway and of the dolly in and out
+SHIFT = (-0.180, -0.065)                 # lens shift, which moves the pile right and up with no change of perspective
+FOCUS = (0.03, 0.05)                     # x, y of the focus point, on the title block of the top sheet
 PAPER = (0.93, 0.92, 0.89)
 DESK = (0.05, 0.045, 0.04)
 LAMP = (1.0, 0.78, 0.55)
 FILL = (0.62, 0.72, 1.0)
+LAMP_POWER, FILL_POWER = 8.5, 0.8
 
 
-def tex_path(d, name):
-    return os.path.join(d, 'tex', os.path.splitext(name)[0] + '.png')
+def tex_path(d, doc, page):
+    return os.path.join(d, 'tex', '%s_p%02d.png' % (doc, page))
 
 
 def prep(d):
-    """Convert each figure to a PNG sheet canvas: white A4 page, figure fitted to the width, centred."""
-    from PIL import Image
+    """Rasterise each page used on the desk from its document, at DPI (TOP_DPI for the top sheet)."""
     os.makedirs(os.path.join(d, 'tex'), exist_ok=True)
-    cw, ch = CANVAS_W, round(CANVAS_W * SHEET_H / SHEET_W)
-    for name, *_ in SHEETS:
-        src = os.path.join(PAPERS, name)
+    for k, (doc, page, *_) in enumerate(SHEETS):
+        src = os.path.join(d, 'pdf', doc + '.pdf')
         if not os.path.exists(src):
-            print('missing figure, sheet left blank:', src)
+            print('missing document, sheet left blank:', src)
             continue
-        im = Image.open(src).convert('RGB')
-        fw = round(cw * (1 - 2 * MARGIN)); fh = round(fw * im.height / im.width)
-        if fh > ch * (1 - 2 * MARGIN * SHEET_W / SHEET_H):
-            fh = round(ch * (1 - 2 * MARGIN * SHEET_W / SHEET_H)); fw = round(fh * im.width / im.height)
-        im = im.resize((fw, fh), Image.LANCZOS)
-        page = Image.new('RGB', (cw, ch), (255, 255, 255))
-        page.paste(im, ((cw - fw) // 2, (ch - fh) // 2))
-        page.save(tex_path(d, name), compress_level=6)
-        print('texture', tex_path(d, name), page.size)
+        dpi = TOP_DPI if k == len(SHEETS) - 1 else DPI
+        stem = os.path.join(d, 'tex', 'tmp_%s_%02d' % (doc, page))
+        subprocess.run(['pdftoppm', '-r', str(dpi), '-png', '-hide-annotations', '-singlefile',
+                        '-f', str(page), '-l', str(page), src, stem], check=True)
+        os.replace(stem + '.png', tex_path(d, doc, page))
+        print('texture', tex_path(d, doc, page))
 
 
 def build(d, samples, W, H):
     import bpy, bmesh
+    from mathutils import Vector
     bpy.ops.wm.read_factory_settings(use_empty=True)
     sc = bpy.context.scene
     sc.render.engine = 'CYCLES'; sc.cycles.samples = samples; sc.cycles.use_denoising = True; sc.cycles.device = 'CPU'
+    if os.environ.get('DESK_GPU') == '1':
+        # the graphics card, when there is one: about twice as fast as the processor for these frames
+        prefs = bpy.context.preferences.addons['cycles'].preferences; prefs.compute_device_type = 'CUDA'; prefs.get_devices()
+        for dev in prefs.devices: dev.use = dev.type == 'CUDA'
+        sc.cycles.device = 'GPU'
     sc.render.resolution_x, sc.render.resolution_y = W, H; sc.render.resolution_percentage = 100
     sc.render.fps = FPS; sc.frame_start = 0; sc.frame_end = FRAMES - 1
     sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
@@ -97,7 +106,7 @@ def build(d, samples, W, H):
 
     def paper(name, png):
         # the printed sheet: the page image multiplied by the paper tint, so margins are paper and ink is ink
-        m = principled(name, PAPER, 0.65); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+        m = principled(name, PAPER, 0.7); nt = m.node_tree; b = nt.nodes['Principled BSDF']
         if png and os.path.exists(png):
             img = bpy.data.images.load(png); img.colorspace_settings.name = 'sRGB'
             t = nt.nodes.new('ShaderNodeTexImage'); t.image = img; t.interpolation = 'Cubic'; t.extension = 'EXTEND'
@@ -109,11 +118,11 @@ def build(d, samples, W, H):
 
     # desk
     bpy.ops.mesh.primitive_plane_add(size=4, location=(0, 0, 0)); desk = bpy.context.object; desk.name = 'desk'
-    desk.data.materials.append(principled('desk', DESK, 0.5))
+    desk.data.materials.append(principled('desk', DESK, 0.65))
+    desk.data.materials[0].node_tree.nodes['Principled BSDF'].inputs['Specular IOR Level'].default_value = 0.3
 
     # sheets: a grid with UVs, arched by a sine, solidified upwards to the paper thickness
-    top = None
-    for k, (name, x, y, rot) in enumerate(SHEETS):
+    for k, (doc, page, x, y, rot) in enumerate(SHEETS):
         nx, ny = 32, 44
         bm = bmesh.new()
         bmesh.ops.create_grid(bm, x_segments=nx, y_segments=ny, size=0.5)
@@ -129,29 +138,33 @@ def build(d, samples, W, H):
         ob = bpy.data.objects.new('sheet%d' % k, me); bpy.context.collection.objects.link(ob)
         ob.location = (x, y, k * LAYER); ob.rotation_euler = (0, 0, math.radians(rot))
         sol = ob.modifiers.new('solid', 'SOLIDIFY'); sol.thickness = THICK; sol.offset = 1.0; sol.use_even_offset = True
-        ob.data.materials.append(paper('paper%d' % k, tex_path(d, name)))
+        ob.data.materials.append(paper('paper%d' % k, tex_path(d, doc, page)))
         for p in me.polygons: p.use_smooth = True
-        top = ob
 
-    # lights: the warm lamp from the upper left, a weak cool fill from the right
+    # lights: the warm lamp from the far left, a weak cool fill from the near right
     def area(name, loc, aim, color, power, size):
         ld = bpy.data.lights.new(name, 'AREA'); ld.color = color; ld.energy = power; ld.size = size; ld.shape = 'DISK'
         lo = bpy.data.objects.new(name, ld); bpy.context.collection.objects.link(lo); lo.location = loc
-        from mathutils import Vector
         lo.rotation_euler = (Vector(aim) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler(); return lo
-    area('lamp', (-0.5, -0.15, 0.55), (0.0, 0.04, 0.0), LAMP, 10.0, 0.32)
-    area('fill', (0.55, -0.35, 0.45), (0.0, 0.1, 0.0), FILL, 1.5, 0.7)
+    area('lamp', (-0.40, 0.02, 0.55), (0.08, 0.03, 0.0), LAMP, LAMP_POWER, 0.22)
+    area('fill', (0.55, -0.30, 0.45), (0.0, 0.0, 0.0), FILL, FILL_POWER, 0.8)
     w = bpy.data.worlds.new('w'); sc.world = w; w.use_nodes = True
     w.node_tree.nodes['Background'].inputs['Color'].default_value = (0.004, 0.0045, 0.006, 1)
 
-    # camera: pitched down, dollying along x, focus on the top sheet
-    cd = bpy.data.cameras.new('cam'); cd.lens = CAM_LENS; cd.sensor_width = 36
-    cd.dof.use_dof = True; cd.dof.focus_object = top; cd.dof.aperture_fstop = CAM_FSTOP; cd.dof.aperture_blades = 7
+    # camera: pitched down at the origin, breathing on a closed path, focus on the title block of the top sheet
+    aim = bpy.data.objects.new('aim', None); bpy.context.collection.objects.link(aim); aim.location = (0, 0, 0)
+    focus = bpy.data.objects.new('focus', None); bpy.context.collection.objects.link(focus)
+    focus.location = (FOCUS[0], FOCUS[1], len(SHEETS) * LAYER)
+    cd = bpy.data.cameras.new('cam'); cd.lens = CAM_LENS; cd.sensor_width = 36; cd.shift_x, cd.shift_y = SHIFT
+    cd.dof.use_dof = True; cd.dof.focus_object = focus; cd.dof.aperture_fstop = CAM_FSTOP; cd.dof.aperture_blades = 7
     cam = bpy.data.objects.new('cam', cd); bpy.context.collection.objects.link(cam); sc.camera = cam
-    cam.rotation_euler = (math.radians(90 - CAM_PITCH), 0, 0)
-    cy = top.location.y + 0.04 - CAM_H / math.tan(math.radians(CAM_PITCH))   # aim a little past the sheet centre
-    cam.location = (DOLLY, cy, CAM_H); cam.keyframe_insert('location', frame=0)
-    cam.location = (-DOLLY, cy, CAM_H); cam.keyframe_insert('location', frame=FRAMES - 1)
+    tr = cam.constraints.new('TRACK_TO'); tr.target = aim; tr.track_axis = 'TRACK_NEGATIVE_Z'; tr.up_axis = 'UP_Y'
+    pitch = math.radians(CAM_PITCH)
+    for f in range(FRAMES + 1):
+        t = 2 * math.pi * f / FRAMES
+        dist = CAM_DIST + SWAY_D * (1 - math.cos(t)) / 2
+        cam.location = (SWAY_X * math.sin(t), -dist * math.cos(pitch), dist * math.sin(pitch))
+        cam.keyframe_insert('location', frame=f)
     for fc in cam.animation_data.action.fcurves:
         for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 
@@ -166,16 +179,16 @@ def build(d, samples, W, H):
 
 
 def post(d):
-    """Crossfade frames FRAMES to FRAMES + FADE - 1 from the last rendered frame into the first, and the poster."""
-    from PIL import Image
+    """The poster from frame 0, and the seam check: frames 299 to 0 should differ no more than frames 0 to 1."""
+    from PIL import Image, ImageChops, ImageStat
     fr = os.path.join(d, 'frames')
-    a = Image.open(os.path.join(fr, 'f_%04d.png' % (FRAMES - 1))).convert('RGB')
-    b = Image.open(os.path.join(fr, 'f_%04d.png' % 0)).convert('RGB')
-    for i in range(FADE):
-        t = (i + 1) / (FADE + 1)
-        Image.blend(a, b, t).save(os.path.join(fr, 'f_%04d.png' % (FRAMES + i)), compress_level=6)
-    Image.open(os.path.join(fr, 'f_0100.png')).convert('RGB').save(os.path.join(d, 'desk.poster.webp'), quality=80)
-    print('wrote', FADE, 'crossfade frames and', os.path.join(d, 'desk.poster.webp'))
+    load = lambda i: Image.open(os.path.join(fr, 'f_%04d.png' % i)).convert('RGB')
+    f0, f1, fl = load(0), load(1), load(FRAMES - 1)
+    seam = sum(ImageStat.Stat(ImageChops.difference(fl, f0)).mean) / 3
+    step = sum(ImageStat.Stat(ImageChops.difference(f0, f1)).mean) / 3
+    print('seam check: mean difference 299 to 0 = %.3f, 0 to 1 = %.3f (8 bit levels)' % (seam, step))
+    f0.save(os.path.join(d, 'desk.poster.webp'), quality=82)
+    print('wrote', os.path.join(d, 'desk.poster.webp'))
 
 
 if __name__ == '__main__':
@@ -186,13 +199,13 @@ if __name__ == '__main__':
     elif mode == 'post':
         post(d)
     else:
-        if not all(os.path.exists(tex_path(d, n)) for n, *_ in SHEETS if os.path.exists(os.path.join(PAPERS, n))):
+        if not all(os.path.exists(tex_path(d, doc, p)) for doc, p, *_ in SHEETS if os.path.exists(os.path.join(d, 'pdf', doc + '.pdf'))):
             prep(d)
         import bpy
         if mode == 'still':
             frame = int(sys.argv[3]); rest = sys.argv[4:]
             samples = int(rest[0]) if rest else 24
-            W, H = (int(rest[1]), int(rest[2])) if len(rest) > 2 else (480, 320)
+            W, H = (int(rest[1]), int(rest[2])) if len(rest) > 2 else (480, 270)
             sc = build(d, samples, W, H); sc.frame_set(frame)
             out = os.path.join(d, 'still_%04d_%dx%d.png' % (frame, W, H))
             sc.render.filepath = out; bpy.ops.render.render(write_still=True); print('wrote', out)

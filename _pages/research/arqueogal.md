@@ -6,11 +6,11 @@ nav_section: Research
 crumb: {label: Research, url: /research/}
 description: ArqueoGal, the FCT exploratory project on the Milky Way's history, and the machine-learning pipelines Andreas W. Neitzel develops for it as co-investigator.
 lede: An FCT exploratory project to read the Milky Way's history from its red giants, star by star, with ages from TESS, orbits from Gaia and chemistry from APOGEE and JANUS.
-extra_css: [/assets/css/papers.css]
+extra_css: [/assets/css/papers.css, /assets/css/schematics.css]
 ---
-<figure class="panel blueprint guide-wide" data-build>
+<figure class="panel blueprint guide-wide">
   {% include figures/arqueogal.svg %}
-  <figcaption class="credit">The project followed by one red giant. Its TESS light curve gives oscillations (task 2) and, with PARAM against a grid of stellar models, a mass and an age (task 4). Its <i>Gaia</i> astrometry gives an orbit, from the kinematics code of my integration repository (task 3). Its spectrum gives chemistry: from APOGEE for the one star in ten that has it, from my network JANUS for the rest. The three lanes fill the star's row of the all-sky catalogue, D-Cat; my package Starfold returns its population (task 5); the Galactic model, TRILEGAL and a chemo-kinematic model, reads the catalogue and draws the disc (task 6). The stages I built, the orbit code, JANUS and Starfold, are filled in the accent; the one I take part in, the Galactic modelling, is hatched; the team's are in outline. Task leads: 2, Campante; 3, Bossini; 4, Monteiro and Bossini; 5 and 6, Campante and Miglio. The timeline carries the deliverables, with task 1 (data management, lead Campante) and task 7 (the outreach installation at the Porto Planetarium, lead Pereira) at its ends. From the application 2024.15303.PEX and the kickoff of 16 February 2026.</figcaption>
+  {% include figures/arqueogal-narrow.svg %}
 </figure>
 
 <div class="article-layout">
@@ -21,7 +21,7 @@ extra_css: [/assets/css/papers.css]
       <h2>My part</h2>
       <p>I am a co-investigator (team member) on the project and I develop its machine-learning pipelines, with allocations on the stellar population classification and Galactic modelling tasks. That work has three repositories. ArqueoGal itself is the platform: it prepares and corrects the observational catalogues, computes the kinematics and assembles the project's deliverables under an explicit release policy, with provenance on every file. It contains no model. JANUS, in its own repository, owns the <i>Gaia</i> XP input chain, the normalising-flow ensemble and the per-star reliability. Starfold, open source, owns the population search and its recurrence evidence. ArqueoGal hands each tool its input and receives a scored table back, so the three can be tested and replaced on their own.</p>
       <h2>Where it runs</h2>
-      <p>The two FCT advanced-computing projects on Deucalion and MareNostrum 5, which I hold as responsible investigator, run the JANUS side of this work. My PhD fellowship since September 2026 is paid by the project.</p>
+      <p>The two FCT advanced-computing projects on Deucalion and MareNostrum 5, which I hold as principal investigator, run the JANUS side of this work. My PhD fellowship since September 2026 is paid by the project.</p>
     </div>
   </article>
   <aside class="article-aside">

@@ -1,5 +1,5 @@
 // Site behaviour: theme, header state, the arrival build, sections that build once as they arrive,
-// loops that play only on screen, the pointer light on the concept cards, portal drift, FIG 1 captions,
+// loops that play only on screen, the pointer light on the concept cards, FIG 1 captions,
 // record filters, one-time figure builds and the lazy start of the globe. No dependencies.
 (() => {
   const root = document.documentElement;
@@ -77,26 +77,9 @@
     p.style.setProperty("--mx", (e.clientX - r.left) + "px"); p.style.setProperty("--my", (e.clientY - r.top) + "px");
   }, { passive: true }));
 
-  // ---- portals: the pictures drift slowly with the scroll; the spine runs only while on screen ----
-  const portals = [...document.querySelectorAll(".portal")];
-  if (portals.length && !still) {
-    let queued = false;
-    const drift = () => {
-      if (queued) return; queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
-        portals.forEach((p) => {
-          const r = p.getBoundingClientRect();
-          if (r.bottom < -100 || r.top > innerHeight + 100) return;
-          const k = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
-          p.style.setProperty("--py", (-k * 36).toFixed(1) + "px");
-        });
-      });
-    };
-    addEventListener("scroll", drift, { passive: true }); drift();
-    const section = document.querySelector(".portals");
-    if (section) new IntersectionObserver((es) => es.forEach((e) => section.classList.toggle("is-live", e.isIntersecting))).observe(section);
-  }
+  // ---- portals: the spine runs only while on screen --------------------------------
+  const portalSection = document.querySelector(".portals");
+  if (portalSection && !still) new IntersectionObserver((es) => es.forEach((e) => portalSection.classList.toggle("is-live", e.isIntersecting))).observe(portalSection);
 
   // ---- FIG 1: stage captions ------------------------------------------------------
   const fig = document.getElementById("fig1");

@@ -9,8 +9,8 @@ extra_links:
     - {label: Held-out benchmark, url: /software/starfold-benchmark/}
 codes:
   - {id: janus, title: JANUS, loop: ai, img: /assets/img/heroes/line_janus.webp, url: /research/janus/, links: [{label: "The method", url: /research/janus/}, {label: "The talks", url: /talks/}]}
-  - {id: starfold, title: Starfold, loop: starfold, img: /assets/img/heroes/software_chem.webp, url: /software/starfold-demo/, links: [{label: "Run it on 9,242 stars", url: /software/starfold-demo/}, {label: "The held-out benchmark", url: /software/starfold-benchmark/}, {label: "Source code", url: "https://github.com/AndreasWNeitzel/starfold"}]}
-  - {id: haydnsim, title: HAYDNsim, loop: cluster, img: /assets/img/heroes/software_cluster.webp, url: /software/haydnsim/, links: [{label: "The pipeline", url: /software/haydnsim/}, {label: "What is HAYDN?", url: /guide/haydn/}]}
+  - {id: starfold, title: Starfold, loop: starfold, img: /assets/img/heroes/software_starfold.webp, url: /software/starfold-demo/, links: [{label: "Run it on 9,242 stars", url: /software/starfold-demo/}, {label: "The held-out benchmark", url: /software/starfold-benchmark/}, {label: "Source code", url: "https://github.com/AndreasWNeitzel/starfold"}]}
+  - {id: haydnsim, title: HAYDNsim, loop: haydn, img: /assets/img/heroes/software_haydn.webp, url: /software/haydnsim/, links: [{label: "The pipeline", url: /software/haydnsim/}, {label: "What is HAYDN?", url: /guide/haydn/}]}
 playgrounds:
   - {id: nn, art: nn, url: /playground/neural-network/}
   - {id: orbits, art: orbit, img: /assets/img/heroes/card_orbits.webp, url: /playground/orbits/}

@@ -3,7 +3,7 @@ layout: default
 permalink: /research/
 title: Research
 copy: research
-extra_css: [/assets/css/fig1.css, /assets/css/thesis.css]
+extra_css: [/assets/css/thesis.css]
 lines:
   - id: janus
     img: /assets/img/heroes/line_janus.webp
@@ -22,7 +22,7 @@ lines:
       - {label: "The integration repository", url: "https://github.com/AndreasWNeitzel/ArqueoGal"}
   - id: populations
     loop: starfold
-    img: /assets/img/heroes/software_chem.webp
+    img: /assets/img/heroes/software_starfold.webp
     url: /papers/neitzel-2025-manifold-learning/
     links:
       - {label: "The paper, explained", url: /papers/neitzel-2025-manifold-learning/}
@@ -51,8 +51,8 @@ lines:
       - {label: "The paper, explained", url: /papers/campante-2026-gj570a/}
       - {label: "ESO and the VLT, in a minute", url: /guide/eso-vlt/}
   - id: haydn
-    loop: cluster
-    img: /assets/img/heroes/software_cluster.webp
+    loop: haydn
+    img: /assets/img/heroes/software_haydn.webp
     url: /software/haydnsim/
     links:
       - {label: "The pipeline", url: /software/haydnsim/}
@@ -85,9 +85,5 @@ lines:
 <section class="section" id="explainers" aria-labelledby="explainers-title">
   <div class="section-head k-up"><h2 id="explainers-title">Papers, explained</h2><a class="more" href="{{ '/publications/' | relative_url }}">The list with DOIs <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
   {% include explainers.html %}
-</section>
-
-<section class="section section--tight k-up" aria-label="FIG 1">
-  {% include fig1.html %}
 </section>
 </div>

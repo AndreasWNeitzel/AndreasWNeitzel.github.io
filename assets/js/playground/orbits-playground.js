@@ -1,11 +1,13 @@
 // Orbits playground: controls, the integration loop and the canvas drawing for two problems
 // that share the integrators in orbits-physics.js, satellites around a point-mass Earth and
-// stars in the MWPotential2014 model of the Milky Way. Every number comes from orbits.json.
+// stars in the MWPotential2014 model of the Milky Way, and a third view, the kinematic spiral
+// of orbits-spiral.js. Every measured number comes from orbits.json.
 // Canvas colours come from the site tokens (window.siteTokens) and are read again whenever
 // the theme changes. Nothing moves until the visitor presses Run.
 import {
-  galaxySystem, pointMassSystem, leapfrogStep, eulerStep, rk4Adaptive, stateFromElements, osculating, elevationDeg,
+  KPC_PER_MYR_PER_KMS, galaxySystem, pointMassSystem, leapfrogStep, eulerStep, rk4Adaptive, stateFromElements, osculating, elevationDeg,
 } from "./orbits-physics.js";
+import { SPIRAL, makeDisc, oval, pitchAt, place, placeOne, rates } from "./orbits-spiral.js";
 
 const MINUS = "−";
 const RK4_TOL = 1e-10;
@@ -165,7 +167,7 @@ async function boot(root) {
     modeButtons: [...root.querySelectorAll(".ob-mode button")],
     run: $(".ob-run-btn"), step: $(".ob-step"), reset: $(".ob-reset"), launch: $(".ob-launch"),
     live: $(".pg-live"), state: $(".pg-state"), form: $(".ob-settings"),
-    time: $(".ob-time"), alt: $(".ob-alt"), speed: $(".ob-speed"), ecc: $(".ob-ecc"), eccRef: $(".ob-ecc-ref"),
+    time: $(".ob-time"), pattern: $(".ob-pattern"), omega: $(".ob-omega"), pitch: $(".ob-pitch"), span: $(".ob-span"), alt: $(".ob-alt"), speed: $(".ob-speed"), ecc: $(".ob-ecc"), eccRef: $(".ob-ecc-ref"),
     zmax: $(".ob-zmax"), zmaxRef: $(".ob-zmax-ref"), lz: $(".ob-lz"), lzRef: $(".ob-lz-ref"),
     E: $(".ob-energy-value"), ERef: $(".ob-e-ref"), err: $(".ob-err"), stepNow: $(".ob-stepnow"),
     mainTitle: $(".ob-main-title"), mainKey: $(".ob-main-key"), mainCap: $(".ob-main-cap"),
@@ -203,7 +205,7 @@ async function boot(root) {
     F = { mono: cs.getPropertyValue("--mono").trim() || "monospace", sans: cs.getPropertyValue("--sans").trim() || "sans-serif" };
   }
   readTheme();
-  const bodyColour = (b) => (b.test ? C.ink2 : C.cat[b.cat]);
+  const bodyColour = (b) => (b.sun ? C.ink : b.test ? C.ink2 : C.cat[b.cat]);
 
   // ------------------------------------------------------------ the two problems
   const earthGM = D.earth.gm_km3_s2;
@@ -222,7 +224,7 @@ async function boot(root) {
       title: "Around the Earth", sideTitle: "Visible from the ground",
       cap: "Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.",
       mainAria: "Three Molniya satellites and a geostationary satellite around the rotating Earth, drawn to scale",
-      sideAria: "Timeline of when each satellite is above the horizon of Porto, Moscow and the third station",
+      sideAria: "Timeline of when each satellite is above the horizon of Porto, Santiago and the third station",
       bodies() {
         const M = D.molniya;
         const c = M.constellation;
@@ -251,16 +253,30 @@ async function boot(root) {
       speeds: [[10, "10 Myr per s"], [25, "25 Myr per s"], [50, "50 Myr per s"], [100, "100 Myr per s"], [200, "200 Myr per s"]], speed: 50,
       trailEvery: 1, sampleEvery: 1, historyEvery: 2,
       title: "Face-on, from the north Galactic pole", sideTitle: "Distance from the axis against height",
-      cap: "The disc turns clockwise. The dashed ring is the Sun's circle at R = 8 kpc; the rings are 5 kpc apart.",
-      mainAria: "Orbits of six stars in the plane of the Milky Way, seen from the north Galactic pole",
-      sideAria: "Orbits of six stars as distance from the Galactic axis against height above the plane",
+      cap: "The disc turns clockwise. The dashed ring is R = 8 kpc, where the Sun starts; the rings are 5 kpc apart.",
+      mainAria: "Orbits of six stars and the Sun in the plane of the Milky Way, seen from the north Galactic pole",
+      sideAria: "Orbits of six stars and the Sun as distance from the Galactic axis against height above the plane",
       bodies() {
         const shorts = { "61 Virginis": "61 Vir", "Proxima Centauri": "Proxima", "Barnard's star": "Barnard", "Lalande 21185": "Lalande", "Kapteyn's star": "Kapteyn", "HD 140283": "HD 140283" };
-        return D.stars.map((st, i) => ({
+        const stars = D.stars.map((st, i) => ({
           name: st.name, short: shorts[st.name] || st.name, cat: [0, 1, 2, 4, 6, 9][i], star: st,
           s0: Float64Array.from([...st.galactocentric.xyz_kpc, ...st.galactocentric.vxyz_km_s]),
         }));
+        // The Sun is a body like the others, from the frame's own definition.
+        const so = D.solar;
+        stars.push({ name: "Sun", short: "Sun", sun: true, cat: 3, s0: Float64Array.from([-so.galcen_distance_kpc, 0, so.z_sun_pc / 1000, ...so.v_sun_km_s]) });
+        return stars;
       },
+    },
+    spiral: {
+      steps: [25], step: 25, stepLabel: (v) => `${v} Myr`,
+      speeds: [[10, "10 Myr per s"], [25, "25 Myr per s"], [50, "50 Myr per s"], [100, "100 Myr per s"]], speed: 25,
+      trailEvery: 1, sampleEvery: 1, historyEvery: 1,
+      title: "Kinematic spiral, no self-gravity", sideTitle: "Rates against radius",
+      cap: `${SPIRAL.count.toLocaleString("en-GB")} test stars on epicyclic orbits in MWPotential2014, from the north Galactic pole. The rings are 5 kpc apart.`,
+      mainAria: "Test stars on nested ovals forming two trailing spiral arms, seen from the north Galactic pole",
+      sideAria: "Circular frequency and Omega minus kappa over two against radius in MWPotential2014",
+      bodies: () => [],
     },
   };
 
@@ -290,6 +306,9 @@ async function boot(root) {
   let resumeOnShow = false;
   let hoverHistory = -1;
   let testParticle = null;
+  let resumeOnScroll = false;
+  let onScreen = true;
+  let spiral = null; // built on first use
   const dirty = { main: true, side: true, energy: true };
 
   function setStations() {
@@ -432,6 +451,10 @@ async function boot(root) {
   }
 
   function advance(span) {
+    if (mode === "spiral") {
+      t += span;
+      return;
+    }
     if (integrator === "rk4") {
       const chunk = Math.max(M.sampleEvery, h);
       let left = span;
@@ -473,11 +496,13 @@ async function boot(root) {
     if (mode === next) return;
     const was = running;
     pause();
+    resumeOnScroll = false;
     note = "";
     mode = next;
     root.dataset.mode = mode;
     for (const btn of ui.modeButtons) btn.setAttribute("aria-pressed", btn.dataset.mode === mode ? "true" : "false");
     M = MODES[mode];
+    if (mode === "spiral" && !spiral) spiral = buildSpiral();
     h = M.step;
     speed = M.speed;
     fillSelect(f.step, M.steps.map((v) => [v, M.stepLabel(v)]), h);
@@ -504,12 +529,26 @@ async function boot(root) {
       return span;
     };
     ui.mainKey.replaceChildren(...bodies.map(key));
+    if (mode === "spiral") {
+      const mark = (colour, text) => {
+        const span = document.createElement("span");
+        const i = document.createElement("i");
+        i.className = "ob-k";
+        i.style.background = colour;
+        span.append(i, document.createTextNode(text));
+        return span;
+      };
+      ui.mainKey.replaceChildren(mark(CP.ink2, "test stars"), mark(CP.accent, "marked stars"));
+    }
     if (mode === "earth") ui.sideKey.textContent = "last 24 h";
+    else if (mode === "spiral") ui.sideKey.textContent = "km/s/kpc";
     else ui.sideKey.textContent = "R and z in kpc";
   }
 
+  const still = () => mode === "spiral" && motion.matches;
+
   function run() {
-    if (running) return;
+    if (running || still()) return;
     running = true;
     lastFrame = 0;
     ui.run.textContent = "Pause";
@@ -529,7 +568,8 @@ async function boot(root) {
   ui.run.addEventListener("click", () => (running ? pause() : run()));
   ui.step.addEventListener("click", () => {
     pause();
-    if (integrator === "rk4") {
+    if (mode === "spiral") advance(h);
+    else if (integrator === "rk4") {
       for (const b of bodies) rk4Adaptive(M.sys, b, h, h, RK4_TOL);
       t += h;
       afterStep();
@@ -568,6 +608,8 @@ async function boot(root) {
       follow = Number(f.follow.value);
       markAll();
       updateReadout();
+    } else if (name === "view" || name === "ovals") {
+      markAll();
     }
   });
   ui.form.addEventListener("input", (e) => {
@@ -626,6 +668,18 @@ async function boot(root) {
   let note = "";
 
   function updateReadout() {
+    ui.run.disabled = still();
+    if (mode === "spiral") {
+      // written only on change: this runs every frame and the text sits in a live region
+      const put = (el, text) => { if (el.textContent !== text) el.textContent = text; };
+      put(ui.time, myr(t));
+      put(ui.pattern, spiral.at8.pattern.toFixed(1));
+      put(ui.omega, spiral.at8.omega.toFixed(1));
+      put(ui.span, `${spiral.at4.pattern.toFixed(1)} and ${spiral.at12.pattern.toFixed(1)}`);
+      put(ui.pitch, `${pitchAt(galaxySys.mw, spiral.disc, SPIRAL.R0, t).toFixed(1)}°`);
+      put(ui.state, still() ? "Reduced motion: a still frame. Step moves it on." : (running ? STATES.running : STATES.idle));
+      return;
+    }
     const b = bodies[follow];
     if (!b) return;
     const E = M.sys.energy(...b.s);
@@ -858,7 +912,8 @@ async function boot(root) {
     // The movable station is labelled by the latitude it is at, not by a fixed name.
     const label = (st) => (st.adjustable_latitude ? `${Math.round(st.lat)}\u00b0 N` : st.name);
     const left = 8 + Math.ceil(Math.max(...stations.map((st) => ctx.measureText(label(st)).width)));
-    const right = 8 + Math.ceil(ctx.measureText("Molniya 100%").width);
+    const brace = 9; // width of the bracket that gathers the Molniya rows
+    const right = 8 + brace + 4 + Math.ceil(ctx.measureText("Molniya 100%").width);
     const W = s.w - left - right - 8;
     const top = 6;
     const bottom = s.h - 18;
@@ -869,6 +924,12 @@ async function boot(root) {
     const tEnd = Math.max(t, windowS);
     const tStart = tEnd - windowS;
     const X = (time) => left + ((time - tStart) / windowS) * W;
+    // "no signal" goes in a gap only when the row is tall enough and the gap wide enough
+    const NO_SIGNAL = "no signal";
+    const gapFont = `italic 500 13px ${F.sans}`;
+    ctx.font = gapFont;
+    const noSignalW = rowH >= 11 ? ctx.measureText(NO_SIGNAL).width + 10 : Infinity;
+    ctx.font = `500 13px ${F.mono}`;
     // time axis, hours since the start
     ctx.strokeStyle = C.line;
     ctx.fillStyle = C.muted;
@@ -890,12 +951,14 @@ async function boot(root) {
       let anyMolniya = 0;
       let geo = 0;
       const any = new Uint8Array(VIS_N);
+      const gaps = [];
       bodies.forEach((b, j) => {
         const base = (i * nb + j) * VIS_N;
         const y = y0 + j * (rowH + rowGap);
         ctx.fillStyle = bodyColour(b);
         ctx.globalAlpha = 0.9;
         let runStart = -1;
+        let gapStart = -1;
         let count = 0;
         for (let k = 0; k < visCount; k++) {
           const idx = (visHead - visCount + k + VIS_N) % VIS_N;
@@ -911,6 +974,13 @@ async function boot(root) {
             ctx.fillRect(X(runStart), y, Math.max(1, X(end) - X(runStart)), rowH);
             runStart = -1;
           }
+          if (!on && gapStart < 0) gapStart = time;
+          if ((on || k === visCount - 1) && gapStart >= 0) {
+            const x0 = X(gapStart);
+            const x1 = X(time);
+            if (x1 - x0 >= noSignalW) gaps.push({ x: (x0 + x1) / 2, y: y + rowH / 2 });
+            gapStart = -1;
+          }
         }
         if (j === nb - 1) geo = count / Math.max(1, visCount);
       });
@@ -918,11 +988,35 @@ async function boot(root) {
       anyMolniya /= Math.max(1, visCount);
       ctx.globalAlpha = 1;
       ctx.fillStyle = C.muted;
-      ctx.textAlign = "left";
+      ctx.font = gapFont;
+      ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      const yc = y0 + (groupH - 8) / 2;
-      ctx.fillText(`Molniya ${Math.round(anyMolniya * 100)}%`, left + W + 8, yc - 6);
-      ctx.fillText(`GEO ${Math.round(geo * 100)}%`, left + W + 8, yc + 6);
+      for (const g of gaps) ctx.fillText(NO_SIGNAL, g.x, g.y);
+      ctx.font = `500 13px ${F.mono}`;
+      // the bracket gathers the Molniya rows to one label, a tick ties GEO to its own row
+      const bx = left + W + 3;
+      const yTop = y0;
+      const yBot = y0 + (nb - 1) * rowH + (nb - 2) * rowGap;
+      const yMid = (yTop + yBot) / 2;
+      const yGeo = y0 + (nb - 1) * (rowH + rowGap) + rowH / 2;
+      const hb = brace / 2;
+      ctx.strokeStyle = C.muted;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(bx, yTop);
+      ctx.quadraticCurveTo(bx + hb, yTop, bx + hb, yTop + hb);
+      ctx.lineTo(bx + hb, yMid - hb);
+      ctx.quadraticCurveTo(bx + hb, yMid, bx + brace, yMid);
+      ctx.quadraticCurveTo(bx + hb, yMid, bx + hb, yMid + hb);
+      ctx.lineTo(bx + hb, yBot - hb);
+      ctx.quadraticCurveTo(bx + hb, yBot, bx, yBot);
+      ctx.moveTo(bx, yGeo);
+      ctx.lineTo(bx + brace, yGeo);
+      ctx.stroke();
+      ctx.fillStyle = C.ink2;
+      ctx.textAlign = "left";
+      ctx.fillText(`Molniya ${Math.round(anyMolniya * 100)}%`, bx + brace + 4, yMid);
+      ctx.fillText(`GEO ${Math.round(geo * 100)}%`, bx + brace + 4, yGeo);
     });
   }
 
@@ -952,20 +1046,13 @@ async function boot(root) {
     ctx.setLineDash([4, 4]);
     ring(ctx, cx, cy, D.potential.R0_kpc * scale);
     ctx.setLineDash([]);
-    // the centre and the Sun
+    // the centre
     ctx.strokeStyle = C.ink2;
     line(ctx, cx - 5, cy, cx + 5, cy);
     line(ctx, cx, cy - 5, cx, cy + 5);
-    const sx = X(-D.solar.galcen_distance_kpc);
-    const sy = Y(0);
-    ctx.fillStyle = C.ink2;
-    dot(ctx, sx, sy, 1.5);
-    ring(ctx, sx, sy, 4.5);
-    ctx.textAlign = "right";
+    ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillStyle = C.muted;
-    ctx.fillText("Sun", sx - 7, sy + 2);
-    ctx.textAlign = "left";
     ctx.fillText("centre", cx + 7, cy + 2);
     drawTrails2D(ctx, (x, y) => [X(x), Y(y)], true, 1, 1);
   }
@@ -1007,12 +1094,6 @@ async function boot(root) {
     ctx.fillText("z (kpc)", m.l + 4, m.t + 1);
     ctx.textAlign = "center";
     ctx.fillText("R (kpc)", m.l + W / 2, m.t + H + 15);
-    const sx = X(D.solar.galcen_distance_kpc);
-    const sy = Y(D.solar.z_sun_pc / 1000);
-    ctx.strokeStyle = C.ink2;
-    ctx.fillStyle = C.ink2;
-    dot(ctx, sx, sy, 1.5);
-    ring(ctx, sx, sy, 4.5);
     drawTrails2D(ctx, (x, y, z) => [X(Math.hypot(x, y)), Y(z)], false, 1, 0.8);
   }
 
@@ -1045,10 +1126,15 @@ async function boot(root) {
       dot(ctx, x, y, 4.6);
       ctx.fillStyle = bodyColour(b);
       dot(ctx, x, y, 3.2);
+      if (b.sun) {
+        ctx.strokeStyle = C.ink;
+        ctx.lineWidth = 1;
+        ring(ctx, x, y, 5);
+      }
       if (i === follow) {
         ctx.strokeStyle = C.ink;
         ctx.lineWidth = 1.5;
-        ring(ctx, x, y, 7);
+        ring(ctx, x, y, 7.5);
       }
       if (labelAll || i === follow) labels.push({ x, y, text: b.short });
     });
@@ -1060,6 +1146,214 @@ async function boot(root) {
       ctx.fillStyle = C.ink2;
       ctx.fillText(l.text, l.x + 8, l.ly);
     }
+  }
+
+  // ------------------------------------------------------------ the kinematic spiral
+  function buildSpiral() {
+    const mw = galaxySys.mw;
+    const disc = makeDisc(mw);
+    const row = (R) => { const r = rates(mw, R); return { omega: r.omega, pattern: r.omega - r.kappa / 2 }; };
+    const curve = Array.from({ length: 121 }, (_, i) => { const R = 3 + i * 0.1; return { R, ...row(R) }; });
+    // A handful of stars around the Sun's radius, marked so that they can be followed through the arms.
+    const marked = [];
+    for (let i = 0; i < disc.count && marked.length < 8; i += 7) if (disc.Rg[i] > 5 + marked.length && disc.Rg[i] < 6 + marked.length) marked.push(i);
+    return {
+      disc, curve, marked, at4: row(4), at8: row(SPIRAL.R0), at12: row(12),
+      x: new Float32Array(disc.count), y: new Float32Array(disc.count),
+    };
+  }
+
+  // A square layer the size of the stage's short side, rebuilt when that or the colour changes.
+  function starLayer(s) {
+    const side = Math.min(s.canvas.width, s.canvas.height);
+    let L = spiral.layer;
+    if (!L || L.side !== side || L.ink !== C.ink2) {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = side;
+      const lc = canvas.getContext("2d", { willReadFrequently: true });
+      lc.fillStyle = C.ink2;
+      lc.fillRect(0, 0, 1, 1);
+      const [r, g, b] = lc.getImageData(0, 0, 1, 1).data;
+      lc.clearRect(0, 0, 1, 1);
+      const image = lc.createImageData(side, side);
+      L = spiral.layer = {
+        side, ink: C.ink2, canvas, ctx: lc, image, pixels: new Uint32Array(image.data.buffer),
+        colour: ((0xd0 << 24) | (Math.round(b * 0.82) << 16) | (Math.round(g * 0.82) << 8) | Math.round(r * 0.82)) >>> 0,
+      };
+    }
+    return L;
+  }
+
+  const viewRate = () => (f.view.value === "pattern" ? spiral.at8.pattern * KPC_PER_MYR_PER_KMS : 0);
+
+  // The disc turns clockwise on the screen, as in the Galaxy view: the angle runs with screen y down.
+  function drawSpiral() {
+    const s = cv.main;
+    const ctx = s.begin();
+    if (s.w < 40) return;
+    const RMAX = 17;
+    const scale = (Math.min(s.w, s.h) / 2 - 8) / RMAX;
+    const cx = s.w / 2;
+    const cy = s.h / 2;
+    // The rings and labels do not move, so they are kept on a canvas of their own.
+    const key = `${s.canvas.width}x${s.canvas.height}/${C.line}/${C.muted}/${F.mono}`;
+    if (spiral.backKey !== key) {
+      spiral.backKey = key;
+      const back = spiral.back || (spiral.back = document.createElement("canvas"));
+      back.width = s.canvas.width;
+      back.height = s.canvas.height;
+      const bc = back.getContext("2d");
+      bc.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
+      bc.lineWidth = 1;
+      for (let R = 5; R <= 15; R += 5) {
+        bc.strokeStyle = C.line;
+        ring(bc, cx, cy, R * scale);
+      }
+      bc.strokeStyle = C.ink2;
+      line(bc, cx - 5, cy, cx + 5, cy);
+      line(bc, cx, cy - 5, cx, cy + 5);
+      const tags = spiral.tags || (spiral.tags = document.createElement("canvas"));
+      tags.width = s.canvas.width;
+      tags.height = s.canvas.height;
+      const tc = tags.getContext("2d");
+      tc.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
+      tc.font = `500 13px ${F.mono}`;
+      tc.textBaseline = "middle";
+      tc.textAlign = "left";
+      for (let R = 5; R <= 15; R += 5) {
+        const text = R === 5 && 5 * scale > 60 ? "5 kpc" : String(R);
+        const lx = cx + R * scale + 3;
+        tc.fillStyle = C.surface;
+        tc.fillRect(lx - 2, cy - 8, tc.measureText(text).width + 4, 16);
+        tc.fillStyle = C.muted;
+        tc.fillText(text, lx, cy);
+      }
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.drawImage(spiral.back, 0, 0);
+    ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
+    const frame = viewRate();
+    const { disc, x, y, marked } = spiral;
+    place(disc, t, frame, x, y);
+    // The stars are written straight into a pixel buffer, far cheaper than thousands of canvas calls.
+    const L = starLayer(s);
+    const dotPx = Math.max(2, Math.round(1.5 * s.dpr));
+    const half = L.side / 2;
+    const k = scale * s.dpr;
+    L.pixels.fill(0);
+    for (let i = 0; i < disc.count; i++) {
+      const px = (half + x[i] * k) | 0;
+      const py = (half + y[i] * k) | 0;
+      if (px < 0 || py < 0 || px + dotPx > L.side || py + dotPx > L.side) continue;
+      for (let v = 0; v < dotPx; v++) {
+        const base = (py + v) * L.side + px;
+        for (let u = 0; u < dotPx; u++) L.pixels[base + u] = L.colour;
+      }
+    }
+    L.ctx.putImageData(L.image, 0, 0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.drawImage(L.canvas, Math.round(cx * s.dpr - half), Math.round(cy * s.dpr - half));
+    ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
+    // the ring labels stay above the stars
+    {
+      const d = s.dpr;
+      const [sx, sy, sw, sh] = [Math.round(cx * d), Math.round((cy - 9) * d), Math.round((s.w - cx) * d), Math.round(18 * d)];
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(spiral.tags, sx, sy, sw, sh, sx, sy, sw, sh);
+      ctx.setTransform(d, 0, 0, d, 0, 0);
+    }
+    if (f.ovals.checked) {
+      ctx.strokeStyle = C.accent2;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.7;
+      for (const Rg of [4, 6, 8, 10, 12, 14]) {
+        const o = oval(galaxySys.mw, disc, Rg, t, frame);
+        ctx.beginPath();
+        for (let i = 0; i < o.length; i += 2) {
+          const px = cx + o[i] * scale;
+          const py = cy + o[i + 1] * scale;
+          if (i) ctx.lineTo(px, py);
+          else ctx.moveTo(px, py);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+    // the marked stars, each with the last 40 Myr of its path
+    const p = [0, 0];
+    ctx.strokeStyle = C.accent;
+    ctx.fillStyle = C.accent;
+    ctx.lineWidth = 1.25;
+    ctx.lineJoin = "round";
+    for (const i of marked) {
+      ctx.beginPath();
+      for (let k = 0; k <= 16; k++) {
+        placeOne(disc, i, t - 2.5 * k, frame, p);
+        const px = cx + p[0] * scale;
+        const py = cy + p[1] * scale;
+        if (k) ctx.lineTo(px, py);
+        else ctx.moveTo(px, py);
+      }
+      ctx.stroke();
+      placeOne(disc, i, t, frame, p);
+      dot(ctx, cx + p[0] * scale, cy + p[1] * scale, 3);
+    }
+  }
+
+  function drawRates() {
+    const s = cv.side;
+    const ctx = s.begin();
+    if (s.w < 60) return;
+    ctx.font = `13px ${F.mono}`;
+    const m = { l: 34, r: 12, t: 8, b: 26 };
+    const W = s.w - m.l - m.r;
+    const H = s.h - m.t - m.b;
+    const yMax = 75;
+    const X = (R) => m.l + ((R - 3) / 12) * W;
+    const Y = (v) => m.t + H - (v / yMax) * H;
+    ctx.lineWidth = 1;
+    ctx.fillStyle = C.muted;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    for (let R = 3; R <= 15; R += 3) {
+      const x = Math.round(X(R)) + 0.5;
+      ctx.strokeStyle = C.line;
+      line(ctx, x, m.t, x, m.t + H);
+      ctx.fillText(String(R), x, m.t + H + 4);
+    }
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    for (let v = 0; v <= yMax; v += 25) {
+      const y = Math.round(Y(v)) + 0.5;
+      ctx.strokeStyle = v === 0 ? C.lineStrong : C.line;
+      line(ctx, m.l, y, m.l + W, y);
+      ctx.fillStyle = C.muted;
+      ctx.fillText(String(v), m.l - 5, y);
+    }
+    ctx.textAlign = "right";
+    ctx.textBaseline = "top";
+    ctx.fillText("R (kpc)", m.l + W - 4, m.t + 3);
+    const trace = (key, colour, width) => {
+      ctx.strokeStyle = colour;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      spiral.curve.forEach((c, i) => { if (i) ctx.lineTo(X(c.R), Y(c[key])); else ctx.moveTo(X(c.R), Y(c[key])); });
+      ctx.stroke();
+    };
+    trace("omega", C.ink2, 1.5);
+    trace("pattern", C.accent, 2);
+    ctx.fillStyle = C.accent;
+    dot(ctx, X(SPIRAL.R0), Y(spiral.at8.pattern), 3.5);
+    ctx.fillStyle = C.ink2;
+    dot(ctx, X(SPIRAL.R0), Y(spiral.at8.omega), 3.5);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "bottom";
+    ctx.font = `500 13px ${F.mono}`;
+    ctx.fillStyle = C.ink2;
+    ctx.fillText("Ω", X(SPIRAL.R0) + 6, Y(spiral.at8.omega) - 2);
+    ctx.fillStyle = C.accent;
+    ctx.fillText("Ω − κ/2", X(SPIRAL.R0) + 6, Y(spiral.at8.pattern) - 2);
   }
 
   // ------------------------------------------------------------ energy error
@@ -1254,7 +1548,7 @@ async function boot(root) {
           geo ? D.geo.speed_km_s.toFixed(3) : Mo.perigee_speed_km_s.toFixed(3), geo ? D.geo.speed_km_s.toFixed(3) : Mo.apogee_speed_km_s.toFixed(3)];
       }));
     buildStationsTable();
-    const gb = MODES.galaxy.bodies();
+    const gb = MODES.galaxy.bodies().filter((b) => b.star);
     table(ui.tables.stars, [["Star"], ["<em>Gaia</em> DR3 source_id"], ["G", 1], ["Parallax (mas)", 1], ["RV (km/s)", 1], ["Distance (pc)", 1], ["x, y, z (kpc)"], ["v<sub>x</sub>, v<sub>y</sub>, v<sub>z</sub> (km/s)"], ["e (galpy)", 1], ["z<sub>max</sub> (kpc)", 1], ["R<sub>peri</sub>, R<sub>apo</sub> (kpc)", 1], ["L<sub>z</sub> (kpc km/s)", 1]],
       gb.map((b) => {
         const st = b.star;
@@ -1300,13 +1594,14 @@ async function boot(root) {
       lastFrame = now;
       if (dtReal > 0) {
         advance(speed * dtReal);
-        for (const key in dirty) dirty[key] = true;
+        if (mode === "spiral") dirty.main = true; // the rates chart does not change with time
+        else for (const key in dirty) dirty[key] = true;
         updateReadout();
       }
     }
-    if (dirty.main) { onPlate(mode === "earth" ? drawEarth : drawFaceOn); dirty.main = false; }
-    if (dirty.side) { (mode === "earth" ? drawVisibility : drawMeridional)(); dirty.side = false; }
-    if (dirty.energy) { drawEnergy(); dirty.energy = false; }
+    if (dirty.main) { onPlate({ earth: drawEarth, galaxy: drawFaceOn, spiral: drawSpiral }[mode]); dirty.main = false; }
+    if (dirty.side) { ({ earth: drawVisibility, galaxy: drawMeridional, spiral: drawRates }[mode])(); dirty.side = false; }
+    if (dirty.energy && mode !== "spiral") { drawEnergy(); dirty.energy = false; }
     if (running) schedule();
   }
 
@@ -1319,12 +1614,29 @@ async function boot(root) {
     markAll();
   });
   document.fonts?.ready.then(() => markAll());
+  motion.addEventListener("change", () => {
+    if (still()) pause();
+    updateReadout();
+  });
+  // The spiral stops when the plate leaves the screen and carries on when it returns.
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver((entries) => {
+      onScreen = entries[entries.length - 1].isIntersecting;
+      if (!onScreen && running && mode === "spiral") {
+        resumeOnScroll = true;
+        pause();
+      } else if (onScreen && resumeOnScroll) {
+        resumeOnScroll = false;
+        run();
+      }
+    }).observe(ui.mainCanvas);
+  }
 
   // ------------------------------------------------------------ start
   buildTables();
   for (const b of [ui.run, ui.step, ui.reset, ui.launch]) b.disabled = false;
   integrator = f.integrator.value;
-  const wanted = params.get("mode") === "galaxy" ? "galaxy" : "earth";
+  const wanted = ["galaxy", "spiral"].includes(params.get("mode")) ? params.get("mode") : "earth";
   setMode(wanted);
   root.classList.add("is-ready");
   // ?skip=<simulated time> advances before the first frame and ?autorun=1 starts running;

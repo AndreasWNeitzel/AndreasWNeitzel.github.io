@@ -11,6 +11,8 @@ cards:
   asteroseismology: /assets/img/heroes/research_seismo.webp
   machine-learning-for-stars: /assets/img/heroes/line_janus.webp
   eso-vlt: /assets/img/photos/vlt-daylight.webp
+  plato: /assets/img/heroes/plato_card.webp
+  ariel: /assets/img/heroes/ariel_card.webp
 loops:
   gaia: gaia
   supercomputers: hall

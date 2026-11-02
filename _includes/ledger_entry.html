@@ -25,7 +25,7 @@
   {%- elsif k == "seminar" -%}{%- assign mk = "seminar" -%}{%- elsif k == "poster" -%}{%- assign mk = "poster" -%}{%- elsif k == "pitch" -%}{%- assign mk = "pitch" -%}{%- else -%}{%- assign mk = "talk" -%}{%- endif -%}
   {%- assign country = e.location | split: ", " | last | downcase -%}
 {%- elsif cat == "publications" -%}
-  {%- if k == "thesis" -%}{%- assign mk = "thesis" -%}{%- elsif k == "data" -%}{%- assign mk = "data" -%}{%- elsif k == "letter" -%}{%- assign mk = "letter" -%}{%- else -%}{%- assign mk = "article" -%}{%- endif -%}
+  {%- if k == "thesis" -%}{%- assign mk = "thesis" -%}{%- elsif k == "data" -%}{%- assign mk = "data" -%}{%- elsif e.role == "first-author" -%}{%- assign mk = "lead" -%}{%- else -%}{%- assign mk = "article" -%}{%- endif -%}
 {%- endif -%}
 {%- unless mk -%}{%- assign mk = tg | replace: "abroad", "position" | replace: "membership", "position" | replace: "teaching", "service" | replace: "event", "service" -%}{%- if mk == "paper" %}{% assign mk = "article" %}{% endif -%}{%- endunless -%}
   <div class="when"><span>{{ when }}{% if country %}{% assign fl = "portugal,spain,italy,denmark,chile" | split: "," %}{% if fl contains country %} <svg class="flag" width="18" height="12" role="img" aria-label="{{ e.location | split: ', ' | last }}"><use href="#f-{{ country }}"/></svg>{% endif %}{% endif %}</span>

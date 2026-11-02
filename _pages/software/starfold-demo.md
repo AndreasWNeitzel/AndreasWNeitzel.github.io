@@ -7,9 +7,14 @@ title: Starfold on 9,242 Milky Way stars
 nav_section: Software
 description: A recorded Starfold run on 9,242 APOGEE DR19 stars with Gaia DR3 orbits, with the map it cut, the chemistry and orbit planes, every star's record across the 32 refits and the warnings the run raised.
 lede: Starfold split 9,242 Milky Way stars into two groups without labels, and the group medians lie on the disc's two chemical sequences.
-extra_css: [/assets/css/starfold-demo.css]
+extra_css: [/assets/css/starfold-demo.css, /assets/css/schematics.css]
 ---
 <div class="sfd-page">
+
+<figure class="panel blueprint sf-how">
+  {% include figures/starfold-how.svg %}
+  {% include figures/starfold-how-narrow.svg %}
+</figure>
 
 <section class="sfd" id="sf-demo" aria-label="Recorded Starfold run" data-header="{{ '/assets/data/starfold/apogee_run.json' | relative_url }}">
   <div class="sfd-dash">

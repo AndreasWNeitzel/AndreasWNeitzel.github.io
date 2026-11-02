@@ -307,7 +307,7 @@
   .mk--seminar { --mk: light-dark(#04785a, #4fd8ae); }
   .mk--poster, .mk--pitch { --mk: light-dark(#a85a00, #f5b544); }
   .mk--article { --mk: light-dark(#4338ca, #9aa3ff); }
-  .mk--letter { --mk: light-dark(#7e22ce, #cf9dff); }
+  .mk--lead { --mk: light-dark(#8f6a00, #f2cf52); }
   .mk--thesis { --mk: light-dark(#b0123c, #ff8096); }
   .mk--data { --mk: light-dark(#0e7490, #4fd6ee); }
   .mk--hpc { --mk: light-dark(#6d28d9, #b79dff); }
@@ -364,8 +364,8 @@
   html.js .k-left { opacity: 0; transform: translateX(-36px); transition: opacity .8s var(--ease), transform 1s var(--ease); }
   html.js .k-scale { opacity: 0; transform: scale(.97); transition: opacity 1s var(--ease), transform 1.4s var(--ease); }
   html.js .k-card { opacity: 0; transform: translateY(46px); transition: opacity 1s var(--ease), transform 1.2s var(--ease), box-shadow .5s var(--ease); }
-  html.js .k-card .tri > div, html.js .k-card .media > img { opacity: 0; transform: translateY(26px) scale(1.04); transition: opacity 1s var(--ease), transform 1.4s var(--ease); }
-  html.js .k-card.is-in .tri > div, html.js .k-card.is-in .media > img { opacity: 1; transform: none; }
+  html.js .k-card .tri > div, html.js .k-card .media > img { opacity: 0; transition: opacity .7s var(--ease); }
+  html.js .k-card.is-in .tri > div, html.js .k-card.is-in .media > img { opacity: 1; }
   html.js .k-card.is-in .tri > div:nth-child(2) { transition-delay: .1s; } html.js .k-card.is-in .tri > div:nth-child(3) { transition-delay: .2s; }
   html.js .is-in.k-up, html.js .is-in.k-left, html.js .is-in.k-scale, html.js .is-in.k-card { opacity: 1; transform: none; }
   html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .9s var(--ease); }
@@ -433,10 +433,9 @@
   .portal::after { content: ""; position: absolute; left: -35px; top: 50%; width: 9px; height: 9px; margin-top: -4px; background: var(--base); border: 1px solid var(--flow); z-index: 1; }
   .portal .node { position: absolute; left: -26px; top: 50%; width: 26px; height: 1px; background: var(--flow); opacity: .6; }
   .portal .media { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; }
-  .portal .media img { position: absolute; left: 0; inline-size: 100%; block-size: 125%; top: -12.5%; object-fit: cover; transform: translate3d(0, var(--py, 0px), 0); transition: transform 1.1s var(--ease); }
+  .portal .media img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
   .portal .tri { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: #0d0c0b; }
   .portal .tri > div { position: relative; overflow: hidden; }
-  .portal:hover .media img { transform: translate3d(0, var(--py, 0px), 0) scale(1.03); }
   .portal .media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(10 9 8 / .88) 0%, rgb(10 9 8 / .14) 52%, rgb(10 9 8 / .14) 100%); }
   .portal .media::before { content: ""; position: absolute; inset: 0; z-index: 1; background: rgb(10 9 8 / .3); opacity: 0; transition: opacity .6s var(--ease); pointer-events: none; }
   .portal:hover .media::before { opacity: 1; }
@@ -450,7 +449,7 @@
   .portal:hover .go { background: rgb(236 235 230 / .14); border-color: #ecebe6; transform: translateX(3px); }
   .portal .glass { position: absolute; z-index: 3; left: 24px; bottom: 100px; max-inline-size: 520px; padding: 18px 20px; border-radius: var(--radius); font-size: 1rem; line-height: 1.5; color: #e9e7e2;
     background: rgb(16 15 14 / .5); border: 1px solid rgb(236 235 230 / .16); opacity: 0; transform: translateY(14px); transition: opacity .45s var(--ease), transform .6s var(--ease); pointer-events: none; }
-  .portal:hover .glass, .portal:focus-visible .glass { opacity: 1; transform: none; backdrop-filter: blur(14px) saturate(1.1); }
+  .portal:hover .glass, .portal:focus-visible .glass { opacity: 1; transform: none; }
   @media (max-width: 860px) {
     .spine, .portal::after, .portal .node { display: none; }
     .portal { block-size: 280px; } .portal .t { left: 18px; right: 18px; bottom: 18px; } .portal .glass { display: none; } .portal .more span { display: none; }

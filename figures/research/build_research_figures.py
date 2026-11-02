@@ -1,345 +1,268 @@
-"""Draw the wide figure of /research/arqueogal/. The JANUS page reuses FIG 1 (figures/fig1/build_fig1.py).
+"""Draw the schematic of /research/arqueogal/: _includes/figures/arqueogal.svg (wide) and
+arqueogal-narrow.svg (phones). The JANUS page has its own figure under figures/janus/.
 
-A schematic is drawn, not written: each stage is a pictogram with a title and at most one short
-line, and the only numbers on a drawing are dimension lines. Every fact is from a public record:
+The Milky Way at an angle with its components as projected density envelopes, one red giant's
+orbit as the accent, the real Gaia red giants around the Sun as marks, and below it the project's
+stages: the star's oscillations give an age (tasks 2 and 4), its astrometry an orbit (task 3), its
+spectrum a chemistry (task 3); Starfold returns its population (task 5); the Galactic model reads
+the catalogue and draws the Galaxy (task 6). Fill tells who built what: tinted for the stages built
+by the developer of the pipelines, hatched for taking part, outline for the team's. Facts from the
+FCT record of 2024.15303.PEX, the kickoff of 16 February 2026 and _data/ledger.yml.
 
-arqueogal.svg  the FCT record of project 2024.15303.PEX and the public ArqueoGal repository: TESS
-               seismic ages, Gaia astrometry and APOGEE abundances; the integration repository
-               with provenance; JANUS for the labels and Starfold for the populations; a
-               chrono-chemo-kinematic map of the disc; 2026 to 2027.
+Real: the giants (assets/data/mw), the orbit (Arcturus, see galaxy_model.py), the chemistry plane
+and the map in two pictograms (assets/data/starfold). Schematic: the oscillation comb and the
+small disc of the last stage. Model: the envelopes, whose parameters and sources are in
+galaxy_model.py.
 
-Usage: python3 figures/research/build_research_figures.py
-Symbols are set in LaTeX through figures/texsvg.py (latex and dvisvgm must be installed).
+Usage: uv run --python 3.11 --with numpy --with scipy --with contourpy --with astropy --with galpy \
+           python figures/research/build_research_figures.py
 """
 
 from __future__ import annotations
 
-import math
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from texsvg import tex_glyphs  # noqa: E402
+import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "_includes/figures"
-FS = 10.5
-TY = 36
-Y0 = 176
+HERE = Path(__file__).resolve().parent
+sys.path[:0] = [str(HERE), str(HERE.parent)]
+import galaxy_model as gm  # noqa: E402
+import schematic_kit as k  # noqa: E402
+from schematic_kit import draw, dots_path, f, fits, link, node, pop, poly, text, thread  # noqa: E402,F401
 
-WORDS: list[str] = []
-DEFS: dict = {}
+OUT = HERE.parents[1] / "_includes/figures"
 
-
-def f(v: float) -> str:
-    return f"{v:.1f}"
-
-
-def draw(cls: str, d: str, t: float, dur: float = 0.35) -> str:
-    return f'<path class="{cls} b-draw" style="--d:{t:.2f}s;--dur:{dur:.2f}s" pathLength="1" d="{d}"/>'
-
-
-def pop(inner: str, t: float) -> str:
-    return f'<g class="b-pop" style="--d:{t:.2f}s">{inner}</g>'
-
-
-def text(x: float, y: float, s: str, cls: str, anchor: str = "start") -> str:
-    WORDS.extend(s.split())
-    return f'<text class="{cls}" x="{f(x)}" y="{f(y)}" text-anchor="{anchor}">{s}</text>'
+STAGES = (  # key, kind, title, tag, line
+    ("age", "team", "AGE", "TASKS 2, 4", "TESS oscillations, PARAM"),
+    ("orbit", "me", "ORBIT", "TASK 3", "Gaia astrometry, galpy"),
+    ("chem", "me", "CHEMISTRY", "TASK 3", "APOGEE, JANUS"),
+    ("pops", "me", "POPULATION", "TASK 5", "Starfold"),
+    ("model", "part", "THE GALAXY", "TASK 6", "TRILEGAL, chemo-kinematic"),
+)
+LABEL = ("Schematic of the ArqueoGal project. The Milky Way seen at an angle, with its halo, thick disc, "
+         "thin disc and bar drawn as density envelopes, real Gaia red giants around the Sun, and the orbit "
+         "of one red giant. That star gives an age from TESS oscillations (tasks 2 and 4), an orbit from Gaia "
+         "astrometry and a chemistry from APOGEE or JANUS (task 3). Starfold returns its population (task 5) "
+         "and the Galactic model reads the result (task 6). The orbit, chemistry and population stages are "
+         "tinted, the Galactic model is hatched and the age stage is in outline.")
 
 
-def glyph(snippet: str, size: float) -> tuple[str, float]:
-    key = (snippet, round(size, 2))
-    if key not in DEFS:
-        body, w = tex_glyphs(snippet, size)
-        DEFS[key] = (f"rsg{len(DEFS)}", w, body)
-    gid, w, _ = DEFS[key]
-    return gid, w
+def scaled(pts, x, y, w, h, xr=None, yr=None, flip=True):
+    """Map (a, b) rows into a box, keeping the data ranges given or found."""
+    a, b = pts[:, 0], pts[:, 1]
+    x0, x1 = xr or (a.min(), a.max())
+    y0, y1 = yr or (b.min(), b.max())
+    px = x + (a - x0) / (x1 - x0) * w
+    py = y + h - (b - y0) / (y1 - y0) * h if flip else y + (b - y0) / (y1 - y0) * h
+    return np.column_stack([px, py])
 
 
-def run(x: float, y: float, parts, cls: str = "nw-body", size: float = FS, anchor: str = "start") -> str:
-    adv = 0.6 * size
-    cur, out = 0.0, []
-    for kind, seg in parts:
-        if kind == "text":
-            WORDS.extend(seg.split())
-            out.append(f'<text class="{cls}" x="{f(cur)}" y="0" style="white-space:pre">{seg}</text>')
-            cur += len(seg) * adv
-        else:
-            WORDS.append(seg)
-            gid, w = glyph(seg, size * 1.08)
-            out.append(f'<use class="{cls}-tex" href="#{gid}" transform="translate({f(cur + 0.5)} 0)"/>')
-            cur += w + 1.2
-    shift = {"start": 0.0, "middle": -cur / 2, "end": -cur}[anchor]
-    return f'<g transform="translate({f(x + shift)} {f(y)})">{"".join(out)}</g>'
+def pictogram(key: str, x: float, y: float, w: float, h: float, t: float, data: dict) -> str:
+    if key == "age":
+        # the comb of a red giant's modes under its Gaussian envelope (shape only)
+        base = y + h
+        xs = np.linspace(x, x + w, 17)
+        env = np.exp(-(((xs - (x + w / 2)) / (w * 0.24)) ** 2))
+        teeth = " ".join(f"M{f(a)} {f(base)} V{f(base - (h - 4) * e * (1 if i % 2 == 0 else 0.62) - 2)}" for i, (a, e) in enumerate(zip(xs, env)))
+        curve = [(a, base - (h - 4) * np.exp(-(((a - (x + w / 2)) / (w * 0.24)) ** 2)) - 2) for a in np.linspace(x, x + w, 40)]
+        return draw("sx-guide", f"M{f(x)} {f(base)} H{f(x + w)}", t, 0.25) + draw("sx-line", teeth, t + 0.1, 0.4) + draw("sx-guide", poly(curve), t + 0.2, 0.4)
+    if key == "orbit":
+        # the same star's orbit seen from above, to the same data as the Galaxy above
+        X, Y = data["orbit_face"]
+        ext = 8.6
+        side = min(w, h)
+        cx, cy = x + w / 2, y + h / 2
+        pts = [(cx + a / ext * side / 2, cy - b / ext * side / 2) for a, b in zip(X[::4], Y[::4])]
+        return draw("sx-line-me", poly(pts), t, 0.6) + pop(f'<rect class="sx-node-q" x="{f(cx - 1.5)}" y="{f(cy - 1.5)}" width="3" height="3"/>', t + 0.2)
+    if key == "chem":
+        p = data["chem"]
+        q = scaled(p, x, y, w, h, (-1.0, 0.5), (-0.08, 0.34))
+        q = q[(q[:, 0] >= x) & (q[:, 0] <= x + w) & (q[:, 1] >= y) & (q[:, 1] <= y + h)]
+        return pop(f'<path class="sx-data" d="{dots_path(q)}"/>', t)
+    if key == "pops":
+        m, g = data["map"], data["group"]
+        xr, yr = (m[:, 0].min(), m[:, 0].max()), (m[:, 1].min(), m[:, 1].max())
+        q = scaled(m, x, y, w, h, xr, yr)
+        s = "".join(f'<path class="{cls}" d="{dots_path(q[g == v])}"/>' for v, cls in ((-1, "sx-faint"), (1, "sx-ink"), (0, "sx-data")))
+        return pop(s, t)
+    cx, cy = x + w / 2, y + h / 2
+    return "".join(draw("sx-line", f"M{f(cx - r)} {f(cy)} a{f(r)} {f(r * 0.34)} 0 1 0 {f(2 * r)} 0 a{f(r)} {f(r * 0.34)} 0 1 0 {f(-2 * r)} 0", t + 0.05 * i, 0.4)
+                   for i, r in enumerate((min(w / 2, h * 1.3), min(w / 2, h * 1.3) * 0.62, min(w / 2, h * 1.3) * 0.28)))
 
 
-def node(x: float, y: float, t: float, size: float = 5.0) -> str:
-    return pop(f'<rect class="nw-node" x="{f(x - size / 2)}" y="{f(y - size / 2)}" width="{f(size)}" height="{f(size)}"/>', t)
+def stage_shell(key, kind, x, y, w, h, t, inner, hatch):
+    cls = {"team": "sx-box", "me": "sx-box-me", "part": "sx-box-part"}[kind]
+    style = f' fill="url(#{hatch})"' if kind == "part" else ""
+    d = f"M{f(x)} {f(y)} h{f(w)} v{f(h)} h{f(-w)} Z"
+    title = next(s[2] for s in STAGES if s[0] == key)
+    tag = next(s[3] for s in STAGES if s[0] == key)
+    line = next(s[4] for s in STAGES if s[0] == key)
+    return (f'<g class="sx-stage sx-part ag-s-{key}" tabindex="0" role="group" aria-label="{title.title()}, {tag.lower()}: {line}">'
+            f'<rect class="sx-hit" x="{f(x)}" y="{f(y)}" width="{f(w)}" height="{f(h)}"/>'
+            + draw(cls, d, t, 0.4, style) + inner + "</g>")
 
 
-def thread(d: str, t: float) -> str:
-    return pop(f'<path class="ray flowray nw-thread" d="{d}"/>', t)
+def galaxy(cx, cy, s, n_giants, env, t):
+    """Layers of the Galaxy at centre (cx, cy), s pixels per kpc."""
+    def path(ln, keep=2):
+        ln = np.vstack([ln[::keep], ln[:1]])
+        return poly(np.column_stack([cx + s * ln[:, 0], cy - s * ln[:, 1]]), close=True)
+
+    comps = []
+    for name in ("halo", "thick", "thin"):
+        for i, level in enumerate(env[name]):
+            d = "".join(path(ln) for ln in level)
+            comps.append(pop(f'<path class="ag-tone ag-{name}" d="{d}"/>', t + 0.1 * i))
+            if i == 0:
+                comps.append(draw(f"ag-edge ag-edge-{name}", d, t, 0.8))
+    bar = "".join(path(ln, 3) for ln in env["bar"][0])
+    comps.append(pop(f'<path class="ag-bar" d="{bar}"/>', t + 0.5))
+    hair = "".join(draw("sx-guide", poly(np.column_stack([cx + s * u, cy - s * v]), close=True), t + 0.2 * i, 0.6)
+                   for i, (u, v, _) in enumerate(gm.rings().values()))
+    u, v, _ = gm.giants(n_giants)
+    dots = pop(f'<path class="sx-data ag-giant" d="{dots_path(np.column_stack([cx + s * u, cy - s * v]))}"/>', t + 0.7)
+    return comps, hair, dots
 
 
-def link(x0: float, y0: float, x1: float, y1: float, t: float) -> str:
-    b = (x1 - x0) * 0.45
-    return thread(f"M{f(x0)} {f(y0)} C{f(x0 + b)} {f(y0)} {f(x1 - b)} {f(y1)} {f(x1)} {f(y1)}", t)
+def anchor(level, u, upper=True):
+    """The envelope's point at horizontal position u, on its upper side."""
+    ln = max(level, key=len)
+    side = ln[ln[:, 1] > 0] if upper else ln[ln[:, 1] < 0]
+    return side[np.argmin(np.abs(side[:, 0] - u))]
 
 
-def dim(x0: float, x1: float, y: float, label: str, t: float, above: bool = True) -> str:
-    tick = 4
-    s = draw("nw-ruler", f"M{f(x0)} {f(y - tick)} v{tick * 2} M{f(x0)} {f(y)} H{f(x1)} M{f(x1)} {f(y - tick)} v{tick * 2}", t, 0.25)
-    ly = y - 7 if above else y + 14
-    return s + pop(text((x0 + x1) / 2, ly, label, "nw-dim", "middle"), t + 0.1)
+def leader(x0, y0, x1, y1, label, t, anchor_side="start", room=120):
+    """A hairline from a point on the drawing to its label; the elbow keeps the text level."""
+    gap = 6 if anchor_side == "start" else -6
+    ex = x0 + abs(y1 - y0) * (1 if x1 > x0 else -1)
+    return (draw("sx-guide-strong", f"M{f(x0)} {f(y0)} L{f(ex)} {f(y1)} H{f(x1)}", t, 0.3)
+            + pop(text(x1 + gap, y1 + 4, label, "sx-note", anchor_side, room, 11.5), t + 0.1))
 
 
-def box(x: float, y: float, w: float, h: float, t: float) -> str:
-    return draw("nw-box", f"M{f(x)} {f(y)} h{f(w)} v{f(h)} h{f(-w)} Z", t, 0.4)
+def wide(env, orbit, data) -> str:
+    k.reset()
+    W, H, cx, cy, s = 1120.0, 558.0, 560.0, 196.0, 14.4
+    BY, BH, BW = 402.0, 116.0, 204.0
+    xs = {"age": 20.0, "orbit": 236.0, "chem": 452.0, "pops": 668.0, "model": 896.0}
+    comps, hair, dots = galaxy(cx, cy, s, 2400, env, 0.0)
+    P = ['<g class="sx-part ag-comps">' + "".join(comps) + hair + "</g>", '<g class="sx-part ag-giants">' + dots + "</g>"]
+    u, v, _ = orbit
+    ox, oy = cx + s * u, cy - s * v
+    P.append('<g class="sx-part ag-orbit">' + thread(poly(np.column_stack([ox, oy])[::3]), 0.9, "ag-orbit-line")
+             + pop(f'<circle class="ag-star" cx="{f(ox[0])}" cy="{f(oy[0])}" r="4"/>', 0.9) + "</g>")
+
+    # labels on the margins
+    def at(name, uu, up=True):
+        a = anchor(env[name][0], uu, up)
+        return cx + s * a[0], cy - s * a[1]
+
+    L = []
+    L.append(leader(*at("halo", 9.5), 870, 40, "halo", 1.2))
+    L.append(leader(*at("thick", 7.0), 870, 74, "thick disc", 1.25))
+    L.append(leader(*at("thin", 13.0), 870, 142, "thin disc", 1.3))
+    b = max(env["bar"][0], key=len)
+    e = b[np.argmax(b[:, 0])]
+    L.append(leader(cx + s * e[0], cy - s * e[1], 870, 108, "bar", 1.35))
+    L.append(leader(ox[0], oy[0] - 4, 250, oy[0] - 40, "one red giant", 1.4, "end"))
+    gu, gv, _ = gm.giants(2400)
+    L.append(leader(cx + s * np.median(gu) - 40, cy - s * np.median(gv) + 22, 250, cy - s * np.median(gv) + 62, "Gaia red giants", 1.45, "end"))
+    P.append('<g class="sx-part ag-labels">' + "".join(L) + "</g>")
+
+    # stages
+    T = 1.4
+    for i, (key, kind, title, tag, line) in enumerate(STAGES):
+        x = xs[key]
+        inner = pictogram(key, x + 14, BY + 12, BW - 28, 52, T + 0.15 * i + 0.1, data)
+        inner += pop(text(x + 12, BY + 84, fits(title, 12.5, 120), "sx-title") + text(x + BW - 12, BY + 84, fits(tag, 11.5, 76), "sx-note", "end")
+                     + text(x + 12, BY + 102, fits(line, 11.5, BW - 24), "sx-note"), T + 0.15 * i + 0.2)
+        P.append(stage_shell(key, kind, x, BY, BW, BH, T + 0.15 * i, inner, "ag-hatch-w"))
+
+    # the thread: the star fans out to its three measurements, they meet on the rail under the
+    # stages, Starfold passes to the model and the model returns to the Galaxy
+    th = []
+    for key in ("age", "orbit", "chem"):
+        c = xs[key] + BW / 2
+        th.append(thread(f"M{f(ox[0])} {f(oy[0])} C{f(ox[0])} 350 {f(c)} 330 {f(c)} {f(BY)}", 1.0) + node(c, BY, 1.1))
+    R = BY + BH + 20
+    sx = xs["pops"] + BW / 2
+    a0, a1, a2 = (xs[n] + BW / 2 for n in ("age", "orbit", "chem"))
+    th.append(thread(f"M{f(a0)} {f(BY + BH)} V{f(R - 8)} Q{f(a0)} {f(R)} {f(a0 + 8)} {f(R)} H{f(sx - 8)} Q{f(sx)} {f(R)} {f(sx)} {f(R - 8)} V{f(BY + BH)}", 2.0))
+    th.append(thread(f"M{f(a1)} {f(BY + BH)} V{f(R)} M{f(a2)} {f(BY + BH)} V{f(R)}", 2.0))
+    for c in (a0, a1, a2, sx):
+        th.append(node(c, BY + BH, 2.05))
+    th.append(link(xs["pops"] + BW, BY + 58, xs["model"], BY + 58, 2.2))
+    mx = xs["model"] + BW / 2
+    tipx, tipy = cx + s * gm.REACH["thin"][0], cy
+    th.append(thread(f"M{f(mx)} {f(BY)} C{f(mx)} 300 {f(tipx + 110)} {f(tipy)} {f(tipx)} {f(tipy)}", 2.4) + node(mx, BY, 2.4) + node(tipx, tipy, 2.5))
+    P.insert(3, '<g class="sx-part ag-thread">' + "".join(th) + "</g>")
+
+    defs = hatch("ag-hatch-w")
+    print(f"arqueogal.svg: {len(k.WORDS)} words")
+    return k.svg("ag-fig sx-wide", W, H, LABEL, P, defs, "group")
 
 
-def svg(cls: str, w: int, h: int, label: str, body: list[str]) -> str:
-    defs = "".join(f'<g id="{gid}">{b}</g>' for gid, _, b in DEFS.values())
-    return (f'<svg class="bp-svg nw-svg {cls}" data-build viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" '
-            f'role="img" aria-label="{label}"><defs>{defs}</defs>' + "".join(body) + "</svg>\n")
+def hatch(pid: str) -> str:
+    return (f'<pattern id="{pid}" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">'
+            '<path class="sx-hatch-line" d="M0 0 V6"/></pattern>')
 
 
-# ---------------------------------------------------------------- ArqueoGal
-MONO_ADV = 0.6  # Geist Mono advance per character, in em
+def narrow(env, orbit, data) -> str:
+    k.reset()
+    W, cx, cy, s = 380.0, 190.0, 134.0, 9.6
+    BX, BW, BH, GAP = 18.0, 354.0, 76.0, 10.0
+    comps, hair, dots = galaxy(cx, cy, s, 1300, env, 0.0)
+    P = ['<g class="sx-part ag-comps">' + "".join(comps) + hair + "</g>", '<g class="sx-part ag-giants">' + dots + "</g>"]
+    u, v, _ = orbit
+    ox, oy = cx + s * u, cy - s * v
+    P.append('<g class="sx-part ag-orbit">' + thread(poly(np.column_stack([ox, oy])[::3]), 0.9, "ag-orbit-line")
+             + pop(f'<circle class="ag-star" cx="{f(ox[0])}" cy="{f(oy[0])}" r="3.5"/>', 0.9) + "</g>")
 
+    # a key in place of the margin labels
+    ky = 274.0
+    key = (("ag-k-halo", "halo", 18), ("ag-k-thick", "thick disc", 86), ("ag-k-thin", "thin disc", 196), ("ag-k-bar", "bar", 300),
+           ("ag-k-star", "one red giant", 18), ("ag-k-giant", "Gaia red giants", 196))
+    K = []
+    for i, (cls, lab, x) in enumerate(key):
+        y = ky + (20 if i > 3 else 0)
+        K.append(f'<rect class="{cls}" x="{f(x)}" y="{f(y - 8)}" width="10" height="10"/>')
+        K.append(text(x + 16, y + 1, lab, "sx-note", "start", W - x - 16, 12))
+    P.append('<g class="sx-part ag-labels">' + pop("".join(K), 1.2) + "</g>")
 
-def fits(label: str, size: float, width: float) -> str:
-    """Refuse a label wider than the room it has; the check runs at build time."""
-    need = len(label) * MONO_ADV * size
-    if need > width:
-        raise ValueError(f"label too wide for {width:.0f}px: {label!r} needs {need:.0f}px")
-    return label
-
-
-def arqueogal() -> str:
-    """One red giant's path through the project. Three lanes leave the star: its TESS light
-    curve (task 2, then PARAM in task 4 for mass and age), its Gaia astrometry (task 3, the
-    orbit) and its spectrum (task 3, APOGEE where it exists, else chemistry from JANUS). The
-    lanes fill one row of the all-sky catalogue; Starfold (task 5) returns the population; the
-    Galactic model (task 6) reads the catalogue and draws the map. Fill tells who built what:
-    solid accent for the stages Andreas built, hatched where he takes part, outline for the
-    team's. Facts from the FCT application 2024.15303.PEX and the kickoff of 16 February 2026."""
-    global WORDS
-    WORDS = []
-    DEFS.clear()
-    W, H = 1120, 560
-    P: list[str] = []
-    P.append('<pattern id="nw-hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">'
-             '<path class="nw-hatch-line" d="M0 0 V6"/></pattern>')
-    T = 0.0
-    P.append(pop(text(20, 28, "ONE RED GIANT, THROUGH THE PROJECT", "nw-title"), T))
-    P.append(draw("nw-guide", "M20 36 H1100", T, 0.4))
-
-    L = (150.0, 270.0, 390.0)  # lane centres
-    BH = 96.0
-    XA, XB, WA = 100.0, 330.0, 190.0
-    XC, WC = 560.0, 160.0
-    XD, WD = 756.0, 184.0
-    XE, WE = 968.0, 132.0
-    FS_NOTE, FS_TITLE = 10.5, 11.0
-
-    def stage(x, y, w, title, tag, kind, t):
-        cls = {"me": "nw-box-me", "part": "nw-box-part", "team": "nw-box"}[kind]
-        lines = tag if isinstance(tag, tuple) else (tag,)
-        for ln in lines:
-            fits(ln, FS_NOTE, w - 20)
-        fits(title, FS_TITLE, w - 20)
-        out = [draw(cls, f"M{f(x)} {f(y - BH / 2)} h{f(w)} v{f(BH)} h{f(-w)} Z", t, 0.4)]
-        for k, ln in enumerate(lines):
-            out.append(pop(text(x + 10, y - BH / 2 + 15 + 12 * k, ln, "nw-note"), t + 0.1))
-        out.append(pop(text(x + 10, y + BH / 2 - 10, title, "nw-title"), t + 0.15))
-        return out
-
-    def note(x, y, label, room, t, anchor="start"):
-        fits(label, FS_NOTE, room)
-        return pop(text(x, y, label, "nw-note", anchor), t)
-
-    # the star, and three rays leaving it
-    SX, SY = 48.0, L[1]
-    P.append(draw("nw-line", f"M{SX - 13} {SY} a13 13 0 1 0 26 0 a13 13 0 1 0 -26 0", T, 0.4))
-    for a in range(0, 360, 45):
-        r0, r1 = 17, 22 if a % 90 == 0 else 20
-        P.append(draw("nw-line", f"M{f(SX + r0 * math.cos(math.radians(a)))} {f(SY - r0 * math.sin(math.radians(a)))} L{f(SX + r1 * math.cos(math.radians(a)))} {f(SY - r1 * math.sin(math.radians(a)))}", T + 0.05, 0.2))
-    P.append(note(SX, SY - 36, "a red giant", 90, T + 0.2, "middle"))
-    for y in L:
-        P.append(thread(f"M{SX + 26} {SY} C{SX + 52} {SY}, {XA - 40} {f(y)}, {XA} {f(y)}", T + 0.2))
-        P.append(node(XA, y, T + 0.3))
-    T += 0.4
-
-    # lane 1: the light curve and its oscillations (task 2), then PARAM (task 4)
-    y = L[0]
-    P += stage(XA, y, WA, "TESS LIGHT CURVE", "TASK 2", "team", T)
-    x0, yc = XA + 12, y - 8
-    pts = [(x0 + 1.9 * i, yc + 8 * math.sin(i * 0.9) * (0.6 + 0.4 * math.sin(i * 0.17)) + 3 * math.sin(i * 2.7)) for i in range(46)]
-    P.append(draw("nw-line", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in pts), T + 0.2, 0.6))
-    cx0 = XA + 118
-    P.append(draw("nw-guide", f"M{cx0 - 4} {y + 14} H{cx0 + 64}", T + 0.3, 0.2))
-    for k in range(9):
-        h = 5 + 24 * math.exp(-((k - 4) / 2.2) ** 2)
-        P.append(draw("nw-line", f"M{cx0 + 7 * k} {y + 14} v{-h:.1f}", T + 0.3 + 0.02 * k, 0.2))
-    P.append(thread(f"M{XA + WA} {f(y)} H{XB}", T + 0.4))
-    P.append(node(XA + WA, y, T + 0.4)); P.append(node(XB, y, T + 0.45))
-    P += stage(XB, y, WA, "PARAM: MASS AND AGE", "TASK 4", "team", T + 0.3)
-    gx, gy = XB + 14, y - 30
-    P.append(draw("nw-line", f"M{gx} {gy} V{gy + 44} H{gx + 52}", T + 0.5, 0.3))
-    for k in range(4):
-        xx = gx + 46 - 11 * k
-        P.append(draw("nw-guide", f"M{xx} {gy + 42 - k} C{xx + 2} {gy + 30}, {xx - 7} {gy + 22}, {xx - 5} {gy + 16} C{xx - 3} {gy + 10}, {xx - 18} {gy + 6}, {xx - 24 - k} {gy + 1}", T + 0.55 + 0.04 * k, 0.4))
-    P.append(draw("nw-gate", f"M{gx + 18} {gy + 20} h12 v10 h-12 Z", T + 0.7, 0.3))
-    hx, hb = XB + 90, y + 18
-    P.append(draw("nw-guide", f"M{hx} {hb} H{hx + 84}", T + 0.6, 0.2))
-    P.append(pop(f'<path class="nw-band" d="M{hx + 32} {hb} V{hb - 12} H{hx + 54} V{hb} Z"/>', T + 0.8))
-    P.append(draw("nw-line", f"M{hx} {hb} C{hx + 22} {hb}, {hx + 30} {hb - 6}, {hx + 36} {hb - 28} C{hx + 40} {hb - 40}, {hx + 48} {hb - 40}, {hx + 52} {hb - 28} C{hx + 58} {hb - 6}, {hx + 64} {hb}, {hx + 84} {hb}", T + 0.65, 0.6))
-
-    # lane 2: Gaia astrometry (task 3), then the orbit
-    y = L[1]
-    P += stage(XA, y, WA, "GAIA ASTROMETRY", "TASK 3", "team", T + 0.2)
-    sx, sy = XA + 40, y - 6
-    P.append(pop(f'<circle class="nw-dot" cx="{f(sx)}" cy="{f(sy)}" r="3"/>', T + 0.4))
-    P.append(draw("nw-line", f"M{sx + 6} {sy - 4} L{sx + 46} {sy - 26} M{sx + 38} {sy - 27} L{sx + 46} {sy - 26} L{sx + 42} {sy - 19}", T + 0.4, 0.4))
-    P.append(draw("nw-guide-strong", f"M{sx - 30} {sy + 22} L{sx} {sy} L{sx + 30} {sy + 22} M{sx - 30} {sy + 22} H{sx + 30}", T + 0.45, 0.4))
-    P.append(draw("nw-dimline", f"M{sx - 8} {sy + 13} a8 8 0 0 0 16 0", T + 0.5, 0.2))
-    P.append(note(XA + 112, y - 14, "motion,", 70, T + 0.5))
-    P.append(note(XA + 112, y - 2, "parallax", 70, T + 0.5))
-    P.append(thread(f"M{XA + WA} {f(y)} H{XB}", T + 0.6))
-    P.append(node(XA + WA, y, T + 0.6)); P.append(node(XB, y, T + 0.65))
-    P += stage(XB, y, WA, "ORBIT IN THE GALAXY", "TASK 3", "me", T + 0.5)
-    ox, oy = XB + 58, y - 4
-    opts = []
-    for k in range(181):
-        th = 2 * math.pi * k / 180 * 3
-        r = 26 + 10 * math.cos(1.37 * th)
-        opts.append((ox + r * math.cos(th), oy + 0.5 * r * math.sin(th)))
-    P.append(draw("nw-line-me", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in opts), T + 0.7, 0.8))
-    P.append(pop(f'<circle class="nw-obs" cx="{f(ox)}" cy="{f(oy)}" r="2.6"/>', T + 0.9))
-    P.append(note(XB + 112, y - 14, "galpy,", 70, T + 0.8))
-    P.append(note(XB + 112, y - 2, "actions", 70, T + 0.8))
-
-    # lane 3: the spectrum (task 3), APOGEE where it exists, else JANUS
-    y = L[2]
-    P += stage(XA, y, WA, "SPECTRUM", "TASK 3", "team", T + 0.4)
-    ax, ay = XA + 14, y - 26
-    P.append(draw("nw-line", f"M{ax} {ay} H{ax + 70} " + " ".join(f"M{f(ax + 3 + 1.9 * k)} {ay} v{f(3 + 9 * abs(math.sin(k * 1.37) * math.cos(k * 0.41)))}" for k in range(35)), T + 0.6, 0.5))
-    P.append(note(ax + 80, ay + 4, "APOGEE", 90, T + 0.7))
-    bx, by = XA + 14, y + 18
-    xp = [(bx + 2 * k, by - 14 * math.exp(-((k - 14) / 12) ** 2) * (1 + 0.15 * math.sin(k * 1.3))) for k in range(36)]
-    P.append(draw("nw-line", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in xp), T + 0.65, 0.5))
-    P.append(draw("nw-guide", f"M{bx} {by} H{bx + 70}", T + 0.65, 0.2))
-    P.append(note(bx + 80, by - 2, "Gaia XP", 90, T + 0.75))
-    P.append(thread(f"M{XA + WA} {f(y)} H{XB}", T + 0.8))
-    P.append(node(XA + WA, y, T + 0.8)); P.append(node(XB, y, T + 0.85))
-    P += stage(XB, y, WA, "CHEMISTRY: JANUS", "TASK 3", "me", T + 0.7)
-    nx, ny = XB + 16, y - 30
-    cols = (nx, nx + 22, nx + 44)
-    rows = (ny + 4, ny + 18, ny + 32, ny + 46)
-    edges = " ".join(f"M{cols[a]} {ra} L{cols[a + 1]} {rb}" for a in range(2) for ra in rows for rb in rows)
-    P.append(draw("nw-guide", edges, T + 0.9, 0.4))
-    P.append(pop("".join(f'<circle class="nw-dot" cx="{c}" cy="{r}" r="2.4"/>' for c in cols for r in rows), T + 1.0))
-    lx = XB + 84
-    for k, (lab, wv) in enumerate((("[M/H]", 30), ("[α/M]", 18), ("[Fe/H]", 26), ("[Mg/H]", 22))):
-        yy = ny + 6 + 13 * k
-        P.append(note(lx, yy + 4, lab, 44, T + 1.0 + 0.05 * k))
-        P.append(draw("nw-line-me", f"M{lx + 46} {yy} h{wv} M{lx + 46 + wv - 4} {yy - 3} v6", T + 1.05 + 0.05 * k, 0.3))
-    T += 1.2
-
-    # the catalogue: one row per star, filled band by band
-    CY0, CY1 = L[0] - BH / 2, L[2] + BH / 2
-    P.append(draw("nw-box", f"M{XC} {f(CY0)} h{WC} v{f(CY1 - CY0)} h{-WC} Z", T, 0.5))
-    P.append(pop(text(XC + WC / 2, CY0 - 10, fits("THE ALL-SKY CATALOGUE", FS_TITLE, 200), "nw-title", "middle"), T + 0.1))
-    P.append(note(XC + WC / 2, CY1 + 16, "one row per star", 160, T + 0.1, "middle"))
-    bands = (("seismic", "D-Cat-a", "team", L[0] - 24), ("mass, age", "D-Cat-c", "team", L[0] + 24),
-             ("orbit", "D-Cat-b", "me", L[1]), ("chemistry", "D-Cat-b", "me", L[2]), ("population", "D-Cat-d", "me", L[2] + 36))
-    for k, (what, dl, kind, by) in enumerate(bands):
-        if kind == "me":
-            P.append(pop(f'<rect class="nw-band-me" x="{XC + 4}" y="{f(by - 8)}" width="{WC - 8}" height="16" rx="2"/>', T + 0.1 + 0.06 * k))
-        P.append(note(XC + 10, by + 4, what, 90, T + 0.15 + 0.06 * k))
-        P.append(note(XC + WC - 10, by + 4, dl, 60, T + 0.15 + 0.06 * k, "end"))
-        if k:
-            P.append(draw("nw-guide", f"M{XC + 6} {f(by - 18)} H{XC + WC - 6}", T + 0.1 + 0.06 * k, 0.25))
-    ytop = L[0] - BH / 2 - 16
-    P.append(thread(f"M{XA + WA} {L[0] - 30} C{XA + WA + 22} {L[0] - 30}, {XB - 30} {ytop}, {XB} {ytop} H{XC - 24} C{XC - 10} {ytop}, {XC - 10} {L[0] - 24}, {XC} {L[0] - 24}", T))
-    P.append(node(XA + WA, L[0] - 30, T))
-    P.append(thread(f"M{XB + WA} {L[0]} C{XB + WA + 16} {L[0]}, {XC - 16} {L[0] + 24}, {XC} {L[0] + 24}", T + 0.05))
-    P.append(thread(f"M{XB + WA} {L[1]} H{XC}", T + 0.1))
-    P.append(thread(f"M{XB + WA} {L[2]} H{XC}", T + 0.15))
-    for yy in (L[0] - 24, L[0] + 24, L[1], L[2]):
-        P.append(node(XC, yy, T + 0.2))
-    P.append(node(XB + WA, L[0], T)); P.append(node(XB + WA, L[1], T)); P.append(node(XB + WA, L[2], T))
-    T += 0.4
-
-    # Starfold reads the row and returns the population
-    y = L[1]
-    P += stage(XD, y, WD, "STARFOLD: POPULATION", "TASK 5", "me", T)
-    gold = math.pi * (3 - math.sqrt(5))
-    for g, (cx, cy, axx, ayy, tilt, n) in enumerate(((XD + 40, y - 12, 22, 11, -14, 7), (XD + 96, y - 13, 20, 10, 12, 6), (XD + 66, y + 12, 28, 11, 4, 8))):
-        th = math.radians(tilt)
-        hull = []
-        for kk in range(36):
-            u = 2 * math.pi * kk / 36
-            r = 1 + 0.07 * math.sin(2 * u + g) + 0.05 * math.sin(3 * u + 2 * g)
-            px, py = axx * r * math.cos(u), ayy * r * math.sin(u)
-            hull.append((cx + px * math.cos(th) - py * math.sin(th), cy + px * math.sin(th) + py * math.cos(th)))
-        P.append(draw("nw-hull", "M" + " L".join(f"{f(a)} {f(b)}" for a, b in hull) + " Z", T + 0.2 + 0.1 * g, 0.4))
-        dots = []
-        for kk in range(n):
-            rr = 0.7 * math.sqrt((kk + 0.5) / n)
-            px, py = axx * rr * math.cos(kk * gold + g), ayy * rr * math.sin(kk * gold + g)
-            dots.append(f'<circle class="nw-dot" cx="{f(cx + px * math.cos(th) - py * math.sin(th))}" cy="{f(cy + px * math.sin(th) + py * math.cos(th))}" r="2.2"/>')
-        P.append(pop("".join(dots), T + 0.3 + 0.1 * g))
-    P.append(note(XD + 112, y + 18, "32 refits", 62, T + 0.5))
-    P.append(thread(f"M{XC + WC} {f(y)} H{XD}", T))
-    P.append(node(XC + WC, y, T)); P.append(node(XD, y, T + 0.05))
-    P.append(thread(f"M{XD} {f(y + 30)} C{XD - 30} {f(y + 30)}, {XC + WC + 30} {f(L[2] + 36)}, {XC + WC} {f(L[2] + 36)}", T + 0.4))
-    P.append(node(XD, y + 30, T + 0.4)); P.append(node(XC + WC, L[2] + 36, T + 0.5))
-    T += 0.5
-
-    # the Galactic model reads the catalogue and draws the map
-    P += stage(XE, y, WE, "THE DISC, MAPPED", "TASK 6", "part", T)
-    mx, my = XE + WE / 2, y - 4
-    for r in (16, 30, 44):
-        P.append(draw("nw-line", f"M{f(mx - r)} {f(my)} a{r} {r * 0.4:.1f} 0 1 0 {2 * r} 0 a{r} {r * 0.4:.1f} 0 1 0 {-2 * r} 0", T + 0.1, 0.5))
-    P.append(pop(f'<circle class="nw-obs" cx="{f(mx + 24)}" cy="{f(my + 3)}" r="2.6"/>', T + 0.3))
-    P.append(thread(f"M{XD + WD} {f(y)} H{XE}", T))
-    P.append(node(XD + WD, y, T)); P.append(node(XE, y, T + 0.05))
-    T += 0.4
-
-    # the timeline of deliverables
-    RY = 500
-    x0, x1 = 40, 1080
-    mx_ = lambda m: x0 + (x1 - x0) * m / 18
-    P.append(draw("nw-ruler", f"M{x0} {RY - 5} v10 M{x0} {RY} H{x1} M{x1} {RY - 5} v10", T, 0.5))
-    P.append(note(x0, RY + 20, "Feb 2026", 60, T + 0.1))
-    P.append(note(x1, RY + 20, "Aug 2027", 60, T + 0.1, "end"))
-    marks = ((5, "D-Cat-a", "Jul 2026"), (6, "D-Cat-b · D7.1", "Aug 2026"), (10, "D-Cat-c · D5.1", "Dec 2026"), (12, "D-Cat-d", "Feb 2027"), (18, "D6.1", "Aug 2027"))
-    for k, (m, lab, when) in enumerate(marks):
-        px = mx_(m)
-        above = k % 2 == 0
-        P.append(draw("nw-ruler", f"M{f(px)} {RY - 5} v10", T + 0.1 + 0.08 * k, 0.2))
-        P.append(pop(text(px, RY - 12 if above else RY + 34, lab, "nw-dim", "end" if m == 18 else "middle"), T + 0.15 + 0.08 * k))
-        if m != 18:
-            P.append(note(px, RY + 20 if above else RY - 26, when, 70, T + 0.15 + 0.08 * k, "middle"))
-    P.append(pop(text((x0 + x1) / 2, RY + 52, "FCT exploratory project 2024.15303.PEX, 18 months · task 1 data management and task 7 outreach alongside", "nw-dim", "middle"), T + 0.5))
-
-    label = ("Schematic of ArqueoGal as one red giant's path: its TESS light curve gives oscillations (task 2) and, with PARAM, "
-             "mass and age (task 4); its Gaia astrometry gives an orbit (task 3); its spectrum gives chemistry, from APOGEE where "
-             "it exists and from the network JANUS otherwise (task 3). The three fill one row of the all-sky catalogue; Starfold "
-             "returns the population (task 5); the Galactic model reads the catalogue and draws the disc (task 6). Stages filled "
-             "in the accent are the ones Andreas Neitzel built, the hatched stage is one he takes part in, outlined stages are the "
-             "team's. A timeline carries the deliverables from February 2026 to August 2027.")
-    out = svg("rs-arqueogal", W, H, label, P)
-    print(f"arqueogal.svg: {len(WORDS)} words on the drawing")
-    return out
+    y0 = ky + 40
+    for i, (key_, kind, title, tag, line) in enumerate(STAGES):
+        y = y0 + i * (BH + GAP)
+        inner = pictogram(key_, BX + 12, y + 12, 76, BH - 24, 1.4 + 0.1 * i, data)
+        inner += pop(text(BX + 104, y + 30, fits(title, 13, 130), "sx-title") + text(BX + BW - 10, y + 30, fits(tag, 12, 90), "sx-note", "end")
+                     + text(BX + 104, y + 52, fits(line, 12, BW - 114), "sx-note"), 1.5 + 0.1 * i)
+        P.append(stage_shell(key_, kind, BX, y, BW, BH, 1.3 + 0.1 * i, inner, "ag-hatch-n"))
+    yl = y0 + 4 * (BH + GAP) + BH / 2
+    th = [thread(f"M{f(ox[0])} {f(oy[0])} C{f(ox[0])} {f(ky - 50)} 8 {f(ky - 80)} 8 {f(ky - 24)} V{f(yl)}", 1.0)]
+    for i in range(5):
+        y = y0 + i * (BH + GAP) + BH / 2
+        th.append(thread(f"M8 {f(y)} H{f(BX)}", 1.2) + node(BX, y, 1.25))
+    P.insert(3, '<g class="sx-part ag-thread">' + "".join(th) + "</g>")
+    H = yl + BH / 2 + 8
+    print(f"arqueogal-narrow.svg: {len(k.WORDS)} words")
+    return k.svg("ag-fig sx-narrow", W, H, LABEL, P, hatch("ag-hatch-n"), "group")
 
 
 def main() -> None:
-    OUT.joinpath("arqueogal.svg").write_text(arqueogal())
-    for n in ("arqueogal.svg",):
-        print(f"wrote {OUT / n} ({OUT.joinpath(n).stat().st_size / 1024:.1f} KB)")
+    env = gm.envelopes()
+    X, Y, Z = gm.arcturus_orbit()
+    orbit = gm.to_view(X, Y, Z)
+    run = k.starfold_run()
+    rng = np.random.default_rng(20261102)
+    idx = rng.choice(len(run["group"]), size=500, replace=False)
+    data = {
+        "orbit_face": (X, Y),
+        "chem": np.asarray(run["features"], float)[idx][:, :2],
+        "map": np.asarray(run["map"], float)[idx],
+        "group": np.asarray(run["group"])[idx],
+    }
+    for name, out in (("arqueogal.svg", wide(env, orbit, data)), ("arqueogal-narrow.svg", narrow(env, orbit, data))):
+        (OUT / name).write_text(out)
+        print(f"wrote {OUT / name} ({len(out) / 1024:.1f} KB)")
 
 
 if __name__ == "__main__":

@@ -24,6 +24,7 @@
 .pg-key .k-obs, .pg-key .k-data { inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--ink); }
 .pg-key .k-draw { background: linear-gradient(90deg, var(--cat-0), var(--cat-1), var(--cat-2)); }
 .pg-key .k-curve { block-size: 2px; background: var(--flow); }
+.pg-key .k-now { block-size: 0; border-block-start: 1.5px dashed var(--ink); background: none; }
 
 /* range sliders: a label with the value, then the slider */
 .gp-range .pg-label { display: flex; justify-content: space-between; gap: 8px; }

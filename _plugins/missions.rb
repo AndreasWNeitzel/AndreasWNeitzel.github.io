@@ -93,7 +93,7 @@ module SiteFilters
       return ["paper", "data", "data"] if k == "data"
       return ["paper", "thesis", "thesis"] if k == "thesis"
       return nil if k == "in-preparation"
-      ["paper", k == "letter" ? "letter" : "paper", e["role"] == "first-author" ? "paper · first author" : "paper"]
+      ["paper", e["role"] == "first-author" ? "lead" : "paper", e["role"] == "first-author" ? "paper · first author" : "paper"]
     when "presentations"
       poster = %w[poster pitch].include?(k)
       lab = poster ? (k == "pitch" ? "poster pitch" : "poster") : (k == "seminar" ? "seminar" : (k == "invited" ? "invited talk" : "talk"))

@@ -9,8 +9,10 @@
 //
 // In:  init {t, y, var}, run, pause, step {count}, reset {start}, config {stepScale,
 //      burn, draws}, grid {x}
-// Out: ready {...}, state {...} after every change and about every 60 ms while running,
-//      predictive {...} when a marginalised prediction on the grid is finished.
+// Out: ready {...}, state {...} after every change and about every 60 ms while running
+//      (with the conditional mean of the current state on the grid whenever the state has
+//      moved), predictive {...} with the marginalised prediction: after every loop while
+//      running, one of its posterior states refreshed each time, and in full otherwise.
 import { cholesky, forwardSolve, logLikelihood, mulberry32, gaussian } from "./gp-math.js";
 
 // The page's priors. Log-uniform parameters are sampled as ln(parameter).
@@ -31,7 +33,6 @@ const STEP = [0.1268, 0.2363, 0.5337, 0.1678, 0.1446];
 const SEED = 11;
 const SLICE_MS = 40;
 const MAX_STEPS = 200000;
-const PREDICT_EVERY_MS = 1500;
 const CURVES_KEPT = 12;
 
 let data = null; // {n, t, y, var, tau}
@@ -49,8 +50,10 @@ let run = 0;
 let rand = mulberry32(SEED);
 let cfg = { stepScale: 1, burn: 0.25, draws: 32, start: "fixed" };
 let grid = null;
-let job = null;
-let lastPredict = 0;
+let slots = null; // the marginalised prediction, one slot per posterior state
+let lastAlpha = null; // K^-1 y of the last factorised state
+let alphaNow = null; // K^-1 y of the current state
+let nowDirty = true; // the current state moved since its curve was last sent
 
 const lo = PRIOR.map((p) => (p.log ? Math.log(p.lo) : p.lo));
 const hi = PRIOR.map((p) => (p.log ? Math.log(p.hi) : p.hi));
@@ -88,7 +91,9 @@ function factor(p, out) {
 function logPosterior(th) {
   for (let i = 0; i < D; i++) if (!(th[i] >= lo[i] && th[i] <= hi[i])) return -Infinity;
   if (!factor(natural(th), K)) return -Infinity;
-  return logLikelihood(K, data.n, data.y).value;
+  const ll = logLikelihood(K, data.n, data.y);
+  lastAlpha = ll.alpha;
+  return ll.value;
 }
 
 function record(th, value) {
@@ -111,6 +116,8 @@ function metropolisStep() {
   if (Math.log(1 - rand()) < lpProp - lp) {
     theta = prop;
     lp = lpProp;
+    alphaNow = lastAlpha;
+    nowDirty = true;
     accepted += 1;
   }
   record(theta, lp);
@@ -119,44 +126,47 @@ function metropolisStep() {
 // ---------------------------------------------------------------- marginalised prediction
 // The prediction on the grid averages the conditional distribution of the latent function
 // over posterior samples: the mean of the mixture is the mean of the conditional means and
-// its variance is E[var_i + mean_i^2] - mean^2. Samples are taken at even spacing from the
-// part of the chain after burn-in; before the first step the starting point alone is used.
-function startJob() {
-  if (!grid || !data) return;
+// its variance is E[var_i + mean_i^2] - mean^2. Slot k holds state burn + (k + 1/2) avail / count
+// of the part of the chain after burn-in, so the slots sit at even spacing; before the first
+// step the starting point alone is used. While the chain runs, one slot is recomputed per loop
+// (in turn), so the band follows the chain without a pause; when it stops, every slot is
+// recomputed at once for the chain as it stands.
+function makeSlots() {
+  if (!grid || !data) return null;
   const m = grid.length;
-  const burn = Math.floor(cfg.burn * steps);
-  const avail = steps - burn;
-  let rows;
-  if (steps === 0) rows = [-1];
-  else {
-    const count = Math.min(cfg.draws, avail);
-    rows = Array.from({ length: count }, (_, k) => burn + Math.floor(((k + 0.5) * avail) / count));
-  }
-  job = {
-    rows, next: 0, m, burn, steps,
-    sum: new Float64Array(m), sumSq: new Float64Array(m), curves: [],
+  const count = cfg.draws;
+  return {
+    m, count, next: 0,
+    filled: new Uint8Array(count),
+    mean: new Float64Array(count * m), sq: new Float64Array(count * m),
+    curves: Array.from({ length: Math.min(CURVES_KEPT, count) }, () => new Float32Array(m)),
     L: new Float64Array(data.n * data.n), row: new Float64Array(data.n), v: new Float64Array(data.n),
   };
 }
 
-function jobParams(row) {
-  if (row < 0) return natural(theta);
+function slotParams(k) {
+  if (steps === 0) return natural(theta);
+  const burn = Math.floor(cfg.burn * steps);
+  const avail = steps - burn;
+  const row = burn + Math.min(avail - 1, Math.floor(((k + 0.5) * avail) / slots.count));
   const p = new Array(D);
   for (let i = 0; i < D; i++) p[i] = chain[row * COLS + i];
   return p;
 }
 
-function jobSample() {
+function fillSlot(k) {
   const { n, t, y } = data;
-  const p = jobParams(job.rows[job.next]);
-  const { L, row, v, m } = job;
-  if (!factor(p, L)) { job.next += 1; return; }
+  const p = slotParams(k);
+  const { L, row, v, m } = slots;
+  slots.filled[k] = 0;
+  if (!factor(p, L)) return;
   const alpha = logLikelihood(L, n, y).alpha;
   const e1 = p[0] * p[0];
   const e2 = 2 * p[1] * p[1];
   const e3 = Math.PI / p[2];
   const e4 = 2 / (p[3] * p[3]);
-  const curve = job.curves.length < CURVES_KEPT ? new Float32Array(m) : null;
+  const curve = k < slots.curves.length ? slots.curves[k] : null;
+  const base = k * m;
   for (let i = 0; i < m; i++) {
     const x = grid[i];
     let mean = 0;
@@ -169,51 +179,93 @@ function jobSample() {
     forwardSolve(L, n, row, v);
     let vv = e1;
     for (let j = 0; j < n; j++) vv -= v[j] * v[j];
-    job.sum[i] += mean;
-    job.sumSq[i] += Math.max(0, vv) + mean * mean;
+    slots.mean[base + i] = mean;
+    slots.sq[base + i] = Math.max(0, vv) + mean * mean;
     if (curve) curve[i] = mean;
   }
-  if (curve) job.curves.push(curve);
-  job.next += 1;
+  slots.filled[k] = 1;
 }
 
-function finishJob() {
-  const { m, sum, sumSq, curves } = job;
-  const count = job.rows.length;
+// Sends the mixture over the filled slots.
+function publish() {
+  const { m, count, filled } = slots;
   const mean = new Float32Array(m);
   const sd = new Float32Array(m);
+  let used = 0;
+  for (let k = 0; k < count; k++) used += filled[k];
+  if (!used) return;
   for (let i = 0; i < m; i++) {
-    const mu = sum[i] / count;
+    let s1 = 0;
+    let s2 = 0;
+    for (let k = 0; k < count; k++) {
+      if (!filled[k]) continue;
+      s1 += slots.mean[k * m + i];
+      s2 += slots.sq[k * m + i];
+    }
+    const mu = s1 / used;
     mean[i] = mu;
-    sd[i] = Math.sqrt(Math.max(0, sumSq[i] / count - mu * mu));
+    sd[i] = Math.sqrt(Math.max(0, s2 / used - mu * mu));
   }
+  const curves = slots.curves.filter((_, k) => filled[k]).map((c) => c.slice());
   self.postMessage({
-    type: "predictive", run, x: grid, mean, sd, curves, samples: count, burn: job.burn, steps: job.steps,
+    type: "predictive", run, x: grid, mean, sd, curves, samples: used, burn: Math.floor(cfg.burn * steps), steps,
   }, [mean.buffer, sd.buffer, ...curves.map((c) => c.buffer)]);
-  job = null;
-  lastPredict = performance.now();
 }
 
-// Works on the pending job for about `ms` milliseconds.
-function advanceJob(ms) {
-  if (!job) return;
-  const t0 = performance.now();
-  while (job.next < job.rows.length && performance.now() - t0 < ms) jobSample();
-  if (job.next >= job.rows.length) finishJob();
+// Every slot at once, for a chain that is not running.
+function refreshAll() {
+  slots = makeSlots();
+  if (!slots) return;
+  const count = steps === 0 ? 1 : slots.count;
+  for (let k = 0; k < count; k++) fillSlot(k);
+  publish();
 }
 
-function finishJobNow() {
-  while (job) advanceJob(50);
+// One slot, in turn, while the chain runs.
+function refreshOne() {
+  if (!slots) slots = makeSlots();
+  if (!slots) return;
+  fillSlot(slots.next);
+  slots.next = (slots.next + 1) % slots.count;
+  publish();
+}
+
+// The conditional mean of the latent function on the grid at the current state, which needs
+// only K^-1 y of that state and one row of the cross-covariance per grid point.
+function currentCurve() {
+  if (!grid || !alphaNow) return null;
+  const { n, t } = data;
+  const p = natural(theta);
+  const e1 = p[0] * p[0];
+  const e2 = 2 * p[1] * p[1];
+  const e3 = Math.PI / p[2];
+  const e4 = 2 / (p[3] * p[3]);
+  const out = new Float32Array(grid.length);
+  for (let i = 0; i < grid.length; i++) {
+    const x = grid[i];
+    let mean = 0;
+    for (let j = 0; j < n; j++) {
+      const d = x - t[j];
+      const sn = Math.sin(e3 * d);
+      mean += e1 * Math.exp(-(d * d) / e2 - e4 * sn * sn) * alphaNow[j];
+    }
+    out[i] = mean;
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------- messages out
 function post() {
   const fresh = chain.slice(sent * COLS, steps * COLS);
   sent = steps;
+  const now = nowDirty ? currentCurve() : null;
+  if (now) nowDirty = false;
+  const transfer = [fresh.buffer];
+  if (now) transfer.push(now.buffer);
   self.postMessage({
     type: "state", run, status, steps, accepted, rows: fresh, cols: COLS,
-    current: natural(theta), lp, maxSteps: MAX_STEPS,
-  }, [fresh.buffer]);
+    current: natural(theta), lp, maxSteps: MAX_STEPS, now, nowX: now ? grid : null,
+  }, transfer);
 }
 
 function stop(reason) {
@@ -228,8 +280,8 @@ function loop() {
   while (performance.now() - t0 < SLICE_MS && steps < MAX_STEPS) metropolisStep();
   if (steps >= MAX_STEPS) stop("limit");
   post();
-  if (!job && performance.now() - lastPredict > PREDICT_EVERY_MS) startJob();
-  advanceJob(SLICE_MS / 2);
+  if (running) refreshOne();
+  else refreshAll();
   if (running) timer = setTimeout(loop, 0);
 }
 
@@ -240,16 +292,17 @@ function restart() {
   steps = 0;
   accepted = 0;
   sent = 0;
-  job = null;
+  slots = null;
   if (cfg.start === "prior") {
     // A fresh draw from the prior on every reset; the proposal stream itself is reseeded.
     const draw = mulberry32(SEED + 1000 * run);
     theta = PRIOR.map((p, i) => lo[i] + (hi[i] - lo[i]) * draw());
   } else theta = coordinate(START);
   lp = logPosterior(theta);
+  alphaNow = lastAlpha;
+  nowDirty = true;
   post();
-  startJob();
-  finishJobNow();
+  refreshAll();
 }
 
 self.onmessage = (event) => {
@@ -272,8 +325,7 @@ self.onmessage = (event) => {
       if (!running) break;
       stop("paused");
       post();
-      if (!job) startJob();
-      finishJobNow();
+      refreshAll();
       break;
     case "step": {
       if (steps >= MAX_STEPS) break;
@@ -281,8 +333,7 @@ self.onmessage = (event) => {
       const target = Math.min(MAX_STEPS, steps + (msg.count || 100));
       while (steps < target) metropolisStep();
       post();
-      startJob();
-      finishJobNow();
+      refreshAll();
       break;
     }
     case "reset":
@@ -291,15 +342,13 @@ self.onmessage = (event) => {
       break;
     case "config":
       for (const key of ["stepScale", "burn", "draws", "start"]) if (key in msg) cfg[key] = msg[key];
-      if (!running) {
-        startJob();
-        finishJobNow();
-      }
+      if (!running || (slots && slots.count !== cfg.draws)) refreshAll();
       break;
     case "grid":
       grid = msg.x;
-      startJob();
-      if (!running) finishJobNow();
+      nowDirty = true;
+      refreshAll();
+      if (!running) post();
       break;
     default:
       break;

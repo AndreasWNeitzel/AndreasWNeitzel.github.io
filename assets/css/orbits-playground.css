@@ -4,8 +4,9 @@
 .ob-main canvas { touch-action: pan-y; cursor: grab; }
 .ob-main canvas.is-dragging { cursor: grabbing; }
 
-/* mode switch: two buttons, the chosen one filled */
-.ob-mode .btn { flex: 1 1 0; }
+/* mode switch: the chosen button filled */
+.ob-mode { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ob-mode .btn:last-child { grid-column: 1 / -1; }
 .ob-mode .btn[aria-pressed="true"] { background: var(--ink); color: var(--base); border-color: var(--ink); }
 
 /* readouts that belong to one mode */
@@ -15,12 +16,18 @@
 .ob-readout dd .ob-ref:empty { display: none; }
 .ob-readout [data-mode] { display: none; }
 .ob[data-mode="earth"] .ob-readout [data-mode="earth"],
-.ob[data-mode="galaxy"] .ob-readout [data-mode="galaxy"] { display: block; }
+.ob[data-mode="galaxy"] .ob-readout [data-mode="galaxy"],
+.ob[data-mode="spiral"] .ob-readout [data-mode="spiral"] { display: block; }
+.ob-readout .ob-wide { grid-column: 1 / -1; }
+.ob[data-mode="spiral"] .ob-not-spiral, .ob[data-mode="spiral"] .ob-energy { display: none; }
+.ob-check { cursor: pointer; }
+.ob-check input { accent-color: var(--mark); }
 
 /* mode-specific controls and details */
 .ob-only { display: none; }
 .ob[data-mode="earth"] .ob-only[data-mode="earth"],
-.ob[data-mode="galaxy"] .ob-only[data-mode="galaxy"] { display: contents; }
+.ob[data-mode="galaxy"] .ob-only[data-mode="galaxy"],
+.ob[data-mode="spiral"] .ob-only[data-mode="spiral"] { display: contents; }
 .ob-details[data-mode] { display: none; }
 .ob[data-mode="earth"] .ob-details[data-mode="earth"],
 .ob[data-mode="galaxy"] .ob-details[data-mode="galaxy"] { display: grid; }

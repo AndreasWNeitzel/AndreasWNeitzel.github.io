@@ -229,6 +229,21 @@ def article():
     return p
 
 
+def lead():
+    """First author: the page with the pen that wrote it."""
+    p = sheet()
+    p.append(line(27, 15, 55, 14, w=1.0))
+    for i in range(4):
+        y = 26 + 6 * i
+        p.append(line(26, y, 66, y - 1, w=0.36))
+    p.append(line(26, 50, 48, 49.6, w=0.36))
+    p.append(path([(40, 86), (46, 62), (68, 40), (79, 51), (57, 73)])
+             + path([(55.2, 63.5), (58, 66.3), (54.6, 69.2), (52.6, 66.6)]))
+    p.append(poly((40, 86), (41, 85), (53, 70), (52, 69)))
+    p.append(brush([(40, 86, .5), (31, 90, .55), (24, 84, .4), (18, 90, .04)]))
+    return p
+
+
 def letter():
     p = []
     # an envelope in three-quarter view, sealed
@@ -418,7 +433,7 @@ def award():
     return wreath(50, 46, 34) + [sparkle(50, 42, 15, .2)]
 
 
-MARKS = dict(talk=talk, invited=invited, seminar=seminar, poster=poster, pitch=pitch, article=article, letter=letter,
+MARKS = dict(talk=talk, invited=invited, seminar=seminar, poster=poster, pitch=pitch, article=article, lead=lead,
              thesis=thesis, data=data, hpc=hpc, grant=grant, proposal=proposal, observing=observing, software=software,
              position=position, degree=degree, service=service, award=award)
 

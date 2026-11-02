@@ -2,7 +2,7 @@
 solar cells on its sun-facing side, a hexagonal service module in gold multi-layer insulation, the payload under a
 cylindrical dark thermal tent with the two telescope apertures 106.5 degrees apart, and the phased-array antenna.
 Schematic, not an engineering model. Usage: uv run --python 3.11 --with bpy==4.2.0 python blender_gaia.py OUT.png [angle_deg] [samples]"""
-import math, sys
+import math, sys, os
 import bpy, bmesh
 from mathutils import Vector
 
@@ -18,6 +18,10 @@ sc.render.engine = 'CYCLES'; sc.cycles.samples = samples; sc.cycles.use_denoisin
 sc.render.resolution_x, sc.render.resolution_y = W, H; sc.render.film_transparent = True
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
 sc.cycles.device = 'CPU'
+if os.environ.get('CYCLES_DEVICE') == 'GPU':  # the CPU path in this wheel uses two or three cores; the GPU is the same tracer
+    pr = bpy.context.preferences.addons['cycles'].preferences; pr.compute_device_type = 'CUDA'; pr.get_devices()
+    for dv in pr.devices: dv.use = dv.type == 'CUDA'
+    sc.cycles.device = 'GPU'; sc.cycles.denoising_use_gpu = True
 
 def mat(name, base, metal=0.0, rough=0.4, emit=None, estr=0.0, noise_bump=0.0, spec=0.5, nscale=9.0):
     m = bpy.data.materials.new(name); m.use_nodes = True

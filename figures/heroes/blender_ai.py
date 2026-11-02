@@ -5,7 +5,7 @@ red giant (its 343 sampled fluxes) or its 48 coefficients.
              fan out to six outputs, like a bundle of optical fibres
   manifold : a learned latent surface, a fine glowing mesh that the spectrum's light falls onto and bends
 Usage: uv run --python 3.11 --with bpy==4.2.0 python blender_ai.py VARIANT SPEC.json OUT.png [samples] [W] [H]"""
-import json, math, random, sys
+import json, math, random, sys, os
 import bpy, bmesh
 from mathutils import Vector
 
@@ -18,6 +18,10 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 sc.render.engine = 'CYCLES'; sc.cycles.samples = samples; sc.cycles.use_denoising = True; sc.cycles.device = 'CPU'
 sc.render.resolution_x, sc.render.resolution_y = W, H
+if os.environ.get('CYCLES_DEVICE') == 'GPU':  # the CPU path in this wheel uses two or three cores; the GPU is the same tracer
+    pr = bpy.context.preferences.addons['cycles'].preferences; pr.compute_device_type = 'CUDA'; pr.get_devices()
+    for dv in pr.devices: dv.use = dv.type == 'CUDA'
+    sc.cycles.device = 'GPU'; sc.cycles.denoising_use_gpu = True
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Punchy'
 
 def emissive(color, strength, name='e'):

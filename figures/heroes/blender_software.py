@@ -7,7 +7,7 @@
 - haydn: a crowded cluster core as counts on a pixel grid: stars drawn from a King profile and a power-law luminosity
   function, each spread by a Moffat PSF, the image lifted into a height field. Schematic.
 Usage: uv run --python 3.11 --with bpy==4.2.0 python blender_software.py VARIANT OUT.png [samples] [W] [H]"""
-import json, math, random, sys
+import json, math, random, sys, os
 import bpy, bmesh
 import numpy as np
 from mathutils import Vector
@@ -15,12 +15,16 @@ from mathutils import Vector
 variant, out = sys.argv[1], sys.argv[2]
 samples = int(sys.argv[3]) if len(sys.argv) > 3 else 96
 W, H = (int(sys.argv[4]), int(sys.argv[5])) if len(sys.argv) > 5 else (1100, 950)
-ROOT = '/home/aneitzel/projects/AndreasWNeitzel.github.io/'
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..') + os.sep
 random.seed(5); rng = np.random.default_rng(5)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 sc.render.engine = 'CYCLES'; sc.cycles.samples = samples; sc.cycles.use_denoising = True; sc.cycles.device = 'CPU'
 sc.render.resolution_x, sc.render.resolution_y = W, H
+if os.environ.get('CYCLES_DEVICE') == 'GPU':  # the CPU path in this wheel uses two or three cores; the GPU is the same tracer
+    pr = bpy.context.preferences.addons['cycles'].preferences; pr.compute_device_type = 'CUDA'; pr.get_devices()
+    for dv in pr.devices: dv.use = dv.type == 'CUDA'
+    sc.cycles.device = 'GPU'; sc.cycles.denoising_use_gpu = True
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
 
 def mix(a, b, t): return tuple(x + (y - x) * t for x, y in zip(a, b))

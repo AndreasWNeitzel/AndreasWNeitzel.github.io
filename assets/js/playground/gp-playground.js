@@ -845,6 +845,7 @@ async function boot(root) {
   let runId = -1;
   let maxSteps = Infinity;
   let predictive = null;
+  let nowCurve = null; // conditional mean at the chain's current state, {x, mean}
   let summary = null;
   let pairCache = null;
   let hoverMain = -1;
@@ -900,6 +901,7 @@ async function boot(root) {
       steps = 0;
       accepted = 0;
       predictive = null;
+      nowCurve = null;
       summary = null;
       pairCache = null;
     }
@@ -917,6 +919,10 @@ async function boot(root) {
     current = m.current;
     lpNow = m.lp;
     pairCache = null;
+    if (m.now) {
+      nowCurve = { x: m.nowX, mean: m.now };
+      sdirty.main = true;
+    }
     updateReadout();
     sdirty.trace = sdirty.pair = true;
     schedule();
@@ -1124,6 +1130,16 @@ async function boot(root) {
       ctx.strokeStyle = C.accent;
       ctx.lineWidth = 2;
       polyline(ctx, px, predictive.mean, f.X, f.Y);
+    }
+    // the chain's current state, redrawn whenever it moves
+    if (nowCurve && steps > 0) {
+      ctx.strokeStyle = C.ink;
+      ctx.lineWidth = 1.25;
+      ctx.globalAlpha = 0.85;
+      ctx.setLineDash([5, 4]);
+      polyline(ctx, nowCurve.x, nowCurve.mean, f.X, f.Y);
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
     }
     ctx.lineWidth = 1;
     for (let i = 0; i < n; i++) {

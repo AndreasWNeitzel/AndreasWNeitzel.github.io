@@ -1,0 +1,90 @@
+/* Schematics built by figures/schematic_kit.py: grey linework, the mark colour for real data and
+   for the parts Andreas built, flowing dashes in the flow colour. Text sizes are viewBox units. */
+@layer pages {
+  .sx-svg { inline-size: 100%; block-size: auto; display: block; color: var(--fig); overflow: visible; }
+  .sx-narrow { display: none; }
+  @media (max-width: 760px) { .sx-wide { display: none; } .sx-narrow { display: block; } }
+
+  /* the one-time build, armed by site.js */
+  .sx-svg .b-draw { vector-effect: none; }
+  .sx-svg[data-build="armed"] .b-draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .sx-svg[data-build="armed"] .b-pop { visibility: hidden; }
+  .sx-svg[data-build="run"] .b-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: sx-draw var(--dur, .4s) cubic-bezier(.16, 1, .3, 1) var(--d, 0s) forwards; }
+  .sx-svg[data-build="run"] .b-pop { visibility: hidden; animation: sx-pop 0s linear var(--d, 0s) forwards; }
+  @keyframes sx-draw { to { stroke-dashoffset: 0; } }
+  @keyframes sx-pop { to { visibility: visible; } }
+  @media print { .sx-svg .b-draw { stroke-dashoffset: 0 !important; animation: none !important; } .sx-svg .b-pop { visibility: visible !important; animation: none !important; } }
+
+  /* type */
+  .sx-svg .sx-title { font: 600 12.5px var(--mono); letter-spacing: .06em; fill: var(--ink); }
+  .sx-svg .sx-note { font: 500 11.5px var(--mono); fill: var(--ink-2); }
+  .sx-svg .sx-i { font-style: italic; }
+  .sx-narrow .sx-title { font-size: 13px; }
+  .sx-narrow .sx-note { font-size: 12px; }
+
+  /* linework */
+  .sx-svg .sx-guide { fill: none; stroke: var(--muted); stroke-width: .6; opacity: .45; }
+  .sx-svg .sx-guide-strong { fill: none; stroke: var(--muted); stroke-width: .75; opacity: .8; }
+  .sx-svg .sx-line { fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round; }
+  .sx-svg .sx-line-me { fill: none; stroke: var(--mark); stroke-width: .9; stroke-linejoin: round; }
+  .sx-svg .sx-box { fill: none; stroke: currentColor; stroke-width: 1.2; }
+  .sx-svg .sx-box-me { fill: color-mix(in oklab, var(--mark) 10%, transparent); stroke: var(--mark); stroke-width: 1.4; }
+  .sx-svg .sx-box-part { stroke: var(--mark); stroke-width: 1.4; }
+  .sx-svg .sx-hatch-line { stroke: var(--mark); stroke-width: .9; opacity: .4; }
+  .sx-svg .sx-hit { fill: transparent; }
+
+  /* marks: dots are zero-length segments with round caps */
+  .sx-svg .sx-data, .sx-svg .sx-ink, .sx-svg .sx-faint { fill: none; stroke-linecap: round; stroke-width: 1.8; }
+  .sx-svg .sx-data { stroke: var(--mark); }
+  .sx-svg .sx-ink { stroke: var(--ink-2); }
+  .sx-svg .sx-faint { stroke: var(--muted); opacity: .45; }
+  .sx-svg .sx-node { fill: var(--flow); }
+  .sx-svg .sx-node-q { fill: var(--ink-2); }
+
+  /* the accent thread */
+  .sx-svg .sx-thread { fill: none; stroke: var(--flow); stroke-width: 1.5; stroke-dasharray: 6 5; stroke-linecap: butt; }
+  @media (prefers-reduced-motion: no-preference) { .sx-svg .sx-thread { animation: sx-flow 1.8s linear infinite; } @keyframes sx-flow { to { stroke-dashoffset: -22; } } }
+
+  /* the Galaxy */
+  .ag-fig .ag-tone { fill: currentColor; stroke: none; }
+  .ag-fig .ag-halo { fill-opacity: .022; }
+  .ag-fig .ag-thick { fill-opacity: .04; }
+  .ag-fig .ag-thin { fill-opacity: .075; }
+  .ag-fig .ag-bar { fill: var(--ink); fill-opacity: .42; stroke: var(--ink); stroke-width: .8; stroke-opacity: .8; }
+  .ag-fig .ag-edge { fill: none; stroke: currentColor; }
+  .ag-fig .ag-edge-halo { stroke-width: .7; opacity: .5; }
+  .ag-fig .ag-edge-thick { stroke-width: .8; opacity: .65; }
+  .ag-fig .ag-edge-thin { stroke-width: 1.1; opacity: .85; }
+  .ag-fig .ag-giant { stroke-width: 1.3; stroke-opacity: .6; }
+  .ag-fig .ag-star { fill: var(--flow); stroke: var(--panel, transparent); stroke-width: 0; }
+  .ag-fig .ag-orbit-line { stroke-width: 1.3; stroke-dasharray: 4 3; }
+  .ag-fig [class^="ag-k-"] { stroke: currentColor; stroke-width: .8; }
+  .ag-fig .ag-k-halo { fill: color-mix(in oklab, currentColor 8%, transparent); }
+  .ag-fig .ag-k-thick { fill: color-mix(in oklab, currentColor 22%, transparent); }
+  .ag-fig .ag-k-thin { fill: color-mix(in oklab, currentColor 45%, transparent); }
+  .ag-fig .ag-k-bar { fill: var(--ink); }
+  .ag-fig .ag-k-star { fill: var(--flow); stroke: none; }
+  .ag-fig .ag-k-giant { fill: var(--mark); stroke: none; }
+
+  /* Starfold */
+  .sf-how { margin-block-end: 18px; }
+  .sf-fig .sf-frame { stroke-width: .75; opacity: .55; }
+  .sf-fig .sf-cell { fill: var(--mark); }
+  .sf-fig .sf-dot { stroke-width: 2; }
+  .sf-fig .sf-k3 { stroke-opacity: 1; }
+  .sf-fig .sf-k2 { stroke-opacity: .45; }
+  .sf-fig .sf-k1 { stroke-opacity: .16; }
+
+  /* hover or focus on a stage: it stays, its part of the Galaxy stays, the rest steps back */
+  .ag-fig .sx-part { transition: opacity .2s; }
+  .ag-fig .sx-stage { cursor: pointer; outline: none; }
+  .ag-fig .sx-stage:focus-visible .sx-hit { stroke: var(--flow); stroke-width: 1.5; }
+  .ag-fig:has(.sx-stage:is(:hover, :focus-visible)) .sx-part { opacity: .35; }
+  .ag-fig:has(.sx-stage:is(:hover, :focus-visible)) .sx-stage:is(:hover, :focus-visible),
+  .ag-fig:has(.ag-s-orbit:is(:hover, :focus-visible)) .ag-orbit,
+  .ag-fig:has(.ag-s-age:is(:hover, :focus-visible)) .ag-giants,
+  .ag-fig:has(.ag-s-chem:is(:hover, :focus-visible)) .ag-giants,
+  .ag-fig:has(.ag-s-pops:is(:hover, :focus-visible)) .ag-comps,
+  .ag-fig:has(.ag-s-model:is(:hover, :focus-visible)) .ag-comps,
+  .ag-fig:has(.ag-s-model:is(:hover, :focus-visible)) .ag-giants { opacity: 1; }
+}

@@ -38,8 +38,8 @@ home:
       glass: "I wrote JANUS, Starfold and HAYDNsim, and built demos that run in the browser."
       alts:
         - "Light passing through the layers of the JANUS networks"
-        - "The 9,242 stars of the Starfold run in the chemistry plane, drawn as light"
-        - "Schematic of a simulated telescope image of a crowded globular cluster"
+        - "A sheet of real stars from the Starfold run unrolls, and two groups appear as it flattens"
+        - "HAYDNsim's noisy light curve leads to an oscillation spectrum that rises out of the noise"
     - key: "talks"
       title: "Talks"
       glass: "Talks and posters at workshops and conferences in Portugal, Spain and Denmark, with slides on Zenodo where deposited."
@@ -217,7 +217,7 @@ talks:
 
 publications:
   description: "Refereed papers by Andreas W. Neitzel with DOI and arXiv links, his contribution to each, and plain-language explainers."
-  lede: "Four refereed papers in Astronomy and Astrophysics, one as first author, with my contribution to each stated, plus my MSc dissertation."
+  lede: "Four published papers in Astronomy and Astrophysics, one as first author, with my contribution to each stated, plus my MSc dissertation."
   explainers_lead: "What each paper found and what I did, written for readers outside astronomy."
 
 guide:
@@ -234,6 +234,6 @@ papers:
 plates:
   research: "I turn <i>Gaia</i> spectra into the chemistry, ages and populations of the Milky Way."
   software: "I write research software for stellar astrophysics and browser apps that run on real data."
-  publications: "Four refereed papers in Astronomy and Astrophysics, with my contribution to each stated."
+  publications: "Four published papers in Astronomy and Astrophysics, with my contribution to each stated."
   talks: "Talks and posters since 2022, with slides and posters on Zenodo where deposited."
   guide: "The science, institutions and machines behind my work, one minute each, with sources."

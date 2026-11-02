@@ -24,6 +24,7 @@ the end, and the post step blends the two moving ends with Pillow, so the dolly 
 Usage (the bpy session):
   uv run --python 3.11 --with bpy==4.2.0 python blender_pipeline.py still:I OUT.png [--samples N] [--size WxH]
       [--spec SPEC.json] [--kep PSD.npz]      one frame at loop index I (0 to 359; -30 to 389 allowed)
+      The XP fluxes and the Kepler spectrum default to figures/heroes/renders/pipeline/{xp_spec.json,kic6144777_psd.npz}.
   uv run --python 3.11 --with bpy==4.2.0 python blender_pipeline.py anim OUTDIR [...]
       all 420 frames (loop index -30 to 389) as OUTDIR/raw/r_####.png, Blender frame = index + 31
 The post step (Pillow, no bpy):
@@ -37,9 +38,9 @@ def opt(name, default):
     return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else default
 samples = int(opt('--samples', 24))
 W, H = (int(v) for v in opt('--size', '1280x720').split('x'))
-ROOT = '/home/aneitzel/projects/AndreasWNeitzel.github.io/'
-SCRATCH = '/tmp/claude-1000/-home-aneitzel-projects-AndreasWNeitzel-github-io/d2111143-2038-4d25-b79a-355b75f760d9/scratchpad/'
-SPEC = opt('--spec', SCRATCH + 'bl/spec.json'); KEP = opt('--kep', SCRATCH + 'kep/kic6144777_psd.npz')
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..') + os.sep
+DATA = os.path.join(ROOT, 'figures', 'heroes', 'renders', 'pipeline')
+SPEC = opt('--spec', os.path.join(DATA, 'xp_spec.json')); KEP = opt('--kep', os.path.join(DATA, 'kic6144777_psd.npz'))
 
 NLOOP, PRE, POST = 360, 30, 30          # loop frames, frames rendered before the start and after the end
 def frame_of(i): return i + PRE + 1      # loop index to Blender frame
@@ -65,10 +66,10 @@ random.seed(5); rng = np.random.default_rng(5)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 sc.render.engine = 'CYCLES'; sc.cycles.samples = samples; sc.cycles.use_denoising = True; sc.cycles.device = 'CPU'
-sc.cycles.max_bounces = 5; sc.cycles.diffuse_bounces = 2; sc.cycles.glossy_bounces = 3; sc.cycles.transparent_max_bounces = 14
+sc.cycles.max_bounces = 4; sc.cycles.diffuse_bounces = 1; sc.cycles.glossy_bounces = 2; sc.cycles.transparent_max_bounces = 14
 sc.cycles.volume_bounces = 0; sc.cycles.caustics_reflective = False; sc.cycles.caustics_refractive = False
 sc.render.use_persistent_data = True
-sc.cycles.use_denoising = opt('--denoise', '1') == '1'; sc.cycles.volume_step_rate = 2.0; sc.cycles.volume_max_steps = 256
+sc.cycles.use_denoising = opt('--denoise', '1') == '1'; sc.cycles.volume_step_rate = 2.0; sc.cycles.adaptive_threshold = 0.03; sc.cycles.adaptive_min_samples = 8; sc.cycles.volume_max_steps = 256
 sc.render.resolution_x, sc.render.resolution_y = W, H
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
 sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGB'; sc.render.image_settings.color_depth = '8'
@@ -231,12 +232,19 @@ def world(color=(0.002, 0.0025, 0.004), haze=0.0, boxed=False):
 def floor(z, size=160, base=(0.006, 0.007, 0.009), rough=0.2):
     bpy.ops.mesh.primitive_plane_add(size=size, location=(18, 0, z)); f = bpy.context.object; f.data.materials.append(principled('floor', base, 0.6, rough)); return f
 
-def bloom(size=7, mix_=-0.6):
+def bloom(size=7, mix_=-0.6, mist=0.035):
+    # faint haze from the mist pass (a dim blue grey added with depth), then a soft glow
     sc.use_nodes = True; ct = sc.node_tree; rl = ct.nodes['Render Layers']; comp = ct.nodes['Composite']
+    src = rl.outputs['Image']
+    if mist:
+        sc.view_layers[0].use_pass_mist = True; ws = sc.world.mist_settings; ws.start = 3.0; ws.depth = 22.0; ws.falloff = 'LINEAR'
+        mm = ct.nodes.new('CompositorNodeMath'); mm.operation = 'MULTIPLY'; mm.inputs[1].default_value = mist; ct.links.new(rl.outputs['Mist'], mm.inputs[0])
+        mx = ct.nodes.new('CompositorNodeMixRGB'); mx.blend_type = 'ADD'; ct.links.new(mm.outputs[0], mx.inputs[0]); ct.links.new(src, mx.inputs[1])
+        mx.inputs[2].default_value = (0.42, 0.5, 0.66, 1); src = mx.outputs[0]
     g = ct.nodes.new('CompositorNodeGlare'); g.glare_type = 'FOG_GLOW'; g.quality = 'HIGH'; g.size = size; g.threshold = 0.6; g.mix = mix_
-    ct.links.new(rl.outputs['Image'], g.inputs['Image']); ct.links.new(g.outputs['Image'], comp.inputs['Image'])
+    ct.links.new(src, g.inputs['Image']); ct.links.new(g.outputs['Image'], comp.inputs['Image'])
 
-HAZE = float(opt('--haze', 0.0035))
+HAZE = float(opt('--haze', 0.0))   # volume haze is optional; by default the haze is the cheap mist below
 floor(0.0); world(haze=HAZE, boxed=opt('--hazebox', '0') == '1'); bloom(7, -0.6)
 
 # ---- the thread: one tube along x through every station, with pulses sliding along it
@@ -386,7 +394,7 @@ JX1 = JX0 + sheets[-1][0] * XS
 # ---- 5. labels: six bars of light, ivory to blue, with square nodes (schematic)
 L = Mesh(); heights = [1.25, 0.8, 1.55, 1.0, 0.6, 1.35]
 for k, hk in enumerate(heights):
-    x = SX[4] + (k - 2.5) * 0.34; c = mix(IVORY, BLUE, k / 5)
+    x = SX[4] + (k - 2.5) * 0.34; c = mix(IVORY, (0.32, 0.52, 1.0), (k / 5) ** 0.7)
     L.box((x - 0.016, -0.016, 0.0), (x + 0.016, 0.016, hk), mix((0.02, 0.02, 0.03), c, 0.25), c)
     s = 0.045; L.box((x - s, -s, hk), (x + s, s, hk + 2 * s), c, c)
     L.box((x - 0.09, -0.09, 0.0), (x + 0.09, 0.09, 0.006), (0.01, 0.012, 0.02), mix((0.01, 0.012, 0.02), c, 0.3))
@@ -407,7 +415,7 @@ order = sorted(gfe, key=gfe.get); rank = {g: k / max(1, len(order) - 1) for k, g
 P = np.column_stack([SX[5] + mp[:, 0], mp[:, 1], np.full(len(mp), 0.02)])
 C = np.array([mix(COLD, WARM, rank[g]) if g >= 0 else (0.16, 0.17, 0.2) for g in grp])
 R = np.where(grp >= 0, 0.008, 0.0055)
-points_obj(P, R, C, vcol_emission('stars', 1.0), 'starfold')
+points_obj(P, R, C, vcol_emission('stars', 0.85), 'starfold')
 
 # ---- 7. the Milky Way: two-arm logarithmic spiral, exponential disc, warm bulge, tilted 60 degrees (schematic)
 NG = 60000; nb_ = int(NG * 0.18); nd = NG - nb_
