@@ -983,7 +983,7 @@ async function boot(root) {
     ui.back.disabled = !on;
     if (!on) {
       ui.refitNow.textContent = "showing the fit on all stars";
-      ui.refitText.textContent = `Each bar is a refit on a random ${Math.round(H.refits.fraction * 100)} percent of the stars, as tall as its agreement with the fit on all stars.`;
+      ui.refitText.textContent = `Each bar is a refit on a random ${Math.round(H.refits.fraction * 100)} per cent of the stars, as tall as its agreement with the fit on all stars.`;
       return;
     }
     const m = H.refits.matches[S.refit];

@@ -49,7 +49,9 @@ A planet is only as well known as its star. *Ariel*, ESA's survey of the atmosph
 
 ## The sample
 
-Three sets of stars were run. First, 13 synthetic stars taken straight from the model grid, with made-up measurement errors, to test whether PARAM recovers what it already knows (Sect. 5.3). Second, 33 *Kepler* planet hosts from Silva Aguirre et al. (2015), with the large frequency separation <span class="tex" data-tex="\Delta\nu">Δν</span>, the frequency of maximum power <span class="tex" data-tex="\nu_{\max}">ν<sub>max</sub></span>, the temperature and the metal content from Huber et al. (2013), chosen because four other codes had already characterised them (Sect. 6.1). Third, ten F-G-K seismic planet hosts from the *Ariel* input catalogue, five of them also in Magrini et al. (2022); their identities were withheld at the consortium's request, so the dissertation calls them Ariel-1 to Ariel-10 (Sect. 6.2).
+Three sets of stars were run. First, 13 synthetic stars taken straight from the model grid, with made-up measurement errors, to test whether PARAM recovers what it already knows (Sect. 5.3). Second, 33 *Kepler* planet hosts from Silva Aguirre et al. (2015), with the large frequency separation <span class="tex" data-tex="\Delta\nu">Δν</span>, the frequency of maximum power <span class="tex" data-tex="\nu_{\max}">ν<sub>max</sub></span>, the temperature and the metal content from Huber et al. (2013), chosen because four other codes had already characterised them (Sect. 6.1).
+
+Third, ten F-G-K seismic planet hosts from the *Ariel* input catalogue, five of them also in Magrini et al. (2022); their identities were withheld at the consortium's request, so the dissertation calls them Ariel-1 to Ariel-10 (Sect. 6.2).
 
 ## The method
 
@@ -63,7 +65,9 @@ PARAM compares these inputs, with their one-sigma uncertainties, against the gri
 
 PARAM passes its own test. On the synthetic stars, the recovered masses, radii and ages fall within their quoted uncertainties, with second-quartile relative accuracies of about 1 per cent in mass and 8 per cent in age for the cluster set (Table 5.1). Ages are hardest for stars below about 0.8 <span class="tex" data-tex="M_\odot">M<sub>☉</sub></span> and for young stars, and stars above about 1.2 <span class="tex" data-tex="M_\odot">M<sub>☉</sub></span> can return two solutions because of the hook in their tracks (Sects. 5.3 and 7).
 
-Against other codes it is less precise. On the 33 *Kepler* hosts, PARAM, which uses only the two global seismic parameters, reached median relative uncertainties of 4.9 per cent in mass and 26.0 per cent in age, while BASTA, ASTFIT, YMCM and AMP, which fit individual oscillation frequencies, reached 2.7 to 3.4 per cent and 9.6 to 14.6 per cent (Table 6.4). Its masses agree with BASTA, ASTFIT and AMP to within about 1 per cent, with a 2.2 per cent offset against YMCM, and its ages run 4 to 12 per cent younger than two of the codes (Table 6.3). The dissertation concludes that PARAM is reliable for F-G-K stars but should keep being tested for systematics (Chapter 7).
+Against other codes it is less precise. On the 33 *Kepler* hosts, PARAM, which uses only the two global seismic parameters, reached median relative uncertainties of 4.9 per cent in mass and 26.0 per cent in age, while BASTA, ASTFIT, YMCM and AMP, which fit individual oscillation frequencies, reached 2.7 to 3.4 per cent and 9.6 to 14.6 per cent (Table 6.4).
+
+Its masses agree with BASTA, ASTFIT and AMP to within about 1 per cent, with a 2.2 per cent offset against YMCM, and its ages run 4 to 12 per cent younger than two of the codes (Table 6.3). The dissertation concludes that PARAM is reliable for F-G-K stars but should keep being tested for systematics (Chapter 7).
 
 ## The results
 
@@ -74,7 +78,9 @@ Against other codes it is less precise. On the 33 *Kepler* hosts, PARAM, which u
 
 With the inputs as published, seismology and luminosity are each enough. Starting from spectroscopy alone, median uncertainties of 28.8 per cent in age and 5.3 per cent in mass, adding <span class="tex" data-tex="\Delta\nu">Δν</span> and <span class="tex" data-tex="\nu_{\max}">ν<sub>max</sub></span> brings them to 7.7 and 1.5 per cent, and adding the luminosity instead brings them to 9.2 and 1.2 per cent; adding both changes little more (Table 6.8, Chapter 7).
 
-That result rests on unusually small input errors, 0.6 per cent in temperature and 0.02 dex in metal content, and the dissertation says so. When those errors are inflated to literature-typical values, spectroscopy alone gives 34.1 per cent in age and 5.9 per cent in mass, the luminosity 22.0 and 3.9, the two seismic parameters 19.0 and 4.1, and all of them together 14.1 and 3.3 (Table 6.18, Sect. 6.3). In this regime the seismic parameters constrain the age better than the luminosity, and the two together do better than either, which the conclusions flag as a contradiction of the first set of findings (Chapter 7). Adding constraints does not always help: for one star they bring out a second solution near 1.3 <span class="tex" data-tex="M_\odot">M<sub>☉</sub></span>, where the hook makes the tracks cross (Sects. 6.2 and 7).
+That result rests on unusually small input errors, 0.6 per cent in temperature and 0.02 dex in metal content, and the dissertation says so. When those errors are inflated to literature-typical values, spectroscopy alone gives 34.1 per cent in age and 5.9 per cent in mass, the luminosity 22.0 and 3.9, the two seismic parameters 19.0 and 4.1, and all of them together 14.1 and 3.3 (Table 6.18, Sect. 6.3).
+
+In this regime the seismic parameters constrain the age better than the luminosity, and the two together do better than either, which the conclusions flag as a contradiction of the first set of findings (Chapter 7). Adding constraints does not always help: for one star they bring out a second solution near 1.3 <span class="tex" data-tex="M_\odot">M<sub>☉</sub></span>, where the hook makes the tracks cross (Sects. 6.2 and 7).
 
 ## What it led to
 

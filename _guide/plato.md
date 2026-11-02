@@ -17,11 +17,11 @@ sources:
   - {label: "Miglio et al. 2021, Experimental Astronomy 51, 963 (ESA Voyage 2050 white paper)", url: "https://doi.org/10.1007/s10686-021-09711-1"}
 ---
 
-PLATO (PLAnetary Transits and Oscillations of stars) is a mission of the European Space Agency (ESA) to find Earth-sized planets around Sun-like stars, out to orbits where liquid water could exist on the surface. It watches more than 200,000 stars with 26 small cameras, each of 81.4 megapixels, working together. The same measurements also record the faint, regular brightness changes caused by sound waves running through each star.
+PLATO (PLAnetary Transits and Oscillations of stars) is a mission of the European Space Agency (ESA) to find Earth-sized planets around Sun-like stars, out to orbits where liquid water could exist on the surface. It will watch more than 200,000 stars with 26 small cameras, each of 81.4 megapixels, working together. The same measurements also record the faint, regular brightness changes caused by sound waves running through each star.
 
 Those oscillations matter because planets are only as well known as their stars. Asteroseismology, the study of starquakes, gives a star's mass, radius and age far more accurately than its colour and brightness can (Rauer et al. 2014). A planet's size follows from the star's size, and the age of the system says how long the planet has had to change.
 
-ESA plans to launch PLATO in early 2027 on an Ariane 6 rocket from Europe's spaceport in French Guiana, into an orbit around the Sun-Earth Lagrange point 2, 1.5 million kilometres from Earth.
+ESA plans to launch PLATO on an Ariane 6 rocket from Europe's spaceport in French Guiana, into an orbit around the Sun-Earth Lagrange point 2, 1.5 million kilometres from Earth. In November 2026 the planned launch date is early 2027.
 
 ESA runs a Guest Observers Programme through which astronomers outside the mission team propose their own targets for PLATO, in calls for proposals that are submitted through ESA's proposal system. The crowded centres of star clusters are hard for it, because its pixels blend many stars together (the problem that HAYDN is designed to solve).
 

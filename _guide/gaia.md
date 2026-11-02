@@ -25,7 +25,7 @@ sources:
 
 *Gaia* is a space telescope of the European Space Agency. For more than ten years it scanned the whole sky over and over, measuring the position of each star many times. A small yearly wobble in a star's position gives its distance, and a slow drift across the sky gives its motion. *Gaia* also spread the light of hundreds of millions of stars into low-resolution spectra, which carry information on their temperature and chemical composition.
 
-ESA launched *Gaia* on 19 December 2013. It ended science observations on 15 January 2025, after more than three trillion observations of about two billion stars and other objects, and was switched off on 27 March 2025. The third data release (DR3, 13 June 2022), built from the first 34 months of data, gives parallaxes and proper motions for about 1.46 billion sources and mean BP/RP (XP) spectra from 330 to 1050 nm for about 220 million. ESA's schedule gives 2 December 2026 for DR4, built from 66 months of data.
+ESA launched *Gaia* on 19 December 2013. It ended science observations on 15 January 2025, after more than three trillion observations of about two billion stars and other objects, and was switched off on 27 March 2025. The third data release (DR3, 13 June 2022), built from the first 34 months of data, gives parallaxes and proper motions for about 1.46 billion sources and mean BP/RP (XP) spectra from 330 to 1050 nm for about 220 million. As of November 2026, ESA's schedule gives 2 December 2026 for DR4, built from 66 months of data.
 
 ## Where I come in
 

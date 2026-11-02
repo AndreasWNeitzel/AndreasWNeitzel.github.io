@@ -1,15 +1,17 @@
 # Andreas W. Neitzel
 
-> PhD researcher in astrophysics and machine learning at IA (Instituto de Astrofísica e Ciências do Espaço) and the University of Porto. Builds neural networks and unsupervised methods that read stellar chemistry, ages and populations from Gaia XP spectra and asteroseismic data, for Galactic archaeology. First author of Neitzel et al. 2025 (A&A 695, A243). Co-author of Campante et al. 2026 (A&A, doi:10.1051/0004-6361/202660350), for which he carried out the GJ 570 A observations with ESPRESSO at ESO's Very Large Telescope in May 2024, as visiting astronomer for the principal investigator T. L. Campante. Responsible investigator on two approved FCT advanced-computing allocations (MareNostrum 5 and Deucalion, 2026). Co-investigator (team member) on the FCT exploratory project ArqueoGal (2024.15303.PEX). Six-month secondment at INAF-OAS Bologna (2025 to 2026) building simulations for the proposed HAYDN mission. Author of Starfold, an open-source Python package for label-free group recovery with reliability flags.
+> PhD researcher in astrophysics and machine learning at IA (Instituto de Astrofísica e Ciências do Espaço) and the University of Porto. Builds neural networks and unsupervised methods that read stellar chemistry, ages and populations from Gaia XP spectra and asteroseismic data, for Galactic archaeology. First author of Neitzel et al. 2025 (A&A 695, A243). Co-author of Campante et al. 2026 (A&A, doi:10.1051/0004-6361/202660350), for which he carried out the GJ 570 A observations with ESPRESSO at ESO's Very Large Telescope in May 2024, as visiting astronomer for the principal investigator T. L. Campante. Principal investigator on two approved FCT advanced-computing allocations (MareNostrum 5 and Deucalion, 2026). Co-investigator (team member) on the FCT exploratory project ArqueoGal (2024.15303.PEX). Six-month secondment at INAF-OAS Bologna (2025 to 2026) building simulations for the proposed HAYDN mission. Author of Starfold, an open-source Python package for label-free group recovery with reliability flags.
 
 ## Pages
 
-- [Home](https://andreaswneitzel.github.io/): profile, research pipeline, selected work, browser demos, track record, missions and machines
-- [Research](https://andreaswneitzel.github.io/research/): the four lines of work (JANUS, stellar populations and Starfold, asteroseismology, HAYDNsim), the paper explainers and the field guide as background
+- [Home](https://andreaswneitzel.github.io/): profile, selected work, browser demos, track record, missions and machines, research travel
+- [Research](https://andreaswneitzel.github.io/research/): seven lines of work (JANUS, ArqueoGal, stellar populations and Starfold, asteroseismology, supercomputers, the Paranal run, HAYDNsim), the paper explainers and the field guide as background
 - [About](https://andreaswneitzel.github.io/about/): bio, photographs, travel map, skills and the full timeline
 - [Publications](https://andreaswneitzel.github.io/publications/): refereed papers with DOI and arXiv links and the contribution to each
 - [Paper explainers](https://andreaswneitzel.github.io/publications/#explainers): plain-language summaries of each paper
 - [Observing at the Very Large Telescope](https://andreaswneitzel.github.io/observing/paranal/): the May 2024 ESPRESSO run at Paranal
+- [JANUS](https://andreaswneitzel.github.io/research/janus/): the neural network that predicts APOGEE-like parameters and abundances from Gaia XP spectra
+- [ArqueoGal](https://andreaswneitzel.github.io/research/arqueogal/): the FCT exploratory project and the pipelines that serve it
 - [Software and demos](https://andreaswneitzel.github.io/software/): Starfold, Stellar Explorer, Tellurion and the demos
 - [Neural-network playground](https://andreaswneitzel.github.io/playground/neural-network/): a small network trained in the browser on Gaia DR3 XP spectra (teaching demo)
 - [Orbits playground](https://andreaswneitzel.github.io/playground/orbits/): leapfrog, Runge-Kutta and Euler integrators around the Earth (Molniya and geostationary satellites with ground-station visibility) and in MWPotential2014 for six Gaia DR3 stars
@@ -17,7 +19,7 @@
 - [Polytrope playground](https://andreaswneitzel.github.io/playground/polytropes/): Lane-Emden solved in the browser, scaled to the Sun, 61 Virginis and GJ 504, compared with a MESA profile
 - [Starfold held-out benchmark](https://andreaswneitzel.github.io/software/starfold-benchmark/): the ten-table benchmark, including the two held-out tables it lost
 - [Talks and posters](https://andreaswneitzel.github.io/talks/): international and national talks and posters with Zenodo DOIs
-- [Field guide](https://andreaswneitzel.github.io/guide/): short explainers of Galactic archaeology, asteroseismology, Gaia, ESO, INAF, IA and FCT, HAYDN, TESS and Kepler, and supercomputers
+- [Field guide](https://andreaswneitzel.github.io/guide/): short explainers of Galactic archaeology, asteroseismology, machine learning for stars, Gaia, TESS and Kepler, PLATO, Ariel, ESO and the VLT, INAF, IA and FCT, HAYDN, and supercomputers
 - [CV](https://andreaswneitzel.github.io/cv/): funding, computing allocations, education, positions, observing, service and teaching, with a two-page PDF
 
 ## Publications

@@ -30,4 +30,4 @@ The concept comes from a white paper for ESA's Voyage 2050 long-term plan (Migli
 
 ## Where I come in
 
-During my secondment at INAF-OAS Bologna, from September 2025 to March 2026, I wrote HAYDNsim, the simulation pipeline that forecasts the photometric noise of every star in the clusters on the mission's target list, so that the proposal's claims can be tested star by star. The pipeline, its stages and the noise budget it forecasts for 47 Tucanae are on <a href="{{ '/software/haydnsim/' | relative_url }}">the HAYDNsim page</a>. I presented it on a poster at TASC10/KASC17 in Aarhus and in a talk at DFA Week 2026 in Porto.
+During my secondment at INAF-OAS Bologna, from September 2025 to March 2026, I wrote HAYDNsim, the simulation pipeline that forecasts the photometric noise of every star in the clusters on the mission's target list, so that the proposal's claims can be tested star by star. The pipeline and its stages are on <a href="{{ '/software/haydnsim/' | relative_url }}">the HAYDNsim page</a>. I presented it on a poster at TASC10/KASC17 in Aarhus and in a talk at DFA Week 2026 in Porto.

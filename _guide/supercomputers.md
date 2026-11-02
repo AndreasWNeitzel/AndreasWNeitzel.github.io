@@ -31,4 +31,6 @@ The EuroHPC Joint Undertaking was created in 2018 and is based in Luxembourg. De
 
 ## Where I come in
 
-As a member of the University of Porto's HPCvLAB project, I had development access to Deucalion from December 2025 to September 2026 and used 94,001 core-hours in about 250 jobs on its ARM, x86 and A100 partitions, for JANUS, the HAYDN proposal tests and the HAYDNsim noise runs. With Tiago L. Campante as co-responsible investigator, I am the principal investigator on two approved FCT computing allocations, each for 12 months. One gives 299,520 core-hours (99,840 granted, tripled as a bonus) and 1,500 A100 GPU-hours on Deucalion; the other gives 1,002,400 core-hours and 1,000 H100 GPU-hours on MareNostrum 5. The figure above shows what each run is granted and where on the two machines it runs.
+As a member of the University of Porto's HPCvLAB project, I had development access to Deucalion from December 2025 to September 2026 and used 94,001 core-hours in about 250 jobs on its ARM, x86 and A100 partitions, for JANUS, the HAYDN proposal tests and the HAYDNsim noise runs.
+
+With Tiago L. Campante as co-responsible investigator, I am the principal investigator on two approved FCT computing allocations, each for 12 months. One gives 299,520 core-hours (99,840 granted, tripled as a bonus) and 1,500 A100 GPU-hours on Deucalion; the other gives 1,002,400 core-hours and 1,000 H100 GPU-hours on MareNostrum 5. The figure above shows what each run is granted and where on the two machines it runs.

@@ -34,4 +34,4 @@ ESO was established in 1962 and has 16 member states; Portugal joined in 2001. P
 
 ## Where I come in
 
-From 4 to 12 May 2024 I was at Paranal as a visiting astronomer for run 113.26FX.002, and on its six scheduled nights (6 to 12 May) I observed the K dwarf GJ 570 A with ESPRESSO in visitor mode, that is, on site. I did this on behalf of the principal investigator, Tiago L. Campante; the observing proposal was his, not mine. The data are in Campante et al. 2026, published in *Astronomy and Astrophysics* (doi:10.1051/0004-6361/202660350), where I am sixth of 24 authors.
+From 4 to 12 May 2024 I was at Paranal as a visiting astronomer for run 113.26FX.002, and on its six scheduled nights (6 to 12 May) I observed the K dwarf GJ 570 A with ESPRESSO in visitor mode, that is, on site. I did this on behalf of the principal investigator, Tiago L. Campante; the observing proposal was his. The data are in Campante et al. 2026, published in *Astronomy and Astrophysics* (doi:10.1051/0004-6361/202660350), where I am sixth of 24 authors.

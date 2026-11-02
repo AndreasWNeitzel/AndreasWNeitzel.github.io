@@ -129,7 +129,7 @@ research:
     - id: "populations"
       kicker: "2023 to now · 2025 paper and Starfold"
       title: "Stellar populations without labels"
-      text: "My 2025 paper in Astronomy and Astrophysics tests a method for sorting stars into populations on a simulated galaxy, and shows where realistic measurement errors break it. Starfold, open source, grew out of it: it picks its own settings, refits to test stability and raises named warnings. On four held-out tables it beat the library defaults on two and lost on two."
+      text: "My 2025 paper in <i>Astronomy and Astrophysics</i> tests a method for sorting stars into populations on a simulated galaxy, and shows where realistic measurement errors break it. Starfold, open source, grew out of it: it picks its own settings, refits to test stability and raises named warnings. On four held-out tables it matched or beat the library defaults on two and lost on two."
     - id: "seismology"
       kicker: "2021 to now · TESS, <i>Kepler</i> and ESPRESSO"
       title: "Asteroseismology: ages from stellar oscillations"
@@ -234,6 +234,6 @@ papers:
 plates:
   research: "I turn <i>Gaia</i> spectra into the chemistry, ages and populations of the Milky Way."
   software: "I write research software for stellar astrophysics and browser apps that run on real data."
-  publications: "Four published papers in Astronomy and Astrophysics, with my contribution to each stated."
+  publications: "Four published papers in <i>Astronomy and Astrophysics</i>, with my contribution to each stated."
   talks: "Talks and posters since 2022, with slides and posters on Zenodo where deposited."
   guide: "The science, institutions and machines behind my work, one minute each, with sources."
