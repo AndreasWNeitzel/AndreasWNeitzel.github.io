@@ -43,3 +43,8 @@
   }
 }
 
+
+/* the story in three columns across the page */
+.story-cols { display: grid; gap: clamp(28px, 3.5vw, 56px); }
+.story-cols .prose { max-inline-size: none; align-content: start; }
+@media (min-width: 1000px) { .story-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

@@ -3,7 +3,7 @@ layout: default
 permalink: /observing/paranal/
 title: Observing at the Very Large Telescope
 nav_section: Research
-description: My May 2024 visitor-mode observing run at ESO's Paranal Observatory, for an ESPRESSO campaign on the star GJ 570 A.
+description: Why ESPRESSO at ESO's Paranal Observatory was pointed at the K dwarf GJ 570 A in May 2024, what I did as the visiting observer, and what the data showed.
 og_image: /assets/img/og-vlt.jpg
 og_image_alt: Andreas W. Neitzel on the platform of ESO's Very Large Telescope at Paranal at sunset
 extra_css: [/assets/css/observing.css]
@@ -16,16 +16,27 @@ math: true
     <div class="card-body stack-s">
       <p><span class="tag tag--observing">observing</span> <span class="kicker" style="color:rgb(255 255 255 / .8)">Paranal, Chile · May 2024</span></p>
       <h1>Observing at the Very Large Telescope</h1>
-      <p>In May 2024 I was the visitor-mode observer for an ESPRESSO campaign on the star GJ 570 A, part of Tiago L. Campante's programme.</p>
+      <p>In May 2024 I was the visiting observer at Paranal for an ESPRESSO campaign on the star GJ 570 A, part of Tiago L. Campante's programme, to measure oscillations in a cool dwarf star.</p>
     </div>
   </section>
 
   <section>
-    <div class="prose">
-      <h2>What I did</h2>
-      <p>Visitor mode means travelling to the telescope and running the observations alongside ESO's staff. At Paranal I operated ESPRESSO on one of the 8.2 m Unit Telescopes and followed GJ 570 A through the nights, with Tiago Campante as principal investigator.</p>
-      <h2>What the data showed</h2>
-      <p>GJ 570 A, a small, cool star, oscillates with about a sixth of the Sun's strength. Together with a second star observed later in 2024, it shows that stars of this kind oscillate more weakly than expected, and computer simulations of their outer layers do not yet reproduce this. The results are in <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">Campante et al. 2026, with a plain-language explainer here</a>.</p>
+    <div class="story-cols">
+      <div class="prose">
+        <h2>What the campaign was for</h2>
+      <p>Stars oscillate. Gas churning below the surface drives sound waves through the interior, and the pitches of the tones reveal a star's mass, radius and age. This is asteroseismology. In stars like the Sun it is routine, but in K dwarfs, which are smaller and cooler, the surface moves by only a few centimetres per second, and space telescopes that watch brightness have caught the effect in very few of them.</p>
+      <p>A spectrograph can look for the same oscillation as a Doppler shift, the surface moving towards and away from us. ESPRESSO, on the Very Large Telescope, is stable enough to see shifts that small. GJ 570 A is a nearby K dwarf bright enough for 25-second exposures. How strongly such a star oscillates tests our models of convection, and it tells the PLATO mission what it can expect from stars of this kind.</p>
+      </div>
+      <div class="prose">
+        <h2>What I did</h2>
+      <p>Visitor mode means the observer travels to the telescope and runs the observations on site, alongside ESO's staff. The programme was Tiago Campante's, and I was the observer at Paranal for GJ 570 A, from 4 May 2024, with six scheduled nights from 6 to 12 May.</p>
+      <p>Each night the aim was a continuous series of short exposures of one star, about one a minute, so that the oscillations could be followed without gaps. Wind and cloud kept the dome closed on the first night and for half of the fourth, so the series that went into the analysis comes from the remaining nights.</p>
+      </div>
+      <div class="prose">
+        <h2>What came of it</h2>
+      <p>GJ 570 A does oscillate, with periods of three to four minutes, but at only about a sixth of the Sun's strength. Together with a second K dwarf observed in September 2024, it shows that small, cool stars oscillate more weakly than the rule for Sun-like stars predicts, and current 3D simulations of their outer layers do not reproduce the drop.</p>
+      <p>The results are in Campante et al. 2026, published in <i>Astronomy and Astrophysics</i>, where I am sixth of 24 authors and credited with the GJ 570 A observations. <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">The plain-language explainer is here</a>.</p>
+      </div>
     </div>
   </section>
   <section>
