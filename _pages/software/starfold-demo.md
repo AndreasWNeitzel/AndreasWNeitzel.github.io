@@ -11,11 +11,6 @@ extra_css: [/assets/css/starfold-demo.css, /assets/css/schematics.css]
 ---
 <div class="sfd-page">
 
-<figure class="panel blueprint sf-how">
-  {% include figures/starfold-how.svg %}
-  {% include figures/starfold-how-narrow.svg %}
-</figure>
-
 <section class="sfd" id="sf-demo" aria-label="Recorded Starfold run" data-header="{{ '/assets/data/starfold/apogee_run.json' | relative_url }}">
   <div class="sfd-dash">
     <div class="sfd-ctrl">
@@ -37,7 +32,7 @@ extra_css: [/assets/css/starfold-demo.css, /assets/css/schematics.css]
           <details><summary>search_budget_exhausted</summary><p>the search used every trial; a larger n_trials may help</p></details>
           <details><summary>consensus_subsampled</summary><p>the co-association check ran on a seeded subset of stars</p></details>
           <details><summary>consensus_disagrees</summary><p>the cut of the co-association matrix agrees with the partition below 0.5</p></details>
-          <details><summary>null_not_run</summary><p>no calibration test ran, so there is no p-value; run starfold.null_test</p></details>
+          <details><summary>no_structure_supported</summary><p>the calibration test ran and p is above alpha</p></details>
         </div>
       </section>
 
@@ -105,6 +100,11 @@ extra_css: [/assets/css/starfold-demo.css, /assets/css/schematics.css]
   </div>
   <noscript><p class="sfd-state">The panels need JavaScript. The run's numbers are in the tables below.</p></noscript>
 </section>
+
+<figure class="panel blueprint sf-how">
+  {% include figures/starfold-how.svg %}
+  {% include figures/starfold-how-narrow.svg %}
+</figure>
 
 <section class="sfd-numbers" aria-labelledby="numbers">
   <h2 id="numbers">The run in numbers</h2>

@@ -1059,7 +1059,7 @@ async function boot(root) {
     if (i < 0) return;
     const id = A.source_id[i].toString();
     const head = document.createElement("b");
-    head.textContent = `Gaia DR3 ${id}`;
+    head.innerHTML = `<i>Gaia</i> DR3 ${id}`;
     const link = document.createElement("a");
     link.href = `https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&Source=${id}`;
     link.textContent = "VizieR";
@@ -1125,7 +1125,9 @@ async function boot(root) {
       const [ax, ay] = p.axes;
       lines.push([...reading(ax.j), ", ", ...reading(ay.j)]);
     }
-    lines.push([`Gaia DR3 ${A.source_id[i].toString()}`]);
+    const gaia = document.createElement("i");
+    gaia.textContent = "Gaia";
+    lines.push([gaia, ` DR3 ${A.source_id[i].toString()}`]);
     if (p.name !== "map" || S.view !== "fit") lines.push([strongGroup(i)]);
     p.tip.replaceChildren(...lines.map((bits, k) => {
       const el = document.createElement(k === 0 ? "b" : "span");
@@ -1198,7 +1200,7 @@ async function boot(root) {
     const want = BigInt(digits);
     const i = A.source_id.indexOf(want);
     if (i < 0) {
-      ui.facts.textContent = `No star with Gaia DR3 source_id ${digits} among the ${grouped(n)}.`;
+      ui.facts.innerHTML = `No star with <i>Gaia</i> DR3 source_id ${digits} among the ${grouped(n)}.`;
       return;
     }
     pin(i);

@@ -46,7 +46,7 @@
   color: var(--muted);
 }
 .sfd-small, .sfd-cap { margin: 0; font-size: 0.8125rem; line-height: 1.42; color: var(--muted); }
-.sfd-cap .sfd-exact { color: color-mix(in oklab, var(--muted) 82%, var(--surface)); }
+.sfd-cap .sfd-exact { color: var(--muted); }
 .sfd sub { font-size: 0.72em; line-height: 0; }
 
 /* plot stages: square cells sized by their panel, capped so the dashboard fits one screen */
@@ -209,7 +209,7 @@
 /* replay */
 .sfd-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
 .sfd-buttons .sfd-play { min-inline-size: 74px; }
-.sfd-buttons .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.sfd-buttons .btn:disabled { color: var(--muted); background: transparent; border-color: var(--line); cursor: not-allowed; }
 .sfd-buttons .sfd-prev, .sfd-buttons .sfd-next { min-inline-size: 34px; padding-inline: 0; font-size: 1.05rem; }
 .sfd-strip {
   display: grid;
