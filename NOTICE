@@ -7,3 +7,8 @@ Globe on the home page (assets/vendor/globe, assets/data/map)
   figures/map/build_globe_regions.py.
 - Terrain in figures/eso and the Paranal renders: Copernicus DEM GLO-30, © DLR e.V. 2010 to 2014 and © Airbus Defence
   and Space GmbH 2014 to 2018, provided under COPERNICUS by the European Union and ESA.
+
+Type in Stellar Explorer (stellar-explorer/fonts)
+- Rajdhani, Copyright 2014 Indian Type Foundry, SIL Open Font License 1.1 (LICENSE-rajdhani.txt).
+- Share Tech Mono, Copyright 2012 Carrois Type Design, SIL Open Font License 1.1 (LICENSE-share-tech-mono.txt).
+- Exo 2, Copyright 2013 The Exo 2 Project Authors, SIL Open Font License 1.1 (LICENSE-exo-2.txt).

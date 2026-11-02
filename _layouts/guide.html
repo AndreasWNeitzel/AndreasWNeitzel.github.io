@@ -33,7 +33,7 @@ layout: default
           {%- for rid in page.related %}
             {%- assign hit = nil -%}
             {%- for cat in L %}{% for e in cat[1] %}{% if e.id == rid %}{% assign hit = e %}{% endif %}{% endfor %}{% endfor -%}
-            {%- if hit %}<li class="small"><span class="kicker">{{ hit.date | month_year }}</span><br>{{ hit.title | missions | truncate: 120 }}</li>{% endif -%}
+            {%- if hit %}<li class="small"><span class="kicker">{{ hit.date | month_year }}</span><br>{{ hit.title | missions }}</li>{% endif -%}
           {%- endfor %}
         </ul>
       </section>

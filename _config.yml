@@ -52,7 +52,6 @@ keep_files:
 
 plugins:
   - jekyll/scholar
-  - jekyll-feed
   - jekyll-sitemap
 
 collections:
@@ -67,6 +66,14 @@ collections:
     permalink: /papers/:name/
 
 defaults:
+  - scope:
+      path: "assets/pdf/CV_Neitzel_Academic_Public.pdf"
+    values:
+      sitemap: false
+  - scope:
+      path: "google59621b3d0c0a5124.html"
+    values:
+      sitemap: false
   - scope:
       path: ""
     values:
@@ -88,10 +95,6 @@ defaults:
     values:
       layout: paper
       nav_section: Publications
-
-feed:
-  collections:
-    - notes
 
 # jekyll-scholar
 scholar:

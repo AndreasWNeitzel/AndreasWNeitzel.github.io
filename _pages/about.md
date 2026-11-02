@@ -27,7 +27,7 @@ copy: about
     <dl>
       <div><dt>Doctorate</dt><dd>{{ phd.title }}, {{ phd.date | slice: 0, 4 }} to 2027</dd></div>
       <div><dt>Institutions</dt><dd>{% for a in p.affiliations %}{{ a.short }}{% unless forloop.last %}, {% endunless %}{% endfor %}</dd></div>
-      <div><dt>Published papers</dt><dd>{{ refereed.size }}</dd></div>
+      <div><dt>Refereed papers</dt><dd>{{ refereed.size }}</dd></div>
       <div><dt>Talks and posters</dt><dd>{{ L.presentations.size }}</dd></div>
       {%- if hpc.size > 0 %}
       <div><dt>Supercomputing, as principal investigator</dt><dd>{{ core | divided_by: 100000.0 | round | divided_by: 10.0 }} million core-hours, {{ gpu | delimit }} GPU-hours</dd></div>

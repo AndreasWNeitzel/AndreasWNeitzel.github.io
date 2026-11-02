@@ -9,7 +9,7 @@
   // some figures hold a wide and a narrow drawing and only one of them shows.
   const STATIC = [
     ".panel.blueprint:not(:has(.vlt-row))", ".vlt-row", ".paper-fig-svg", ".paper-fig-img", ".jn-frame", ".se-fig",
-    ".sfb-figure", ".gallery figure", ".tl-hero", "figure.panel.guide-wide", "figure:has(> video)",
+    ".sfb-figure", ".gallery figure", ".strip figure", ".tl-hero", "figure.panel.guide-wide", "figure:has(> video)",
   ].join(", ");
   const SKIP = ".plate, .hero, .card, .explainer, .row-item, .concept, .portal, .pg-wrap";
   // [the element that goes full screen, where its control sits]
@@ -222,7 +222,7 @@
   function attachStatic(host) {
     if (host.closest(SKIP) || !host.querySelector(MEDIA)) return;
     const link = host.querySelector("img")?.closest("a");
-    if (link && !isImageLink(link) && !host.querySelector("svg:not(.i)")) return;
+    if (link && !isImageLink(link) && !host.querySelector("svg:not(.i)") && !host.matches(".tl-hero")) return;
     if (getComputedStyle(host).position === "static") host.style.position = "relative";
     const ctl = control(false);
     ctl.setAttribute("aria-label", "Enlarge " + label(host));

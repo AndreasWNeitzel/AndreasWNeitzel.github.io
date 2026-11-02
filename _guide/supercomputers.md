@@ -15,7 +15,6 @@ related:
   - fund-2025-hpcvlab-deucalion-team-member
   - fund-2026-10-cpca-a1-deucalion
   - fund-2026-10-cpca-a2-marenostrum
-  - skill-2026-hpc
 sources:
   - {label: "EuroHPC Joint Undertaking, Discover EuroHPC JU", url: "https://eurohpc-ju.europa.eu/about/discover-eurohpc-ju_en"}
   - {label: "EuroHPC Joint Undertaking, Our supercomputers", url: "https://eurohpc-ju.europa.eu/supercomputers/our-supercomputers_en"}

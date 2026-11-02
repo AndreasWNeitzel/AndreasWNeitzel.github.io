@@ -45,6 +45,7 @@
     {%- endif -%}
   {%- endcapture -%}
   {%- assign meta = meta | strip -%}
+  {%- assign m0 = meta | slice: 0, 1 -%}{%- if m0 == "·" %}{% assign meta = meta | slice: 1, 9999 | strip | capitalize %}{% endif -%}
   {%- if meta != "" %}<p class="meta">{{ meta }}</p>{% endif %}
   {%- if include.compact and e.tagline %}
   <p class="note">{{ e.tagline | missions }}</p>
@@ -53,7 +54,7 @@
   {%- endif %}
   {%- if cat == "education" and e.thesis %}<p class="note">Thesis: {{ e.thesis | missions }}.{% if e.advisors %} Advisors: {{ e.advisors | join: ", " | initials }}.{% endif %}</p>{% endif %}
   {%- if e.details and include.compact != true %}
-  <ul class="note">{% for d in e.details %}<li>{{ d | missions }}</li>{% endfor %}</ul>
+  <ul class="note">{% for d in e.details %}{% if d contains "HAYDNsim pipeline" and e.summary contains "HAYDNsim pipeline" %}{% continue %}{% endif %}<li>{{ d | replace: "4 086", "4,086" | missions }}</li>{% endfor %}</ul>
   {%- endif %}
   {%- if e.contribution %}<p class="contribution">Contribution: {{ e.contribution }}</p>{% endif %}
   {%- if cat == "software" and include.compact != true %}

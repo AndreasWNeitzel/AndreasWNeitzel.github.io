@@ -23,7 +23,7 @@ lede: Starfold 0.2.0 was tested on ten tables with known classes and lost to the
       </thead>
       <tbody>
         {%- for r in site.data.starfold_benchmark %}
-        <tr><th scope="row">{{ r.table }}</th><td>{{ r.set }}</td><td>{{ r.n_rows }}</td><td>{{ r.n_features }}</td><td>{{ r.n_classes }}</td><td>{{ r.starfold_recovery }}</td><td>{{ r.defaults_recovery }}</td><td>{{ r.result }}</td></tr>
+        <tr><th scope="row">{{ r.table }}</th><td>{{ r.set }}</td><td>{{ r.n_rows | delimit }}</td><td>{{ r.n_features | delimit }}</td><td>{{ r.n_classes }}</td><td>{{ r.starfold_recovery | append: "000" | slice: 0, 5 }}</td><td>{{ r.defaults_recovery | append: "000" | slice: 0, 5 }}</td><td>{{ r.result }}</td></tr>
         {%- endfor %}
       </tbody>
     </table>

@@ -12,7 +12,6 @@ related:
   - pub-2025-neitzel-manifold-learning
   - sw-2026-starfold
   - pres-2026-07-tasc10-oral-janus
-  - skill-2026-ml-probabilistic-deep-learning
   - teach-2025-06-ia-summer-programme
 sources:
   - {label: "Leung and Bovy 2019, Monthly Notices of the Royal Astronomical Society (astroNN)", url: "https://doi.org/10.1093/mnras/sty3217"}
