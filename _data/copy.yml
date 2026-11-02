@@ -237,3 +237,12 @@ plates:
   publications: "Four published papers in <i>Astronomy and Astrophysics</i>, with my contribution to each stated."
   talks: "Talks and posters since 2022, with slides and posters on Zenodo where deposited."
   guide: "The science, institutions and machines behind my work, one minute each, with sources."
+
+credits:
+  footer: "The renders, animations, figures and text on this site are my own work, all rights reserved."
+  footer_link: "Credits and reuse"
+  lede: "Who made what on this site, and how to ask before reusing it."
+  own: "The renders, animations, schematics, figures, interactive demos and writing here are made by me, and all rights are reserved. If an image carries no credit line, it is my work."
+  pictures: "The pictures of me come from my own collection. I did not take them all."
+  thirdparty: "Other people's images, data and software are listed below. Each keeps its own credit and licence."
+  reuse: "If you would like to reuse anything of mine, please write to me first at {email}. Requests for research and teaching are welcome. Any reuse carries a credit to Andreas W. Neitzel with a link to this site."
