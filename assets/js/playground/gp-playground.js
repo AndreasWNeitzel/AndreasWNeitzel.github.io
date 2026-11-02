@@ -327,7 +327,7 @@ async function boot(root) {
   // ------------------------------------------------------------ mode switch
   const tabs = $$(".gp-switch [role=tab]");
   const panels = { kernels: $("#gp-kernels"), star: $("#gp-star") };
-  let mode = query.get("mode") === "star" ? "star" : "kernels";
+  let mode = query.get("mode") === "kernels" ? "kernels" : "star";
   function setMode(next) {
     mode = next;
     for (const tab of tabs) tab.setAttribute("aria-selected", tab.dataset.mode === mode ? "true" : "false");

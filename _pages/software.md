@@ -13,12 +13,12 @@ codes:
   - {id: haydnsim, title: HAYDNsim, loop: cluster, img: /assets/img/heroes/software_cluster.webp, url: /software/haydnsim/, links: [{label: "The pipeline", url: /software/haydnsim/}, {label: "What is HAYDN?", url: /guide/haydn/}]}
 playgrounds:
   - {id: nn, art: nn, url: /playground/neural-network/}
-  - {id: orbits, art: orbit, url: /playground/orbits/}
-  - {id: gp, art: gp, url: /playground/gaussian-processes/}
+  - {id: orbits, art: orbit, img: /assets/img/heroes/card_orbits.webp, url: /playground/orbits/}
+  - {id: gp, art: gp, img: /assets/img/heroes/card_gp.webp, url: /playground/gaussian-processes/}
   - {id: polytropes, art: polytrope, url: /playground/polytropes/}
 demos:
   - {id: starfold-demo, img: /assets/img/heroes/software_starfold.webp, url: /software/starfold-demo/}
-  - {id: stellar-explorer, art: hr, url: /stellar-explorer/}
+  - {id: stellar-explorer, art: hr, img: /assets/img/heroes/card_explorer.webp, url: /stellar-explorer/}
   - {id: tellurion, img: /assets/img/tellurion/blackhole-legend-3d.webp, url: /software/tellurion/}
 ---
 {%- assign L = site.data.ledger -%}
@@ -52,7 +52,7 @@ demos:
   <div class="explainers">
     {%- for pg in page.playgrounds %}{% assign c = C.playgrounds | where: "id", pg.id | first %}
     <a class="explainer k-up" href="{{ pg.url | relative_url }}">
-      <div class="pic art">{% include figures/art-{{ pg.art }}.svg %}</div>
+      {%- if pg.img %}<div class="pic"><img src="{{ pg.img | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async"></div>{% else %}<div class="pic art">{% include figures/art-{{ pg.art }}.svg %}</div>{% endif %}
       <h3>{{ c.title | missions }}</h3><p>{{ c.text | missions }}</p>
     </a>
     {%- endfor %}

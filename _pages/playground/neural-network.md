@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: playground
 permalink: /playground/neural-network/
 crumb: {label: Software, url: /software/}
 title: Neural-network playground
@@ -8,9 +8,8 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
 ---
 <link rel="stylesheet" href="{{ '/assets/css/playground.css' | relative_url }}">
 <div class="pg-page">
-<p class="pg-intro">A multilayer perceptron maps the first 24 Hermite coefficients of each star's <em>Gaia</em> DR3 BP and RP spectra, divided by its brightness, to its <span class="pg-nb">GSP-Spec</span> metallicity [M/H]; it learns from 3,200 stars and is checked on 800 that it never trains on.</p>
-
-<section class="pg" id="nn-playground" aria-label="Neural-network playground" data-header="{{ '/assets/data/playground/gaia_xp_mh.json' | relative_url }}" data-worker="{{ '/assets/js/playground/nn-worker.js' | relative_url }}">
+<section class="pg pg-app nn" id="nn-playground" aria-label="Neural-network playground" data-header="{{ '/assets/data/playground/gaia_xp_mh.json' | relative_url }}" data-worker="{{ '/assets/js/playground/nn-worker.js' | relative_url }}">
+  <header class="pg-bar"><p class="crumbs"><a href="{{ page.crumb.url | relative_url }}">{{ page.crumb.label }}</a></p><h1>{{ page.title | missions }}</h1><a class="pg-about-link" href="#about">What you are looking at</a></header>
   <div class="pg-top">
     <div class="pg-rail">
       <div class="pg-group pg-run">
@@ -85,7 +84,9 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
   <noscript><p class="pg-state">The playground needs JavaScript. The data it uses are described below.</p></noscript>
 </section>
 
-<details class="pg-more">
+<section class="pg-about" id="about">
+<p class="pg-intro">A multilayer perceptron maps the first 24 Hermite coefficients of each star's <em>Gaia</em> DR3 BP and RP spectra, divided by its brightness, to its <span class="pg-nb">GSP-Spec</span> metallicity [M/H]; it learns from 3,200 stars and is checked on 800 that it never trains on.</p>
+<details class="pg-more" open>
   <summary>What you are looking at</summary>
   <div class="prose">
     <p>The diagram draws the network. A star enters as 48 numbers, its BP coefficients in the upper band and its RP coefficients in the lower one, and passes through the hidden layers to a single output, the estimated [M/H].</p>
@@ -108,6 +109,7 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
   <p>Download the <a href="{{ '/assets/data/playground/gaia_xp_mh.bin' | relative_url }}">data</a> (0.5 MB), its <a href="{{ '/assets/data/playground/gaia_xp_mh.json' | relative_url }}">header</a> and its <a href="{{ '/assets/data/playground/gaia_xp_mh.meta.json' | relative_url }}">provenance</a>, which records the queries, their dates and the cuts. Training runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
 </div>
+</section>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/nn-playground.js' | relative_url }}"></script>

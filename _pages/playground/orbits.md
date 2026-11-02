@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: playground
 permalink: /playground/orbits/
 crumb: {label: Software, url: /software/}
 math: true
@@ -10,9 +10,8 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
 <link rel="stylesheet" href="{{ '/assets/css/playground.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/orbits-playground.css' | relative_url }}">
 <div class="pg-page">
-<p class="pg-intro">A geostationary satellite sits over the equator, so above 81.3 degrees of latitude it never rises: at the pole there is no signal from it at all. The Molniya orbit is the answer to that, and this page is the demonstration.</p>
-
-<section class="pg ob" id="orbits-playground" aria-label="Orbits playground" data-mode="earth" data-src="{{ '/assets/data/playground/orbits.json' | relative_url }}">
+<section class="pg pg-app ob" id="orbits-playground" aria-label="Orbits playground" data-mode="earth" data-src="{{ '/assets/data/playground/orbits.json' | relative_url }}">
+  <header class="pg-bar"><p class="crumbs"><a href="{{ page.crumb.url | relative_url }}">{{ page.crumb.label }}</a></p><h1>{{ page.title | missions }}</h1><a class="pg-about-link" href="#about">What you are looking at</a></header>
   <div class="pg-top">
     <div class="pg-rail">
       <div class="pg-group ob-run">
@@ -104,7 +103,9 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
   <noscript><p class="pg-state">The playground needs JavaScript. The numbers it uses are in the data file linked below.</p></noscript>
 </section>
 
-<details class="pg-more">
+<section class="pg-about" id="about">
+<p class="pg-intro">A geostationary satellite sits over the equator, so above 81.3 degrees of latitude it never rises: at the pole there is no signal from it at all. The Molniya orbit is the answer to that, and this page is the demonstration.</p>
+<details class="pg-more" open>
   <summary>What you are looking at</summary>
   <div class="prose">
     <p>In Earth mode the view shows three Molniya satellites and one geostationary satellite around the turning Earth, to scale. A Molniya orbit has a semi-major axis of 26,562 km, an eccentricity of 0.74, an inclination of 63.4 degrees and its perigee at the southernmost point of the orbit, so each pass takes half a sidereal day and the satellite spends about two thirds of it high over the northern hemisphere. The three orbital planes are 120 degrees apart and the satellites are timed so that one of them is always near apogee above the same longitude, here Moscow's. The geostationary satellite circles 35,786 km above the equator at longitude 0, in step with the ground.</p>
@@ -130,6 +131,7 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
   <p>Download the <a href="{{ '/assets/data/playground/orbits.json' | relative_url }}">data</a> (15 KB) and its <a href="{{ '/assets/data/playground/orbits.meta.json' | relative_url }}">provenance</a>, which records the queries, their dates, the candidates set aside and why, and the galpy cross-checks. The integration runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
 </div>
+</section>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/orbits-playground.js' | relative_url }}"></script>

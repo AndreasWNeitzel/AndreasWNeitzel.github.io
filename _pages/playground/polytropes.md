@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: playground
 permalink: /playground/polytropes/
 crumb: {label: Software, url: /software/}
 title: Build a star
@@ -10,12 +10,11 @@ math: true
 <link rel="stylesheet" href="{{ '/assets/css/playground.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/polytrope-playground.css' | relative_url }}">
 <div class="pg-page">
-<p class="pg-intro">A polytrope assumes one relation between pressure and density, <span class="tex" data-tex="P = K\rho^{1 + 1/n}">P = Kρ^(1 + 1/n)</span>.</p>
-
-<section class="pg pt" id="pt-playground" aria-label="Polytrope playground" data-stars="{{ '/assets/data/playground/polytrope_stars.json' | relative_url }}" data-mesa="{{ '/assets/data/playground/mesa_1msun_profile.json' | relative_url }}">
-  <div class="pt-dash">
-    <div class="pt-ctrl">
-    <div class="pg-panel pg-run pt-run">
+<section class="pg pg-app pt" id="pt-playground" aria-label="Polytrope playground" data-stars="{{ '/assets/data/playground/polytrope_stars.json' | relative_url }}" data-mesa="{{ '/assets/data/playground/mesa_1msun_profile.json' | relative_url }}">
+  <header class="pg-bar"><p class="crumbs"><a href="{{ page.crumb.url | relative_url }}">{{ page.crumb.label }}</a></p><h1>{{ page.title | missions }}</h1><a class="pg-about-link" href="#about">What you are looking at</a></header>
+  <div class="pg-top">
+    <div class="pg-rail pt-ctrl">
+    <div class="pg-group pg-run pt-run">
       <label class="pg-field"><span class="pg-label">Star</span><span class="pg-select"><select name="star" class="pt-star" disabled><option>Loading</option></select></span></label>
       <p class="pt-obs">Loading the star table.</p>
       <div class="pg-buttons">
@@ -30,7 +29,7 @@ math: true
         <p class="pg-state">Loading.</p>
       </div>
     </div>
-    <form class="pg-panel pg-settings pt-settings" aria-label="Polytrope settings">
+    <form class="pg-group pg-settings pt-settings" aria-label="Polytrope settings">
       <label class="pt-slider pt-slider--wide"><span class="pt-slider-head"><span class="pg-label">Polytropic index n</span><output>3.00</output></span><input type="range" name="n" min="0" max="4.9" step="0.01" value="3" disabled></label>
       <label class="pt-slider"><span class="pt-slider-head"><span class="pg-label">Mass (M&#9737;)</span><output>1.00</output></span><input type="range" name="M" min="0.5" max="2" step="0.01" value="1" disabled></label>
       <label class="pt-slider"><span class="pt-slider-head"><span class="pg-label">Radius (R&#9737;)</span><output>1.00</output></span><input type="range" name="R" min="0.5" max="2.5" step="0.01" value="1" disabled></label>
@@ -39,44 +38,59 @@ math: true
       <p class="pg-hint">A star sets M, R, X and Z and moves n to the index at its luminosity; every slider move re-solves the model.</p>
     </form>
     </div>
-
-    <figure class="pg-panel panel pt-main">
+    <div class="pg-stage2">
+      <figure class="pt-render" id="pt-star">
+        <div class="pt-star-stage"><canvas role="img" aria-label="The chosen star rendered from its mass, radius and luminosity: the colour from its effective temperature, the limb darkened, the surface granulated"></canvas></div>
+        <figcaption>
+          <dl class="pg-readout pt-star-readout">
+            <div><dt>M</dt><dd><span class="pt-sr-m">1.00</span> <small>M&#9737;</small></dd></div>
+            <div><dt>R</dt><dd><span class="pt-sr-r">1.00</span> <small>R&#9737;</small></dd></div>
+            <div><dt>L</dt><dd><span class="pt-sr-l">1.000</span> <small>L&#9737;</small></dd></div>
+            <div><dt>T<sub>eff</sub></dt><dd><span class="pt-sr-t">5772</span> <small>K</small></dd></div>
+          </dl>
+        </figcaption>
+      </figure>
+      <figure class="pt-main">
       <figcaption class="pg-head">
         <span class="pg-title">Inside the star</span>
         <span class="pg-key"><span><i class="k-poly"></i>polytrope</span><span class="pt-main-key" hidden><i class="k-mesa"></i>MESA model, 1 M&#9737; at 2.8 Gyr</span><span class="pt-main-key" hidden><i class="k-conv"></i>convective in MESA</span></span>
       </figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Density, temperature, pressure and energy generation against fractional radius"></canvas><div class="pg-tip" hidden></div></div>
     </figure>
-
-    <figure class="pg-panel pt-curve">
+    </div>
+  </div>
+  <div class="pg-row">
+    <figure class="pg-chart pt-curve">
       <figcaption class="pg-head"><span class="pg-title">Model luminosity against index</span><span class="pg-key"><span><i class="k-obs"></i><span class="pt-curve-key">L obs</span></span></span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Model luminosity in solar units on a log scale against the polytropic index from 0 to 4.9, with the observed luminosity marked"></canvas><div class="pg-tip" hidden></div></div>
     </figure>
-
-    <figure class="pg-panel pt-hist">
+    <figure class="pg-chart pt-hist">
       <figcaption class="pg-head"><span class="pg-title">Index from the uncertainties</span><span class="pg-key pt-mc-key">no draws yet</span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Histogram of the polytropic index over Monte Carlo draws of mass, radius and luminosity, with the median and the 68 per cent interval"></canvas></div>
     </figure>
+    <section class="pg-chart pg-chart--wide pt-detail" aria-label="The solution and the energy generation">
+      <div class="pg-head"><span class="pg-title">The solution behind the picture</span></div>
+      <p class="pt-facts">Solving.</p>
+      <div class="pg-pair">
+        <figure class="pg-sub pt-theta">
+          <div class="pg-stage"><canvas role="img" aria-label="The Lane-Emden solution theta against xi for the chosen index, with the exact solutions for n = 0, 1 and 5"></canvas></div>
+          <figcaption class="pg-caption"><span class="pt-check">Checking the solver against the exact solutions.</span></figcaption>
+        </figure>
+        <figure class="pg-sub pt-eps">
+          <div class="pg-stage"><canvas role="img" aria-label="Energy generation of the pp chain and the CNO cycle against fractional radius, with the fraction of the luminosity generated inside each radius"></canvas></div>
+          <figcaption class="pg-caption"><span class="pg-key"><span><i class="k-pp"></i>pp chain</span><span><i class="k-cno"></i>CNO cycle</span><span><i class="k-cum"></i>L inside r, right axis</span><span class="pt-main-key" hidden><i class="k-ana"></i>X in MESA, right axis</span></span> <span class="pt-share"></span></figcaption>
+        </figure>
+      </div>
+    </section>
   </div>
-
-  <section class="pg-panel pt-detail" aria-label="The solution and the energy generation">
-    <div class="pg-head"><span class="pg-title">The solution behind the picture</span></div>
-    <p class="pt-facts">Solving.</p>
-    <div class="pg-pair">
-      <figure class="pg-sub pt-theta">
-        <div class="pg-stage"><canvas role="img" aria-label="The Lane-Emden solution theta against xi for the chosen index, with the exact solutions for n = 0, 1 and 5"></canvas></div>
-        <figcaption class="pg-caption"><span class="pt-check">Checking the solver against the exact solutions.</span></figcaption>
-      </figure>
-      <figure class="pg-sub pt-eps">
-        <div class="pg-stage"><canvas role="img" aria-label="Energy generation of the pp chain and the CNO cycle against fractional radius, with the fraction of the luminosity generated inside each radius"></canvas></div>
-        <figcaption class="pg-caption"><span class="pg-key"><span><i class="k-pp"></i>pp chain</span><span><i class="k-cno"></i>CNO cycle</span><span><i class="k-cum"></i>L inside r, right axis</span><span class="pt-main-key" hidden><i class="k-ana"></i>X in MESA, right axis</span></span> <span class="pt-share"></span></figcaption>
-      </figure>
-    </div>
-  </section>
   <noscript><p class="pg-state">The playground needs JavaScript. The data it uses are described below.</p></noscript>
 </section>
 
-<details class="pg-more">
+
+
+<section class="pg-about" id="about">
+<p class="pg-intro">A polytrope assumes one relation between pressure and density, <span class="tex" data-tex="P = K\rho^{1 + 1/n}">P = Kρ^(1 + 1/n)</span>.</p>
+<details class="pg-more" open>
   <summary>What you are looking at</summary>
   <div class="prose">
     <p>Writing <span class="tex" data-tex="\rho = \rho_c\,\theta^n">ρ = ρ_c θ^n</span> and measuring the radius in units of <span class="tex" data-tex="\alpha^2 = (n+1)K\rho_c^{1/n - 1}/(4\pi G)">α² = (n + 1)K ρ_c^(1/n − 1)/(4πG)</span> turns hydrostatic equilibrium and mass conservation into the Lane-Emden equation,</p>
@@ -104,6 +118,7 @@ math: true
   <p>Download the <a href="{{ '/assets/data/playground/polytrope_stars.json' | relative_url }}">star table</a>, which records every value with its table and convention, and the <a href="{{ '/assets/data/playground/mesa_1msun_profile.json' | relative_url }}">model profile</a> with its provenance. Everything runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
 </div>
+</section>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/polytrope-playground.js' | relative_url }}"></script>

@@ -4,6 +4,7 @@
 // file reads the controls and draws on canvases with the site's colour tokens, which are read
 // again whenever the theme changes. The data load when the playground nears the viewport.
 import { N_MAX, NODES, ANALYTIC, Grid, model, drawValue, quantile, solveLaneEmden } from "./polytrope-core.js";
+import { StarRender } from "./star-render.js";
 
 const MINUS = "−";
 const SUN = "☉";
@@ -162,7 +163,14 @@ async function boot(root) {
     mainKeys: root.querySelectorAll(".pt-main-key"),
     mainTip: $(".pt-main .pg-tip"),
     curveTip: $(".pt-curve .pg-tip"),
+    starM: document.querySelector(".pt-sr-m"),
+    starR: document.querySelector(".pt-sr-r"),
+    starL: document.querySelector(".pt-sr-l"),
+    starT: document.querySelector(".pt-sr-t"),
   };
+  // the rendered star above the panels: it shows the nominal Sun until the table arrives
+  const starCanvas = document.querySelector("#pt-star canvas");
+  const starView = starCanvas ? StarRender.create(starCanvas) : null;
   const cv = {
     main: surface($(".pt-main canvas")),
     curve: surface($(".pt-curve canvas")),
@@ -246,8 +254,20 @@ async function boot(root) {
     curveData = null;
     updateReadout();
     updateFacts();
+    updateStar();
     for (const key of ["main", "curve", "theta", "eps"]) dirty[key] = true;
     schedule();
+  }
+
+  // The rendered star takes the current M and R with the star's observed luminosity, so its
+  // colour is the effective temperature of the real star (or of the custom M and R at that L).
+  function updateStar() {
+    if (!starView) return;
+    const teff = starView.set({ mass: P.M, radius: P.R, lum: Lobs, X: P.X, Z: P.Z, n });
+    if (ui.starM) ui.starM.textContent = fixed(P.M, 2);
+    if (ui.starR) ui.starR.textContent = fixed(P.R, 2);
+    if (ui.starL) ui.starL.textContent = lumText(Lobs);
+    if (ui.starT) ui.starT.textContent = grouped(teff);
   }
 
   function setSlider(name, value) {
@@ -292,6 +312,7 @@ async function boot(root) {
     updateObs();
     updateReadout();
     updateFacts();
+    updateStar();
     updateKeys();
     markAll();
   }
@@ -360,6 +381,7 @@ async function boot(root) {
       cur = model(grid.solution(n), P);
       updateReadout();
       updateFacts();
+      updateStar();
       dirty.main = dirty.curve = dirty.theta = dirty.eps = dirty.hist = true;
       schedule();
       return;

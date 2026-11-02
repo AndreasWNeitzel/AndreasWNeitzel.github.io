@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: playground
 permalink: /playground/gaussian-processes/
 crumb: {label: Software, url: /software/}
 title: Gaussian-process playground
@@ -10,63 +10,9 @@ math: true
 <link rel="stylesheet" href="{{ '/assets/css/playground.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/gp-playground.css' | relative_url }}">
 <div class="pg-page">
-<section class="pg gp" id="gp-playground" aria-label="Gaussian-process playground" data-rv="{{ '/assets/data/playground/hd41248_harps.json' | relative_url }}" data-worker="{{ '/assets/js/playground/gp-worker.js' | relative_url }}">
-  <div class="gp-modes">
-    <div class="gp-switch pg-buttons" role="tablist" aria-label="Mode">
-      <button type="button" class="btn" role="tab" id="gp-tab-kernels" aria-selected="true" aria-controls="gp-kernels" data-mode="kernels">Kernels</button>
-      <button type="button" class="btn" role="tab" id="gp-tab-star" aria-selected="false" aria-controls="gp-star" data-mode="star">A star: HD 41248</button>
-    </div>
-    <p class="gp-mode-text" data-for="kernels">Random functions from four covariance functions, pinned down by observations you add; the marginal likelihood says which length scale and noise the points prefer.</p>
-    <p class="gp-mode-text" data-for="star" hidden>A quasi-periodic Gaussian process for the activity in 223 HARPS velocities of HD 41248, its four kernel parameters and a jitter sampled by a Metropolis chain.</p>
-  </div>
-
-  <div class="gp-dash" id="gp-kernels" role="tabpanel" aria-labelledby="gp-tab-kernels">
-    <div class="pg-top">
-      <div class="pg-rail">
-        <div class="pg-group pg-run">
-          <div class="pg-buttons">
-            <button type="button" class="btn btn--primary gp-k-draw" title="Draw five new random functions">New draws</button>
-            <button type="button" class="btn gp-k-clear" title="Remove every observation">Clear points</button>
-          </div>
-          <div class="pg-live" aria-live="polite" aria-atomic="true">
-            <dl class="pg-readout">
-              <div><dt>Observations</dt><dd><span class="gp-k-count">0</span></dd></div>
-              <div><dt>log marginal likelihood</dt><dd><span class="gp-k-lml">n/a</span></dd></div>
-            </dl>
-            <p class="pg-state gp-k-state">Click in the figure to add an observation, and on a point to remove it.</p>
-          </div>
-        </div>
-        <form class="pg-group pg-settings gp-k-settings" aria-label="Kernel settings">
-          <label class="pg-field pg-field--wide"><span class="pg-label">Kernel</span><span class="pg-select"><select name="kernel"><option value="se" selected>Squared exponential</option><option value="per">Periodic</option><option value="qp">Quasi-periodic</option><option value="m32">Matérn 3/2</option></select></span></label>
-          <label class="pg-field pg-field--wide pg-range gp-range" data-param="l"><span class="pg-label"><span>Length scale ℓ</span><output name="l-out">1.00</output></span><input type="range" name="l" min="-1" max="1" step="0.02" value="0" aria-label="Length scale, logarithmic"></label>
-          <label class="pg-field pg-field--wide pg-range gp-range" data-param="P" hidden><span class="pg-label"><span>Period P</span><output name="P-out">2.0</output></span><input type="range" name="P" min="0.5" max="5" step="0.1" value="2" aria-label="Period"></label>
-          <label class="pg-field pg-field--wide pg-range gp-range" data-param="lam" hidden><span class="pg-label"><span>Smoothing λ</span><output name="lam-out">1.00</output></span><input type="range" name="lam" min="-1" max="1" step="0.02" value="0" aria-label="Smoothing within a period, logarithmic"></label>
-          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sf"><span class="pg-label"><span>Amplitude σ<sub>f</sub></span><output name="sf-out">1.00</output></span><input type="range" name="sf" min="-0.6" max="0.6" step="0.02" value="0" aria-label="Amplitude, logarithmic"></label>
-          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sn"><span class="pg-label"><span>Noise σ<sub>n</sub></span><output name="sn-out">0.10</output></span><input type="range" name="sn" min="-2" max="0.3" step="0.02" value="-1" aria-label="Observation noise, logarithmic"></label>
-          <p class="pg-hint">Length scales, amplitude and noise move on logarithmic scales. The period and the smoothing appear for the periodic kernels.</p>
-        </form>
-      </div>
-      <figure class="pg-plate gp-main gp-k-main">
-        <figcaption class="pg-legend">
-          <span class="pg-title gp-k-title">Five functions drawn from the prior</span>
-          <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
-        </figcaption>
-        <div class="pg-stage"><canvas role="img" aria-label="Random functions drawn from the kernel on 0 to 10, with the mean and the 2 sigma band"></canvas><div class="pg-tip" hidden></div></div>
-      </figure>
-    </div>
-    <div class="pg-row">
-      <figure class="pg-chart gp-k-kernel">
-        <figcaption class="pg-head"><span class="pg-title">Covariance against separation</span></figcaption>
-        <div class="pg-stage"><canvas role="img" aria-label="The kernel as a function of the separation between two inputs, from 0 to 10"></canvas></div>
-      </figure>
-      <figure class="pg-chart gp-k-lml">
-        <figcaption class="pg-head"><span class="pg-title">log marginal likelihood over ℓ and σ<sub>n</sub></span><span class="pg-key">click to set</span></figcaption>
-        <div class="pg-stage"><canvas role="img" aria-label="Map of the log marginal likelihood of the observations over the length scale and the noise, with the current values ringed"></canvas><div class="pg-tip" hidden></div></div>
-      </figure>
-    </div>
-  </div>
-
-  <div class="gp-dash" id="gp-star" role="tabpanel" aria-labelledby="gp-tab-star" hidden>
+<section class="pg pg-app gp" id="gp-playground" aria-label="Gaussian-process playground" data-rv="{{ '/assets/data/playground/hd41248_harps.json' | relative_url }}" data-worker="{{ '/assets/js/playground/gp-worker.js' | relative_url }}">
+  <header class="pg-bar"><p class="crumbs"><a href="{{ page.crumb.url | relative_url }}">{{ page.crumb.label }}</a></p><h1>{{ page.title | missions }}</h1><div class="gp-switch pg-buttons" role="tablist" aria-label="Mode"><button type="button" class="btn btn--sm" role="tab" id="gp-tab-star" aria-selected="true" aria-controls="gp-star" data-mode="star">HD 41248</button><button type="button" class="btn btn--sm" role="tab" id="gp-tab-kernels" aria-selected="false" aria-controls="gp-kernels" data-mode="kernels">Kernels</button></div><a class="pg-about-link" href="#about">What you are looking at</a></header>
+  <div class="gp-dash" id="gp-star" role="tabpanel" aria-labelledby="gp-tab-star">
     <div class="pg-top">
       <div class="pg-rail">
         <div class="pg-group pg-run">
@@ -118,8 +64,54 @@ math: true
     </div>
   </div>
 
+  <div class="gp-dash" id="gp-kernels" role="tabpanel" aria-labelledby="gp-tab-kernels" hidden>
+    <div class="pg-top">
+      <div class="pg-rail">
+        <div class="pg-group pg-run">
+          <div class="pg-buttons">
+            <button type="button" class="btn btn--primary gp-k-draw" title="Draw five new random functions">New draws</button>
+            <button type="button" class="btn gp-k-clear" title="Remove every observation">Clear points</button>
+          </div>
+          <div class="pg-live" aria-live="polite" aria-atomic="true">
+            <dl class="pg-readout">
+              <div><dt>Observations</dt><dd><span class="gp-k-count">0</span></dd></div>
+              <div><dt>log marginal likelihood</dt><dd><span class="gp-k-lml">n/a</span></dd></div>
+            </dl>
+            <p class="pg-state gp-k-state">Click in the figure to add an observation, and on a point to remove it.</p>
+          </div>
+        </div>
+        <form class="pg-group pg-settings gp-k-settings" aria-label="Kernel settings">
+          <label class="pg-field pg-field--wide"><span class="pg-label">Kernel</span><span class="pg-select"><select name="kernel"><option value="se" selected>Squared exponential</option><option value="per">Periodic</option><option value="qp">Quasi-periodic</option><option value="m32">Matérn 3/2</option></select></span></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="l"><span class="pg-label"><span>Length scale ℓ</span><output name="l-out">1.00</output></span><input type="range" name="l" min="-1" max="1" step="0.02" value="0" aria-label="Length scale, logarithmic"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="P" hidden><span class="pg-label"><span>Period P</span><output name="P-out">2.0</output></span><input type="range" name="P" min="0.5" max="5" step="0.1" value="2" aria-label="Period"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="lam" hidden><span class="pg-label"><span>Smoothing λ</span><output name="lam-out">1.00</output></span><input type="range" name="lam" min="-1" max="1" step="0.02" value="0" aria-label="Smoothing within a period, logarithmic"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sf"><span class="pg-label"><span>Amplitude σ<sub>f</sub></span><output name="sf-out">1.00</output></span><input type="range" name="sf" min="-0.6" max="0.6" step="0.02" value="0" aria-label="Amplitude, logarithmic"></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sn"><span class="pg-label"><span>Noise σ<sub>n</sub></span><output name="sn-out">0.10</output></span><input type="range" name="sn" min="-2" max="0.3" step="0.02" value="-1" aria-label="Observation noise, logarithmic"></label>
+          <p class="pg-hint">Length scales, amplitude and noise move on logarithmic scales. The period and the smoothing appear for the periodic kernels.</p>
+        </form>
+      </div>
+      <figure class="pg-plate gp-main gp-k-main">
+        <figcaption class="pg-legend">
+          <span class="pg-title gp-k-title">Five functions drawn from the prior</span>
+          <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
+        </figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Random functions drawn from the kernel on 0 to 10, with the mean and the 2 sigma band"></canvas><div class="pg-tip" hidden></div></div>
+      </figure>
+    </div>
+    <div class="pg-row">
+      <figure class="pg-chart gp-k-kernel">
+        <figcaption class="pg-head"><span class="pg-title">Covariance against separation</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="The kernel as a function of the separation between two inputs, from 0 to 10"></canvas></div>
+      </figure>
+      <figure class="pg-chart gp-k-lml">
+        <figcaption class="pg-head"><span class="pg-title">log marginal likelihood over ℓ and σ<sub>n</sub></span><span class="pg-key">click to set</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Map of the log marginal likelihood of the observations over the length scale and the noise, with the current values ringed"></canvas><div class="pg-tip" hidden></div></div>
+      </figure>
+    </div>
+  </div>
+
   <section class="pg-details gp-details" aria-label="The model">
-    <div class="gp-cols" data-for="kernels">
+    <div class="gp-cols" data-for="kernels" hidden>
       <div class="gp-col">
         <span class="pg-title">The kernel</span>
         <span class="tex tex-display gp-k-formula" data-tex="k(x, x') = \sigma_f^2 \exp\left(-\frac{(x - x')^2}{2\ell^2}\right)">k(x, x') = σf² exp(−(x − x')² / 2ℓ²)</span>
@@ -132,7 +124,7 @@ math: true
         <p>Observations enter with the same noise σ<sub>n</sub>. The log marginal likelihood trades fit against complexity, so the map on the right is where the hyperparameters would be learnt from the points.</p>
       </div>
     </div>
-    <div class="gp-cols" data-for="star" hidden>
+    <div class="gp-cols" data-for="star">
       <div class="gp-col">
         <span class="pg-title">The model</span>
         <span class="tex tex-display" data-tex="k(t_i, t_j) = \eta_1^2 \exp\left[-\frac{(t_i - t_j)^2}{2\eta_2^2} - \frac{2 \sin^2\left(\pi (t_i - t_j) / \eta_3\right)}{\eta_4^2}\right] + \left(\sigma_i^2 + s^2\right) \delta_{ij}">k(ti, tj) = η1² exp[−(ti − tj)² / 2η2² − 2 sin²(π (ti − tj) / η3) / η4²] + (σi² + s²) δij</span>
@@ -155,7 +147,8 @@ math: true
   <noscript><p class="pg-state">The playground needs JavaScript. The data it uses are described below.</p></noscript>
 </section>
 
-<details class="pg-more">
+<section class="pg-about" id="about">
+<details class="pg-more" open>
   <summary>What you are looking at</summary>
   <div class="prose">
     <p><b>Kernels.</b> The main figure shows five random functions drawn from the chosen kernel on x from 0 to 10, with the mean and the band two standard deviations either side. With no observations that is the prior: the mean is zero and the band has the width of the amplitude. The squared exponential gives smooth functions, Matérn 3/2 rougher ones, the periodic kernel repeats exactly and the quasi-periodic kernel repeats while slowly forgetting, which is the behaviour of spots rotating across a stellar surface.</p>
@@ -181,6 +174,7 @@ math: true
   <p>Download the <a href="{{ '/assets/data/playground/hd41248_harps.json' | relative_url }}">velocities</a> (12 kB), their <a href="{{ '/assets/data/playground/hd41248_harps.meta.json' | relative_url }}">provenance</a>, which records the query, its date and the catalogue ReadMe, and the <a href="{{ '/assets/data/playground/hd41248_gp_pilot.json' | relative_url }}">pilot run</a>. The table remains the authors' and the journal's; it is reproduced here for teaching, with its reference. Everything runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
 </div>
+</section>
 </div>
 <script src="{{ '/assets/js/tokens.js' | relative_url }}" defer></script>
 <script type="module" src="{{ '/assets/js/playground/gp-playground.js' | relative_url }}"></script>
