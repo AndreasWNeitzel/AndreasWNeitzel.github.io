@@ -6,8 +6,8 @@ site:
 
 home:
   role: "Astrophysicist and machine-learning researcher"
-  photo_alt: "Andreas speaking at a podium with a microphone at the TASC8 and KASC15 workshop in Porto, 2024"
-  photo_caption: "TASC8 and KASC15, Porto, 2024"
+  photo_alt: "Andreas speaking at a podium with a microphone at the TASC8/KASC15 workshop in Porto, 2024"
+  photo_caption: "TASC8/KASC15, Porto, 2024"
   concepts:
     - key: "missions"
       title: "Space Missions"
@@ -44,7 +44,7 @@ home:
       title: "Talks"
       glass: "Talks and posters at workshops and conferences in Portugal, Spain and Denmark, with slides on Zenodo where deposited."
       alts:
-        - "Andreas speaking at TASC10 in Aarhus"
+        - "Andreas speaking at TASC10/KASC17 in Aarhus"
         - "Andreas presenting JANUS at a meeting in Porto"
         - "Andreas at DFA Week 2026 in Porto pointing at the title slide"
   missions_title: "Missions and machines"
@@ -105,7 +105,7 @@ about:
     - key: "dome"
       caption: "Beneath the mirror cell of a Unit Telescope"
     - key: "aarhus"
-      caption: "Speaking at TASC10, Aarhus, 2026"
+      caption: "Speaking at TASC10/KASC17, Aarhus, 2026"
     - key: "daylight"
       caption: "Between the Unit Telescopes in daylight"
     - key: "porto"

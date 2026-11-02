@@ -32,8 +32,8 @@ body_class: home
     <div class="flow"><span class="spine" aria-hidden="true"></span>
     {%- for pt in H.portals %}
     {%- assign cp = C.portals | where: "key", pt.key | first %}
-    <a class="portal k-card" href="{{ pt.url | relative_url }}"><span class="node" aria-hidden="true"></span>
-      <div class="media">{% if pt.images.size > 1 %}<div class="tri">{% for im in pt.images %}<div><img src="{{ im.src | relative_url }}" alt="{{ cp.alts[forloop.index0] }}" loading="lazy" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}></div>{% endfor %}</div>
+    <a class="portal" href="{{ pt.url | relative_url }}"><span class="node" aria-hidden="true"></span>
+      <div class="media">{% if pt.images.size > 1 %}<div class="tri">{% for im in pt.images %}<div><img src="{{ '/assets/img/heroes/portal/' | append: im.src | split: '/' | last | prepend: '/assets/img/heroes/portal/' | relative_url }}" alt="{{ cp.alts[forloop.index0] }}" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}></div>{% endfor %}</div>
         {%- else %}{% assign im = pt.images[0] %}<img src="{{ im.src | relative_url }}" alt="{{ cp.alts[0] }}" loading="lazy" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}>{% endif %}</div>
       <p class="glass">{{ cp.glass | missions }}</p>
       <div class="t"><h2>{{ cp.title }}</h2><span class="more"><span>Learn more</span><span class="go"><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></div>

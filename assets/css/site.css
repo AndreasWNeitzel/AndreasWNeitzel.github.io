@@ -182,7 +182,7 @@
   .marks { padding: 24px 0; display: flex; align-items: center; gap: 36px; border-block-start: 1px solid var(--line); flex-wrap: wrap; }
   .marks span { font: 400 0.8rem var(--mono); color: var(--ink-2); margin-inline-end: -14px; }
   .marks img { inline-size: auto; opacity: .9; }
-  .marks .fct { block-size: 28px; } .marks .ehpc { block-size: 54px; }
+  .marks .fct { block-size: 46px; } .marks .ehpc { block-size: 76px; }
   .on-light { display: none; }
   :root[data-theme="light"] .on-light { display: inline; } :root[data-theme="light"] .on-dark { display: none; }
   @media (prefers-color-scheme: light) { :root:not([data-theme]) .on-light { display: inline; } :root:not([data-theme]) .on-dark { display: none; } }
@@ -425,8 +425,7 @@
   .portals { position: relative; }
   .flow { position: relative; display: grid; gap: 22px; }
   .spine { position: absolute; left: -30px; top: 0; bottom: 0; width: 1px; background: var(--line); overflow: hidden; }
-  .spine::after { content: ""; position: absolute; left: 0; right: 0; top: -14px; bottom: 0; background: repeating-linear-gradient(180deg, var(--flow) 0 6px, transparent 6px 14px); opacity: .55; animation: run 2.4s linear infinite paused; will-change: transform; }
-  .portals.is-live .spine::after { animation-play-state: running; }
+  .spine::after { content: ""; position: absolute; left: 0; right: 0; top: -14px; bottom: 0; background: repeating-linear-gradient(180deg, var(--flow) 0 6px, transparent 6px 14px); opacity: .55; will-change: transform; }
   @keyframes run { to { transform: translateY(14px); } }
   .portal { position: relative; display: block; block-size: 380px; border-radius: var(--radius); background: #0d0c0b; color: #ecebe6; isolation: isolate; box-shadow: 0 0 0 1px var(--line-strong); transition: box-shadow .5s var(--ease); }
   .portal:hover { text-decoration: none; box-shadow: 0 0 0 1px var(--flow); }

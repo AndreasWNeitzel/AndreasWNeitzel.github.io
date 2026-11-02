@@ -1,6 +1,6 @@
 // Site behaviour: theme, header state, the arrival build, sections that build once as they arrive,
 // loops that play only on screen, the pointer light on the concept cards, FIG 1 captions,
-// record filters, one-time figure builds and the lazy start of the globe. No dependencies.
+// record filters, one-time figure builds and the idle start of the globe. No dependencies.
 (() => {
   const root = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -77,10 +77,6 @@
     p.style.setProperty("--mx", (e.clientX - r.left) + "px"); p.style.setProperty("--my", (e.clientY - r.top) + "px");
   }, { passive: true }));
 
-  // ---- portals: the spine runs only while on screen --------------------------------
-  const portalSection = document.querySelector(".portals");
-  if (portalSection && !still) new IntersectionObserver((es) => es.forEach((e) => portalSection.classList.toggle("is-live", e.isIntersecting))).observe(portalSection);
-
   // ---- FIG 1: stage captions ------------------------------------------------------
   const fig = document.getElementById("fig1");
   if (fig && fig.querySelector("[data-captions]")) {
@@ -146,14 +142,13 @@
     builds.forEach((el) => { el.dataset.build = "armed"; io.observe(el); });
   }
 
-  // ---- the globe: its libraries and maps load when the section approaches ---------------
+  // ---- the globe: its libraries and maps load once the page is idle ---------------
   const globe = document.querySelector("[data-globe]");
   if (globe) {
     const load = (src) => new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.defer = true; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
     const start = () => load(globe.dataset.vendor + "d3-array.min.js").then(() => load(globe.dataset.vendor + "d3-geo.min.js")).then(() => load(globe.dataset.vendor + "topojson-client.min.js")).then(() => load(globe.dataset.script)).catch(() => {});
-    if ("IntersectionObserver" in window) {
-      const io = new IntersectionObserver((entries) => { if (entries.some((e) => e.isIntersecting)) { io.disconnect(); start(); } }, { rootMargin: "700px 0px" });
-      io.observe(globe);
-    } else start();
+    // loaded while the page is idle, never during a scroll: parsing the maps would stall it
+    const idle = window.requestIdleCallback || ((f) => setTimeout(f, 300));
+    if (document.readyState === "complete") idle(start); else addEventListener("load", () => idle(start), { once: true });
   }
 })();
