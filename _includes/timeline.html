@@ -21,7 +21,7 @@
     <li class="tl-row k-row" data-kind="{{ r.kind }}" data-id="{{ r.id }}">
       <span class="tl-date">{{ r.start }}{% if r.end != "" %}<span class="tl-to">to {{ r.end }}</span>{% endif %}</span>
       {%- assign mk = r.tag | replace: "abroad", "position" | replace: "membership", "position" | replace: "teaching", "service" | replace: "event", "service" -%}{%- if mk == "paper" %}{% assign mk = "article" %}{% endif %}
-      <span class="mk mk--{{ mk }} mk--row"><svg aria-hidden="true"><use href="#mk-{{ mk }}"/></svg><span>{{ r.label }}</span></span>
+      <span class="mk mk--{{ mk }} mk--row"><svg aria-hidden="true"><use href="{{ '/assets/img/kind-marks.svg' | relative_url }}#mk-{{ mk }}"/></svg><span>{{ r.label }}</span></span>
       <span class="tl-title">{{ r.title | missions }}{% if r.meta != "" %}<small>{{ r.meta | missions }}</small>{% endif %}</span>
       <span class="tl-links">{% if r.url %}<a href="{{ r.url | relative_url }}">{{ r.link }}</a>{% endif %}</span>
     </li>

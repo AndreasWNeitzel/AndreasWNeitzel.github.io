@@ -328,3 +328,14 @@
   .pg-about > .pg-intro + .pg-more { padding-block-start: 0; border-block-start: 0; }
   .pg-about .pg-notes .pg-credits { font-size: 0.9375rem; }
 }
+
+/* the network: one clean diverging pair for the sign of a weight, sky and coral, on a cooler black; the same pair runs
+   from cool to hot stars in the scatter, which is the way stars themselves are coloured */
+.nn {
+  --accent: light-dark(#0a78b8, #7ccfff); --accent-2: light-dark(#d4452f, #ff7f6b);
+  --mark: var(--accent); --flow: var(--accent-2);
+}
+.nn .pg-plate {
+  --bg: #0b0d12; --surface: #0b0d12; --surface-2: #171a22;
+  background: linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px, linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px, #0b0d12;
+}

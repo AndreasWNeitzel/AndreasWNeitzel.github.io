@@ -63,10 +63,13 @@ module SiteFilters
         fin = e["end_date"].to_s
         fin_my = fin == "present" ? "present" : month_year(fin)
         fin_my = "" if fin_my == month_year(date)
+        # a degree belongs to the year it was completed, and says so; one still running says that instead
+        done = cat == "education" && !fin.empty? && fin != "present"
+        label = done ? "degree completed" : "degree in progress" if cat == "education"
         rows << {
           "id" => e["id"].to_s, "when" => month_year(date), "start" => month_year(date),
           "end" => fin_my,
-          "sort" => date.ljust(10, "0"), "kind" => kind, "tag" => tag, "label" => label,
+          "sort" => (done ? fin : date).ljust(10, "0"), "kind" => kind, "tag" => tag, "label" => label,
           "title" => e["title"].to_s, "meta" => meta, "url" => url,
           "link" => url.to_s.include?("doi.org") ? "DOI" : url.to_s.include?("arxiv") ? "arXiv" : "Open"
         }

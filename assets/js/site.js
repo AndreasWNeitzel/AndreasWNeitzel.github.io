@@ -36,9 +36,7 @@
   if (document.body.classList.contains("intro")) {
     const heroImg = document.querySelector(".hero img");
     const go = () => requestAnimationFrame(() => {
-      document.querySelectorAll(".concept").forEach((c, k) => { c.style.transitionDelay = (0.5 + k * 0.08) + "s"; });
       document.body.classList.remove("intro");
-      setTimeout(() => document.querySelectorAll(".concept").forEach((c) => { c.style.transitionDelay = ""; }), 1900);
     });
     if (still) document.body.classList.remove("intro");
     else Promise.all([document.fonts.ready, heroImg ? heroImg.decode().catch(() => {}) : null]).then(go);
@@ -119,6 +117,32 @@
     });
     fig.addEventListener("pointerleave", () => set(null));
   }
+
+  // ---- staged figures: hover, focus or tap a stage; its line shows in the readout ---------
+  document.querySelectorAll("[data-stagefig]").forEach((fg) => {
+    const lines = JSON.parse(fg.querySelector("[data-captions]").textContent);
+    const titleEl = fg.querySelector("[data-read-title]");
+    const lineEl = fg.querySelector("[data-read-line]");
+    const rest = lineEl.innerHTML = lineEl.innerHTML.replace("Hover", matchMedia("(hover: none)").matches ? "Tap" : "Hover");
+    const stages = fg.querySelectorAll(".jn-stage");
+    let held = null;
+    const set = (key) => {
+      const c = key && lines[key];
+      stages.forEach((s) => s.classList.toggle("is-active", !!c && s.dataset.stage === key));
+      fg.classList.toggle("has-active", !!c);
+      titleEl.innerHTML = c ? c.title : "";
+      lineEl.innerHTML = c ? c.line : rest;
+    };
+    stages.forEach((s) => {
+      s.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") set(s.dataset.stage); });
+      s.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") set(held); });
+      s.addEventListener("focus", () => { if (s.matches(":focus-visible")) { held = s.dataset.stage; set(held); } });
+      s.addEventListener("blur", () => { held = null; set(null); });
+      s.addEventListener("click", (e) => { e.stopPropagation(); held = held === s.dataset.stage ? null : s.dataset.stage; set(held); });
+      s.addEventListener("keydown", (e) => { if (e.key === "Escape") s.blur(); });
+    });
+    fg.addEventListener("click", () => { held = null; set(null); });
+  });
 
   // ---- the record: one kind at a time; empty years fold away --------------------------
   const buttons = document.querySelectorAll(".filters [data-filter]");

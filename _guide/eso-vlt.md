@@ -23,7 +23,7 @@ sources:
   - {label: "ESO, VLT enclosure", url: "https://www.eso.org/sci/facilities/paranal/telescopes/ut/enclosure.html"}
   - {label: "Pepe et al. 2014, ESPRESSO, arXiv:1401.5918", url: "https://arxiv.org/abs/1401.5918"}
   - {label: "Grupp et al. 2020, the ESPRESSO Coudé train, arXiv:2004.12499", url: "https://arxiv.org/abs/2004.12499"}
-  - {label: "Copernicus DEM GLO-30", url: "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"}
+  - {label: "Terrain: Copernicus DEM GLO-30, © DLR e.V. 2010 to 2014 and © Airbus Defence and Space GmbH 2014 to 2018, provided under COPERNICUS by the European Union and ESA", url: "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"}
   - {label: "Campante et al. 2026, Astronomy and Astrophysics, doi:10.1051/0004-6361/202660350", url: "https://doi.org/10.1051/0004-6361/202660350"}
 ---
 

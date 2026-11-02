@@ -11,7 +11,7 @@
   {%- if a contains "Neitzel" -%}{%- assign position = forloop.index -%}{%- endif -%}
 {%- endfor -%}
 <div class="bib-entry">
-<div class="when"><span>{{ entry.year }}</span>{%- assign mk = "article" -%}{%- if entry.note contains "letter" %}{% assign mk = "letter" %}{% endif -%}<span class="mk mk--{{ mk }}{% if position == 1 %} mk--lead{% endif %}"><svg aria-hidden="true"><use href="#mk-{{ mk }}"/></svg><span>{% if position == 1 %}first author{% else %}co-author {{ position }}/{{ n }}{% endif %}</span></span>{% if entry.note contains "accepted" %}<span class="tag tag--accepted">accepted</span>{% endif %}</div>
+<div class="when"><span>{{ entry.year }}</span>{%- assign mk = "article" -%}{%- if entry.note contains "letter" %}{% assign mk = "letter" %}{% endif -%}<span class="mk mk--{{ mk }}{% if position == 1 %} mk--lead{% endif %}"><svg aria-hidden="true"><use href="{{ '/assets/img/kind-marks.svg' | relative_url }}#mk-{{ mk }}"/></svg><span>{% if position == 1 %}first author{% else %}co-author {{ position }}/{{ n }}{% endif %}</span></span>{% if entry.note contains "accepted" %}<span class="tag tag--accepted">accepted</span>{% endif %}</div>
 <p class="title">{{ entry.title | missions }}</p>
 <p class="meta">
   {%- if n > 4 -%}

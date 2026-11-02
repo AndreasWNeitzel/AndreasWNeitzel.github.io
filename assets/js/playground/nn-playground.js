@@ -270,8 +270,9 @@ async function boot(root) {
     C = CP;
     try { draw(); } finally { C = page; }
   }
+  const pageColour = tokensIn(root);
   function readTheme() {
-    C = palette((name) => T.colour(name));
+    C = palette(pageColour);
     CP = palette(plateColour);
     const cs = getComputedStyle(document.documentElement);
     F = { mono: cs.getPropertyValue("--mono").trim() || "monospace", sans: cs.getPropertyValue("--sans").trim() || "sans-serif" };

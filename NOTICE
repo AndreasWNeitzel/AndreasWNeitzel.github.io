@@ -5,3 +5,5 @@ Globe on the home page (assets/vendor/globe, assets/data/map)
 - countries-110m.json from world-atlas 2.0.2 (ISC licence, Mike Bostock), built from Natural Earth, which is in the
   public domain; globe-mid.json and globe-near.json are cut and simplified from Natural Earth 1:10m by
   figures/map/build_globe_regions.py.
+- Terrain in figures/eso and the Paranal renders: Copernicus DEM GLO-30, © DLR e.V. 2010 to 2014 and © Airbus Defence
+  and Space GmbH 2014 to 2018, provided under COPERNICUS by the European Union and ESA.
