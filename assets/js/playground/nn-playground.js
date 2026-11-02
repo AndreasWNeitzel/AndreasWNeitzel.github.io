@@ -452,8 +452,10 @@ async function boot(root) {
     const est = S && S.sample.row === r ? `network ${signed(S.sample.prediction)}` : "network estimate pending";
     const head = document.createElement("b");
     head.textContent = `GSP-Spec [M/H] ${signed(A.mh_gspspec[r])}, ${est} dex`;
-    const rest = ` \u00b7 Gaia DR3 ${A.source_id[r].toString()} \u00b7 Teff ${grouped(A.teff_gspspec[r])} K \u00b7 log g ${A.logg_gspspec[r].toFixed(2)} \u00b7 G ${A.phot_g_mean_mag[r].toFixed(1)} mag`;
-    ui.facts.replaceChildren(head, document.createTextNode(rest));
+    const gaia = document.createElement("i");
+    gaia.textContent = "Gaia";
+    const rest = ` DR3 ${A.source_id[r].toString()} \u00b7 Teff ${grouped(A.teff_gspspec[r])} K \u00b7 log g ${A.logg_gspspec[r].toFixed(2)} \u00b7 G ${A.phot_g_mean_mag[r].toFixed(1)} mag`;
+    ui.facts.replaceChildren(head, " \u00b7 ", gaia, document.createTextNode(rest));
   }
 
   ui.scale.addEventListener("change", () => {
@@ -875,12 +877,12 @@ async function boot(root) {
     ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
-    ctx.fillText("GSP-Spec [M/H] (dex)", f.x0 + f.size / 2, f.y0 + f.size + f.m.b - 4);
+    ctx.fillText(f.size < 175 ? "GSP-Spec [M/H]" : "GSP-Spec [M/H] (dex)", f.x0 + f.size / 2, f.y0 + f.size + f.m.b - 4);
     ctx.save();
     ctx.translate(11, f.y0 + f.size / 2);
     ctx.rotate(-Math.PI / 2);
     ctx.textBaseline = "middle";
-    ctx.fillText("network [M/H] (dex)", 0, 0);
+    ctx.fillText(f.size < 175 ? "network [M/H]" : "network [M/H] (dex)", 0, 0);
     ctx.restore();
     // Temperature scale: the same OKLab ramp as the points, hot at the top.
     const bx = f.x0 + f.size + 22;
@@ -929,7 +931,7 @@ async function boot(root) {
       const a = document.createElement("span");
       a.textContent = `Teff ${grouped(A.teff_gspspec[r])} K, log g ${A.logg_gspspec[r].toFixed(2)}`;
       const b = document.createElement("span");
-      b.textContent = `Gaia DR3 ${A.source_id[r].toString()}`;
+      b.innerHTML = `<i>Gaia</i> DR3 ${A.source_id[r].toString()}`;
       ui.parityTip.append(head, a, b);
       ui.parityTip.hidden = false;
       const x = parityXY[2 * i];
@@ -1051,10 +1053,9 @@ async function boot(root) {
     }
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    for (const w of [400, 500, 600, 700, 800, 900, 1000]) {
-      if (s.w < 420 && w % 200 !== 0) continue;
-      ctx.fillText(String(w), X(w), m.t + H + 6);
-    }
+    // as many wavelength ticks as fit: 400 to 1000 in steps of 100, 200 or 300 nm
+    const nmStep = W >= 300 ? 100 : W >= 170 ? 200 : 300;
+    for (let w = 400; w <= 1000; w += nmStep) ctx.fillText(String(w), X(w), m.t + H + 6);
     const order = [0, 1, 2].sort((a, b) => (examples[a] === selected) - (examples[b] === selected));
     ctx.lineJoin = "round";
     const ends = [];

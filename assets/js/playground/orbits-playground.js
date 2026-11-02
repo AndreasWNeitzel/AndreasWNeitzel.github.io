@@ -860,7 +860,14 @@ async function boot(root) {
       }
       labels.push({ x: p.sx, y: p.sy, text: b.short, hidden: p.hidden });
     });
-    spreadLabels(labels, 12);
+    // the stations' labels stand still; a satellite's label moves off any it would land on
+    spreadLabels(labels, 15);
+    for (const st of stLabels) {
+      if (!st.right) continue;
+      let top = st.ly;
+      const near = labels.filter((l) => Math.abs(st.x - (l.x + 9)) < 60 && l.ly <= st.ly + 14).sort((p, q) => q.ly - p.ly);
+      for (const l of near) { if (top - l.ly < 15) l.ly = top - 15; top = l.ly; }
+    }
     ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     for (const l of labels) {
@@ -880,7 +887,8 @@ async function boot(root) {
     line(ctx, 12, s.h - 12.5, 12 + bar, s.h - 12.5);
     ctx.fillText("10,000 km", 12 + bar + 6, s.h - 9);
     ctx.textAlign = "right";
-    ctx.fillText(`view: azimuth ${Math.round(view.az)}°, elevation ${Math.round(view.el)}°`, s.w - 10, s.h - 9);
+    // on a phone the two notes would meet, so the view takes the line above the scale
+    ctx.fillText(`view: azimuth ${Math.round(view.az)}°, elevation ${Math.round(view.el)}°`, s.w - 10, s.w < 480 ? s.h - 28 : s.h - 9);
   }
 
   // dragging turns the view
@@ -1138,7 +1146,14 @@ async function boot(root) {
       }
       if (labelAll || i === follow) labels.push({ x, y, text: b.short });
     });
-    spreadLabels(labels, 12);
+    // the stations' labels stand still; a satellite's label moves off any it would land on
+    spreadLabels(labels, 15);
+    for (const st of stLabels) {
+      if (!st.right) continue;
+      let top = st.ly;
+      const near = labels.filter((l) => Math.abs(st.x - (l.x + 9)) < 60 && l.ly <= st.ly + 14).sort((p, q) => q.ly - p.ly);
+      for (const l of near) { if (top - l.ly < 15) l.ly = top - 15; top = l.ly; }
+    }
     ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";

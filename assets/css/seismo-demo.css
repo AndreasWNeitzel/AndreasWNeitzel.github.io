@@ -54,7 +54,10 @@
 .sd-views + .sd-bar { padding-block-start: 10px; border-block-start: 1px solid var(--line); }
 .sd-group { display: inline-flex; align-items: center; gap: 8px; }
 .sd-lab { font: italic 500 1.05rem/1 var(--serif); color: var(--ink); cursor: help; }
-.sd-seg button { min-inline-size: 30px; padding: 5px 8px; font: 500 0.8125rem/1.2 var(--mono); }
+.sd-seg { display: inline-flex; gap: 2px; }
+.sd-seg button { min-inline-size: 30px; padding: 5px 8px; font: 500 0.8125rem/1.2 var(--mono); color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); cursor: pointer; }
+.sd-seg button[aria-pressed="true"] { color: var(--base); background: var(--ink); border-color: var(--ink); }
+.sd-seg button:disabled { color: var(--muted); background: transparent; cursor: not-allowed; }
 .sd-seg button:not([aria-pressed="true"]):hover { background: var(--surface-2); color: var(--ink); }
 .sd .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .sd-mix { margin-inline-start: auto; }

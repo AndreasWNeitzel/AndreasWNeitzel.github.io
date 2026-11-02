@@ -75,7 +75,7 @@
 .pg-rail > .pg-group:first-child { padding-block-start: 0; border-block-start: 0; }
 .pg-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
 .pg-buttons .btn:first-child { flex: 1 1 auto; }
-.pg-buttons .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.pg-buttons .btn:disabled { color: var(--muted); background: transparent; border-color: var(--line); cursor: not-allowed; transform: none; box-shadow: none; }
 .pg-live { display: grid; gap: 10px; }
 .pg-readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; margin: 0; }
 .pg-readout > div { min-inline-size: 0; }
@@ -242,7 +242,7 @@
 .pg-more > .prose { margin-block-start: 16px; max-inline-size: 70ch; }
 .pg-notes { display: grid; gap: 28px; max-inline-size: 960px; margin-block-start: clamp(28px, 3vw, 40px); padding-block-start: 18px; border-block-start: 1px solid var(--line); }
 .pg-notes .pg-credits { margin: 0; max-inline-size: 70ch; align-content: start; }
-.pg-notes .pg-credits h2 { margin: 0; font-size: 1.5rem; }
+.pg-notes .pg-credits h2 { margin: 0; font-size: 1.25rem; }
 
 /* ---------------------------------------------------------------- the app shell
    On a screen wide and tall enough, the playground fills the first screen: one bar with the crumb and the
@@ -275,10 +275,10 @@
 
 @media (min-width: 1000px) and (min-height: 620px) {
   .pg-app {
-    --strip: clamp(170px, 27dvh, 240px);
+    --strip: clamp(236px, 27dvh, 260px); --main-min: 320px;
     display: grid;
     grid-template-columns: var(--rail) minmax(0, 1fr);
-    grid-template-rows: 56px max(320px, calc(100dvh - var(--head-h) - 56px - var(--strip) - 40px)) var(--strip);
+    grid-template-rows: 56px max(var(--main-min), calc(100dvh - var(--head-h) - 56px - var(--strip) - 40px)) var(--strip);
     grid-auto-rows: auto;
     column-gap: 24px;
     row-gap: 12px;
@@ -334,6 +334,12 @@
 .nn {
   --accent: light-dark(#0a78b8, #7ccfff); --accent-2: light-dark(#d4452f, #ff7f6b);
   --mark: var(--accent); --flow: var(--accent-2);
+}
+/* the scatter needs a real square: a taller strip, and more of its width than the loss curve */
+@media (min-width: 1000px) and (min-height: 620px) {
+  .pg-app.nn { --strip: clamp(276px, 31dvh, 300px); }
+  .pg-app.nn .pg-chart.pg-parity { flex-grow: 1.7; }
+  .pg-app.nn .pg-chart.pg-loss { flex-grow: .8; }
 }
 .nn .pg-plate {
   --bg: #0b0d12; --surface: #0b0d12; --surface-2: #171a22;

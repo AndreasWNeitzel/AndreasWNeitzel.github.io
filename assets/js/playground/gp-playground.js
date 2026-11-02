@@ -1442,7 +1442,8 @@ async function boot(root) {
       ctx.font = `500 13px ${F.sans}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(steps ? "Waiting for states after burn-in" : "Press Run to sample", m.l + W / 2, m.t + H / 2);
+      // above the marker of the current state, which sits at the centre before a run
+      ctx.fillText(steps ? "Waiting for states after burn-in" : "Press Run to sample", m.l + W / 2, m.t + H / 4);
     }
     S.pairTitle.textContent = `${SYMBOL[scfg.py]} against ${SYMBOL[scfg.px]}, ${grouped(P.count)} states after burn-in`;
     scv.pair.canvas.setAttribute("aria-label", `Scatter of ${SYMBOL[scfg.py]} against ${SYMBOL[scfg.px]} for ${P.count} posterior states after burn-in, with marginal histograms and the current state ringed`);
