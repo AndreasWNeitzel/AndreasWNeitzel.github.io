@@ -222,7 +222,7 @@ async function boot(root) {
       speeds: [[600, "10 min per s"], [1800, "30 min per s"], [3600, "1 h per s"], [10800, "3 h per s"]], speed: 3600,
       trailEvery: 120, sampleEvery: 60, historyEvery: 60,
       title: "Around the Earth", sideTitle: "Visible from the ground",
-      cap: "Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.",
+      cap: "Drag to turn the view. A line joins a station to each satellite above its horizon.",
       mainAria: "Three Molniya satellites and a geostationary satellite around the rotating Earth, drawn to scale",
       sideAria: "Timeline of when each satellite is above the horizon of Porto, Santiago and the third station",
       bodies() {
@@ -253,7 +253,7 @@ async function boot(root) {
       speeds: [[10, "10 Myr per s"], [25, "25 Myr per s"], [50, "50 Myr per s"], [100, "100 Myr per s"], [200, "200 Myr per s"]], speed: 50,
       trailEvery: 1, sampleEvery: 1, historyEvery: 2,
       title: "Face-on, from the north Galactic pole", sideTitle: "Distance from the axis against height",
-      cap: "The disc turns clockwise. The dashed ring is R = 8 kpc, where the Sun starts; the rings are 5 kpc apart.",
+      cap: "The disc turns clockwise. The dashed ring is R = 8 kpc, where the Sun starts.",
       mainAria: "Orbits of six stars and the Sun in the plane of the Milky Way, seen from the north Galactic pole",
       sideAria: "Orbits of six stars and the Sun as distance from the Galactic axis against height above the plane",
       bodies() {
@@ -273,7 +273,7 @@ async function boot(root) {
       speeds: [[10, "10 Myr per s"], [25, "25 Myr per s"], [50, "50 Myr per s"], [100, "100 Myr per s"]], speed: 25,
       trailEvery: 1, sampleEvery: 1, historyEvery: 1,
       title: "Kinematic spiral, no self-gravity", sideTitle: "Rates against radius",
-      cap: `${SPIRAL.count.toLocaleString("en-GB")} test stars on epicyclic orbits in MWPotential2014, from the north Galactic pole. The rings are 5 kpc apart.`,
+      cap: `${SPIRAL.count.toLocaleString("en-GB")} test stars on epicyclic orbits in MWPotential2014.`,
       mainAria: "Test stars on nested ovals forming two trailing spiral arms, seen from the north Galactic pole",
       sideAria: "Circular frequency and Omega minus kappa over two against radius in MWPotential2014",
       bodies: () => [],

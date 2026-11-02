@@ -49,7 +49,7 @@ math: true
           <span class="pg-key gp-key--row"><span><i class="k-data"></i>velocity</span><span><i class="k-mean"></i>marginal mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-curve"></i>12 posterior samples</span><span><i class="k-now"></i>current state</span><label class="pg-inline"><span class="pg-label">Window</span><span class="pg-select pg-select--sm"><select class="gp-s-window" aria-label="Part of the series to show"><option>Loading</option></select></span></label></span>
         </figcaption>
         <div class="pg-stage"><canvas role="img" aria-label="Radial velocities of HD 41248 in a 150 day window with the marginalised Gaussian-process prediction, and an overview of the whole series"></canvas><div class="pg-tip" hidden></div></div>
-        <p class="pg-foot">Velocities about the mean against days since the first observation (31 October 2003), with their catalogue uncertainties. Click in the strip to move the 150 day window; the band is the activity signal alone, without the jitter.</p>
+        <p class="pg-foot">Velocities about the mean with their catalogue uncertainties. Click in the strip to move the window.</p>
       </figure>
     </div>
     <div class="pg-row">

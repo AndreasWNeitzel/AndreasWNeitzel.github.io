@@ -8,7 +8,7 @@ role: "MSc dissertation"
 contribution: "My own dissertation: the luminosities from Gaia parallaxes and 2MASS photometry with bolometric corrections, the self-consistency tests of PARAM and its comparison with four other codes, and the characterisation of ten Ariel input catalogue stars over sixteen constraint sets. As an MSc research fellow on the BreakStarS project, I implemented the small-frequency-separation routine in PARAM."
 figure: "/assets/img/papers/neitzel-2022-kippenhahn.webp"
 figure_alt: "Two Kippenhahn diagrams, one above the other, showing the interior of a one solar mass star and of a 1.2 solar mass star against age. Grey circled regions mark convection, red hatched regions mark nuclear burning, and dashed lines mark the end of the main sequence, the end of the subgiant phase and the red-giant bump."
-figure_caption: "How the inside of a star changes with age: for one solar mass (top) and 1.2 solar masses (bottom), the height is the fraction of the star's mass measured from the centre, grey circles mark convection and red hatching marks nuclear burning. The heavier star keeps a convective core through its main sequence, which ends in the hook that later makes its mass and age ambiguous. From the dissertation, Fig. 2.4, two MESA models at solar metallicity."
+figure_caption: "The interior of a 1 and a 1.2 solar-mass star with age; grey circles mark convection, red hatching nuclear burning. From the dissertation, Fig. 2.4."
 wide_figure: figures/thesis-method.svg
 extra_css: [/assets/css/papers.css, /assets/css/thesis.css]
 math: true
@@ -69,7 +69,7 @@ Against other codes it is less precise. On the 33 *Kepler* hosts, PARAM, which u
 
 <figure class="figure paper-fig">
   <div class="paper-fig-svg" data-build>{% include figures/thesis-results.svg %}</div>
-  <figcaption>What each extra constraint buys. Median relative uncertainty of age (left) and mass (right) for the ten <i>Ariel</i> input catalogue stars under eight sets of constraints: circles with the input uncertainties as published (Table 6.8), squares after inflating the temperature and metallicity uncertainties to 75 K and 0.1 dex, typical of the literature (Table 6.18). Data from the dissertation's own tables.</figcaption>
+  <figcaption>Median age (left) and mass (right) uncertainty for ten <i>Ariel</i> stars; circles use the published input uncertainties, squares inflated temperature and metallicity uncertainties.</figcaption>
 </figure>
 
 With the inputs as published, seismology and luminosity are each enough. Starting from spectroscopy alone, median uncertainties of 28.8 per cent in age and 5.3 per cent in mass, adding <span class="tex" data-tex="\Delta\nu">Δν</span> and <span class="tex" data-tex="\nu_{\max}">ν<sub>max</sub></span> brings them to 7.7 and 1.5 per cent, and adding the luminosity instead brings them to 9.2 and 1.2 per cent; adding both changes little more (Table 6.8, Chapter 7).

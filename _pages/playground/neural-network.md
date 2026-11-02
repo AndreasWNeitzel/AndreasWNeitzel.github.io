@@ -72,13 +72,13 @@ lede: Train a small neural network, here in your browser, to estimate how rich i
         <label class="pg-inline"><span class="pg-label">Bars</span><span class="pg-select pg-select--sm"><select class="pg-scale"><option value="network" selected>network input</option><option value="flux">divided by brightness</option></select></span></label>
       </figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="The selected star's 24 BP and 24 RP coefficients as bars"></canvas></div>
-      <p class="pg-caption"><span class="pg-bars-note">Each coefficient divided by the star's brightness, then rescaled so that 0 is the training average and 1 its spread.</span> Faded bars lie beyond the coefficients the catalogue lists as relevant for this star.</p>
+      <p class="pg-caption"><span class="pg-bars-note">Scaled so that 0 is the training average and 1 its spread.</span> Faded bars lie beyond the coefficients the catalogue lists as relevant for this star.</p>
     </figure>
 
     <figure class="pg-chart pg-spectrum">
       <figcaption class="pg-head"><span class="pg-title">Spectra of the three example giants</span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Spectra of the three example giants, flux against wavelength from 336 to 1020 nm"></canvas></div>
-      <p class="pg-caption">Spectra of the three example giants, flux relative to each star's mean, sampled from all 110 coefficients with GaiaXPy.<span class="pg-spec-note" hidden> The star being followed is not one of the three.</span></p>
+      <p class="pg-caption">Flux relative to each star's mean.<span class="pg-spec-note" hidden> The star being followed is not one of the three.</span></p>
     </figure>
   </div>
   <noscript><p class="pg-state">The playground needs JavaScript. The data it uses are described below.</p></noscript>

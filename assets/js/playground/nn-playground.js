@@ -459,8 +459,8 @@ async function boot(root) {
   ui.scale.addEventListener("change", () => {
     barMode = ui.scale.value;
     ui.barsNote.textContent = barMode === "network"
-      ? "Each coefficient divided by the star's brightness, then rescaled so that 0 is the training average and 1 its spread."
-      : "Each coefficient divided by the star's brightness, on a scale that expands small values.";
+      ? "Scaled so that 0 is the training average and 1 its spread."
+      : "On a scale that expands small values.";
     dirty.bars = true;
     schedule();
   });

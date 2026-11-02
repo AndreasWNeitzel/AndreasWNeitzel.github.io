@@ -82,7 +82,7 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
     <figure class="pg-plate ob-main">
       <figcaption class="pg-legend"><span class="pg-title ob-main-title">Around the Earth</span><span class="pg-key ob-main-key"></span></figcaption>
       <div class="pg-stage"><canvas role="img" aria-label="Three Molniya satellites and a geostationary satellite around the rotating Earth, drawn to scale"></canvas></div>
-      <p class="pg-foot ob-main-cap">Drag to turn the view. A line from a station to a satellite means the satellite is above that station's horizon.</p>
+      <p class="pg-foot ob-main-cap">Drag to turn the view. A line joins a station to each satellite above its horizon.</p>
     </figure>
   </div>
 
@@ -102,15 +102,15 @@ lede: Integrate orbits in your browser, from a satellite's twelve hours around t
     <h2>The satellites and the stations</h2>
     <div class="table-wrap ob-table-sats"></div>
     <div class="table-wrap ob-table-stations"></div>
-    <p class="pg-caption">Elements of the Molniya orbit from Kidder and Vonder Haar (1990) and the NASA orbit catalogue; the semi-major axes follow from the periods by Kepler's third law with GM = 398,600.4418 km³/s² (IERS Conventions 2010). The Earth is a sphere of radius 6,378.137 km turning once a sidereal day; the Greenwich meridian lies along the inertial <i>x</i> axis at <i>t</i> = 0. Visibility uses the geometric horizon, an elevation above 0 degrees.</p>
+    <p class="pg-caption">Molniya elements from Kidder and Vonder Haar (1990) and the NASA orbit catalogue; the Earth is a sphere turning once a sidereal day.</p>
   </section>
   <section class="pg-details ob-details" data-mode="galaxy" aria-label="The stars and the potential">
     <h2>The six stars</h2>
     <div class="table-wrap ob-table-stars"></div>
-    <p class="pg-caption">Catalogue values from <em>Gaia</em> DR3 at epoch J2016.0, with their published uncertainties; distances are 1 / parallax. Galactocentric coordinates with the Sun at (−8.0, 0, 0.0208) kpc moving at (11.10, 232.24, 7.25) km/s; their uncertainties are standard deviations over 20,000 draws from the Gaia errors and correlations. The reference eccentricity, <span class="tex" data-tex="z_\mathrm{max}"><i>z</i><sub>max</sub></span>, pericentre and apocentre come from a 10 Gyr galpy integration of the same starting point, for comparison with the live values.</p>
+    <p class="pg-caption">Catalogue values from <em>Gaia</em> DR3 at epoch J2016.0 with their published uncertainties; reference orbit from a 10 Gyr galpy integration.</p>
     <h2>The potential</h2>
     <div class="table-wrap ob-table-potential"></div>
-    <p class="pg-caption">MWPotential2014 (Bovy 2015). Each component is scaled so that its share of the radial force at <i>R</i> = 8 kpc in the plane is the fraction listed; the shares sum to one, so the circular speed there is 220 km/s. The masses are what these scalings imply.</p>
+    <p class="pg-caption">MWPotential2014 (Bovy 2015), each component scaled to the listed share of the radial force at <i>R</i> = 8 kpc.</p>
   </section>
   <noscript><p class="pg-state">The playground needs JavaScript. The numbers it uses are in the data file linked below.</p></noscript>
 </section>

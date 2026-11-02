@@ -9,7 +9,7 @@ role: "co-author (6 of 24)"
 contribution: "Carried out the GJ 570 A ESPRESSO observations at Paranal (visitor mode, May 2024)."
 figure: "/assets/img/papers/campante-2026-gj570a.webp"
 figure_alt: "Log-log scatter plot of peak oscillation amplitude, in centimetres per second, against the ratio of luminosity to mass for 21 stars, coloured by magnetic activity. A dotted line of slope 0.7 runs through the Sun-like stars; a steeper solid line of slope 1.5 runs through the cool K dwarfs at the lower left, including GJ 570 A and GJ 783 A."
-figure_caption: "Peak oscillation amplitude against luminosity divided by mass, for 21 stars including the Sun. The cool K dwarfs at the lower left, GJ 570 A among them, fall on the steep solid line; the dotted line fits the Sun-like stars. From Campante et al. 2026, A&A, doi:10.1051/0004-6361/202660350, Fig. 6, CC BY 4.0."
+figure_caption: "Oscillation amplitude against luminosity over mass; the cool K dwarfs, GJ 570 A among them, lie on the steep line. From Campante et al. 2026, A&A, doi:10.1051/0004-6361/202660350, Fig. 6, CC BY 4.0."
 card_image: "/assets/img/photos/vlt-golden-hour.webp"
 order: 2
 sources:

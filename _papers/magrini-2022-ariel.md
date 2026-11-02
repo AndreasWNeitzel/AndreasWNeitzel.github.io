@@ -15,13 +15,7 @@ math: true
 extra_css: [/assets/css/kiel.css]
 figure_svg: figures/magrini-2022.svg
 figure_alt: "Kiel diagram of the 187 host stars: surface gravity against effective temperature, each star with error bars, sized by mass and shaded by iron abundance, with the Sun marked."
-figure_caption: >-
-  Where the 187 host stars sit. Each mark is one star of table A.1 at its temperature and surface
-  gravity with the table's error bars, sized by mass and shaded by [Fe/H]. Filled marks are thin-disc
-  stars and open marks thick-disc stars by the paper's rule in Sect. 6.2, applied to table A.2: v is the
-  peculiar velocity from U, V and W, with the 220 km/s rotation of the local standard of rest taken off V.
-  The Sun is marked for reference. Data: Magrini et al. 2022, A&amp;A 663, A161, tables A.1 and A.2 via
-  the CDS (J/A+A/663/A161).
+figure_caption: "The 187 host stars by temperature and surface gravity, sized by mass and shaded by [Fe/H]; filled marks are thin-disc stars, open marks thick-disc. Data: Magrini et al. 2022, A&amp;A 663, A161, via the CDS (J/A+A/663/A161)."
 sources:
   - label: "Article in A&A (open access)"
     url: "https://doi.org/10.1051/0004-6361/202243405"
