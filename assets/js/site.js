@@ -77,6 +77,14 @@
     p.style.setProperty("--mx", (e.clientX - r.left) + "px"); p.style.setProperty("--my", (e.clientY - r.top) + "px");
   }, { passive: true }));
 
+  // ---- every card that links somewhere says so on hover, as the home portals do ------
+  document.querySelectorAll(".concept .plate, .explainer .pic, .row-item .pic").forEach((pic) => {
+    const more = document.createElement("span");
+    more.className = "card-more"; more.setAttribute("aria-hidden", "true");
+    more.innerHTML = '<span>Learn more</span><span class="go"><svg class="i"><use href="#i-arrow"/></svg></span>';
+    pic.appendChild(more);
+  });
+
   // ---- FIG 1: stage captions ------------------------------------------------------
   const fig = document.getElementById("fig1");
   if (fig && fig.querySelector("[data-captions]")) {

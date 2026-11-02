@@ -863,3 +863,14 @@
   .wrap > .row > .prose:only-child:has(> p + p) { display: block; max-inline-size: none; columns: 2; column-gap: clamp(40px, 4vw, 64px); }
   .wrap > .row > .prose:only-child:has(> p + p) > p { break-inside: avoid; margin-block-start: 0; margin-block-end: 1em; }
 }
+
+/* hovering a card: an accent frame and "Learn more" with its arrow, as on the home portals */
+.card-more { position: absolute; z-index: 3; inset: auto 0 0 0; display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 34px 16px 14px; font: 400 0.95rem/1 var(--sans); color: #ecebe6; background: linear-gradient(0deg, rgb(10 9 8 / .72), transparent); opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
+.card-more > span:first-child { transform: translateX(8px); transition: transform .5s var(--ease); }
+.card-more .go { inline-size: 36px; block-size: 36px; border-radius: 50%; border: 1px solid rgb(236 235 230 / .5); display: grid; place-items: center; transition: transform .4s var(--ease), background .3s; }
+.card-more .go .i { position: static; inset: auto; inline-size: 16px; block-size: 16px; color: inherit; }
+:is(.concept, .explainer, .row-item):is(:hover, :focus-within) .card-more { opacity: 1; }
+:is(.concept, .explainer, .row-item):is(:hover, :focus-within) .card-more > span:first-child { transform: none; }
+:is(.concept, .explainer, .row-item):is(:hover, :focus-within) .card-more .go { background: rgb(236 235 230 / .14); transform: translateX(3px); }
+:is(.explainer, .row-item):is(:hover, :focus-within) .pic, .concept:is(:hover, :focus-within) .plate { box-shadow: 0 0 0 1px var(--flow); }
+@media (hover: none) { .card-more { display: none; } }
