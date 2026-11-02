@@ -874,3 +874,11 @@
 :is(.concept, .explainer, .row-item):is(:hover, :focus-within) .card-more .go { background: rgb(236 235 230 / .14); transform: translateX(3px); }
 :is(.explainer, .row-item):is(:hover, :focus-within) .pic, .concept:is(:hover, :focus-within) .plate { box-shadow: 0 0 0 1px var(--flow); }
 @media (hover: none) { .card-more { display: none; } }
+/* the mission cards carry it in their upper corner, in the page's own ink */
+.mi a { position: relative; }
+.mi .card-more { inset: 14px 14px auto auto; padding: 0; background: none; color: var(--ink); }
+.mi .card-more .go { border-color: var(--line-strong); }
+.mi a:is(:hover, :focus-visible) { border-color: var(--flow); box-shadow: 0 0 0 1px var(--flow); text-decoration: none; }
+.mi a:is(:hover, :focus-visible) .card-more { opacity: 1; }
+.mi a:is(:hover, :focus-visible) .card-more > span:first-child { transform: none; }
+.mi a:is(:hover, :focus-visible) .card-more .go { background: color-mix(in oklab, var(--ink) 12%, transparent); transform: translateX(3px); }

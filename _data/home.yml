@@ -57,11 +57,11 @@ missions:
   - id: plato
     logo: /assets/img/logos/missions/plato-112.webp
     logo_alt: PLATO mission logo (ESA)
-    url: /about/#record
+    url: /guide/plato/
   - id: ariel
     logo: /assets/img/logos/missions/ariel-112.webp
     logo_alt: Ariel mission logo (ESA)
-    url: /papers/neitzel-2022-msc-thesis/
+    url: /guide/ariel/
   - id: haydn
     logo: /assets/img/logos/missions/haydn-112.webp
     logo_alt: HAYDN mission logo

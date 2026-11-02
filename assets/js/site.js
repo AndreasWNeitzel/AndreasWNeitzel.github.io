@@ -78,7 +78,7 @@
   }, { passive: true }));
 
   // ---- every card that links somewhere says so on hover, as the home portals do ------
-  document.querySelectorAll(".concept .plate, .explainer .pic, .row-item .pic").forEach((pic) => {
+  document.querySelectorAll(".concept .plate, .explainer .pic, .row-item .pic, .mi a").forEach((pic) => {
     const more = document.createElement("span");
     more.className = "card-more"; more.setAttribute("aria-hidden", "true");
     more.innerHTML = '<span>Learn more</span><span class="go"><svg class="i"><use href="#i-arrow"/></svg></span>';
