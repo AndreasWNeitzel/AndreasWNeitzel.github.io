@@ -36,7 +36,7 @@ The Milky Way grew from stars it formed itself and from smaller galaxies it swal
 
 ## What we did
 
-The test bed was a simulated galaxy with a known history: m12f, from the FIRE-2 simulations, which went through two major mergers, 6.5 and 1.4 billion years ago (Sect. 2.1). A mock *Gaia* survey of it gave four samples (Sect. 2.2): 75,000 stars at all stages of evolution (A), and 76,168 red giants like those in the *TESS* catalogue of oscillating giants, with no errors (B), realistic errors (C) or optimistic errors (D).
+The test bed was a simulated galaxy with a known history: m12f, from the FIRE-2 simulations, which went through two major mergers, 6.5 and 1.4 billion years ago (Sect. 2.1). A mock *Gaia* survey of it gave four samples (Sect. 2.2): 75,000 stars at all stages of evolution (A), and 76,168 red giants like those in the TESS catalogue of oscillating giants, with no errors (B), realistic errors (C) or optimistic errors (D).
 
 UMAP turned five numbers per star (age, two chemical abundances, two measures of velocity) into a position on a two-dimensional map, and HDBSCAN found the groups on that map (Sect. 3).
 

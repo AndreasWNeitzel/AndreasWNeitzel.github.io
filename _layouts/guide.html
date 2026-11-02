@@ -5,9 +5,10 @@ layout: default
 {%- assign slug = page.url | split: "/" | last -%}
 {%- assign loops = site.data.home.guide_loops -%}
 {%- assign lp = loops[slug] -%}
-{%- assign pic = page.image -%}{%- if pic == "" or pic == nil %}{% assign pic = page.photo %}{% endif -%}
+{%- assign pic = site.data.home.guide_stills[slug] | default: page.image -%}{%- if pic == "" or pic == nil %}{% assign pic = page.photo %}{% endif -%}
 {%- assign alt = page.image_alt | default: page.photo_alt -%}
-{% include plate.html loop=lp still=pic alt=alt title=page.title line=page.lede crumb="Field guide" crumb_url="/guide/" credit=page.image_credit credit_url=page.image_source %}
+{%- assign credit = page.image_credit -%}{%- if site.data.home.guide_stills[slug] %}{% assign credit = nil %}{% assign alt = site.data.home.guide_still_alts[slug] %}{% endif -%}
+{% include plate.html loop=lp still=pic alt=alt title=page.title line=page.lede crumb="Field guide" crumb_url="/guide/" credit=credit credit_url=page.image_source %}
 <div class="wrap">
   {%- if page.wide_figure %}
   <figure class="panel blueprint guide-wide k-up" data-build>

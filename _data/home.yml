@@ -91,3 +91,8 @@ guide_loops:
   haydn: cluster
   machine-learning-for-stars: ai
   galactic-archaeology: sky
+# a guide page whose plate shows the same render as its card on /guide/ (stills; loops are in guide_loops)
+guide_stills:
+  asteroseismology: /assets/img/heroes/research_seismo.webp
+guide_still_alts:
+  asteroseismology: "A Kepler power spectrum of a red giant drawn as filaments of light"

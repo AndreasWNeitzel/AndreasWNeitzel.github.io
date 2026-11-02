@@ -91,9 +91,10 @@ footer:
   line: "PhD candidate at IA and the University of Porto, working on machine learning for Galactic archaeology."
 
 about:
-  description: "Andreas W. Neitzel is a fourth-year PhD candidate at the University of Porto using machine learning and asteroseismology to study the Milky Way."
-  role: "Astrophysicist and machine-learning researcher"
-  bio: "I am a fourth-year PhD candidate at IA and the University of Porto, supervised by Tiago L. Campante, Diego Bossini and Andrea Miglio. My work chains neural networks on <i>Gaia</i> spectra, unsupervised methods that find stellar populations, and asteroseismology (the study of starquakes) with TESS and <i>Kepler</i> data. Before that I did an MSc with an <i>Ariel</i> dissertation, spent six months at INAF-OAS Bologna writing HAYDNsim, and observed with ESPRESSO at the VLT in May 2024."
+  description: "Andreas W. Neitzel is a fifth-year PhD candidate in astronomy at the University of Porto who builds neural networks and unsupervised learning methods to reconstruct the history of the Milky Way from Gaia data."
+  role: "Astrophysicist building machine-learning methods for large surveys"
+  bio: "I am a fifth-year PhD candidate at the University of Porto and IA, supervised by Tiago L. Campante, Diego Bossini and Andrea Miglio. I apply machine learning to large astronomical surveys to reconstruct how the Milky Way was assembled (Galactic archaeology). My first-author paper in <i>Astronomy and Astrophysics</i> (2025) tests an unsupervised, manifold-learning method for sorting stars into populations, and Starfold, the open-source Python package that grew from it, applies the method to any table of measurements."
+  bio_2: "JANUS, the deep neural network I am developing, reads the chemistry of red giants from <i>Gaia</i> spectra and gives each star a reliability score. I am responsible investigator on two national supercomputing allocations to run it on about 220 million and 1.8 billion stars. I also use Bayesian inference and asteroseismology (the study of starquakes) to measure stellar ages, built simulation pipelines for the proposed HAYDN mission at INAF-OAS Bologna, and observed with ESPRESSO at the VLT in 2024."
   facts:
     based: "Porto"
     citizenship: "EU (Portugal, Germany)"

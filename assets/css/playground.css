@@ -318,3 +318,13 @@
   .pg-app .pg-select select { min-block-size: 32px; }
   .pg-app .pg-legend { padding: 10px 14px 4px; }
 }
+
+/* below the app, the notes take the reading column and the data and credits sit beside them */
+@media (min-width: 1100px) {
+  .pg-about { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); column-gap: clamp(32px, 4vw, 64px); align-items: start; }
+  .pg-about > .pg-intro, .pg-about > .pg-more { grid-column: 1; }
+  .pg-about > .pg-notes { grid-column: 2; grid-row: 1 / span 3; margin-block-start: 0; padding-block-start: 0; border-block-start: 0; }
+  .pg-about > .pg-more { margin-block-start: 24px; }
+  .pg-about > .pg-intro + .pg-more { padding-block-start: 0; border-block-start: 0; }
+  .pg-about .pg-notes .pg-credits { font-size: 0.9375rem; }
+}

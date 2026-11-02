@@ -4,11 +4,14 @@ with the title and one line at its lower left. Parameters: loop (name), still (p
 crumb_url, tri (a list of {src, pos} for three panels), pos (object-position for the still).
 {%- endcomment -%}
 {%- assign has_loop = false -%}
-{%- if include.loop -%}{%- assign vpath = "/assets/video/" | append: include.loop | append: ".av1.mp4" -%}{%- assign vf = site.static_files | where: "path", vpath | first -%}{%- if vf %}{% assign has_loop = true %}{% endif -%}{%- endif -%}
+{%- assign loop_name = include.loop -%}
+{%- if include.loop -%}{%- assign vpath = "/assets/video/" | append: include.loop | append: ".av1.mp4" -%}{%- assign vf = site.static_files | where: "path", vpath | first -%}{%- if vf %}{% assign has_loop = true %}{% endif -%}
+{%- comment -%} a plate spans the window, so it takes the 1920 px cut of a loop when one exists {%- endcomment -%}
+{%- assign hdpath = "/assets/video/" | append: include.loop | append: "-hd.av1.mp4" -%}{%- assign hf = site.static_files | where: "path", hdpath | first -%}{%- if hf %}{% assign loop_name = include.loop | append: "-hd" %}{% endif -%}{%- endif -%}
 <section class="plate k-scale" aria-label="{{ include.title | strip_html }}">
   <div class="plate-media">
     {%- if include.tri %}<div class="tri">{% for im in include.tri %}<div><img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}></div>{% endfor %}</div>
-    {%- elsif has_loop %}{% include loop.html name=include.loop alt=include.alt %}
+    {%- elsif has_loop %}{% include loop.html name=loop_name alt=include.alt %}
     {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}" fetchpriority="high" decoding="async"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}>{% endif %}
   </div>
   {%- if include.credit %}<a class="plate-credit" href="{{ include.credit_url }}">{{ include.credit }}</a>{% endif %}

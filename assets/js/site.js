@@ -102,7 +102,7 @@
 
   // ---- FIG 1: stage captions ------------------------------------------------------
   const fig = document.getElementById("fig1");
-  if (fig) {
+  if (fig && fig.querySelector("[data-captions]")) {
     const caps = JSON.parse(fig.querySelector("[data-captions]").textContent);
     const titleEl = fig.querySelector("[data-cap-title]");
     const textEl = fig.querySelector("[data-cap-text]");

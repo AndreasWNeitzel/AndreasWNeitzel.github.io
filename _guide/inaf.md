@@ -26,4 +26,4 @@ OAS Bologna was formed in January 2018 and runs the 152 cm Cassini telescope at 
 
 ## Where I come in
 
-From September 2025 to March 2026 I was a visiting PhD student at INAF-OAS Bologna, in Andrea Miglio's group, where I built simulation pipelines for the proposed *HAYDN* mission. During that secondment I also commuted from Bologna to the Padova observatory, which is listed as one of my affiliations on the TASC10/KASC17 poster.
+From September 2025 to March 2026 I was a visiting PhD student at INAF-OAS Bologna, in Andrea Miglio's group, where I built simulation pipelines for the proposed HAYDN mission. During that secondment I also commuted from Bologna to the Padova observatory, which is listed as one of my affiliations on the TASC10/KASC17 poster.

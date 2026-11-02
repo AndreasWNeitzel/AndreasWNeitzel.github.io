@@ -1,0 +1,62 @@
+{%- comment -%}
+Pictograms for talks, posters and papers, 32 by 32: linework in currentColor, the tinted body in --mk-fill and
+one accent part in --mk-accent, so each kind takes its colour from CSS (.mk--talk and so on in site.css).
+{%- endcomment -%}
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="mk-mic" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="11.5" y="2.5" width="9" height="14" rx="4.5" fill="var(--mk-fill)"/>
+      <path d="M13.5 6.5h5 M13.5 9.5h5 M13.5 12.5h5" stroke-width="1.1"/>
+      <path d="M8.5 11.5v1.5a7.5 7.5 0 0 0 15 0v-1.5"/>
+      <path d="M16 20.5v4.5 M11.5 25h9"/>
+      <path d="M16 25c0 3.4 3.2 4.6 6.4 3.6s5.2-2.4 7.1-.6" stroke="var(--mk-accent)"/>
+    </g>
+  </defs>
+  <symbol id="mk-talk" viewBox="0 0 32 32"><use href="#mk-mic"/></symbol>
+  <symbol id="mk-invited" viewBox="0 0 32 32"><use href="#mk-mic"/><path d="M26 1.6l1.25 2.55 2.8.4-2.03 1.98.48 2.8L26 8l-2.5 1.33.48-2.8-2.03-1.98 2.8-.4Z" fill="var(--mk-accent)" stroke="currentColor" stroke-width=".9" stroke-linejoin="round"/></symbol>
+  <symbol id="mk-seminar" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="3.5" width="18" height="12.5" rx="1" fill="var(--mk-fill)"/>
+    <path d="M5.5 13l3.5-3.5 2.5 2 4.5-5" stroke="var(--mk-accent)"/>
+    <path d="M11.5 16v3.5 M8 19.5h7"/>
+    <circle cx="25.5" cy="11.5" r="2.4"/>
+    <path d="M21 19.5h9 M22 19.5l1.4 9.5h4.2l1.4-9.5 M20.5 29.5h10"/>
+  </g></symbol>
+  <symbol id="mk-poster" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5.5" y="3" width="21" height="17" rx="1" fill="var(--mk-fill)"/>
+    <path d="M9 6.5h14" stroke-width="2.2"/>
+    <rect x="9" y="9.5" width="6.5" height="7" fill="var(--mk-accent)" stroke="none"/>
+    <path d="M18 10.5h5 M18 13.5h5 M18 16.5h3" stroke-width="1.1"/>
+    <path d="M10.5 20l-3 9.5 M21.5 20l3 9.5 M16 20v6"/>
+  </g></symbol>
+  <symbol id="mk-pitch" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3.5" y="3" width="19" height="15" rx="1" fill="var(--mk-fill)"/>
+    <path d="M6.5 6.5h12" stroke-width="2.2"/>
+    <path d="M6.5 10h8 M6.5 13h6" stroke-width="1.1"/>
+    <path d="M8 18l-2.5 10.5 M18 18l1 4"/>
+    <circle cx="24" cy="22.5" r="6.2" fill="var(--bg, #fff)"/>
+    <path d="M24 22.5v-3.4" stroke="var(--mk-accent)" stroke-width="1.8"/><path d="M24 14.6v1.7 M22.4 14.6h3.2"/>
+  </g></symbol>
+  <symbol id="mk-article" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 2.5h13l6 6v21h-19Z" fill="var(--mk-fill)"/><path d="M19.5 2.5v6h6"/>
+    <path d="M9.5 6.5h7" stroke="var(--mk-accent)" stroke-width="2.2"/>
+    <path d="M9.5 12h5.5 M9.5 15h5.5 M9.5 18h5.5 M9.5 21h5.5 M9.5 24h5.5 M18 21h4.5 M18 24h4.5" stroke-width="1.1"/>
+    <rect x="17.5" y="11.5" width="5.5" height="6" fill="var(--mk-accent)" stroke="none"/>
+  </g></symbol>
+  <symbol id="mk-letter" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 2.5h19v27h-19Z" fill="var(--mk-fill)"/>
+    <path d="M9.5 7.5h7" stroke-width="2.2"/>
+    <path d="M9.5 12.5h6 M9.5 15.5h6 M9.5 18.5h13 M9.5 21.5h13 M9.5 24.5h9" stroke-width="1.1"/>
+    <path d="M19 2.5v10l2-1.6 2 1.6v-10" fill="var(--mk-accent)" stroke="var(--mk-accent)"/>
+  </g></symbol>
+  <symbol id="mk-thesis" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 4.5a2 2 0 0 1 2-2h17.5v24H8a2 2 0 0 0-2 2Z" fill="var(--mk-fill)"/>
+    <path d="M6 28.5a2 2 0 0 0 2 2h17.5v-4"/><path d="M10.5 2.5v24"/>
+    <rect x="13.5" y="8" width="9" height="5" rx=".6" fill="var(--mk-accent)" stroke="none"/>
+    <path d="M14.5 17h7" stroke-width="1.1"/>
+  </g></symbol>
+  <symbol id="mk-data" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 7c0-2.5 4.5-4.5 10-4.5S26 4.5 26 7v18c0 2.5-4.5 4.5-10 4.5S6 27.5 6 25Z" fill="var(--mk-fill)"/>
+    <ellipse cx="16" cy="7" rx="10" ry="4.5" fill="var(--mk-accent)"/>
+    <path d="M6 13c0 2.5 4.5 4.5 10 4.5S26 15.5 26 13 M6 19c0 2.5 4.5 4.5 10 4.5S26 21.5 26 19"/>
+  </g></symbol>
+</svg>

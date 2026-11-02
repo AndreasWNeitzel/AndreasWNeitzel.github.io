@@ -1,7 +1,8 @@
 # Liquid filters for the site: italicise mission names, keep initials together, format date
 # spans, and merge the ledger export into one typed, dated list for the home-page timeline.
 module SiteFilters
-  MISSIONS = %w[Gaia Ariel ARIEL TESS Kepler HAYDN PLATO Cheops Euclid].freeze
+  # word names only: acronyms (TESS, PLATO, HAYDN, K2) stay roman
+  MISSIONS = %w[Gaia Ariel ARIEL Kepler Cheops Euclid].freeze
   MONTHS = %w[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec].freeze
 
   def missions(text)
@@ -9,6 +10,11 @@ module SiteFilters
     MISSIONS.reduce(text.to_s) do |s, m|
       s.gsub(/(?<![\w<>\/])#{m}(?=[\s,.:;)\/?'’]|$)/, "<i>#{m}</i>")
     end
+  end
+
+  # 1002400 -> "1,002,400"
+  def delimit(n)
+    n.to_i.to_s.reverse.scan(/\d{1,3}/).join(",").reverse
   end
 
   def initials(text)

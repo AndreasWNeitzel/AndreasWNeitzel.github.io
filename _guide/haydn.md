@@ -24,9 +24,9 @@ sources:
   url: https://doi.org/10.1093/mnras/stad3565
 ---
 
-*HAYDN* (High-precision AsteroseismologY of DeNse stellar fields) is a proposed space telescope for asteroseismology in crowded fields. Globular clusters hold thousands of stars with nearly the same age and distance, which makes them clean tests of stellar physics. Their centres are so crowded that the pixels of *Kepler*, *TESS* and *PLATO* blend many stars together. *HAYDN* would combine much finer pixels with months of observation of a single field.
+HAYDN (High-precision AsteroseismologY of DeNse stellar fields) is a proposed space telescope for asteroseismology in crowded fields. Globular clusters hold thousands of stars with nearly the same age and distance, which makes them clean tests of stellar physics. Their centres are so crowded that the pixels of *Kepler*, TESS and PLATO blend many stars together. HAYDN would combine much finer pixels with months of observation of a single field.
 
-The concept comes from a white paper for ESA's Voyage 2050 long-term plan (Miglio et al. 2021), and the *HAYDN* consortium now presents it as a proposed ESA M-class mission. The white paper sketched a telescope of about 90 cm with a field of about one degree, pixels of about 0.25 arcseconds against 4 arcseconds for *Kepler*, and runs of 6 to 24 months on targets such as 47 Tucanae. By 2023, seismic masses had been measured in two globular clusters, for 75 red giants in M4 and 47 giants in M80 (Howell et al. 2022, 2023).
+The concept comes from a white paper for ESA's Voyage 2050 long-term plan (Miglio et al. 2021), and the HAYDN consortium now presents it as a proposed ESA M-class mission. The white paper sketched a telescope of about 90 cm with a field of about one degree, pixels of about 0.25 arcseconds against 4 arcseconds for *Kepler*, and runs of 6 to 24 months on targets such as 47 Tucanae. By 2023, seismic masses had been measured in two globular clusters, for 75 red giants in M4 and 47 giants in M80 (Howell et al. 2022, 2023).
 
 ## Where I come in
 

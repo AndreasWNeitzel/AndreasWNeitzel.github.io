@@ -23,7 +23,7 @@ sources:
 
 ## The question
 
-Stars like the Sun ring with sound waves driven by churning gas below the surface, and the tones reveal a star's mass, radius and age. In K dwarfs, smaller and cooler than the Sun, the oscillations move the surface by less than 10 cm/s, and space telescopes have detected them in only a few of these stars (Sect. 1, Fig. 1). Their strength tests the physics of convection and is needed to forecast what the *PLATO* mission will detect (Sect. 1).
+Stars like the Sun ring with sound waves driven by churning gas below the surface, and the tones reveal a star's mass, radius and age. In K dwarfs, smaller and cooler than the Sun, the oscillations move the surface by less than 10 cm/s, and space telescopes have detected them in only a few of these stars (Sect. 1, Fig. 1). Their strength tests the physics of convection and is needed to forecast what the PLATO mission will detect (Sect. 1).
 
 ## What the team did
 
