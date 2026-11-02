@@ -12,10 +12,10 @@ codes:
   - {id: starfold, title: Starfold, loop: starfold, img: /assets/img/heroes/software_starfold.webp, url: /software/starfold-demo/, links: [{label: "Run it on 9,242 stars", url: /software/starfold-demo/}, {label: "The held-out benchmark", url: /software/starfold-benchmark/}, {label: "Source code", url: "https://github.com/AndreasWNeitzel/starfold"}]}
   - {id: haydnsim, title: HAYDNsim, loop: haydn, img: /assets/img/heroes/software_haydn.webp, url: /software/haydnsim/, links: [{label: "The pipeline", url: /software/haydnsim/}, {label: "What is HAYDN?", url: /guide/haydn/}]}
 playgrounds:
-  - {id: nn, art: nn, url: /playground/neural-network/}
+  - {id: nn, art: nn, img: /assets/img/heroes/card_nn.webp, url: /playground/neural-network/}
   - {id: orbits, art: orbit, img: /assets/img/heroes/card_orbits.webp, url: /playground/orbits/}
   - {id: gp, art: gp, img: /assets/img/heroes/card_gp.webp, url: /playground/gaussian-processes/}
-  - {id: polytropes, art: polytrope, url: /playground/polytropes/}
+  - {id: polytropes, art: polytrope, img: /assets/img/heroes/card_polytrope.webp, url: /playground/polytropes/}
 demos:
   - {id: starfold-demo, img: /assets/img/heroes/software_starfold.webp, url: /software/starfold-demo/}
   - {id: stellar-explorer, art: hr, img: /assets/img/heroes/card_explorer.webp, url: /stellar-explorer/}
