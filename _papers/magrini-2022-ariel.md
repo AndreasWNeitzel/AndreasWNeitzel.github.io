@@ -13,6 +13,7 @@ card_credit_url: "https://www.esa.int/ESA_Multimedia/Images/2024/07/Ariel_key_vi
 order: 4
 math: true
 extra_css: [/assets/css/kiel.css]
+figure_credit: "own"
 figure_svg: figures/magrini-2022.svg
 figure_alt: "Kiel diagram of the 187 host stars: surface gravity against effective temperature, each star with error bars, sized by mass and shaded by iron abundance, with the Sun marked."
 figure_caption: "The 187 host stars by temperature and surface gravity, sized by mass and shaded by [Fe/H]; filled marks are thin-disc stars, open marks thick-disc. Data: Magrini et al. 2022, A&amp;A 663, A161, via the CDS (J/A+A/663/A161)."

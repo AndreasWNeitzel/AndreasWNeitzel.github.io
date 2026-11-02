@@ -76,6 +76,8 @@ missions:
     icon: i-cpu
     url: /guide/supercomputers/
 
+missions_credit: "Logos: ESA (Gaia, PLATO, Ariel), NASA (Kepler, TESS), HAYDN proposal consortium."
+
 # Photographs for the About page strip (assets/img/heroes), captions in copy.yml.
 strip:
   - {key: golden, src: /assets/img/photos/vlt-golden-hour.webp, pos: "50% 50%"}

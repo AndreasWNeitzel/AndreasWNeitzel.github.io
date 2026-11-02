@@ -8,7 +8,7 @@ description: ArqueoGal, the FCT exploratory project on the Milky Way's history, 
 lede: An FCT exploratory project to read the Milky Way's history from its red giants, star by star, with ages from TESS, orbits from Gaia and chemistry from APOGEE and JANUS.
 extra_css: [/assets/css/papers.css, /assets/css/schematics.css]
 ---
-<figure class="panel blueprint guide-wide">
+<figure class="panel blueprint guide-wide" data-credit="own">
   {% include figures/arqueogal.svg %}
   {% include figures/arqueogal-narrow.svg %}
 </figure>

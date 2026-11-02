@@ -12,7 +12,7 @@ math: true
 {%- assign jf = site.data.copy.research.janus_fig -%}
 <figure class="jn-fig panel" id="janus-fig" data-stagefig>
   <div class="jn-head"><span class="figno">FIG 1</span><p class="jn-read" aria-live="polite"><b data-read-title></b> <span data-read-line>{{ jf.default }}</span></p></div>
-  <div class="jn-frame" data-build>{% include figures/janus.svg %}</div>
+  <div class="jn-frame" data-build data-credit="own">{% include figures/janus.svg %}</div>
   <script type="application/json" data-captions>{{ jf.stages | jsonify }}</script>
 </figure>
 

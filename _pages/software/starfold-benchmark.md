@@ -32,11 +32,11 @@ lede: Starfold 0.2.0 was tested on ten tables with known classes and lost to the
 </section>
 <section class="row" aria-labelledby="figures">
   <h2 id="figures">Figures</h2>
-  <figure class="figure sfb-figure">
+  <figure class="figure sfb-figure" data-credit="own">
     {% include figures/starfold-resolution.svg %}
     <figcaption>Starfold gains most where the classes are large compared with the finest structure its graph can resolve. Left, recovery minus default recovery; right, correlation of the label-free score with recovery. Data: <a href="{{ '/assets/data/starfold/benchmark/resolution.json' | relative_url }}">resolution.json</a>.</figcaption>
   </figure>
-  <figure class="figure sfb-figure">
+  <figure class="figure sfb-figure" data-credit="own">
     {% include figures/starfold-injection.svg %}
     <figcaption>Groups smaller than the resolution scale are not found; those found stay pure as the support threshold rises. A method check on synthetic groups injected into a real table and never kept. Data: <a href="{{ '/assets/data/starfold/benchmark/injection.json' | relative_url }}">injection.json</a>, <a href="{{ '/assets/data/starfold/benchmark/provenance.json' | relative_url }}">provenance</a>.</figcaption>
   </figure>

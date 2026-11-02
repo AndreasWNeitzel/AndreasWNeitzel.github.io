@@ -34,7 +34,7 @@ loops:
       <div class="pic">
         {%- if vf %}{% include loop.html name=lp alt="" %}
         {%- elsif ci %}<img src="{{ ci | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">
-        {%- elsif g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">
+        {%- elsif g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% if g.image_credit %}<a class="ccredit" href="{{ g.image_source }}">{{ g.image_credit }}, {{ g.image_licence }}</a>{% endif %}
         {%- elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}
       </div>
       <div class="words">

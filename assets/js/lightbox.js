@@ -29,6 +29,13 @@
   };
   const icon = (id) => `<svg class="i" aria-hidden="true"><use href="#${id}"></use></svg>`;
 
+  // The line under an enlarged figure comes only from the data-credit marker on the figure or around it:
+  // "own" for my work, any other value is the source's credit, and no marker means no line.
+  const creditOf = (el) => {
+    const v = el.closest("[data-credit]")?.dataset.credit;
+    return v === "own" ? "© Andreas W. Neitzel" : v || "";
+  };
+
   const label = (root) => {
     const m = root.matches("[aria-label]") ? root : root.querySelector("img[alt], svg[aria-label], canvas[aria-label], video[aria-label]");
     const text = (m && (m.alt || m.getAttribute("aria-label"))) || root.querySelector("svg title, figcaption")?.textContent || "";
@@ -57,7 +64,7 @@
   };
 
   // ---- static figures -----------------------------------------------------------------------
-  let dlg, view, frame, shut;
+  let dlg, view, frame, note, shut;
 
   function chooseMedia(host) {
     if (host.matches(".vlt-row")) return host; // two drawings that join at a seam: one picture
@@ -102,8 +109,9 @@
     frame = document.createElement("div");
     frame.inert = true; // pointer input goes to the view; links and stages in a copy stay out of the way
     view.append(frame);
+    note = document.createElement("p"); note.className = "lb-credit"; note.hidden = true;
     const close = closeButton();
-    dlg.append(view, close);
+    dlg.append(view, note, close);
     document.body.append(dlg);
 
     let z = 1, x = 0, y = 0, ratio = 1, sheet = "", gesture = null, pinch = null;
@@ -206,8 +214,10 @@
       frame.replaceChildren(item.node);
       if (el.matches("img")) item.node.addEventListener("load", () => { ratio = item.node.naturalWidth / item.node.naturalHeight; fit(); }, { once: true });
       dlg.setAttribute("aria-label", label(host));
+      note.textContent = creditOf(el); note.hidden = !note.textContent;
       lock(true);
       dlg.showModal();
+      view.style.insetBlockEnd = note.hidden ? "" : note.offsetHeight + "px"; // the figure fits above the line
       addEventListener("resize", fit);
       fit();
       if (motion()) {

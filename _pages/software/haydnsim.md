@@ -10,11 +10,11 @@ extra_css: [/assets/css/haydn.css]
 ---
 <div class="prose"><p>HAYDNsim is a Python package that builds synthetic stellar fields for the proposed ESA HAYDN mission and turns them into per-star inputs for the HAYDN Noise Estimator. It serves the mission proposal, which is described on <a href="{{ '/guide/haydn/' | relative_url }}">its own page</a>; this page is about the pipeline. The paper is in preparation, so this page keeps to what the poster and the talk below have already shown.</p></div>
 
-<figure class="panel blueprint guide-wide" data-build>
+<figure class="panel blueprint guide-wide" data-build data-credit="own">
   {% include figures/haydn-pipeline.svg %}
 </figure>
 
-<figure class="panel blueprint guide-wide" data-build>
+<figure class="panel blueprint guide-wide" data-build data-credit="own">
   {% include figures/haydn-field.svg %}
 </figure>
 
@@ -26,12 +26,12 @@ extra_css: [/assets/css/haydn.css]
   </div>
 </section>
 
-<figure class="panel blueprint guide-wide" data-build>
+<figure class="panel blueprint guide-wide" data-build data-credit="own">
   {% include figures/haydn-crowding.svg %}
   <figcaption class="credit">The share of each cluster's stars whose light is mostly its neighbours', for the seven globular clusters on the TASC10/KASC17 poster (Neitzel et al. 2026, doi:10.5281/zenodo.23263454). Star positions are schematic; the bars are the poster's values.</figcaption>
 </figure>
 
-<figure class="panel guide-wide">
+<figure class="panel guide-wide" data-credit="Background: ESA/Gaia/DPAC, CC BY-SA 3.0 IGO">
   <a href="{{ '/assets/img/haydnsim/candidate-fields-sky-3000.webp' | relative_url }}"><img src="{{ '/assets/img/haydnsim/candidate-fields-sky.webp' | relative_url }}" alt="The sky in Galactic coordinates over the Gaia colour map, with the footprints of Kepler, the K2 campaigns, the CoRoT runs, the TESS continuous viewing zones and the PLATO fields, and the candidate HAYDN globular clusters, open clusters, young massive clusters and the bulge field marked and named." loading="lazy" decoding="async" width="1600" height="949"></a>
   <figcaption class="credit">The 26 target fields on the sky in Galactic coordinates, with the fields of earlier and coming missions. Background: ESA/Gaia/DPAC, CC BY-SA 3.0 IGO (acknowledgement A. Moitinho); this figure is shared under the same licence.</figcaption>
 </figure>

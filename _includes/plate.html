@@ -16,7 +16,7 @@ enlarged and raised, so a person low in the frame stands above the text).
     {%- elsif has_loop %}{% include loop.html name=loop_name alt=include.alt %}
     {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}"{% unless include.alt %} role="presentation"{% endunless %} fetchpriority="high" decoding="async"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}>{% endif %}
   </div>
-  {%- if include.credit %}<a class="plate-credit" href="{{ include.credit_url }}">{{ include.credit }}</a>{% endif %}
+  {%- if include.credit and has_loop == false %}<a class="plate-credit" href="{{ include.credit_url }}">{{ include.credit }}</a>{% endif %}
   <div class="plate-text"{% if include.textw %} style="--plate-w: {{ include.textw }}"{% endif %}>
     {%- if include.crumb %}<p class="crumbs"><a href="{{ include.crumb_url | relative_url }}">{{ include.crumb }}</a></p>{% endif %}
     <h1>{{ include.title | missions }}</h1>

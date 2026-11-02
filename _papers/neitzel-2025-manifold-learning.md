@@ -7,6 +7,7 @@ arxiv: "2501.16294"
 year: 2025
 role: "first author"
 contribution: "First and corresponding author."
+figure_credit: "Neitzel et al. 2025, A&amp;A 695, A243, CC BY 4.0"
 figure: "/assets/img/papers/neitzel-2025-manifold-learning.webp"
 figure_alt: "Twelve scatter plots in four columns, one per test sample (A to D), and three rows: velocity, alpha-element abundance against iron abundance, and iron abundance against age. Stars are coloured by the group the method assigned; columns A and B show five groups, columns C and D three."
 figure_caption: "Groups the method found without labels in the four test samples. With measurement errors (C and D) the disc stays one group. From Neitzel et al. 2025, A&A 695, A243, Fig. 11, CC BY 4.0."

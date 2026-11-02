@@ -188,6 +188,9 @@
   .marks span { font: 400 0.8125rem var(--mono); color: var(--ink-2); margin-inline-end: -14px; }
   .marks img { inline-size: auto; opacity: .9; }
   .marks .fct { block-size: 46px; } .marks .ehpc { block-size: 76px; }
+  .marks-credit { margin-inline-start: auto; font: 400 0.8125rem var(--mono); color: var(--ink-2); }
+  .rights { padding-block: 0 18px; font: 0.8125rem/1.5 var(--mono); color: var(--ink-2); }
+  .rights a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
   .on-light { display: none; }
   :root[data-theme="light"] .on-light { display: inline; } :root[data-theme="light"] .on-dark { display: none; }
   @media (prefers-color-scheme: light) { :root:not([data-theme]) .on-light { display: inline; } :root:not([data-theme]) .on-dark { display: none; } }
@@ -468,6 +471,7 @@
   .mi a { display: grid; grid-template-columns: 56px 1fr; grid-template-rows: auto auto 1fr; column-gap: 16px; row-gap: 2px; padding: 18px; block-size: 100%; border-radius: var(--radius); color: var(--ink);
     background: var(--raised); border: 1px solid var(--line); transition: border-color .3s, transform .4s var(--ease); }
   .mi a:hover { text-decoration: none; border-color: var(--line-strong); transform: translateY(-2px); }
+  .mi-credit { margin-block-start: 14px; }
   .mi .logo { grid-row: 1 / 3; inline-size: 56px; block-size: 56px; border-radius: var(--radius-sm); background: #fff; display: grid; place-items: center; overflow: hidden; box-shadow: 0 0 0 1px var(--line); }
   .mi .logo img { inline-size: 48px; block-size: 48px; object-fit: contain; }
   .mi .logo.wide img { inline-size: 52px; block-size: 30px; }
@@ -590,6 +594,7 @@
   .explainer .tag::before { background: #f0eee9; }
   .explainer h3 { font: 400 1.4rem/1.2 var(--serif); }
   .explainer p { color: var(--ink-2); font-size: 0.98rem; line-height: 1.5; }
+  .row-item .ccredit { inset: auto 0 0 auto; max-inline-size: 100%; padding: 2px 8px; border-start-start-radius: var(--radius-sm); background: rgb(0 0 0 / .62); color: #fff; text-shadow: none; }
   .explainer .ccredit { inset: auto auto 10px 14px; max-inline-size: calc(100% - 28px); text-align: start; color: #f0eee9; }
 
   /* ===== research: FIG 1 and the lines of work ===== */

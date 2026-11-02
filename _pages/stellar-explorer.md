@@ -20,7 +20,7 @@ lede: Stellar Explorer follows one star of the Sun's mass through its life, usin
       <li>The propagation diagram (Brunt-Väisälä and Lamb frequencies with the selected mode's cavities), the échelle diagram, the mode inertias and the mode's radial displacement. Frequencies, degrees, radial orders and inertias come from GYRE; the displacement is a JWKB reconstruction on the GYRE equilibrium structure. Eight models, at the helium flash and along the asymptotic giant branch, have no GYRE output in the run, and the panels say so.</li>
     </ul>
   </div>
-  <div class="se-side"><figure class="se-fig">{% include figures/art-hr.svg %}<figcaption class="credit">The track the app follows; points with a stored interior are coloured by phase.</figcaption></figure><img class="se-pic" src="{{ '/assets/img/heroes/card_explorer.webp' | relative_url }}" width="1600" height="900" alt="" role="presentation" loading="lazy" decoding="async"></div>
+  <div class="se-side"><figure class="se-fig" data-credit="own">{% include figures/art-hr.svg %}<figcaption class="credit">The track the app follows; points with a stored interior are coloured by phase.</figcaption></figure><img class="se-pic" src="{{ '/assets/img/heroes/card_explorer.webp' | relative_url }}" width="1600" height="900" alt="" role="presentation" loading="lazy" decoding="async"></div>
 </div>
 <section class="section" aria-labelledby="data">
   <div class="section-head"><h2 id="data">Data and scope</h2></div>

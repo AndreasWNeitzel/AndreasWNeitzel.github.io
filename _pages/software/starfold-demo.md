@@ -101,7 +101,7 @@ extra_css: [/assets/css/starfold-demo.css, /assets/css/schematics.css]
   <noscript><p class="sfd-state">The panels need JavaScript. The run's numbers are in the tables below.</p></noscript>
 </section>
 
-<figure class="panel blueprint sf-how">
+<figure class="panel blueprint sf-how" data-credit="own">
   {% include figures/starfold-how.svg %}
   {% include figures/starfold-how-narrow.svg %}
 </figure>

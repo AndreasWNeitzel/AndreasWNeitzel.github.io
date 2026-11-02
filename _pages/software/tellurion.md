@@ -9,7 +9,7 @@ lede: A separate website of mine, with free interactive physics and astronomy si
 ---
 {%- assign t = site.data.ledger.software | where: "id", "sw-2026-05-tellurion" | first -%}
 <section class="tl-top" aria-label="What Tellurion is">
-  <figure class="tl-hero">
+  <figure class="tl-hero" data-credit="own">
     <a href="https://tellurion.dev/playgrounds/_legends/blackhole-legend-3d/"><img src="{{ '/assets/img/tellurion/ui-blackhole-legend-3d.webp' | relative_url }}" width="1440" height="900" decoding="async"
       alt="The black-hole page of Tellurion: a lensed accretion disc around the shadow of a black hole, with the photon sphere and the innermost stable orbit marked, and controls and live readouts on the right."></a>
     <figcaption class="credit">An example page, the black-hole simulation, as it runs on tellurion.dev.</figcaption>

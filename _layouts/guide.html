@@ -7,17 +7,17 @@ layout: default
 {%- assign lp = loops[slug] -%}
 {%- assign pic = site.data.home.guide_stills[slug] | default: page.image -%}{%- if pic == "" or pic == nil %}{% assign pic = page.photo %}{% endif -%}
 {%- assign alt = page.image_alt | default: page.photo_alt -%}
-{%- assign credit = page.image_credit -%}{%- if site.data.home.guide_stills[slug] %}{% assign credit = nil %}{% assign alt = site.data.home.guide_still_alts[slug] %}{% endif -%}
+{%- assign credit = page.image_credit -%}{%- if credit and page.image_licence %}{% assign credit = credit | append: ", " | append: page.image_licence %}{% endif -%}{%- if site.data.home.guide_stills[slug] %}{% assign credit = nil %}{% assign alt = site.data.home.guide_still_alts[slug] %}{% endif -%}
 {% include plate.html loop=lp still=pic alt=alt title=page.title line=page.lede crumb="Field guide" crumb_url="/guide/" credit=credit credit_url=page.image_source pos=page.plate_pos textw=page.plate_textw %}
 <div class="wrap">
   {%- if page.wide_figure %}
-  <figure class="panel blueprint guide-wide k-up" data-build>
+  <figure class="panel blueprint guide-wide k-up" data-build data-credit="own">
     {% include {{ page.wide_figure }} %}
     {%- if page.wide_caption %}<figcaption class="credit">{{ page.wide_caption | missions }}</figcaption>{% endif %}
   </figure>
   {%- endif %}
   {%- for wf in page.wide_figures %}
-  <figure class="panel blueprint guide-wide k-up" data-build>
+  <figure class="panel blueprint guide-wide k-up" data-build data-credit="own">
     {% include {{ wf.include }} %}
     {%- if wf.caption %}<figcaption class="credit">{{ wf.caption | missions }}</figcaption>{% endif %}
   </figure>

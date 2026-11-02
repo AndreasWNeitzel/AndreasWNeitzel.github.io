@@ -29,7 +29,9 @@
       <a href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia"><img class="fct on-dark" src="{{ '/assets/img/logos/fct-negative-480-trim.png' | relative_url }}" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"><img class="fct on-light" src="{{ '/assets/img/logos/fct-positive-480-trim.png' | relative_url }}" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"></a>
       <span>Computing from</span>
       <a href="https://eurohpc-ju.europa.eu/" aria-label="EuroHPC Joint Undertaking"><img class="ehpc on-dark" src="{{ '/assets/img/logos/eurohpc-ju-negative.svg' | relative_url }}" alt="EuroHPC Joint Undertaking" loading="lazy"><img class="ehpc on-light" src="{{ '/assets/img/logos/eurohpc-ju.svg' | relative_url }}" alt="EuroHPC Joint Undertaking" loading="lazy"></a>
+      <small class="marks-credit">Logos: FCT, EuroHPC JU</small>
     </div>
-    <p class="colophon"><span>© {{ site.time | date: '%Y' }} {{ p.name | initials }}</span><span>Instituto de Astrofísica e Ciências do Espaço, Porto</span><span>Updated <time datetime="{{ site.time | date: '%Y-%m-%d' }}">{{ site.time | date: '%B %Y' }}</time></span><a class="top" href="#top">Back to top <svg class="i" aria-hidden="true" style="transform: rotate(-90deg)"><use href="#i-arrow"/></svg></a></p>
+    <p class="rights">{{ C.credits.footer }} <a href="{{ '/credits/' | relative_url }}">{{ C.credits.footer_link }}</a></p>
+    <p class="colophon"><span>© {{ site.time | date: '%Y' }} {{ p.name }}</span><span>Instituto de Astrofísica e Ciências do Espaço, Porto</span><span>Updated <time datetime="{{ site.time | date: '%Y-%m-%d' }}">{{ site.time | date: '%B %Y' }}</time></span><a class="top" href="#top">Back to top <svg class="i" aria-hidden="true" style="transform: rotate(-90deg)"><use href="#i-arrow"/></svg></a></p>
   </div>
 </footer>

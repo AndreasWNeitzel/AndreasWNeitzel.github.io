@@ -6,6 +6,7 @@ handle: "10216/147245"
 year: 2022
 role: "MSc dissertation"
 contribution: "My own dissertation: the luminosities from Gaia parallaxes and 2MASS photometry with bolometric corrections, the self-consistency tests of PARAM and its comparison with four other codes, and the characterisation of ten Ariel input catalogue stars over sixteen constraint sets. As an MSc research fellow on the BreakStarS project, I implemented the small-frequency-separation routine in PARAM."
+figure_credit: "own"
 figure: "/assets/img/papers/neitzel-2022-kippenhahn.webp"
 figure_alt: "Two Kippenhahn diagrams, one above the other, showing the interior of a one solar mass star and of a 1.2 solar mass star against age. Grey circled regions mark convection, red hatched regions mark nuclear burning, and dashed lines mark the end of the main sequence, the end of the subgiant phase and the red-giant bump."
 figure_caption: "The interior of a 1 and a 1.2 solar-mass star with age; grey circles mark convection, red hatching nuclear burning. From the dissertation, Fig. 2.4."
@@ -71,7 +72,7 @@ Its masses agree with BASTA, ASTFIT and AMP to within about 1 per cent, with a 2
 ## The results
 
 <figure class="figure paper-fig">
-  <div class="paper-fig-svg" data-build>{% include figures/thesis-results.svg %}</div>
+  <div class="paper-fig-svg" data-build data-credit="own">{% include figures/thesis-results.svg %}</div>
   <figcaption>Median age (left) and mass (right) uncertainty for ten <i>Ariel</i> stars; circles use the published input uncertainties, squares inflated temperature and metallicity uncertainties.</figcaption>
 </figure>
 

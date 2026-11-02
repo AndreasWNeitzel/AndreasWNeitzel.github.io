@@ -21,7 +21,7 @@ Build locally with `bundle install` and `bundle exec jekyll build`; the workflow
 
 ## Licence
 
-Text, figures, photographs and data in this repository are copyright Andreas W. Neitzel unless a
-file states otherwise. Images in `assets/img/guide/` and `assets/img/papers/` keep the licences
-stated on the pages that use them. Fonts in `assets/fonts/` are under the SIL Open Font
-License 1.1. The layout code may be reused under the terms in `LICENSE`.
+Text, renders, animations, schematics, figures and interactive demos are copyright Andreas W.
+Neitzel, all rights reserved; ask before reusing them. Third-party images, logos, data and fonts keep
+their own credits and licences, listed on the site's `/credits/` page (`_data/credits.yml`). The
+layout code may be reused under the terms in `LICENSE`.

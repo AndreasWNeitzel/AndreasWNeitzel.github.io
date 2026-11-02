@@ -40,7 +40,7 @@ math: true
     </div>
   </section>
   <section>
-    <figure class="panel blueprint wide-fig vlt-fig" id="light-path" data-build>
+    <figure class="panel blueprint wide-fig vlt-fig" id="light-path" data-build data-credit="own">
       <div class="vlt-row">
         {% include figures/vlt-lightpath.svg %}
         {% include figures/espresso-spectrum.svg %}
