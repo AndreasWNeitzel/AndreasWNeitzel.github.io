@@ -52,6 +52,7 @@ def pop(inner: str, t: float) -> str:
 
 
 def text(x: float, y: float, s: str, cls: str, t: float, anchor: str = "start", extra: str = "") -> str:
+    s = s.replace("Gaia", '<tspan font-style="italic">Gaia</tspan>')  # mission names in italics
     return f'<text class="{cls} b-pop" style="--d:{t:.2f}s" x="{f(x)}" y="{f(y)}" text-anchor="{anchor}"{extra}>{s}</text>'
 
 

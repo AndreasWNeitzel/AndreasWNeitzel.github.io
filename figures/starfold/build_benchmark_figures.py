@@ -191,7 +191,7 @@ def figure_resolution(site: Path) -> None:
     # label offsets per table and panel, chosen by hand so that no label covers a mark
     off_gain = {"landsat": (8, -8, "start"), "rice": (8, -8, "start"), "waveform": (8, 4, "start"),
                 "digits": (8, -8, "start"), "letter": (8, 12, "start"), "pendigits": (8, 18, "start"),
-                "dry_bean": (-8, -8, "end"), "gas_drift": (8, 4, "start"), "coil20": (8, 12, "start"),
+                "dry_bean": (-11, -11, "end"), "gas_drift": (8, 4, "start"), "coil20": (8, 12, "start"),
                 "isolet": (8, 4, "start")}
     off_rho = {"landsat": (-8, 14, "end"), "dry_bean": (8, 12, "start"), "rice": (8, 4, "start"),
                "waveform": (8, 4, "start"), "pendigits": (8, 14, "start"), "letter": (8, -8, "start"),

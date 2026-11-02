@@ -48,7 +48,8 @@ def run(parts, cls: str, size: float, anchor: str = "start") -> tuple[str, float
     cur, out = 0.0, []
     for kind, seg in parts:
         if kind == "text":
-            out.append(f'<text class="{cls}" x="{cur:.1f}" y="0" style="white-space:pre">{seg}</text>')
+            shown = seg.replace("Gaia", '<tspan font-style="italic">Gaia</tspan>')  # mission names in italics
+            out.append(f'<text class="{cls}" x="{cur:.1f}" y="0" style="white-space:pre">{shown}</text>')
             cur += len(seg) * adv
         else:
             body, w = tex_glyphs(seg, size * 1.12)
