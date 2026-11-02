@@ -21,16 +21,16 @@ copy: about
   </div>
   {%- assign refereed = L.publications | where_exp: "e", "e.kind == 'article' or e.kind == 'letter'" -%}
   {%- assign phd = L.education | where: "id", "edu-2022-phd-astronomy" | first -%}
-  {%- assign hpc = L.funding | where: "kind", "computing" | where: "role", "responsible investigator" -%}
+  {%- assign hpc = L.funding | where: "kind", "computing" | where: "role", "principal investigator" -%}
   {%- assign core = 0 %}{% assign gpu = 0 %}{% for f in hpc %}{% assign core = core | plus: f.numbers.core_hours %}{% assign gpu = gpu | plus: f.numbers.gpu_hours %}{% endfor -%}
   <aside class="id-facts k-up" aria-label="At a glance">
     <dl>
       <div><dt>Doctorate</dt><dd>{{ phd.title }}, {{ phd.date | slice: 0, 4 }} to 2027</dd></div>
       <div><dt>Institutions</dt><dd>{% for a in p.affiliations %}{{ a.short }}{% unless forloop.last %}, {% endunless %}{% endfor %}</dd></div>
-      <div><dt>Refereed papers</dt><dd>{{ refereed.size }}</dd></div>
+      <div><dt>Published papers</dt><dd>{{ refereed.size }}</dd></div>
       <div><dt>Talks and posters</dt><dd>{{ L.presentations.size }}</dd></div>
       {%- if hpc.size > 0 %}
-      <div><dt>Supercomputing awarded</dt><dd>{{ core | divided_by: 100000.0 | round | divided_by: 10.0 }} million core-hours, {{ gpu | delimit }} GPU-hours</dd></div>
+      <div><dt>Supercomputing, as principal investigator</dt><dd>{{ core | divided_by: 100000.0 | round | divided_by: 10.0 }} million core-hours, {{ gpu | delimit }} GPU-hours</dd></div>
       {%- endif %}
       <div><dt>Based in</dt><dd>{{ C.facts.based }}</dd></div>
       <div><dt>Citizenship</dt><dd>{{ C.facts.citizenship }}</dd></div>

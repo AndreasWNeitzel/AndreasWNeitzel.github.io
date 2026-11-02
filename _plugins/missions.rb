@@ -88,16 +88,17 @@ module SiteFilters
     case cat
     when "publications"
       return ["paper", "data", "data"] if k == "data"
-      return ["paper", "paper", "thesis"] if k == "thesis"
+      return ["paper", "thesis", "thesis"] if k == "thesis"
       return nil if k == "in-preparation"
-      ["paper", "paper", e["role"] == "first-author" ? "paper · first author" : "paper"]
+      ["paper", k == "letter" ? "letter" : "paper", e["role"] == "first-author" ? "paper · first author" : "paper"]
     when "presentations"
       poster = %w[poster pitch].include?(k)
-      lab = poster ? (k == "pitch" ? "poster pitch" : "poster") : (k == "seminar" ? "seminar" : "talk")
+      lab = poster ? (k == "pitch" ? "poster pitch" : "poster") : (k == "seminar" ? "seminar" : (k == "invited" ? "invited talk" : "talk"))
       lab += " · co-author" if e["role"] == "co-author"
-      ["talk", poster ? "poster" : "talk", lab]
+      mark = %w[poster pitch seminar invited].include?(k) ? k : "talk"
+      ["talk", mark, lab]
     when "funding"
-      return ["hpc", "hpc", "HPC"] if k == "computing"
+      return ["hpc", "hpc", e["role"].to_s.include?("principal") ? "HPC · principal investigator" : "HPC"] if k == "computing"
       return ["proposal", "proposal", "proposal · co-investigator"] if k == "proposal"
       ["grant", "grant", k == "grant" ? "project" : "fellowship"]
     when "events"

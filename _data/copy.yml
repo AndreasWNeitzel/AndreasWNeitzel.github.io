@@ -91,10 +91,10 @@ footer:
   line: "PhD candidate at IA and the University of Porto, working on machine learning for Galactic archaeology."
 
 about:
-  description: "Andreas W. Neitzel is a fifth-year PhD candidate in astronomy at the University of Porto who builds neural networks and unsupervised learning methods to reconstruct the history of the Milky Way from Gaia data."
+  description: "Andreas W. Neitzel is a fifth-year PhD candidate in astronomy at the University of Porto who applies deep learning and unsupervised methods to Gaia data to reconstruct the history of the Milky Way."
   role: "Astrophysicist building machine-learning methods for large surveys"
-  bio: "I am a fifth-year PhD candidate at the University of Porto and IA, supervised by Tiago L. Campante, Diego Bossini and Andrea Miglio. I apply machine learning to large astronomical surveys to reconstruct how the Milky Way was assembled (Galactic archaeology). My first-author paper in <i>Astronomy and Astrophysics</i> (2025) tests an unsupervised, manifold-learning method for sorting stars into populations, and Starfold, the open-source Python package that grew from it, applies the method to any table of measurements."
-  bio_2: "JANUS, the deep neural network I am developing, reads the chemistry of red giants from <i>Gaia</i> spectra and gives each star a reliability score. I am responsible investigator on two national supercomputing allocations to run it on about 220 million and 1.8 billion stars. I also use Bayesian inference and asteroseismology (the study of starquakes) to measure stellar ages, built simulation pipelines for the proposed HAYDN mission at INAF-OAS Bologna, and observed with ESPRESSO at the VLT in 2024."
+  bio: "I am a fifth-year PhD candidate at the University of Porto and IA, building machine learning for Galactic archaeology. Deep neural networks and unsupervised learning on <i>Gaia</i> and other large surveys let me reconstruct how the Milky Way was assembled. My first-author paper in <i>Astronomy and Astrophysics</i> (2025) led to Starfold, an open-source Python package."
+  bio_2: "I am principal investigator on two competitive supercomputing allocations, on Deucalion and MareNostrum 5, for JANUS, my neural network for <i>Gaia</i> spectra. I also use Bayesian inference and asteroseismology to measure stellar ages."
   facts:
     based: "Porto"
     citizenship: "EU (Portugal, Germany)"
@@ -137,7 +137,7 @@ research:
     - id: "hpc"
       kicker: "2025 to now · Deucalion and MareNostrum 5"
       title: "Supercomputers: where the networks train"
-      text: "Two FCT advanced-computing projects, with me as responsible investigator. On Deucalion, 299,520 ARM core-hours (one processor core running for an hour) and 1,500 A100 GPU-hours run JANUS on the <i>Gaia</i> DR3 spectra of about 220 million stars. On MareNostrum 5, 1,002,400 core-hours and 1,000 H100 GPU-hours are for <i>Gaia</i> DR4. Before them I used 94,001 core-hours of development access on Deucalion."
+      text: "Two FCT advanced-computing projects, with me as principal investigator. On Deucalion, 299,520 ARM core-hours (one processor core running for an hour) and 1,500 A100 GPU-hours run JANUS on the <i>Gaia</i> DR3 spectra of about 220 million stars. On MareNostrum 5, 1,002,400 core-hours and 1,000 H100 GPU-hours are for <i>Gaia</i> DR4. Before them I used 94,001 core-hours of development access on Deucalion."
     - id: "paranal"
       kicker: "May 2024 · ESO Very Large Telescope, Paranal"
       title: "Six nights at Paranal"

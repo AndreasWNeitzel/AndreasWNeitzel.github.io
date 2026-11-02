@@ -27,15 +27,16 @@
 {%- elsif cat == "publications" -%}
   {%- if k == "thesis" -%}{%- assign mk = "thesis" -%}{%- elsif k == "data" -%}{%- assign mk = "data" -%}{%- elsif k == "letter" -%}{%- assign mk = "letter" -%}{%- else -%}{%- assign mk = "article" -%}{%- endif -%}
 {%- endif -%}
+{%- unless mk -%}{%- assign mk = tg | replace: "abroad", "position" | replace: "membership", "position" | replace: "teaching", "service" | replace: "event", "service" -%}{%- if mk == "paper" %}{% assign mk = "article" %}{% endif -%}{%- endunless -%}
   <div class="when"><span>{{ when }}{% if country %}{% assign fl = "portugal,spain,italy,denmark,chile" | split: "," %}{% if fl contains country %} <svg class="flag" width="18" height="12" role="img" aria-label="{{ e.location | split: ', ' | last }}"><use href="#f-{{ country }}"/></svg>{% endif %}{% endif %}</span>
-  {%- if mk %}<span class="mk mk--{{ mk }}"><svg aria-hidden="true"><use href="#mk-{{ mk }}"/></svg><span>{{ lb }}</span></span>{% else %}<span class="tag tag--{{ tg }}">{{ lb }}</span>{% endif %}</div>
+  <span class="mk mk--{{ mk }}"><svg aria-hidden="true"><use href="#mk-{{ mk }}"/></svg><span>{{ lb }}</span></span></div>
   <p class="title">{{ e.title | missions }}</p>
   {%- capture meta -%}
     {%- if cat == "presentations" -%}
       {%- if e.people and e.people.size > 1 -%}{%- if e.role == "co-author" -%}{{ e.people | join: ", " | initials }}. {% else -%}With {{ e.people | slice: 1, 999 | join: ", " | initials }}. {% endif -%}{%- endif -%}
       {{ e.venue }}{% if e.location %} · {{ e.location }}{% endif %}
     {%- elsif cat == "funding" -%}
-      {%- if ids.reference -%}{{ ids.reference }} · {% endif -%}{%- if e.funder -%}{{ e.funder }}{% endif -%}{%- if e.role and e.role != "fellow" %} · {{ e.role | replace: "team-member", "team member" }}{% endif -%}{%- if e.pi and k != "computing" %} · PI {{ e.pi | initials }}{% elsif e.pi %} · co-responsible investigator T.&nbsp;L.&nbsp;Campante{% endif -%}
+      {%- if ids.reference -%}{{ ids.reference }} · {% endif -%}{%- if e.funder -%}{{ e.funder }}{% endif -%}{%- if e.role and e.role != "fellow" %} · {{ e.role | replace: "team-member", "team member" | replace: "responsible investigator", "principal investigator" }}{% endif -%}{%- if e.pi and k != "computing" %} · PI {{ e.pi | initials }}{% elsif e.pi %} · co-responsible investigator T.&nbsp;L.&nbsp;Campante{% endif -%}
     {%- elsif cat == "education" -%}
       {{ e.institution }}{% if e.location %} · {{ e.location }}{% endif %}
     {%- elsif cat == "software" -%}
