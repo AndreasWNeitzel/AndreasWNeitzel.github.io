@@ -66,6 +66,10 @@ random.seed(5); rng = np.random.default_rng(5)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 sc = bpy.context.scene
 sc.render.engine = 'CYCLES'; sc.cycles.samples = samples; sc.cycles.use_denoising = True; sc.cycles.device = 'CPU'
+if os.environ.get('CYCLES_DEVICE') == 'GPU':
+    pr = bpy.context.preferences.addons['cycles'].preferences; pr.compute_device_type = 'CUDA'; pr.get_devices()
+    for dv in pr.devices: dv.use = dv.type == 'CUDA'
+    sc.cycles.device = 'GPU'; sc.cycles.denoising_use_gpu = True
 sc.cycles.max_bounces = 4; sc.cycles.diffuse_bounces = 1; sc.cycles.glossy_bounces = 2; sc.cycles.transparent_max_bounces = 14
 sc.cycles.volume_bounces = 0; sc.cycles.caustics_reflective = False; sc.cycles.caustics_refractive = False
 sc.render.use_persistent_data = True
