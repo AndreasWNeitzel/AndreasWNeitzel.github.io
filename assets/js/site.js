@@ -44,8 +44,9 @@
 
   // ---- blocks build once as they arrive; a card waits for its images --------------------
   const show = (el) => {
-    const imgs = [...el.querySelectorAll("img")].filter((i) => !i.complete);
-    Promise.all(imgs.map((i) => i.decode().catch(() => {}))).then(() => el.classList.add("is-in"));
+    const imgs = [...el.querySelectorAll("img")].filter((i) => !i.complete && i.offsetParent);
+    const wait = new Promise((r) => setTimeout(r, 1200));
+    Promise.race([wait, Promise.all(imgs.map((i) => i.decode().catch(() => {})))]).then(() => el.classList.add("is-in"));
   };
   const targets = document.querySelectorAll(".k-up, .k-left, .k-scale, .k-card, .reveal, .year");
   document.querySelectorAll(".mi .k-left").forEach((el, k) => { el.style.transitionDelay = (k % 3) * 0.08 + Math.floor(k / 3) * 0.12 + "s"; });
