@@ -95,25 +95,6 @@
     pic.appendChild(more);
   });
 
-  // ---- FIG 1: stage captions ------------------------------------------------------
-  const fig = document.getElementById("fig1");
-  if (fig && fig.querySelector("[data-captions]")) {
-    const caps = JSON.parse(fig.querySelector("[data-captions]").textContent);
-    const titleEl = fig.querySelector("[data-cap-title]");
-    const textEl = fig.querySelector("[data-cap-text]");
-    const stages = fig.querySelectorAll(".f1-stage");
-    const set = (key) => {
-      stages.forEach((s) => s.classList.toggle("is-active", s.dataset.stage === key));
-      fig.classList.toggle("has-active", !!(key && caps[key]));
-      if (key && caps[key]) { titleEl.textContent = caps[key][0]; textEl.textContent = caps[key][1]; }
-    };
-    stages.forEach((s) => {
-      s.addEventListener("pointerenter", () => set(s.dataset.stage));
-      s.addEventListener("focus", () => set(s.dataset.stage));
-      s.addEventListener("click", () => set(s.dataset.stage));
-    });
-    fig.addEventListener("pointerleave", () => set(null));
-  }
 
   // ---- staged figures: hover, focus or tap a stage; its line shows in the readout ---------
   document.querySelectorAll("[data-stagefig]").forEach((fg) => {

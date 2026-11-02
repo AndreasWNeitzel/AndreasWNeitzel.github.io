@@ -597,18 +597,7 @@
   .row-item .ccredit { inset: auto 0 0 auto; max-inline-size: 100%; padding: 2px 8px; border-start-start-radius: var(--radius-sm); background: rgb(0 0 0 / .62); color: #fff; text-shadow: none; }
   .explainer .ccredit { inset: auto auto 10px 14px; max-inline-size: calc(100% - 28px); text-align: start; color: #f0eee9; }
 
-  /* ===== research: FIG 1 and the lines of work ===== */
-  .fig1 { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr); padding: 0; overflow: hidden; color: var(--fig); }
-  .fig1-head { display: flex; gap: 12px; align-items: baseline; padding: 14px 18px 0; font: 500 0.8125rem var(--mono); color: var(--muted); letter-spacing: 0.02em; }
-  .fig1-head .figno { color: var(--ink); font-weight: 600; letter-spacing: 0.08em; }
-  .fig1-head .fig1-hint { margin-inline-start: auto; opacity: .7; }
-  .fig1-swipe { display: none; }
-  @media (max-width: 860px) { .fig1-swipe { display: inline; } .fig1-head .fig1-hint { display: none; } }
-  .fig1-scroll { min-block-size: 0; display: grid; place-items: center; padding: 10px 16px; overflow-x: auto; }
-  .fig1-cap { position: absolute; inset: auto 0 0 0; padding: 12px 18px 14px; border-block-start: 1px solid var(--line); font-size: 0.92rem; line-height: 1.5; color: var(--ink-2);
-    background: color-mix(in oklab, var(--raised) 94%, transparent); opacity: 0; transition: opacity .18s; pointer-events: none; }
-  .fig1.has-active .fig1-cap { opacity: 1; }
-  .fig1-cap b { color: var(--ink); }
+  /* ===== research: the lines of work ===== */
   .nn-nodes circle { fill: var(--raised); stroke: currentColor; stroke-width: 1.4; vector-effect: non-scaling-stroke; }
 
   .lines { display: grid; gap: 22px; }
