@@ -1026,7 +1026,8 @@ async function boot(root) {
       const nText = `n = ${fixed(n, 2)}`;
       const flip = xe + 7 + ctx.measureText(nText).width > s.w - 2;
       ctx.textAlign = flip ? "right" : "left";
-      ctx.fillText(nText, flip ? xe - 7 : xe + 7, nearOne ? Y(0.2) - 4 : Y(0) - 4);
+      // flipped, it would land on the n = 1 label along the axis, so it rises above it
+      ctx.fillText(nText, flip ? xe - 7 : xe + 7, nearOne || flip ? Y(0.2) - 4 : Y(0) - 4);
     }
     ctx.restore();
     ctx.fillStyle = C.muted;
