@@ -34,7 +34,7 @@
   {%- capture meta -%}
     {%- if cat == "presentations" -%}
       {%- if e.people and e.people.size > 1 -%}{%- if e.role == "co-author" -%}{{ e.people | join: ", " | initials }}. {% else -%}With {{ e.people | slice: 1, 999 | join: ", " | initials }}. {% endif -%}{%- endif -%}
-      {{ e.venue }}{% if e.location %} · {{ e.location }}{% endif %}
+      {{ e.venue | missions }}{% if e.location %} · {{ e.location }}{% endif %}
     {%- elsif cat == "funding" -%}
       {%- if ids.reference -%}{{ ids.reference }} · {% endif -%}{%- if e.funder -%}{{ e.funder }}{% endif -%}{%- if e.role and e.role != "fellow" %} · {{ e.role | replace: "team-member", "team member" | replace: "responsible investigator", "principal investigator" }}{% endif -%}{%- if e.pi and k != "computing" %} · PI {{ e.pi | initials }}{% elsif e.pi %} · co-responsible investigator T.&nbsp;L.&nbsp;Campante{% endif -%}
     {%- elsif cat == "education" -%}

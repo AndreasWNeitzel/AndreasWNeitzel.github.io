@@ -3,7 +3,7 @@
    galaxy's own record as a faint dashed return. Filled marks are real data in the paper's sense
    (the samples, the embedding); outlines are schematic. The one-time build comes from site.css. */
 @layer pages {
-  .paper-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .paper-wide { margin-block-end: 28px; padding: 14px 16px 10px; }
   .paper-wide svg { display: block; inline-size: 100%; block-size: auto; max-block-size: none; }
   .paper-wide figcaption { padding: 8px 4px 2px; }
   .paper-wide .b-draw { vector-effect: none; }

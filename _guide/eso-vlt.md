@@ -8,6 +8,7 @@ extra_css: [/assets/css/eso.css]
 wide_figure: figures/eso-vlt.svg
 image: ""
 photo: /assets/img/photos/vlt-daylight.webp
+plate_textw: 43vw
 photo_alt: Andreas in a hard hat in front of a Unit Telescope enclosure at Paranal, May 2024.
 related:
   - ev-2024-05-paranal-espresso-observing-run

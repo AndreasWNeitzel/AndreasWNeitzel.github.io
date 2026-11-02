@@ -1,7 +1,7 @@
 /* Field guide, ESO and the VLT: ESO's sites in Chile, the station table, and the rendered Paranal
    site model with its drawn overlay (figures/eso/build_eso_figure.py, paranal_render.py). The one-time build comes from site.css ("figure build"). */
 @layer pages {
-  .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .guide-wide { margin-block-end: 28px; padding: 14px 16px 10px; }
   .guide-wide .eso-svg { inline-size: 100%; block-size: auto; }
   .guide-wide figcaption { padding: 8px 4px 2px; }
   .eso-svg .eso-land { fill: color-mix(in oklab, var(--muted) 8%, transparent); stroke: var(--line-strong); stroke-width: 0.8; }

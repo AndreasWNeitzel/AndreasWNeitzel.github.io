@@ -4,7 +4,7 @@ layout: default
 {%- assign slug = page.url | split: "/" | last -%}
 {%- assign cp = site.data.copy.papers | where: "id", slug | first -%}
 {%- assign pic = page.card_image | default: page.figure -%}
-{% include plate.html still=pic alt=page.figure_alt title=cp.short line=cp.line crumb="Publications" crumb_url="/publications/" credit=page.card_credit credit_url=page.card_credit_url %}
+{% include plate.html still=pic alt=page.card_alt title=cp.short line=cp.line crumb="Publications" crumb_url="/publications/" credit=page.card_credit credit_url=page.card_credit_url %}
 <div class="wrap">
   {%- if page.wide_figure %}
   <figure class="panel blueprint paper-wide k-up" data-build>

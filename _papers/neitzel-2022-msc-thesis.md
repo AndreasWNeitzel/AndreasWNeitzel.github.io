@@ -13,9 +13,8 @@ wide_figure: figures/thesis-method.svg
 extra_css: [/assets/css/papers.css, /assets/css/thesis.css]
 math: true
 order: 5
-card_wide: true
-card_image: "/assets/img/papers/neitzel-2022-kippenhahn.webp"
-card_light: true
+card_image: "/assets/img/heroes/research_seismo.webp"
+card_alt: "A Kepler power spectrum of a red giant drawn as filaments of light"
 sources:
   - label: "Dissertation record, Repositório Aberto da Universidade do Porto (hdl:10216/147245)"
     url: "https://hdl.handle.net/10216/147245"

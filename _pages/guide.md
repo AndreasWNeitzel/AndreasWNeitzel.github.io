@@ -20,7 +20,7 @@ loops:
   machine-learning-for-stars: ai
 ---
 {%- assign CP = site.data.copy.plates -%}
-{% include plate.html loop="paranal" still="/assets/img/photos/vlt-golden-hour.webp" alt="The Milky Way rising over the hills at Paranal, drawn from Gaia red giants" title="Field guide" line=CP.guide %}
+{% include plate.html loop="paranal" still="/assets/img/photos/vlt-golden-hour.webp" alt="The Milky Way rising over the hills at Paranal, drawn from Gaia red giants" title="Field guide" line=CP.guide pos="50% 100%" textw="36vw" lift=true %}
 <div class="wrap">
 <section class="section section--tight">
   <div class="rows">

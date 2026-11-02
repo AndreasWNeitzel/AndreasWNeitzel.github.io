@@ -8,7 +8,7 @@
     display: grid; gap: 0; padding: 0; overflow: hidden; margin-block-end: 28px; color: var(--p-ink);
     background: var(--p-bg); border-color: #2b2926; }
   .jn-head { display: flex; gap: 14px; align-items: baseline; padding: 16px 28px 2px; min-block-size: 3.2em; }
-  .jn-head .figno { font: 600 0.8rem var(--mono); letter-spacing: 0.08em; color: var(--p-ink); flex: none; }
+  .jn-head .figno { font: 600 0.8125rem var(--mono); letter-spacing: 0.08em; color: var(--p-ink); flex: none; }
   .jn-read { margin: 0; font-size: 0.95rem; line-height: 1.45; color: var(--p-2); }
   .jn-read b { font-weight: 600; color: var(--p-ink); }
   .jn-read b:empty { display: none; }

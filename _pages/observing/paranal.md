@@ -12,7 +12,7 @@ math: true
 <div class="wrap stack-l">
   <p class="crumbs story-crumbs"><a href="{{ '/research/' | relative_url }}">Research</a> · <a href="{{ '/papers/campante-2026-gj570a/' | relative_url }}">the paper this run produced</a></p>
   <section class="story-hero">
-    <img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="Andreas on the Very Large Telescope platform at Paranal at sunset, with the Unit Telescope enclosures behind him." fetchpriority="high">
+    <img src="{{ '/assets/img/photos/vlt-golden-hour.webp' | relative_url }}" alt="Andreas on the Very Large Telescope platform at Paranal at sunset, with the Unit Telescope enclosures behind him." fetchpriority="high" style="object-position: 50% 100%">
     <div class="card-body stack-s">
       <p><span class="tag tag--observing">observing</span> <span class="kicker" style="color:rgb(255 255 255 / .8)">Paranal, Chile · May 2024</span></p>
       <h1>Observing at the Very Large Telescope</h1>
