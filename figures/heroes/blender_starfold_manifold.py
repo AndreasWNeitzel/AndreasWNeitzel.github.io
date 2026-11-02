@@ -2,12 +2,12 @@
 unrolls into the flat map on which the groups stand apart, and everything returns (Blender, Cycles).
 
 What is real. Every point is a star of the recorded Starfold run on the APOGEE DR19 example table
-(assets/data/starfold, 9,242 stars); a fixed random subsample of 4,000 is drawn, and the same stars are drawn in every
-frame. On the upright plate each star sits at its own recorded [Fe/H] (across) and [alpha/M] (up), so the two ridges
-are the high-alpha and low-alpha sequences as measured; the plate's rules fall on round values of the two
-abundances, and a few very metal-poor stars lie past its left edge. On the flat map each star sits at its own position
-on the run's two-dimensional map, the two axes scaled by one common factor, with the smaller group to the right and
-the sheet that carries the map a little longer than the map at either end, so that it spans most of the frame. The
+(assets/data/starfold, 9,242 stars); a fixed random subsample of 4,000 is drawn from the stars with [Fe/H] above -1.05,
+which leaves out only the sparse metal-poor tail, and the same stars are drawn in every frame. On the upright plate each star sits at its own recorded [Fe/H] (across) and [alpha/M] (up), so the two ridges
+are the high-alpha and low-alpha sequences as measured. The plate has the outline of the flat map, each column scaled
+on its own to fill it, every drawn star inside; its rules fall on round values of the two abundances. On the flat map
+each star sits at its own position on the run's two-dimensional map, the two axes scaled by one common factor, with
+the smaller group to the right and the sheet that carries the map a little longer than the map at either end, so that it spans most of the frame. The
 colour of a star is its recorded group throughout: blue for the larger group, brass for the smaller one, graphite for
 the stars the run left unassigned. Nothing is added.
 
@@ -57,7 +57,10 @@ MAP_L, MARGIN = 12.6, 1.5                          # width of the map, and the b
 L = MAP_L + 2 * MARGIN                             # sheet width: the arc length that is rolled
 k = MAP_L / (hi[0] - lo[0])                        # one scale for both map axes
 HZ = (hi[1] - lo[1]) * k + 0.25                    # sheet height, along the roll's vertical axis
-sel = np.sort(np.random.default_rng(0).choice(len(mp), args.n, replace=False))
+FE_MIN = -1.05                                     # the sparse metal-poor tail stays out of the drawing, so that the ridges fill the plate
+pool = np.flatnonzero(FE > FE_MIN)
+print('drawn from', len(pool), 'of', len(mp), 'stars')
+sel = np.sort(np.random.default_rng(0).choice(pool, args.n, replace=False))
 S = MARGIN + (mp[sel, 0] - lo[0]) * k              # arc length from the sheet's left (inner) edge
 Z = (mp[sel, 1] - (lo[1] + hi[1]) / 2) * k         # height on the sheet
 G = grp[sel]
@@ -68,8 +71,10 @@ BLUE = np.array((0.16, 0.36, 1.0)); BRASS = np.array((1.0, 0.55, 0.14)); GRAPH =
 COL = np.array([BLUE if g == big else (GRAPH if g < 0 else BRASS) for g in G])
 
 # ---------- the plate: [Fe/H] across, [alpha/M] up ----------
-FE0, FE1, AL0, AL1 = -1.2, 0.5, -0.12, 0.40        # the plate's edges in dex
-PW, PH, PY = 5.6, 7.7, -2.9                        # its size, and its place in front of the roll
+PAD = 0.05                                         # a margin inside the plate, as a fraction of each column's range
+FE0, FE1 = FE[sel].min() - PAD * np.ptp(FE[sel]), FE[sel].max() + PAD * np.ptp(FE[sel])   # edges in dex: every drawn star is inside
+AL0, AL1 = AL[sel].min() - PAD * np.ptp(AL[sel]), AL[sel].max() + PAD * np.ptp(AL[sel])
+PW, PH, PY = L, HZ, 0.0                            # exactly the outline and the place of the flat map
 def plate_x(v): return (np.asarray(v) - (FE0 + FE1) / 2) / (FE1 - FE0) * PW
 def plate_z(v): return (np.asarray(v) - (AL0 + AL1) / 2) / (AL1 - AL0) * PH
 P0 = np.stack([plate_x(FE[sel]), np.full(len(sel), PY), plate_z(AL[sel])], -1)
@@ -81,7 +86,7 @@ BOW = 1.2 + 1.0 * rng.random(len(sel))             # how far towards the camera 
 # ---------- the timetable, in seconds of the first half; the second half is its mirror ----------
 HOLD, TRAVEL, STAGGER = 0.7, 1.4, 1.0              # plate held; one star's journey; spread of the departures
 UNROLL0, UNROLL1 = 2.9, 5.4                        # the sheet opens; the flat map then holds to the middle of the loop
-FADE = (0.9, 2.1)                                  # plate gives way to sheet
+FADE = (1.0, 2.3)                                  # plate gives way to sheet
 T_MID = (NF - 1) / FPS / 2
 
 def smooth(x):
@@ -185,7 +190,7 @@ col_attr = me.color_attributes.new('col', 'FLOAT_COLOR', 'POINT')
 stars = link(bpy.data.objects.new('stars', me)); me.materials.append(vcol_emission('stars', 1.5))
 col_attr.data.foreach_set('color', np.concatenate([np.repeat(COL, 6, 0), np.ones((len(COL) * 6, 1))], 1).ravel())
 OFFS = (OCT[None, :, :] * RAD[:, None, None]).reshape(-1, 3)
-ON_PLATE = 0.75                                    # a star is drawn smaller on the plate, so that the two ridges keep their density
+ON_PLATE = 0.90                                    # a star is drawn smaller on the plate, so that the two ridges keep their density
 
 # sheet: a grid of faint glass
 NU, NV = 300, 16
@@ -220,8 +225,8 @@ def set_spline(sp, pts):
 # the plate: faint glass, a frame, and rules at round values of the two abundances
 pme = bpy.data.meshes.new('plate')
 pme.from_pydata([(-PW / 2, PY, -PH / 2), (PW / 2, PY, -PH / 2), (PW / 2, PY, PH / 2), (-PW / 2, PY, PH / 2)], [], [(0, 1, 2, 3)])
-link(bpy.data.objects.new('plate', pme)); pme.materials.append(fades(glass('pglass'), 'plate'))
-RFE, RAL = (-1.0, -0.5, 0.0), (0.0, 0.1, 0.2, 0.3)
+plate = link(bpy.data.objects.new('plate', pme)); pme.materials.append(fades(glass('pglass'), 'plate'))
+RFE, RAL = (-0.75, -0.5, -0.25, 0.0, 0.25), (0.0, 0.1, 0.2, 0.3)
 prules = curve_obj('prules', [2] * (len(RFE) + len(RAL)), 0.006, fades(emission('prules', (0.42, 0.52, 0.70), 0.4), 'plate'))
 pframe = curve_obj('pframe', [5], 0.009, fades(emission('pframe', (0.45, 0.62, 1.0), 0.9), 'plate'))
 def flat_spline(sp, pts): sp.points.foreach_set('co', np.concatenate([np.array(pts, float), np.ones((len(pts), 1))], 1).ravel())
@@ -246,6 +251,7 @@ ct.links.new(ct.nodes['Render Layers'].outputs['Image'], gl_.inputs['Image']); c
 cd = bpy.data.cameras.new('cam'); cd.lens = 40; cd.dof.use_dof = True; cd.dof.aperture_fstop = 8.0
 cam = link(bpy.data.objects.new('cam', cd)); sc.camera = cam
 from mathutils import Vector
+PLATE_OBS, SHEET_OBS = (plate, prules, pframe), (sheet, lines, edge)
 LOOK = Vector((0.0, 0.0, 0.12))
 CAM_D, CAM_H, CAM_AZ, CAM_BACK = (float(v) for v in os.environ.get('SF_CAM', '19.5 2.2 14 3.5').split())
 
@@ -273,6 +279,8 @@ def pose(t):
     f = float(smooth((now - FADE[0]) / (FADE[1] - FADE[0])))
     for s_ in FADERS['plate']: s_.default_value = 1 - f
     for s_ in FADERS['sheet']: s_.default_value = f
+    for ob in PLATE_OBS: ob.hide_render = f >= 1.0
+    for ob in SHEET_OBS: ob.hide_render = f <= 0.0        # the roll is not there at all until the stars leave
     a = math.radians(CAM_AZ * math.sin(math.pi / 2 * arc) ** 2)   # the camera swings round the roll and back
     D = CAM_D + CAM_BACK * arc                            # and stands back while the sheet is rolled, which stands nearer
     cam.location = Vector((LOOK.x + D * math.sin(a), -D * math.cos(a), CAM_H))
