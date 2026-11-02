@@ -13,21 +13,23 @@ Usage (from the repository root):
 assets/img/figures/janus-gaia.webp at twice the drawn size. Without it the existing WebP is used.
 
 The story, one stage each: Gaia, its XP spectrum, the APOGEE DR19 labels it learns from, the
-JANUS ensemble of conditional normalising flows, the labels with their spread and P(H), the
-catalogue of TESS red giants, and the two machines it runs on.
+JANUS ensemble (trunk and coupling layers), the labels with their spread and P(H), the catalogue of
+TESS red giants, and the two machines it runs on. The figure is a dark plate in both themes.
+White is linework and data, brass is the one accent: the thread, and the alpha-rich mode.
 
-Real data (filled, in the mark colour):
+Real data:
 - the spectrum: Gaia DR3 5289554869898620416, the median-[M/H] red giant of the playground set
   (assets/data/playground/gaia_xp_mh.json, row 97; GaiaXPy calibrated flux on a 2 nm grid).
   The part blueward of 660 nm comes from BP, the part redward from RP (they overlap from 640 to
   680 nm). H alpha (656.28 nm) and the Ca II triplet (849.80, 854.21, 866.21 nm) are ticked at
   their air wavelengths.
 - the alpha plane: [alpha/M] against [Fe/H] for the 9,242 APOGEE DR19 giants of the recorded
-  Starfold run (assets/data/starfold/apogee_run.*), as a smoothed density in four levels.
+  Starfold run (assets/data/starfold/apogee_run.*), as isodensity hairlines.
 - the machines: node counts of Deucalion and MareNostrum 5 to scale, one square for 64 nodes
   (sources in figures/hpc/build_hpc_figure.py).
-Schematic (outline): the spacecraft render (proportions after ESA, not an engineering model),
-the flow densities, the label posteriors, P(H) and the table cells.
+Schematic: the spacecraft render (proportions after ESA, not an engineering model), the network
+(flow_samples below pushes a real Gaussian draw through five hand-written coupling layers), the
+label shapes, P(H) and the table cells.
 
 Every connector starts and ends on the outer edge of a square port; the script checks this.
 """
@@ -38,6 +40,7 @@ import argparse
 import json
 import math
 import random
+from itertools import pairwise
 from pathlib import Path
 
 import numpy as np
@@ -70,7 +73,7 @@ def pop(inner: str, t: float) -> str:
     return f'<g class="b-pop" {timing(t)}>{inner}</g>'
 
 
-CHAR = {"jn-title": 0.50 * 17, "jn-lab": 0.60 * 12.5, "jn-tick": 0.60 * 12}
+CHAR = {"jn-title": 0.50 * 19, "jn-lab": 0.60 * 12.5, "jn-tick": 0.60 * 12}
 
 
 def text_w(s: str, cls: str) -> float:
@@ -172,11 +175,11 @@ def load_apogee():
 # ------------------------------------------------------------------ stages
 
 
-def gaia_stage(img_w: int, img_h: int) -> Stage:
-    s = Stage("gaia", "Gaia", 190, 170, 0.2, italic=True)
+def gaia_stage(img_w: int, img_h: int, w: float) -> Stage:
+    s = Stage("gaia", "Gaia", w, 140, 0.2, italic=True)
     W = 178.0
     H = W * img_h / img_w
-    ix, iy = 6.0, 50.0
+    ix, iy = w - W - 22, 32.0
     s.body.append(
         pop(
             f'<image class="jn-render" href="{{{{ \'/assets/img/figures/janus-gaia.webp\' | relative_url }}}}" '
@@ -184,21 +187,20 @@ def gaia_stage(img_w: int, img_h: int) -> Stage:
             0.2,
         )
     )
-    # the starlight: from a star into the first telescope aperture (located in the render)
+    # the starlight: from a star into the near telescope aperture, located in the render
     ax, ay = ix + APERTURE[0] * W, iy + APERTURE[1] * H
-    sx, sy = 168.0, 40.0
-    s.body.append(pop(f'<circle class="jn-star" cx="{f(sx)}" cy="{f(sy)}" r="2.6"/>', 0.25))
-    s.body.append(pop(f'<path class="jn-spike" d="M{f(sx - 8)} {f(sy)} H{f(sx + 8)} M{f(sx)} {f(sy - 8)} V{f(sy + 8)}"/>', 0.25))
-    s.body.append(draw("jn-light", f"M{f(sx - 4)} {f(sy + 3)} L{f(ax + 3)} {f(ay - 2)}", 0.4, 0.35))
-    s.port("r", 190, iy + H * 0.62, "r")
-    s.port("b", 95, iy + H + 6, "b")
-    s.h = iy + H + 10
+    sx, sy = ix - 60, 52.0
+    s.body.append(pop(f'<circle class="jn-star" cx="{f(sx)}" cy="{f(sy)}" r="2.2"/>', 0.25))
+    s.body.append(pop(f'<path class="jn-spike" d="M{f(sx - 9)} {f(sy)} H{f(sx + 9)} M{f(sx)} {f(sy - 9)} V{f(sy + 9)}"/>', 0.25))
+    s.body.append(draw("jn-light", f"M{f(sx + 4)} {f(sy + 1)} L{f(ax - 3)} {f(ay - 1)}", 0.4, 0.35))
+    s.port("b", ix + W / 2, iy + H + 7, "b")
+    s.h = iy + H + 11
     return s
 
 
-def xp_stage(lam, flux) -> Stage:
-    s = Stage("xp", "XP spectrum", 230, 176, 0.6)
-    X0, X1, YT, YB = 14.0, 222.0, 54.0, 138.0
+def xp_stage(lam, flux, w: float, ph: float, pid: str) -> Stage:
+    s = Stage("xp", "XP spectrum", w, ph + 92, 0.6)
+    X0, X1, YT, YB = 0.0, w, 56.0, 56.0 + ph
 
     def x_of(nm):
         return X0 + (nm - 360) / (990 - 360) * (X1 - X0)
@@ -207,233 +209,282 @@ def xp_stage(lam, flux) -> Stage:
         return YB - v * (YB - YT)
 
     pts = [(x_of(l), y_of(v)) for l, v in zip(lam, flux)]
-    s.body.append(draw("jn-g", f"M{f(X0)} {f(YT - 4)} V{f(YB)} H{f(X1)} V{f(YT - 4)}", 0.45, 0.3))
-    split = int(np.searchsorted(lam, 660))
-    bp, rp = pts[: split + 1], pts[split:]
-    for part, cls in ((bp, "jn-fill-bp"), (rp, "jn-fill-rp")):
-        thin = part[::3] + [part[-1]]
-        area = poly(thin) + f" L{f(part[-1][0])} {f(YB)} L{f(part[0][0])} {f(YB)} Z"
-        s.body.append(pop(f'<path class="{cls}" d="{area}"/>', 0.75))
-    s.body.append(draw("jn-spec", smooth(pts), 0.6, 0.7))
-    s.body.append(pop(f'<path class="jn-gd" d="M{f(x_of(660))} {f(YT - 4)} V{f(YB)}"/>', 0.8))
-    # the two photometers: brackets under the axis
-    for (a, b, y, lab) in ((360, 680, 147, "BP"), (640, 990, 155, "RP")):
-        s.body.append(draw("jn-g2", f"M{f(x_of(a))} {f(y - 3)} V{f(y)} H{f(x_of(b))} V{f(y - 3)}", 0.85, 0.3))
-    s.text(x_of(500), 166, "BP", "jn-tick", "middle", t=0.9)
-    s.text(x_of(830), 166, "RP", "jn-tick", "middle", t=0.9)
-    # real lines at their wavelengths
-    li = np.interp
+    grad = (
+        f'<linearGradient id="{pid}fade" gradientUnits="userSpaceOnUse" x1="0" y1="{f(YT)}" x2="0" y2="{f(YB)}">'
+        '<stop offset="0" stop-color="#f4f1ea" stop-opacity=".5"/><stop offset="1" stop-color="#f4f1ea" stop-opacity=".03"/></linearGradient>'
+    )
+    s.body.append(f"<defs>{grad}</defs>")
+    # an engraved fall of hairlines under the curve, one per sampled wavelength
+    for lo, hi, cls in ((360, 660, "jn-comb"), (660, 990, "jn-comb jn-comb-rp")):
+        d = "".join(
+            f"M{f(x_of(l))} {f(y_of(v) + 3)}V{f(YB)}" for l, v in zip(lam, flux) if lo <= l < hi and int(l) % 4 == 0
+        )
+        s.body.append(pop(f'<path class="{cls}" stroke="url(#{pid}fade)" d="{d}"/>', 0.7))
+    s.body.append(draw("jn-g", f"M{f(X0)} {f(YB)} H{f(X1)}", 0.5, 0.3))
+    line = smooth(pts)
+    s.body.append(pop(f'<path class="jn-halo2" d="{line}"/><path class="jn-halo1" d="{line}"/>', 1.0))
+    s.body.append(draw("jn-spec", line, 0.6, 0.8))
 
     def tick(nm, top):
-        yv = y_of(float(li(nm, lam, flux)))
-        return f"M{f(x_of(nm))} {f(yv - 5)} V{f(top)}"
+        return f"M{f(x_of(nm))} {f(y_of(float(np.interp(nm, lam, flux))) - 7)} V{f(top)}"
 
-    s.body.append(draw("jn-line", tick(656.28, 40), 1.0, 0.2))
-    s.body.append(draw("jn-line", " ".join(tick(nm, 40) for nm in (849.80, 854.21, 866.21)), 1.0, 0.2))
-    s.text(x_of(656.28), 36, "Hα", "jn-tick", "middle", t=1.0)
-    s.text(x_of(856.0), 36, "Ca II", "jn-tick", "middle", t=1.0)
-    s.port("l", X0, 96, "l")
-    s.port("r", X1, 96, "r")
-    s.port("t", 142, 26, "t")
-    s.port("b", x_of(660), 172, "b")
-    s.leads["b"] = pop(f'<path class="jn-gd" d="M{f(x_of(660))} {f(YB)} V{f(172 - HALF)}"/>', 0.9)
+    s.body.append(draw("jn-line", tick(656.28, 46), 1.1, 0.2))
+    s.body.append(draw("jn-line", " ".join(tick(nm, 46) for nm in (849.80, 854.21, 866.21)), 1.1, 0.2))
+    s.text(x_of(656.28), 42, "Hα", "jn-tick", "middle", t=1.1)
+    s.text(x_of(856.0), 42, "Ca II", "jn-tick", "middle", t=1.1)
+    # the two photometers overlap: brackets under the axis
+    for a, b, y in ((360, 680, YB + 10), (640, 990, YB + 17)):
+        s.body.append(draw("jn-g2", f"M{f(x_of(a))} {f(y - 3)} V{f(y)} H{f(x_of(b))} V{f(y - 3)}", 0.9, 0.3))
+    s.text(x_of(500), YB + 30, "BP", "jn-tick", "middle", t=0.95)
+    s.text(x_of(830), YB + 34, "RP", "jn-tick", "middle", t=0.95)
+    s.port("t", x_of(740), 26, "t")
+    s.port("r", X1, YT + ph * 0.5, "r")
+    s.port("b", x_of(660), YB + 40, "b")
+    s.h = YB + 44
     return s
 
 
-def apogee_stage(fe, am) -> Stage:
+def apogee_stage(fe, am, w: float, ph: float) -> Stage:
     from matplotlib import pyplot as plt
     from scipy.ndimage import gaussian_filter
 
-    s = Stage("apogee", "APOGEE DR19", 150, 132, 1.0)
-    X0, X1, YT, YB = 6.0, 146.0, 38.0, 112.0
+    s = Stage("apogee", "APOGEE DR19", w, ph + 58, 1.0)
+    X0, X1, YT, YB = 0.0, w, 40.0, 40.0 + ph
     FE, AM = (-1.0, 0.5), (-0.08, 0.36)
-    H, xe, ye = np.histogram2d(fe, am, bins=[60, 44], range=[FE, AM])
-    D = gaussian_filter(H.T, 1.0)
+    H, xe, ye = np.histogram2d(fe, am, bins=[64, 46], range=[FE, AM])
+    D = gaussian_filter(H.T, 1.15)
     D = D / D.max()
-    xc = 0.5 * (xe[1:] + xe[:-1])
-    yc = 0.5 * (ye[1:] + ye[:-1])
-    levels = [0.025, 0.09, 0.25, 0.55, 1.01]
+    xc, yc = 0.5 * (xe[1:] + xe[:-1]), 0.5 * (ye[1:] + ye[:-1])
+    levels = [0.02, 0.05, 0.1, 0.17, 0.26, 0.37, 0.5, 0.65, 0.82]
     fig = plt.figure()
-    cs = plt.contourf(xc, yc, D, levels=levels)
+    cs = plt.contour(xc, yc, D, levels=levels)
     paths = cs.get_paths()
     plt.close(fig)
 
     def to_xy(px, py):
         return X0 + (px - FE[0]) / (FE[1] - FE[0]) * (X1 - X0), YB - (py - AM[0]) / (AM[1] - AM[0]) * (YB - YT)
 
-    s.body.append(draw("jn-g", f"M{f(X0)} {f(YT - 6)} V{f(YB)} H{f(X1 + 2)}", 1.05, 0.3))
+    # topographic hairlines; the alpha-rich ridge is the upper one, in the accent
+    SPLIT = lambda px: 0.145 - 0.115 * (px + 0.3)  # the valley between the two sequences
     for i, p in enumerate(paths):
-        d = []
-        for (vx, vy), code in zip(p.vertices, p.codes):
-            x, y = to_xy(vx, vy)
-            if code == 1:
-                d.append(f"M{f(x)} {f(y)}")
-            elif code == 79:
-                d.append("Z")
-            else:
-                d.append(f"L{f(x)} {f(y)}")
-        s.body.append(pop(f'<path class="jn-dens jn-dens-{i}" fill-rule="evenodd" d="{"".join(d)}"/>', 1.1 + 0.08 * i))
-    s.text(X1, 50, "[α/M]", "jn-tick", "end", t=1.1)
-    s.text(X1, 128, "[Fe/H]", "jn-tick", "end", t=1.1)
-    s.port("t", 128, 26, "t")
-    s.port("r", 150, 75, "r")
+        hi, lo = [], []
+        for seg in p.to_polygons(closed_only=False):
+            if len(seg) < 3:
+                continue
+            xy = [to_xy(*v) for v in seg[:: 2 if len(seg) > 30 else 1]]
+            cx, cy = seg[:, 0].mean(), seg[:, 1].mean()
+            (hi if cy > SPLIT(cx) else lo).append(poly(xy))
+        o = 0.32 + 0.68 * i / (len(paths) - 1)
+        if lo:
+            s.body.append(pop(f'<path class="jn-iso" style="--o:{o:.2f}" d="{"".join(lo)}"/>', 1.1 + 0.05 * i))
+        if hi:
+            s.body.append(pop(f'<path class="jn-iso jn-iso-hi" style="--o:{max(o + 0.35, 0.75):.2f}" d="{"".join(hi)}"/>', 1.1 + 0.05 * i))
+    s.body.append(draw("jn-g", f"M{f(X0)} {f(YT)} V{f(YB)} H{f(X1)}", 1.05, 0.3))
+    s.text(X1, YT + 12, "[α/M]", "jn-tick", "end", t=1.1)
+    s.text(X1, YB + 16, "[Fe/H]", "jn-tick", "end", t=1.1)
+    s.port("t", w - 20, 26, "t")
+    s.port("r", X1, YT + ph * 0.45, "r")
+    s.h = YB + 22
     return s
 
 
-def gauss(y, m, w):
-    return np.exp(-0.5 * ((y - m) / w) ** 2)
+def flow_samples(n: int) -> np.ndarray:
+    """Draws from a two-dimensional Gaussian pushed through five coupling layers.
+
+    Each layer changes one coordinate by an invertible function of itself, conditioned on the
+    other, as a spline coupling layer does. The target (a correlated, two-lobed density) is
+    written by hand: this draws the mechanism of the network, not its output."""
+    z = np.random.default_rng(11).normal(size=(n, 2))
+    z = z[np.hypot(*z.T) < 2.6]
+    x, y = z[:, 0].copy(), z[:, 1].copy()
+    out = [np.c_[x, y]]
+    y = y + 0.25 * np.tanh(x)
+    out.append(np.c_[x, y])
+    x = x + 0.45 * np.sin(1.1 * y)
+    out.append(np.c_[x, y])
+    y = 0.42 * y + 1.0 * np.tanh(2.6 * y)
+    out.append(np.c_[x, y])
+    x = x * (0.5 + 0.12 * np.tanh(y)) - 0.8 * np.tanh(1.5 * y)
+    out.append(np.c_[x, y])
+    y = 1.0 * y - 0.16 * x + 0.25
+    out.append(np.c_[x, y])
+    return np.stack(out, 1)
 
 
-def janus_stage() -> Stage:
-    s = Stage("janus", "JANUS", 290, 176, 1.2)
-    PW, PY0, PY1 = 262.0, 58.0, 170.0  # the front plate
-    # eight networks: seven plates behind the front one
-    back = []
-    for k in range(7, 0, -1):
-        dx, dy = 4 * k, -4 * k
-        back.append(f'<rect class="jn-plate jn-plate-back" x="{f(dx)}" y="{f(PY0 + dy)}" width="{f(PW)}" height="{f(PY1 - PY0)}" rx="3"/>')
-    s.body.append(pop("".join(back), 1.2))
-    s.body.append(pop(f'<rect class="jn-plate" x="0" y="{f(PY0)}" width="{f(PW)}" height="{f(PY1 - PY0)}" rx="3"/>', 1.25))
-    cy, A = 114.0, 38.0
-    ys = np.linspace(-1, 1, 41)
-    dens = [
-        gauss(ys, 0, 0.32),
-        0.75 * gauss(ys, -0.15, 0.30) + 0.35 * gauss(ys, 0.35, 0.22),
-        0.6 * gauss(ys, -0.32, 0.2) + 0.55 * gauss(ys, 0.3, 0.22),
-        0.65 * gauss(ys, -0.45, 0.13) + 0.8 * gauss(ys, 0.28, 0.18),
-    ]
-    axes = [18.0, 86.0, 154.0, 222.0]  # density axes; transforms between them
-    blocks = [52.0, 120.0, 188.0]
-    for i, (ax, p) in enumerate(zip(axes, dens)):
-        p = p / p.max()
-        pts = [(ax + 26 * v, cy + A * y) for y, v in zip(ys, p)]
-        s.body.append(draw("jn-g", f"M{f(ax)} {f(cy - A - 4)} V{f(cy + A + 4)}", 1.3 + 0.12 * i, 0.2))
-        cls = "jn-dens-o" if i < 3 else "jn-dens-out"
-        s.body.append(draw(cls, smooth(pts), 1.35 + 0.15 * i, 0.35))
-    for i, bx in enumerate(blocks):
-        s.body.append(pop(f'<rect class="jn-block" x="{f(bx)}" y="{f(cy - 34)}" width="14" height="68" rx="2"/>', 1.4 + 0.15 * i))
-        # invertible: a forward and a backward chevron on each transform
-        s.body.append(pop(f'<path class="jn-chev" d="M{f(bx + 4)} {f(cy - 4)} l3 3 l3 -3 M{f(bx + 4)} {f(cy + 4)} l3 -3 l3 3" transform="rotate(-90 {f(bx + 7)} {f(cy)})"/>', 1.45 + 0.15 * i))
-    # the spectrum conditions every transform: a bus along the top of the front plate
-    BY = 70.0
-    bus = f"M{f(blocks[0] + 7)} {f(BY)} H{f(blocks[-1] + 7)} " + " ".join(f"M{f(bx + 7)} {f(BY)} V{f(cy - 34)}" for bx in blocks)
-    s.body.append(draw("jn-bus", bus, 1.3, 0.4))
-    s.text(axes[0] + 2, PY1 - 6, "z", "jn-tick", extra=' style="font-style:italic"', t=1.5)
-    s.text(axes[-1] + 2, PY1 - 6, "θ", "jn-tick", extra=' style="font-style:italic"', t=1.9)
-    # ports: the spectrum enters the bus from the left (wide) or from the rule above (phone)
-    s.port("l", 0, BY, "l")
-    s.port("t", 150, 26, "t")
-    s.leads = {
-        "l": draw("jn-bus", f"M{f(HALF)} {f(BY)} H{f(blocks[0] + 7)}", 1.25, 0.15),
-        "t": draw("jn-bus", f"M150 {f(26 + HALF)} V{f(BY)} M{f(blocks[0] + 7)} {f(BY)} H150", 1.25, 0.2),
-    }
-    s.port("r", PW + 28, cy, "r")
-    s.leads["r"] = draw("jn-bus", f"M{f(PW - 8)} {f(cy)} H{f(PW + 28 - HALF)}", 2.0, 0.15)
-    s.port("b1", 60, PY1, "b")
-    s.port("b", 127, PY1, "b")
-    s.port("b3", 210, PY1, "b")
+def janus_stage(scale: float, top: bool, n: int, ny: int, bx: float, b1: float, b3: float) -> Stage:
+    W0, H0 = 514.0, 404.0
+    s = Stage("janus", "JANUS", W0 * scale, H0 * scale, 1.2)
+    k = scale
+    FX1, FY0, FY1 = 486.0, 54.0, 404.0  # the front plate; seven more behind it
+    g: list[str] = []
+    back = "".join(
+        f'<rect class="jn-plate-back" x="{f(4 * i)}" y="{f(FY0 - 3 * i)}" width="{f(FX1)}" height="{f(FY1 - FY0)}" rx="3"/>'
+        for i in range(7, 0, -1)
+    )
+    g.append(pop(back, 1.2))
+    g.append(pop(f'<rect class="jn-plate" x="0" y="{f(FY0)}" width="{f(FX1)}" height="{f(FY1 - FY0)}" rx="3"/>', 1.25))
+    cy = (FY0 + FY1) / 2 + 8
+    # the trunk: four dense layers, all to all, between the inputs and the flows
+    cols = [26.0, 54.0, 82.0, 110.0]
+    ys = [cy + (i - (ny - 1) / 2) * 250 / (ny - 1) for i in range(ny)]
+    edges = "".join(f"M{f(a)} {f(y0)}L{f(b)} {f(y1)}" for a, b in pairwise(cols) for y0 in ys for y1 in ys)
+    fan = "".join(f"M{f(HALF)} {f(cy)}L{f(cols[0])} {f(y)}" for y in ys)
+    g.append(pop(f'<path class="jn-mesh" d="{edges}{fan}"/>', 1.3))
+    dots = "".join(f'<circle cx="{f(x)}" cy="{f(y)}" r="1.5"/>' for x in cols for y in ys)
+    g.append(pop(f'<g class="jn-dots">{dots}</g>', 1.35))
+    # the flow: six planes in oblique view, base Gaussian first, each pair a coupling layer
+    P = flow_samples(n)
+    n, m, _ = P.shape
+    PX0, PW, PG, PH, SK = 160.0, 56.0, 52.0, 262.0, 34.0
+    upper = P[:, 2, 1] > 0  # the draws that end in the upper mode
+
+    def plane_xy(j: int, u, v):
+        return PX0 + PG * j + u * PW, cy + 10 + (0.5 - v) * PH - u * SK
+
+    # one scale for every plane, so the eye sees the density change shape
+    uv = np.stack((0.5 + P[..., 0] / 5.6, 0.5 + P[..., 1] / 5.8), -1)
+    # the conditioning: every plane hears the trunk through one bus along the top
+    BY = FY0 + 16
+    drops = "".join(f"M{f(plane_xy(j, 0.5, 1)[0])} {f(BY)} V{f(plane_xy(j, 0.5, 1)[1])}" for j in range(1, m))
+    bus = f'M{f(cols[-1])} {f(ys[0])} V{f(BY)} H{f(plane_xy(m - 1, 0.5, 1)[0])} {drops}'
+    g.append(draw("jn-bus", bus, 1.4, 0.5))
+    for j in range(m):
+        a = [plane_xy(j, u, v) for u, v in ((0, 0), (1, 0), (1, 1), (0, 1))]
+        g.append(pop(f'<path class="jn-pane{" jn-pane-end" if j in (0, m - 1) else ""}" d="{poly(a)} Z"/>', 1.4 + 0.08 * j))
+    KNEE = m - 3  # the accent takes over where the upper mode has separated
+    idx = np.arange(len(P))
+    white = "".join(poly([plane_xy(j, *uv[i, j]) for j in range(m if not upper[i] else KNEE + 1)]) for i in idx)
+    brass = "".join(poly([plane_xy(j, *uv[i, j]) for j in range(KNEE, m)]) for i in idx[upper])
+    g.append(pop(f'<path class="jn-fib" d="{white}"/>', 1.6))
+    g.append(pop(f'<path class="jn-fib jn-fib-hi" d="{brass}"/>', 1.8))
+    for j in range(m):
+        hi = upper & (j > KNEE)
+        for mask, cls in ((~hi, "jn-pt"), (hi, "jn-pt jn-pt-hi")):
+            d = "".join(f"M{f(plane_xy(j, *uv[i, j])[0])} {f(plane_xy(j, *uv[i, j])[1])}h.01" for i in idx[mask])
+            if d:
+                g.append(pop(f'<path class="{cls}" d="{d}"/>', 1.5 + 0.1 * j))
+    zx, zy = plane_xy(0, 0.5, 0)
+    tx, ty = plane_xy(m - 1, 0.5, 0)
+    g.append(pop(f'<text class="jn-tick" x="{f(zx)}" y="{f(zy + 20)}" text-anchor="middle" style="font-style:italic">z</text>', 1.5))
+    g.append(pop(f'<text class="jn-tick" x="{f(tx)}" y="{f(ty + 20)}" text-anchor="middle" style="font-style:italic">θ</text>', 2.0))
+    ox = plane_xy(m - 1, 1, 0.5)
+    g.append(draw("jn-g2", f"M{f(ox[0] + 4)} {f(cy)} H{f(FX1 + 28 - HALF)}", 2.0, 0.15))
+    s.body.append(f'<g transform="scale({k:.3f})">' + "".join(g) + "</g>")
+    s.port("l", 0, cy * k, "l")
+    s.port("r", (FX1 + 28) * k, cy * k, "r")
+    s.port("t", cols[-1] * k + 60, 26, "t")
+    if top:
+        s.leads["t"] = pop(f'<path class="jn-g2" d="M{f(cols[-1] * k + 60)} {f(26 + HALF)} V{f(FY0 * k)}"/>', 1.25)
+    s.port("l2", 0, (FY1 - 34) * k, "l")
+    s.port("b", bx * k, FY1 * k, "b")
+    s.port("b1", b1 * k, FY1 * k, "b")
+    s.port("b3", b3 * k, FY1 * k, "b")
     return s
 
 
-def labels_stage() -> Stage:
-    s = Stage("labels", "Labels", 170, 172, 2.0)
-    s.body.append(draw("jn-g", "M0 34 V166 H170 V34", 2.0, 0.3))
+def bump(xs, m, w, skew=0.0):
+    z = (xs - m) / w
+    return np.exp(-0.5 * z**2) * (1 + np.vectorize(math.erf)(skew * z / math.sqrt(2)))
+
+
+def labels_stage(w: float, px: float) -> Stage:
+    s = Stage("labels", "Labels", w, 232, 2.0)
+    L0, L1 = 86.0, w - 8
     rows = [
-        ("T<tspan class=\"jn-sub\" dy=\"3\">eff</tspan>", 0.0, 0.16, 0.8, "Teff"),
-        ("log <tspan style=\"font-style:italic\">g</tspan>", 0.05, 0.22, -2.0, "log g"),
-        ("[M/H]", -0.04, 0.18, 1.6, "[M/H]"),
-        ("[α/M]", 0.02, 0.13, -1.2, "[α/M]"),
+        ('T<tspan class="jn-sub" dy="3">eff</tspan>', "Teff", bump),
+        ('log <tspan style="font-style:italic">g</tspan>', "log g", bump),
+        ("[M/H]", "[M/H]", bump),
+        ("[α/M]", "[α/M]", bump),
     ]
-    xs = np.linspace(-1, 1, 33)
-    for i, (lab, m, w, skew, plain) in enumerate(rows):
-        y = 58 + 26 * i
-        s.texts.append((12, y, plain, "jn-lab", "start"))
-        s.body.append(pop(f'<text class="jn-lab" x="12" y="{f(y)}">{lab}</text>', 2.1 + 0.08 * i))
-        # a skew-normal bump: a posterior with its spread (schematic)
-        z = (xs - m) / w
-        p = np.exp(-0.5 * z**2) * (1 + np.vectorize(math.erf)(skew * z / math.sqrt(2)))
+    xs = np.linspace(-1, 1, 49)
+    shapes = [
+        bump(xs, 0.0, 0.17, 0.8),
+        bump(xs, 0.08, 0.22, -2.0),
+        0.8 * bump(xs, -0.2, 0.18) + 0.45 * bump(xs, 0.26, 0.14),
+        0.55 * bump(xs, -0.42, 0.13) + 0.9 * bump(xs, 0.28, 0.17),
+    ]
+    for i, ((lab, plain, _), p) in enumerate(zip(rows, shapes)):
+        y = 70 + 40 * i
+        s.texts.append((0, y, plain, "jn-lab", "start"))
+        s.body.append(pop(f'<text class="jn-lab" x="0" y="{f(y)}">{lab}</text>', 2.1 + 0.08 * i))
         p = p / p.max()
-        pts = [(116 + 44 * x, y + 2 - 15 * v) for x, v in zip(xs, p)]
-        s.body.append(draw("jn-g", f"M72 {f(y + 2)} H160", 2.1, 0.2))
+        pts = [(L0 + (L1 - L0) * (x + 1) / 2, y + 4 - 30 * v) for x, v in zip(xs, p)]
+        hatch = "".join(f"M{f(a)} {f(b + 2)}V{f(y + 4)}" for a, b in pts)
+        s.body.append(pop(f'<path class="jn-hatch" d="{hatch}"/>', 2.2 + 0.08 * i))
+        s.body.append(draw("jn-g", f"M{f(L0)} {f(y + 4)} H{f(L1)}", 2.1, 0.2))
         s.body.append(draw("jn-post", smooth(pts), 2.15 + 0.08 * i, 0.3))
-    # P(H): the probability that the four parameters are jointly off, on a 0 to 1 track
-    y = 160.0
-    s.text(12, y - 2, "P(H)", "jn-lab", t=2.5)
-    s.body.append(draw("jn-g2", f"M72 {f(y - 6)} H160 M72 {f(y - 9)} v6 M160 {f(y - 9)} v6", 2.5, 0.2))
-    s.body.append(pop(f'<rect class="jn-ph" x="72" y="{f(y - 8.5)}" width="11" height="5"/>', 2.6))
-    s.port("l", 0, 104, "l")
-    s.port("r", 170, 104, "r")
-    s.port("t", 67, 26, "t")
-    s.port("b", 67, 166, "b")
+    # P(H), the probability that the four atmospheric parameters are jointly off
+    y = 226.0
+    s.text(0, y, "P(H)", "jn-lab", t=2.5)
+    s.body.append(draw("jn-g2", f"M{f(L0)} {f(y - 4)} H{f(L1)} M{f(L0)} {f(y - 8)} v8 M{f(L1)} {f(y - 8)} v8", 2.5, 0.2))
+    s.body.append(pop(f'<rect class="jn-ph" x="{f(L0)}" y="{f(y - 7)}" width="{f((L1 - L0) * 0.09)}" height="6"/>', 2.6))
+    s.port("l", 0, 26, "l")
+    s.port("t", px, 26, "t")
+    s.body.append(draw("jn-g", f"M0 240 H{f(w)}", 2.5, 0.3))
+    s.port("b", px, 240, "b")
+    s.h = 244
     return s
 
 
-def catalogue_stage() -> Stage:
-    s = Stage("catalogue", "Catalogue", 200, 166, 2.5)
-    X0, X1, Y0, Y1 = 0.0, 200.0, 34.0, 162.0
-    cols = [("T<tspan class=\"jn-sub\" dy=\"3\">eff</tspan>", "Teff", 40), ("[M/H]", "[M/H]", 44), ("[α/M]", "[α/M]", 44), (None, "nu", 30), ("P(H)", "P(H)", 42)]
-    s.body.append(draw("jn-g", f"M{f(X0)} {f(Y0)} V{f(Y1)} H{f(X1)} V{f(Y0)} M{f(X0)} 58 H{f(X1)}", 2.5, 0.35))
-    x = 0.0
-    starts = []
-    for lab, plain, w in cols:
-        starts.append((x, w))
+def catalogue_stage(w: float, rows: int, px: float) -> Stage:
+    H = 58 + rows * 13.0 + 8
+    s = Stage("catalogue", "Catalogue", w, H + 4, 2.5)
+    heads = [('T<tspan class="jn-sub" dy="3">eff</tspan>', "Teff"), ("[M/H]", "[M/H]"), ("[α/M]", "[α/M]"), (None, "nu"), ("P(H)", "P(H)")]
+    cw = w / len(heads)
+    s.body.append(draw("jn-g", f"M0 58 H{f(w)} M0 {f(H)} H{f(w)}", 2.5, 0.35))
+    for j, (lab, plain) in enumerate(heads):
+        x = cw * j
         if lab is None:
-            # oscillation power excess: a comb under a Gaussian envelope (the seismic column)
-            cx = x + w / 2
-            comb = " ".join(f"M{f(cx - 11 + 2.75 * k)} 50 v-{f(1.5 + 9 * math.exp(-(((k - 4) / 1.9) ** 2)))}" for k in range(9))
+            comb = " ".join(f"M{f(x + 2 + 2.75 * q)} 50 v-{f(1.5 + 9 * math.exp(-(((q - 4) / 1.9) ** 2)))}" for q in range(9))
             s.body.append(draw("jn-g2", comb, 2.6, 0.2))
         else:
-            s.texts.append((x + 6, 50, plain, "jn-lab", "start"))
-            s.body.append(pop(f'<text class="jn-lab" x="{f(x + 6)}" y="50">{lab}</text>', 2.6))
-        x += w
+            s.texts.append((x, 50, plain, "jn-lab", "start"))
+            s.body.append(pop(f'<text class="jn-lab" x="{f(x)}" y="50">{lab}</text>', 2.6))
     rng = random.Random(4)
-    cells, flagged = [], []
-    for r in range(8):
-        y = 72 + 12.5 * r
-        bad = r == 5
-        row = []
-        for j, (cx, w) in enumerate(starts[:-1]):
-            L = (0.45 + 0.4 * rng.random()) * (w - 12)
-            row.append(f"M{f(cx + 6)} {f(y)} h{f(L)}")
-        sq_x = starts[-1][0] + 6
-        ph = f'<rect class="{"jn-ph" if bad else "jn-ph-o"}" x="{f(sq_x)}" y="{f(y - 3)}" width="6" height="6"/>'
-        (flagged if bad else cells).append((" ".join(row), ph))
-    s.body.append(draw("jn-cell", " ".join(c for c, _ in cells), 2.7, 0.5))
-    s.body.append(pop("".join(p for _, p in cells), 2.8))
-    for c, p in flagged:
-        s.body.append(pop(f'<g class="jn-flag"><path class="jn-cell" d="{c}"/>{p}</g>', 2.85))
-    s.port("l", 0, 104, "l")
-    s.port("t", 100, 26, "t")
+    flagged = {4, 11, 16}
+    cells, marks = [], []
+    for r in range(rows):
+        y = 70 + 13.0 * r
+        row = "".join(f"M{f(cw * j)} {f(y)}h{f((0.45 + 0.4 * rng.random()) * (cw - 12))}" for j in range(4))
+        if r in flagged:
+            marks.append(f'<path class="jn-cell jn-cell-off" d="{row}"/><rect class="jn-ph" x="{f(cw * 4)}" y="{f(y - 3)}" width="6" height="6"/>')
+        else:
+            cells.append(row)
+            marks.append(f'<rect class="jn-ph-o" x="{f(cw * 4)}" y="{f(y - 3)}" width="6" height="6"/>')
+    s.body.append(draw("jn-cell", "".join(cells), 2.7, 0.5))
+    s.body.append(pop("".join(marks), 2.8))
+    s.port("t", px, 26, "t")
     return s
 
 
-def hpc_stage(wide: bool) -> Stage:
-    s = Stage("hpc", "Supercomputers", 262 if wide else 180, 104 if wide else 152, 2.2)
-    SQ, P = 4.2, 5.5
+def hpc_stage(w: float, wide: bool, px: float) -> Stage:
+    s = Stage("hpc", "Supercomputers", w, 170, 2.2)
+    P = 15.0 if wide else 6.0
+    Q = P * 0.72
     machines = [
-        ("Deucalion", "DR3", [(1632, True), (500, False), (33, True)], 6, 36.0),
-        ("MareNostrum 5", "DR4", [(6408, True), (1120, True)], 10, 82.0),
+        ("Deucalion", "DR3", [(1632, True), (500, False), (33, True)], 9),
+        ("MareNostrum 5", "DR4", [(6408, True), (1120, True)], 23),
     ]
-    if wide:  # side by side, same square size, so the areas keep their ratio
-        machines = [(m[0], m[1], m[2], 6, 36.0) for m in machines[:1]] + [(m[0], m[1], m[2], 16, 36.0) for m in machines[1:]]
-    for k, (name, rel, parts, ncol, y0) in enumerate(machines):
+    base = 40 + 6 * P
+    x0 = 0.0
+    for k, (name, rel, parts, ncol) in enumerate(machines):
+        n = sum(max(1, round(a / 64)) for a, _ in parts)
+        nrow = math.ceil(n / ncol)
+        y0 = (base - nrow * P) if wide else (36.0 if k == 0 else 36 + 4 * P + 34)
         i, sq = 0, []
-        x0 = 112.0 if wide and k else 0.0
         for nodes, used in parts:
             for _ in range(max(1, round(nodes / 64))):
                 r, c = divmod(i, ncol)
-                sq.append(f'<rect class="{"jn-node" if used else "jn-node-o"}" x="{f(x0 + c * P)}" y="{f(y0 + r * P)}" width="{SQ}" height="{SQ}"/>')
+                sq.append(f'<rect class="{"jn-node" if used else "jn-node-o"}" x="{f(x0 + c * P)}" y="{f(y0 + r * P)}" width="{f(Q)}" height="{f(Q)}"/>')
                 i += 1
         s.body.append(pop("".join(sq), 2.3 + 0.15 * k))
+        yt = (base + 14) if wide else y0 + nrow * P + 14
+        s.text(x0, yt, name, "jn-lab", t=2.35 + 0.15 * k)
+        s.text(x0 + text_w(name, "jn-lab") + 8, yt, rel, "jn-tick", t=2.35 + 0.15 * k)
+        s.h = max(s.h, yt + 6) if not wide else yt + 6
         if wide:
-            yb = y0 + 8 * P
-            s.text(x0, yb + 14, name, "jn-lab", t=2.35 + 0.15 * k)
-            s.text(x0 + text_w(name, "jn-lab") + 8, yb + 14, rel, "jn-tick", t=2.35 + 0.15 * k)
-        else:
-            tx = ncol * P + 8
-            s.text(tx, y0 + 12, name, "jn-lab", t=2.35 + 0.15 * k)
-            s.text(tx, y0 + 28, rel, "jn-tick", t=2.35 + 0.15 * k)
-    s.port("t", 160, 26, "t")
+            x0 += ncol * P + 18
+    s.port("t", px, 26, "t")
     return s
 
 
@@ -471,20 +522,21 @@ def on_square_edge(p, c) -> bool:
 
 def build(layout: str, stages: dict[str, Stage], aria: str) -> str:
     if layout == "wide":
-        W, H = 1248, 352
+        W, H = 1280, 646
         pos = {
-            "gaia": (12, 8), "xp": (240, 8), "janus": (512, 8), "labels": (842, 8), "catalogue": (1040, 8),
-            "apogee": (300, 216), "hpc": (640, 216),
+            "gaia": (28, 12), "xp": (28, 160), "apogee": (28, 462),
+            "janus": (430, 12), "hpc": (430, 462),
+            "labels": (982, 12), "catalogue": (982, 306),
         }
         links = [
-            ("gaia", "r", "xp", "l", "flow"), ("xp", "r", "janus", "l", "flow"), ("apogee", "r", "janus", "b1", "flow"),
-            ("janus", "r", "labels", "l", "flow"), ("labels", "r", "catalogue", "l", "flow"), ("hpc", "t", "janus", "b3", "wire"),
+            ("gaia", "b", "xp", "t", "flow"), ("xp", "r", "janus", "l", "flow"), ("apogee", "r", "janus", "l2", "flow"),
+            ("janus", "r", "labels", "l", "flow"), ("labels", "b", "catalogue", "t", "flow"), ("hpc", "t", "janus", "b3", "wire"),
         ]
     else:
         W = 360
         pos = {
-            "gaia": (85, 8), "xp": (65, 206), "janus": (35, 404),
-            "apogee": (0, 610), "hpc": (176, 610), "labels": (95, 800), "catalogue": (80, 1004),
+            "gaia": (8, 8), "xp": (8, 156), "janus": (8, 420),
+            "apogee": (8, 706), "hpc": (187, 706), "labels": (8, 900), "catalogue": (8, 1168),
         }
         H = pos["catalogue"][1] + stages["catalogue"].h + 8
         links = [
@@ -493,7 +545,7 @@ def build(layout: str, stages: dict[str, Stage], aria: str) -> str:
         ]
     for k, (x, y) in pos.items():
         st = stages[k]
-        assert x >= 0 and x + st.w <= W and y + st.h <= H, f"{layout}: {k} outside the frame"
+        assert x >= 0 and x + st.w <= W and y + st.h <= H, f"{layout}: {k} outside the frame ({x + st.w}, {y + st.h})"
     used: dict[str, set[str]] = {k: set() for k in stages}
     for a, pa, b, pb, _ in links:
         used[a].add(pa)
@@ -501,17 +553,16 @@ def build(layout: str, stages: dict[str, Stage], aria: str) -> str:
     prefix = "jw" if layout == "wide" else "jp"
     masks, wires, checks = [], [], []
     for a, pa, b, pb, kind in links:
-        t = stages[a].t + 0.35
-        connector(edge_point(pos[a], stages[a], pa), edge_point(pos[b], stages[b], pb), kind, t, 0.35, prefix, masks, wires, checks)
+        connector(edge_point(pos[a], stages[a], pa), edge_point(pos[b], stages[b], pb), kind, stages[a].t + 0.35, 0.35, prefix, masks, wires, checks)
     for pa, ca, pb, cb in checks:
         assert on_square_edge(pa, ca) and on_square_edge(pb, cb), f"{layout}: connector end off its port {pa} {ca} {pb} {cb}"
     body = [st.render(*pos[k], used[k]) for k, st in stages.items()]
     return (
-        f'<svg class="jn-svg jn-{layout}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="group" '
+        f'<svg class="jn-svg jn-{layout}" viewBox="0 0 {W} {f(H)}" xmlns="http://www.w3.org/2000/svg" role="group" '
         f'aria-label="{aria}">'
         + "<defs>" + "".join(masks) + "</defs>"
-        + '<g class="jn-thread" aria-hidden="true">' + "".join(wires) + "</g>"
         + "".join(body)
+        + '<g class="jn-thread" aria-hidden="true">' + "".join(wires) + "</g>"
         + "</svg>"
     )
 
@@ -549,21 +600,30 @@ def main() -> None:
     APERTURE = (0.478, 0.262)
     lam, flux, _sid = load_spectrum()
     fe, am = load_apogee()
-    stages = {
-        "gaia": gaia_stage(*img.size),
-        "xp": xp_stage(lam, flux),
-        "apogee": apogee_stage(fe, am),
-        "janus": janus_stage(),
-        "labels": labels_stage(),
-        "catalogue": catalogue_stage(),
-        "hpc": hpc_stage(wide=True),
+    wide = {
+        "gaia": gaia_stage(*img.size, 364),
+        "xp": xp_stage(lam, flux, 364, 196, "jw"),
+        "apogee": apogee_stage(fe, am, 364, 112),
+        "janus": janus_stage(1.0, False, 330, 15, 220, 60, 340),
+        "labels": labels_stage(270, 108),
+        "catalogue": catalogue_stage(270, 19, 108),
+        "hpc": hpc_stage(514, True, 486),
+    }
+    phone = {
+        "gaia": gaia_stage(*img.size, 344),
+        "xp": xp_stage(lam, flux, 344, 150, "jp"),
+        "apogee": apogee_stage(fe, am, 165, 100),
+        "janus": janus_stage(0.669, True, 200, 11, 257, 217, 477),
+        "labels": labels_stage(344, 172),
+        "catalogue": catalogue_stage(344, 8, 172),
+        "hpc": hpc_stage(165, False, 158),
     }
     aria = "{{ site.data.copy.research.janus_fig.aria | strip_html | escape }}"
     svg = (
         "{%- comment -%} Generated by figures/janus/build_janus.py; do not edit. {%- endcomment -%}\n"
-        + build("wide", stages, aria)
+        + build("wide", wide, aria)
         + "\n"
-        + build("phone", {**stages, "hpc": hpc_stage(wide=False)}, aria)
+        + build("phone", phone, aria)
         + "\n"
     )
     OUT.write_text(svg)

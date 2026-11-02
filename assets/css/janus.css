@@ -1,88 +1,95 @@
 /* The JANUS figure on /research/janus/ (_includes/figures/janus.svg, built by
-   figures/janus/build_janus.py). Grey linework, blue for real data and my own parts, brass for the
-   flow thread. Two layouts in the include: wide, and a vertical one under 700 px. Hovering or
-   focusing a stage lifts it and dims the rest; its line shows in the readout above. */
+   figures/janus/build_janus.py). A dark plate in both themes, like the site's other plates: white
+   hairlines for everything drawn, brass for the one accent (the thread, and the alpha-rich mode).
+   Two layouts in the include: wide, and a vertical one under 700 px. Hovering or focusing a stage
+   lifts it and dims the rest; its line shows in the readout above. */
 @layer pages {
-  .jn-fig { display: grid; gap: 0; padding: 0; overflow: hidden; color: var(--fig); margin-block-end: 28px; }
-  .jn-head { display: flex; gap: 14px; align-items: baseline; padding: 14px 18px 4px; min-block-size: 3.2em; }
-  .jn-head .figno { font: 600 0.8rem var(--mono); letter-spacing: 0.08em; color: var(--ink); flex: none; }
-  .jn-read { margin: 0; font-size: 0.95rem; line-height: 1.45; color: var(--ink-2); }
-  .jn-read b { font-weight: 600; color: var(--ink); }
+  .jn-fig { --p-bg: #100f0d; --p-ink: #f4f1ea; --p-2: #b9b5ae; --p-3: #8f8b85; --p-brass: #d8b768;
+    display: grid; gap: 0; padding: 0; overflow: hidden; margin-block-end: 28px; color: var(--p-ink);
+    background: var(--p-bg); border-color: #2b2926; }
+  .jn-head { display: flex; gap: 14px; align-items: baseline; padding: 16px 28px 2px; min-block-size: 3.2em; }
+  .jn-head .figno { font: 600 0.8rem var(--mono); letter-spacing: 0.08em; color: var(--p-ink); flex: none; }
+  .jn-read { margin: 0; font-size: 0.95rem; line-height: 1.45; color: var(--p-2); }
+  .jn-read b { font-weight: 600; color: var(--p-ink); }
   .jn-read b:empty { display: none; }
-  .jn-frame { padding: 6px 16px 18px; }
+  .jn-frame { padding: 2px 0 10px; }
 
   .jn-svg { display: block; inline-size: 100%; block-size: auto; overflow: visible; }
-  .jn-phone { display: none; max-inline-size: 420px; margin-inline: auto; }
+  .jn-phone { display: none; max-inline-size: 460px; margin-inline: auto; }
   @media (max-width: 700px) {
     .jn-wide { display: none; }
     .jn-phone { display: block; }
-    .jn-frame { padding: 4px 10px 14px; }
     .jn-head { padding: 12px 14px 4px; min-block-size: 4.6em; }
   }
 
   /* type */
-  .jn-svg .jn-title { font: 400 17px var(--serif); fill: var(--ink); }
-  .jn-svg .jn-lab { font: 500 12.5px var(--mono); fill: var(--ink-2); }
-  .jn-svg .jn-tick { font: 500 12px var(--mono); fill: var(--muted); }
+  .jn-svg .jn-title { font: 300 19px var(--serif); fill: var(--p-ink); }
+  .jn-svg .jn-lab { font: 500 12.5px var(--mono); fill: var(--p-2); }
+  .jn-svg .jn-tick { font: 500 12px var(--mono); fill: var(--p-3); }
   .jn-svg .jn-sub { font-size: 9.5px; }
 
   /* linework */
-  .jn-svg .jn-g { fill: none; stroke: var(--fig); stroke-width: .75; opacity: .45; stroke-linecap: round; }
-  .jn-svg .jn-g2 { fill: none; stroke: var(--fig); stroke-width: 1; opacity: .8; stroke-linecap: round; stroke-linejoin: round; }
-  .jn-svg .jn-gd { fill: none; stroke: var(--fig); stroke-width: .75; opacity: .5; stroke-dasharray: 2 3; }
-  .jn-svg .jn-port { fill: var(--raised); stroke: var(--fig); stroke-width: 1.2; }
+  .jn-svg .jn-g { fill: none; stroke: var(--p-ink); stroke-width: .6; opacity: .3; stroke-linecap: round; }
+  .jn-svg .jn-g2 { fill: none; stroke: var(--p-ink); stroke-width: .8; opacity: .6; stroke-linecap: round; stroke-linejoin: round; }
+  .jn-svg .jn-port { fill: var(--p-bg); stroke: var(--p-ink); stroke-width: 1; }
 
-  /* real data: filled, in the mark colour */
-  .jn-svg .jn-spec { fill: none; stroke: var(--mark); stroke-width: 1.8; stroke-linejoin: round; }
-  .jn-svg .jn-fill-bp { fill: var(--mark); opacity: .22; }
-  .jn-svg .jn-fill-rp { fill: var(--mark); opacity: .10; }
-  .jn-svg .jn-line { fill: none; stroke: var(--ink-2); stroke-width: 1; }
-  .jn-svg .jn-dens { fill: var(--mark); }
-  .jn-svg .jn-dens-0 { opacity: .16; }
-  .jn-svg .jn-dens-1 { opacity: .32; }
-  .jn-svg .jn-dens-2 { opacity: .55; }
-  .jn-svg .jn-dens-3 { opacity: .9; }
-  .jn-svg .jn-node { fill: var(--fig); opacity: .7; }
-  .jn-svg .jn-node-o { fill: none; stroke: var(--fig); stroke-width: .7; opacity: .55; }
+  /* the spectrum: a luminous line over an engraved fall of hairlines */
+  .jn-svg .jn-spec { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+  .jn-svg .jn-halo1 { fill: none; stroke: #fff; stroke-width: 3.4; opacity: .16; stroke-linejoin: round; }
+  .jn-svg .jn-halo2 { fill: none; stroke: #fff; stroke-width: 8; opacity: .05; stroke-linejoin: round; }
+  .jn-svg .jn-comb { fill: none; stroke-width: .8; }
+  .jn-svg .jn-comb-rp { opacity: .6; }
+  .jn-svg .jn-line { fill: none; stroke: var(--p-ink); stroke-width: .8; opacity: .8; }
 
-  /* the network: eight plates, transforms filled (my own), densities in outline (schematic) */
-  .jn-svg .jn-plate { fill: var(--raised); stroke: var(--fig); stroke-width: 1.2; }
-  .jn-svg .jn-plate-back { stroke-width: .8; opacity: .55; }
-  .jn-svg .jn-block { fill: var(--mark); }
-  .jn-svg .jn-chev { fill: none; stroke: var(--raised); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
-  .jn-svg .jn-dens-o { fill: none; stroke: var(--fig); stroke-width: 1.3; stroke-linejoin: round; }
-  .jn-svg .jn-dens-out { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
-  .jn-svg .jn-bus { fill: none; stroke: var(--flow); stroke-width: 1.1; opacity: .9; }
+  /* the alpha plane: isodensity hairlines */
+  .jn-svg .jn-iso { fill: none; stroke: var(--p-ink); stroke-width: .7; opacity: var(--o); stroke-linejoin: round; }
+  .jn-svg .jn-iso-hi { stroke: var(--p-brass); }
+
+  /* the network */
+  .jn-svg .jn-plate { fill: var(--p-bg); stroke: var(--p-ink); stroke-width: .9; stroke-opacity: .75; }
+  .jn-svg .jn-plate-back { fill: var(--p-bg); stroke: var(--p-ink); stroke-width: .6; stroke-opacity: .3; }
+  .jn-svg .jn-mesh { fill: none; stroke: var(--p-ink); stroke-width: .25; opacity: .22; }
+  .jn-svg .jn-dots circle { fill: var(--p-bg); stroke: var(--p-ink); stroke-width: .8; }
+  .jn-svg .jn-bus { fill: none; stroke: var(--p-ink); stroke-width: .7; opacity: .55; }
+  .jn-svg .jn-pane { fill: #fff; fill-opacity: .025; stroke: var(--p-ink); stroke-width: .6; stroke-opacity: .4; }
+  .jn-svg .jn-pane-end { stroke-opacity: .75; }
+  .jn-svg .jn-fib { fill: none; stroke: var(--p-ink); stroke-width: .3; opacity: .4; stroke-linejoin: round; }
+  .jn-svg .jn-fib-hi { stroke: var(--p-brass); opacity: .6; }
+  .jn-svg .jn-pt { fill: none; stroke: var(--p-ink); stroke-width: 1.3; stroke-linecap: round; opacity: .9; }
+  .jn-svg .jn-pt-hi { stroke: var(--p-brass); }
+  .jn-phone .jn-mesh, .jn-phone .jn-fib { vector-effect: non-scaling-stroke; stroke-width: .28; }
 
   /* labels and the catalogue: schematic */
-  .jn-svg .jn-post { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
-  .jn-svg .jn-ph { fill: var(--mark); }
-  .jn-svg .jn-ph-o { fill: none; stroke: var(--fig); stroke-width: 1; }
-  .jn-svg .jn-cell { fill: none; stroke: var(--fig); stroke-width: 2; opacity: .55; stroke-linecap: round; }
-  .jn-svg .jn-flag .jn-cell { opacity: .2; }
+  .jn-svg .jn-post { fill: none; stroke: #fff; stroke-width: 1.2; stroke-linejoin: round; }
+  .jn-svg .jn-hatch { fill: none; stroke: var(--p-ink); stroke-width: .5; opacity: .3; }
+  .jn-svg .jn-ph { fill: var(--p-brass); }
+  .jn-svg .jn-ph-o { fill: none; stroke: var(--p-ink); stroke-width: .7; opacity: .5; }
+  .jn-svg .jn-cell { fill: none; stroke: var(--p-ink); stroke-width: 1; opacity: .42; stroke-linecap: round; }
+  .jn-svg .jn-cell-off { opacity: .13; }
+  .jn-svg .jn-node { fill: var(--p-ink); opacity: .34; }
+  .jn-svg .jn-node-o { fill: none; stroke: var(--p-ink); stroke-width: .7; opacity: .4; }
 
   /* Gaia */
-  .jn-svg .jn-star { fill: var(--ink); }
-  .jn-svg .jn-spike { fill: none; stroke: var(--ink); stroke-width: .9; opacity: .7; stroke-linecap: round; }
-  .jn-svg .jn-light { fill: none; stroke: var(--flow); stroke-width: 1.4; stroke-dasharray: 4 3; stroke-linecap: round; }
+  .jn-svg .jn-star { fill: #fff; }
+  .jn-svg .jn-spike { fill: none; stroke: #fff; stroke-width: .7; opacity: .7; stroke-linecap: round; }
+  .jn-svg .jn-light { fill: none; stroke: var(--p-brass); stroke-width: 1; }
 
-  /* connectors: brass dashes that flow with the data; the machine wire is a grey hairline */
-  .jn-svg .jn-link { fill: none; stroke: var(--flow); stroke-width: 1.8; stroke-dasharray: 5 4; stroke-linecap: round; }
-  .jn-svg .jn-wire { fill: none; stroke: var(--fig); stroke-width: 1; opacity: .7; }
+  /* connectors: brass dashes that flow with the data; the machine wire is a hairline */
+  .jn-svg .jn-link { fill: none; stroke: var(--p-brass); stroke-width: 1.6; stroke-dasharray: 5 4; stroke-linecap: round; }
+  .jn-svg .jn-wire { fill: none; stroke: var(--p-ink); stroke-width: .8; opacity: .5; }
   .jn-svg .jn-mask { fill: none; stroke: #fff; stroke-width: 14; stroke-linecap: round; }
   .jn-svg .jn-thread { pointer-events: none; transition: opacity .25s var(--ease, ease); }
 
   /* stages: hover or focus one, the rest step back */
   .jn-svg .jn-hit { fill: transparent; stroke: transparent; stroke-width: 1; }
   .jn-svg .jn-stage { cursor: pointer; outline: none; transition: opacity .25s var(--ease, ease); }
-  .jn-svg .jn-stage:focus-visible .jn-hit { stroke: var(--mark); stroke-dasharray: 3 3; }
+  .jn-svg .jn-stage:focus-visible .jn-hit { stroke: var(--p-brass); stroke-dasharray: 3 3; }
   .jn-fig.has-active .jn-stage:not(.is-active) { opacity: .35; }
   .jn-fig.has-active .jn-thread { opacity: .45; }
 
   /* one-time build when the figure first enters the view (site.js arms [data-build]) */
   @media (prefers-reduced-motion: no-preference) {
     .jn-svg .jn-link { animation: jn-flow 1.6s linear infinite; }
-    .jn-svg .jn-light { animation: jn-flow 1.2s linear infinite reverse; }
     @keyframes jn-flow { to { stroke-dashoffset: -18; } }
 
     [data-build="armed"] .jn-svg .b-pop { opacity: 0; }
