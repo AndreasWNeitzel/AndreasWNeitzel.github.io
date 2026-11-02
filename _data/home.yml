@@ -95,7 +95,7 @@ guide_loops:
   galactic-archaeology: sky
 # Sources printed on a guide loop built on someone else's material.
 guide_loop_credits:
-  tess-kepler: "Models NASA; sky ESO/S. Brunier, CC BY 4.0"
+  tess-kepler: "Base meshes NASA 3D Resources; sky ESO/S. Brunier, CC BY 4.0"
   plato: "Sky ESO/S. Brunier, CC BY 4.0"
   ariel: "Sky ESO/S. Brunier, CC BY 4.0"
 # a guide page whose plate shows the same render as its card on /guide/ (stills; loops are in guide_loops)
