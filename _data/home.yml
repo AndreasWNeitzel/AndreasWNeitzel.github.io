@@ -93,6 +93,7 @@ guide_loops:
   haydn: cluster
   machine-learning-for-stars: ai
   galactic-archaeology: sky
+  tess-kepler: pair
 # Sources printed on a guide loop built on someone else's material.
 guide_loop_credits:
   tess-kepler: "Base meshes NASA 3D Resources; sky ESO/S. Brunier, CC BY 4.0"
