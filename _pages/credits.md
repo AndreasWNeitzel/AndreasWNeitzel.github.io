@@ -12,7 +12,7 @@ extra_css:
 {%- capture maillink %}<a href="mailto:{{ mail }}">{{ mail }}</a>{% endcapture -%}
 <div class="cr-terms">
   <section><h2>My work</h2><p>{{ CP.own }}</p></section>
-  <section><h2>Pictures of me</h2><p>{{ CP.pictures }}</p></section>
+  <section><h2>Photographs</h2><p>{{ CP.pictures }}</p></section>
   <section><h2>Reuse</h2><p>{{ CP.reuse | replace: slot, maillink }}</p></section>
 </div>
 <section class="section section--tight" aria-labelledby="others">
