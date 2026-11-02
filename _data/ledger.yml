@@ -622,7 +622,7 @@ funding:
   role: co-investigator
   date: 2026-05
   people:
-  - Leitinger (PI)
+  - E. Leitinger (PI)
   summary: Computed per-candidate PLATO noise-to-signal ratios and flux contamination for accreted-star candidates, each with its own Gaia DR3 field of contaminants.
   details:
   - 4 086 candidates, each with a 63 arcsec Gaia DR3 cone to G = 18.5, StarHorse and GSP-Phot parameters and a dedicated noise run.
@@ -1032,16 +1032,16 @@ events:
   - academic
 - id: ev-2024-05-paranal-espresso-observing-run
   title: Visiting astronomer, ESPRESSO at the VLT, ESO Paranal Observatory
-  tagline: Six visitor-mode nights with ESPRESSO at the VLT, observing GJ 570 A for PI T. L. Campante.
+  tagline: 'Visitor-mode ESPRESSO run at the VLT on GJ 570 A for PI T. L. Campante: six nights allocated, five usable.'
   kind: observing-run
   role: visiting astronomer
   location: Paranal, Chile
   date: '2024-05-04'
   end_date: '2024-05-12'
   identifiers:
-    reference: ESO 113.26FX.002
+    reference: ESO 113.26FX.002, program 0113.D-0255(B)
     url: https://arxiv.org/abs/2610.20985
-  summary: Visitor-mode run 113.26FX.002, six nights in May 2024, on the K dwarf GJ 570 A for PI T. L. Campante.
+  summary: 'Visitor-mode run 113.26FX.002 on GJ 570 A for PI T. L. Campante: six nights allocated, five usable.'
   weight: 5
   audiences:
   - academic
