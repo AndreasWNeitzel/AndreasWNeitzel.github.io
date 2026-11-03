@@ -6,6 +6,7 @@ copy: research
 extra_css: [/assets/css/thesis.css]
 lines:
   - id: janus
+    loop: ai
     img: /assets/img/heroes/line_janus.webp
     url: /research/janus/
     links:
