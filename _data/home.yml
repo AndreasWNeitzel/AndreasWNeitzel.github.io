@@ -4,7 +4,7 @@
 # Four concept cards under the hero, one looping render each (assets/video, posters in assets/img/heroes).
 concepts:
   - key: missions
-    loop: gaia
+    loop: missions
     url: /guide/gaia/
   - key: ai
     loop: ai

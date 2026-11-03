@@ -11,8 +11,8 @@ home:
   concepts:
     - key: "missions"
       title: "Space Missions"
-      line: "ESA <i>Gaia</i>, NASA TESS and <i>Kepler</i>, HAYDN"
-      alt: "The Gaia spacecraft turning slowly against the Milky Way"
+      line: "ESA <i>Gaia</i>, PLATO and <i>Ariel</i>, NASA TESS and <i>Kepler</i>"
+      alt: "Gaia, PLATO, TESS, Kepler and Ariel turn in turn and slide in from the right against the Milky Way"
     - key: "ai"
       title: "Artificial Intelligence"
       line: "Deep learning and unsupervised learning"
