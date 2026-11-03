@@ -52,6 +52,7 @@
     const coarse = mk(world), M = mid ? mk(mid) : coarse;
     const nearIds = near ? new Set(near.features.map((f) => f.id)) : new Set();
     const N = near ? mk(near).concat(M.filter((q) => !nearIds.has(q.f.id))) : M;
+    const MIDS = new Set(M.map((q) => q.f.id)), NIDS = new Set(N.map((q) => q.f.id));
     const inBox = (b, l, t) => l > b[0] && l < b[2] && t > b[1] && t < b[3];
     const segs = ROUTES.map(([a, b]) => { const A = P[a], B = P[b], ip = d3.geoInterpolate([A.lon, A.lat], [B.lon, B.lat]); return { b, pts: d3.range(0, 1.0001, 1 / 64).map(ip) }; });
     const marks = PLACES.map((p) => {
@@ -73,8 +74,9 @@
         ctx.beginPath(); seen.forEach((q) => path(q.f)); ctx.fillStyle = colour("--land"); ctx.fill(); if (edge) { ctx.strokeStyle = colour("--land-edge"); ctx.lineWidth = .5; ctx.stroke(); }
         ctx.beginPath(); seen.filter((q) => q.v).forEach((q) => path(q.f)); ctx.fillStyle = colour("--visit-fill"); ctx.fill(); if (edge) { ctx.strokeStyle = colour("--visit"); ctx.lineWidth = .7; ctx.stroke(); }
       };
-      // the whole world first, then the regional detail over it, so the view never ends at a region's edge
-      if (m !== coarse) { layer(coarse, false); layer(m, true); } else layer(m, true);
+      // the whole world first, then the regional detail over it, so the view never ends at a region's edge;
+      // countries the detail redraws are left out of the coarse pass, or its looser coastline shows past the fine one
+      if (m !== coarse) { const ids = m === N ? NIDS : MIDS; layer(coarse.filter((q) => !ids.has(q.f.id)), false); layer(m, true); } else layer(m, true);
       const sr = R * view.k, g = ctx.createRadialGradient(W / 2 - sr * .25, H / 2 - sr * .3, sr * .55, W / 2, H / 2, sr);
       g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.38)"); ctx.beginPath(); path({ type: "Sphere" }); ctx.fillStyle = g; ctx.fill();
       ctx.strokeStyle = colour("--flow"); ctx.lineWidth = 1.8; ctx.lineCap = "round";
