@@ -30,7 +30,7 @@
   .th-svg .th-val { font: 600 11px var(--mono); fill: var(--accent); }
   .th-svg .th-val2 { font: 600 11px var(--mono); fill: var(--accent-2); }
   .paper-fig .th-results { inline-size: 100%; block-size: auto; }
-  @media (max-width: 760px) { .paper-wide .th-method { min-inline-size: 900px; } }
+  @media (max-width: 760px) { .paper-wide .th-method { min-inline-size: 1230px; } .paper-fig-svg:has(.th-results) { overflow-x: auto; } .th-results { min-inline-size: 840px; } }
 }
 @layer pages {
   .th-svg .th-frame { fill: color-mix(in oklab, var(--surface) 60%, transparent); stroke: currentColor; stroke-width: 1.3; stroke-linejoin: round; }

@@ -117,3 +117,9 @@
   .pg-app .pt-detail .pg-sub .pg-stage { flex: 1 1 auto; block-size: auto; min-block-size: 0; }
   .pg-app .pt-detail .pg-caption { display: block; font-size: 0.8125rem; }
 }
+/* on a phone: the star, then the controls that change it, then its interior */
+@media (max-width: 720px) {
+  .pg-app.pt .pg-stage2 { display: contents; }
+  .pg-app.pt .pt-render { order: -1; align-self: stretch; }
+  .pg-app.pt .pt-main { order: 1; align-self: stretch; }
+}

@@ -50,6 +50,6 @@
   .hy-svg .hy-model { fill: none; stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 5 3; }
   .hy-svg .hy-data circle, .hy-svg .hy-data-key { fill: var(--accent); stroke: var(--surface); stroke-width: .6; }
   .hy-svg .hy-spr-wedge { fill: var(--accent-2); }
-  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hy-svg { min-inline-size: 760px; } }
+  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hy-svg, .guide-wide .hy-field-svg { min-inline-size: 1250px; } }
 }
 

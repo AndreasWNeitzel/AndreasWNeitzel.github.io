@@ -32,6 +32,39 @@
     onScroll();
   }
 
+  // ---- phones: the menu button opens the navigation as a sheet; Escape, the scrim or a wider window close it ----
+  const menuBtn = header && header.querySelector(".menu-btn");
+  const nav = document.getElementById("site-nav");
+  if (menuBtn && nav) {
+    const narrow = matchMedia("(max-width: 760px)");
+    const links = () => [...nav.querySelectorAll("a")];
+    const isOpen = () => header.hasAttribute("data-menu");
+    const setOpen = (open, focusBack) => {
+      header.toggleAttribute("data-menu", open);
+      root.classList.toggle("menu-open", open);
+      menuBtn.setAttribute("aria-expanded", String(open));
+      nav.inert = narrow.matches && !open;
+      if (open) links()[0]?.focus({ preventScroll: true });
+      else if (focusBack) menuBtn.focus({ preventScroll: true });
+    };
+    menuBtn.hidden = false;
+    nav.inert = narrow.matches;
+    menuBtn.addEventListener("click", () => setOpen(!isOpen(), false));
+    header.querySelector(".nav-scrim")?.addEventListener("click", () => setOpen(false, true));
+    nav.addEventListener("click", (e) => { if (e.target.closest("a")) setOpen(false, false); });
+    document.addEventListener("keydown", (e) => {
+      if (!isOpen()) return;
+      if (e.key === "Escape") { e.preventDefault(); setOpen(false, true); return; }
+      if (e.key !== "Tab") return;
+      const ring = [menuBtn, ...links()];
+      const k = ring.indexOf(document.activeElement);
+      if (k === -1) return;
+      e.preventDefault();
+      ring[(k + (e.shiftKey ? ring.length - 1 : 1)) % ring.length].focus();
+    });
+    narrow.addEventListener("change", () => { if (isOpen()) setOpen(false, false); nav.inert = narrow.matches; });
+  }
+
   // ---- arrival: one short build, then the page is still -----------------------------
   if (document.body.classList.contains("intro")) {
     const heroImg = document.querySelector(".hero img");

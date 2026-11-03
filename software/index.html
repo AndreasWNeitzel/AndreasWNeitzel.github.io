@@ -69,7 +69,7 @@
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-mark"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/research/">Research</a>
       <a href="/publications/">Publications</a>
       <a href="/software/" aria-current="page">Software</a>
@@ -81,21 +81,23 @@
     <div class="header-actions">
       <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
       <a class="btn btn--sm cv" href="/assets/pdf/cv_neitzel_academic_summary.pdf" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+      <button class="icon-btn menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu" hidden><span class="bars" aria-hidden="true"></span></button>
     </div>
+    <div class="nav-scrim" aria-hidden="true"></div>
   </div>
 </header>
 
 <main id="main">
 <section class="plate k-scale" aria-label="Software">
-  <div class="plate-media"><div class="tri"><div style="--pos: 50% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/ai.poster.webp" aria-label="Light passing through the layers of the JANUS networks">
+  <div class="plate-media"><div class="tri"><div style="--pos: 50% 50%;"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/ai.poster.webp" aria-label="Light passing through the layers of the JANUS networks">
   <source src="/assets/video/ai.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/ai.h264.mp4" type="video/mp4" />
 </video>
-</div><div style="--pos: 42% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/starfold.poster.webp" aria-label="A sheet of real stars from the Starfold run unrolls, and two groups appear as it flattens">
+</div><div style="--pos: 42% 50%;"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/starfold.poster.webp" aria-label="A sheet of real stars from the Starfold run unrolls, and two groups appear as it flattens">
   <source src="/assets/video/starfold.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/starfold.h264.mp4" type="video/mp4" />
 </video>
-</div><div style="--pos: 100% 45%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" data-start="10.33" poster="/assets/img/heroes/haydn.poster.webp" aria-label="HAYDNsim's noisy light curve leads to an oscillation spectrum that rises out of the noise">
+</div><div style="--pos: 100% 45%;"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" data-start="10.33" poster="/assets/img/heroes/haydn.poster.webp" aria-label="HAYDNsim's noisy light curve leads to an oscillation spectrum that rises out of the noise">
   <source src="/assets/video/haydn.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/haydn.h264.mp4" type="video/mp4" />
 </video>

@@ -72,7 +72,7 @@
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-mark"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/research/">Research</a>
       <a href="/publications/" aria-current="page">Publications</a>
       <a href="/software/">Software</a>
@@ -84,7 +84,9 @@
     <div class="header-actions">
       <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
       <a class="btn btn--sm cv" href="/assets/pdf/cv_neitzel_academic_summary.pdf" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+      <button class="icon-btn menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu" hidden><span class="bars" aria-hidden="true"></span></button>
     </div>
+    <div class="nav-scrim" aria-hidden="true"></div>
   </div>
 </header>
 

@@ -69,7 +69,7 @@
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-mark"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/research/">Research</a>
       <a href="/publications/">Publications</a>
       <a href="/software/">Software</a>
@@ -81,13 +81,15 @@
     <div class="header-actions">
       <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
       <a class="btn btn--sm cv" href="/assets/pdf/cv_neitzel_academic_summary.pdf" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+      <button class="icon-btn menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu" hidden><span class="bars" aria-hidden="true"></span></button>
     </div>
+    <div class="nav-scrim" aria-hidden="true"></div>
   </div>
 </header>
 
 <main id="main">
-<section class="plate k-scale plate--lift" aria-label="Field guide">
-  <div class="plate-media"><img src="/assets/img/photos/vlt-golden-hour.webp" alt="Me on the VLT platform at Paranal at sunset, with the Unit Telescopes behind me" fetchpriority="high" decoding="async" style="object-position: 50% 100%" />
+<section class="plate k-scale" aria-label="Field guide">
+  <div class="plate-media"><img src="/assets/img/photos/vlt-golden-hour.webp" alt="Me on the VLT platform at Paranal at sunset, with the Unit Telescopes behind me" fetchpriority="high" decoding="async" style="object-position: 50% 100%;" />
   </div>
   <div class="plate-text" style="--plate-w: 36vw">
     <h1>Field guide</h1><p class="lede">The science, institutions and machines behind my work, one minute each, with sources.</p>
@@ -162,7 +164,7 @@
       </div>
     </article>
     <article class="row-item k-up">
-      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 72% 50%" poster="/assets/img/heroes/plato.poster.webp" aria-label="">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 72% 50%;" poster="/assets/img/heroes/plato.poster.webp" aria-label="">
   <source src="/assets/video/plato.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/plato.h264.mp4" type="video/mp4" />
 </video>
@@ -174,7 +176,7 @@
       </div>
     </article>
     <article class="row-item k-up">
-      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 85% 50%" poster="/assets/img/heroes/ariel.poster.webp" aria-label="">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 85% 50%;" poster="/assets/img/heroes/ariel.poster.webp" aria-label="">
   <source src="/assets/video/ariel.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/ariel.h264.mp4" type="video/mp4" />
 </video>
@@ -198,7 +200,7 @@
       </div>
     </article>
     <article class="row-item k-up">
-      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 77% 50%" poster="/assets/img/heroes/pair.poster.webp" aria-label="">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 77% 50%;" poster="/assets/img/heroes/pair.poster.webp" aria-label="">
   <source src="/assets/video/pair.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/pair.h264.mp4" type="video/mp4" />
 </video>

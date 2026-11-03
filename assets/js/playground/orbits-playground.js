@@ -1146,14 +1146,7 @@ async function boot(root) {
       }
       if (labelAll || i === follow) labels.push({ x, y, text: b.short });
     });
-    // the stations' labels stand still; a satellite's label moves off any it would land on
     spreadLabels(labels, 15);
-    for (const st of stLabels) {
-      if (!st.right) continue;
-      let top = st.ly;
-      const near = labels.filter((l) => Math.abs(st.x - (l.x + 9)) < 60 && l.ly <= st.ly + 14).sort((p, q) => q.ly - p.ly);
-      for (const l of near) { if (top - l.ly < 15) l.ly = top - 15; top = l.ly; }
-    }
     ctx.font = `500 13px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";

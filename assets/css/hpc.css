@@ -20,5 +20,5 @@
   .hpc-svg .hpc-node { fill: var(--accent-2); }
   .hpc-svg .hpc-th { font: 600 10.5px var(--mono); letter-spacing: 0.08em; fill: var(--muted); }
   .hpc-svg .hpc-td { font: 500 11.5px var(--mono); fill: var(--ink-2); }
-  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hpc-svg { min-inline-size: 860px; } }
+  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .hpc-svg { min-inline-size: 1230px; } }
 }

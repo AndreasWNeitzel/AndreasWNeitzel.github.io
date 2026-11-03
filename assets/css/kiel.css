@@ -29,3 +29,5 @@
   .kiel-svg .k-sun { fill: none; stroke: var(--accent-2); stroke-width: 1.2; }
   .kiel-svg .k-sun-dot { fill: var(--accent-2); }
 }
+/* on a phone the diagram keeps its type size and scrolls sideways inside its panel */
+@media (max-width: 760px) { .paper-fig-svg:has(.kiel-svg) { overflow-x: auto; } .kiel-svg { min-inline-size: 840px; } }

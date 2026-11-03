@@ -17,7 +17,7 @@
   .eso-svg .eso-thread { fill: none; stroke-width: 1.5; }
   .eso-svg .bp-label2 { font-size: 12px; }
   .eso-svg .bp-tick { font-size: 11px; }
-  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .eso-svg { min-inline-size: 720px; } }
+  @media (max-width: 760px) { .guide-wide { overflow-x: auto; } .guide-wide .eso-svg { min-inline-size: 1300px; } }
 }
 @layer pages {
   .eso-svg .eso-frame { fill: color-mix(in oklab, var(--surface) 70%, transparent); stroke: var(--line-strong); stroke-width: 1; }

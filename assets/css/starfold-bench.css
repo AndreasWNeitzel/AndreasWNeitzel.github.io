@@ -19,5 +19,5 @@
   .sfb-svg .sfb-legend-dash { stroke: var(--muted); }
   .sfb-svg .sfb-pt { stroke: var(--surface); stroke-width: 1; }
   .sfb-svg .sfb-pt-open { fill: var(--surface); stroke-width: 1.4; }
-  @media (max-width: 760px) { .sfb-figure { overflow-x: auto; } .sfb-svg { min-inline-size: 760px; } }
+  @media (max-width: 760px) { .sfb-figure { overflow-x: auto; } .sfb-svg { min-inline-size: 1230px; } }
 }

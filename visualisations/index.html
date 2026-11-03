@@ -70,7 +70,7 @@
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-mark"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/research/">Research</a>
       <a href="/publications/">Publications</a>
       <a href="/software/">Software</a>
@@ -82,13 +82,15 @@
     <div class="header-actions">
       <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
       <a class="btn btn--sm cv" href="/assets/pdf/cv_neitzel_academic_summary.pdf" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+      <button class="icon-btn menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu" hidden><span class="bars" aria-hidden="true"></span></button>
     </div>
+    <div class="nav-scrim" aria-hidden="true"></div>
   </div>
 </header>
 
 <main id="main">
 <section class="plate k-scale plate--stage" aria-label="Visualisations">
-  <div class="plate-media"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/vishead-hd.poster.webp" aria-label="A looping video shows a pencil sketch of a star's interior becoming a flat schematic, then a 3D cut-away sphere with red and blue oscillation modes, and finally a rendered star with a glowing cut-away interior.">
+  <div class="plate-media"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/vishead.poster.webp" aria-label="A looping video shows a pencil sketch of a star's interior becoming a flat schematic, then a 3D cut-away sphere with red and blue oscillation modes, and finally a rendered star with a glowing cut-away interior.">
   <source src="/assets/video/vishead-hd.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/vishead-hd.h264.mp4" type="video/mp4" />
 </video>
@@ -108,7 +110,7 @@
     </header>
     <div class="vis-grid vis-grid--craft">
       <article class="vis-tile" data-id="gaia" style="--area: gaia" tabindex="0" aria-labelledby="vis-gaia">
-        <div class="vis-media" style="--pos: 50% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 50% 50%" poster="/assets/img/heroes/gaia-hd.poster.webp" aria-label="The Gaia spacecraft turning slowly against the Milky Way">
+        <div class="vis-media" style="--pos: 50% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 50% 50%;" poster="/assets/img/heroes/gaia-hd.poster.webp" aria-label="The Gaia spacecraft turning slowly against the Milky Way">
   <source src="/assets/video/gaia-hd.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/gaia-hd.h264.mp4" type="video/mp4" />
 </video>
@@ -180,7 +182,7 @@
         <div class="vis-glass"><h3 id="vis-allsky">The sky in red giants</h3><p>160,000 <i>Gaia</i> DR3 giants from Andrae et al. 2023, with colour marking metallicity.</p></div>
       </article>
       <article class="vis-tile" data-id="sky" style="--area: sky" tabindex="0" aria-labelledby="vis-sky">
-        <div class="vis-media" style="--pos: 48% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 48% 50%" poster="/assets/img/heroes/sky-hd.poster.webp" aria-label="The Milky Way rising over the hills at Paranal, drawn from Gaia red giants">
+        <div class="vis-media" style="--pos: 48% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 48% 50%;" poster="/assets/img/heroes/sky-hd.poster.webp" aria-label="The Milky Way rising over the hills at Paranal, drawn from Gaia red giants">
   <source src="/assets/video/sky-hd.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/sky-hd.h264.mp4" type="video/mp4" />
 </video>
@@ -226,7 +228,7 @@
         <div class="vis-glass"><h3 id="vis-unroll">Starfold, unrolled</h3><p>4,000 real stars of the run leave the chemistry plane, settle on a rolled sheet and unroll into the map with its two groups.</p></div>
       </article>
       <article class="vis-tile" data-id="janus" style="--area: janus" tabindex="0" aria-labelledby="vis-janus">
-        <div class="vis-media" style="--pos: 40% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 40% 50%" poster="/assets/img/heroes/ai-hd.poster.webp" aria-label="Light passing forward and back through the layers of a neural network">
+        <div class="vis-media" style="--pos: 40% 50%"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 40% 50%;" poster="/assets/img/heroes/ai-hd.poster.webp" aria-label="Light passing forward and back through the layers of a neural network">
   <source src="/assets/video/ai-hd.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
   <source src="/assets/video/ai-hd.h264.mp4" type="video/mp4" />
 </video>

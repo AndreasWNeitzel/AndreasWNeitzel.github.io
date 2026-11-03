@@ -43,7 +43,18 @@
     const dots = el("g");
     // each country keeps its centre and angular radius, so a zoomed view projects only what can be seen;
     // a polygon larger than a hemisphere is wound the wrong way for d3 and would fill the globe, so it is skipped
-    const feats = (w) => w.type === "FeatureCollection" ? w.features : topojson.feature(w, w.objects.countries).features;
+    // the regional files were cut to their boxes in longitude and latitude, so a cut edge is one long segment along a
+    // parallel; d3 would draw it as a great circle, bowing away from the box edge, so long segments get points every half degree
+    const dense = (f) => {
+      const ring = (r) => r.flatMap((p, i) => {
+        if (i === 0) return [p];
+        const q = r[i - 1], n = Math.ceil(Math.max(Math.abs(p[0] - q[0]), Math.abs(p[1] - q[1])) / 0.5);
+        return n <= 1 ? [p] : d3.range(1, n + 1).map((j) => [q[0] + (p[0] - q[0]) * j / n, q[1] + (p[1] - q[1]) * j / n]);
+      });
+      const g = f.geometry, c = g.type === "Polygon" ? g.coordinates.map(ring) : g.coordinates.map((pl) => pl.map(ring));
+      return { ...f, geometry: { ...g, coordinates: c } };
+    };
+    const feats = (w) => w.type === "FeatureCollection" ? w.features.map(dense) : topojson.feature(w, w.objects.countries).features;
     const mk = (w) => feats(w).filter((f) => d3.geoArea(f) < 2 * Math.PI).map((f) => {
       const c = d3.geoCentroid(f), b = d3.geoBounds(f);
       const r = Math.max(...[[b[0][0], b[0][1]], [b[1][0], b[1][1]], [b[0][0], b[1][1]], [b[1][0], b[0][1]]].map((q) => d3.geoDistance(c, q)));
@@ -76,7 +87,7 @@
       ctx.clearRect(0, 0, W, H);
       ctx.beginPath(); path({ type: "Sphere" }); ctx.fillStyle = colour("--sea"); ctx.fill();
       ctx.beginPath(); path(gr); ctx.strokeStyle = "rgba(255,255,255,.08)"; ctx.lineWidth = .6; ctx.stroke();
-      const m = view.k >= 8 && inBox([-12, 35, 4, 45], view.lon, view.lat) ? N : view.k >= 2.5 && (inBox([-20, 30, 35, 66], view.lon, view.lat) || inBox([-80, -45, -55, -10], view.lon, view.lat)) ? M : coarse;
+      const m = view.k >= 8 && inBox([-12, 35, 4, 45], view.lon, view.lat) ? N : view.k >= 2.5 && (inBox([-32, 12, 46, 72], view.lon, view.lat) || inBox([-85, -50, -50, -5], view.lon, view.lat)) ? M : coarse;
       const reach = Math.min(Math.PI / 2, 1.15 * Math.hypot(W, H) / 2 / (R * view.k)) + 0.05, ctr = [view.lon, view.lat];
       const layer = (L, edge) => {
         const seen = L.filter((q) => d3.geoDistance(q.c, ctr) - q.r < reach);
@@ -91,7 +102,7 @@
         const fromMid = m === N ? new Set([...MIDS].filter((i) => !nearIds.has(i))) : MIDS;
         layer(coarse.filter((q) => !NIDS.has(q.f.id) && !MIDS.has(q.f.id)), false);
         // only the box under the view centre: a box near the horizon clips into a degenerate shape that hides land elsewhere
-        masked(fromMid, [MBOX[inBox([-80, -45, -55, -10], view.lon, view.lat) ? 1 : 0]]);
+        masked(fromMid, [MBOX[inBox([-85, -50, -50, -5], view.lon, view.lat) ? 1 : 0]]);
         if (m === N) masked(nearIds, NBOX);
         layer(m, true);
       } else layer(m, true);
