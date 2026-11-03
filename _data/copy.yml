@@ -232,7 +232,7 @@ papers:
   - {id: "neitzel-2025-manifold-learning", short: "Manifold learning for stellar populations", line: "In a simulated Milky Way, a method that needs no labels told disc from halo stars and, in error-free data, found the debris of two swallowed galaxies."}
 
 plates:
-  research: "I turn <i>Gaia</i> spectra into the chemistry, ages and populations of the Milky Way."
+  research: "Explore my work."
   software: "I write research software for stellar astrophysics and browser apps that run on real data."
   publications: "Four published papers in <i>Astronomy and Astrophysics</i>, with my contribution to each stated."
   talks: "Talks and posters since 2022, with slides and posters on Zenodo where deposited."
