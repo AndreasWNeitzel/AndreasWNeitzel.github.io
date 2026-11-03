@@ -63,16 +63,23 @@ module SiteFilters
         fin = e["end_date"].to_s
         fin_my = fin == "present" ? "present" : month_year(fin)
         fin_my = "" if fin_my == month_year(date)
-        # a degree belongs to the year it was completed, and says so; one still running says that instead
+        # a degree shows where it started; a finished one shows again where it was completed
         done = cat == "education" && !fin.empty? && fin != "present"
-        label = done ? "degree completed" : "degree in progress" if cat == "education"
+        label = done ? "degree started" : "degree in progress" if cat == "education"
+        link = url.to_s.include?("doi.org") ? "DOI" : url.to_s.include?("arxiv") ? "arXiv" : "Open"
         rows << {
           "id" => e["id"].to_s, "when" => month_year(date), "start" => month_year(date),
-          "end" => fin_my,
-          "sort" => (done ? fin : date).ljust(10, "0"), "kind" => kind, "tag" => tag, "label" => label,
-          "title" => e["title"].to_s, "meta" => meta, "url" => url,
-          "link" => url.to_s.include?("doi.org") ? "DOI" : url.to_s.include?("arxiv") ? "arXiv" : "Open"
+          "end" => (done ? "" : fin_my),
+          "sort" => date.ljust(10, "0"), "kind" => kind, "tag" => tag, "label" => label,
+          "title" => e["title"].to_s, "meta" => meta, "url" => url, "link" => link
         }
+        if done
+          rows << {
+            "id" => "#{e["id"]}-completed", "when" => month_year(fin), "start" => month_year(fin), "end" => "",
+            "sort" => fin.ljust(10, "0"), "kind" => kind, "tag" => tag, "label" => "degree completed",
+            "title" => e["title"].to_s, "meta" => meta, "url" => url, "link" => link
+          }
+        end
       end
     end
     rows.sort_by { |r| r["sort"] }.reverse
