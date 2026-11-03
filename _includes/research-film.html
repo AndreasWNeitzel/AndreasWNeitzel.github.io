@@ -1,0 +1,23 @@
+{%- comment -%}
+The Research plate with the header film: nine segments slide through a 16:9 stage, drawn by assets/js/research-film.js
+on one canvas, with captions and labels as HTML over it (words from copy.research.film, geometry from
+assets/data/research-film.json). The still is the first thing shown, the whole plate under reduced motion and without
+scripts. Parameters: title, line, credit (the sky and spacecraft credit, shown while the missions are on).
+{%- endcomment -%}
+{%- assign F = site.data.copy.research.film -%}
+<section class="plate k-scale plate--stage plate--film" aria-label="{{ include.title | strip_html }}">
+  <div class="plate-media">
+    <div class="rf" role="img" aria-label="{{ F.alt }}" data-data="{{ '/assets/data/research-film.json' | relative_url }}" data-video="{{ '/assets/video/' | relative_url }}" data-poster="{{ '/assets/img/heroes/' | relative_url }}">
+      <img class="rf-still" src="{{ '/assets/img/heroes/rh-still.poster.webp' | relative_url }}" alt="" role="presentation" fetchpriority="high" decoding="async">
+      <canvas class="rf-cv" aria-hidden="true"></canvas>
+      <div class="rf-ov" aria-hidden="true"><svg class="rf-lines" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg><div class="rf-labs"></div><p class="rf-cap"></p></div>
+    </div>
+  </div>
+  {%- if include.credit %}<a class="plate-credit rf-credit" href="{{ '/credits/' | relative_url }}">{{ include.credit }}</a>{% endif %}
+  <div class="plate-text">
+    <h1>{{ include.title | missions }}</h1>
+    {%- if include.line %}<p class="lede">{{ include.line | missions }}</p>{% endif %}
+  </div>
+  <script type="application/json" class="rf-words">{{ F | jsonify }}</script>
+</section>
+<script src="{{ '/assets/js/research-film.js' | relative_url }}" defer></script>

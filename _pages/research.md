@@ -3,7 +3,7 @@ layout: default
 permalink: /research/
 title: Research
 copy: research
-extra_css: [/assets/css/thesis.css]
+extra_css: [/assets/css/thesis.css, /assets/css/research-film.css]
 lines:
   - id: janus
     loop: ai
@@ -62,7 +62,8 @@ lines:
 ---
 {%- assign C = site.data.copy.research -%}
 {%- assign CP = site.data.copy.plates -%}
-{% include plate.html stage=true loop="pipeline" still="/assets/img/heroes/research_allsky.webp" alt="The research pipeline rendered as a scene, from Gaia to the Milky Way" title="Research" line=CP.research %}
+{%- assign mcredit = "Mock-ups after NASA and ESA references; TESS on NASA 3D Resources mesh; sky ESO/S. Brunier, CC BY 4.0" -%}
+{% include research-film.html title="Research" line=CP.research credit=mcredit %}
 <div class="wrap">
 <section class="section section--tight">
   <div class="rows">

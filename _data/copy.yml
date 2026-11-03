@@ -159,6 +159,25 @@ research:
       catalogue: {title: "Catalogue", line: "Labels for TESS red giants with oscillations, the chemistry layer of ArqueoGal."}
       hpc: {title: "Supercomputers", line: "Deucalion runs DR3 and MareNostrum 5 runs DR4, on FCT allocations I lead."}
   guide_line: "The field guide explains the science, institutions and machines behind this work, one minute each."
+  film:
+    alt: "A looping silent film of astrophysics themes: five spacecraft (Gaia, PLATO, TESS, Kepler, Ariel) against the Milky Way, a Sun-like star cut open, its evolution on a Hertzsprung-Russell diagram, oscillation spectra, dense star fields, galactic maps, neural networks, a manifold unrolled, and a supercomputer hall."
+    captions:
+      star: "Stellar Physics"
+      evolution: "Stellar Evolution"
+      seismo: "Asteroseismology"
+      cluster: "Dense Stellar Fields"
+      maps: "Galactic Archaeology"
+      janus: "Deep Learning"
+      starfold: "Manifold Learning"
+      hall: "High-Performance Computing"
+    zones: ["Core", "Radiative zone", "Convective envelope", "Photosphere", "Chromosphere", "Corona"]
+    stations: ["Main sequence", "Red-giant tip", "Red clump", "White dwarf"]
+    axes:
+      teff: "Effective temperature (K)"
+      lum: "Luminosity (L<sub>☉</sub>)"
+      freq: "Frequency (μHz)"
+    before: "Before"
+    after: "After"
 
 software:
   description: "Research software, browser apps and interactive demos by Andreas W. Neitzel: JANUS, Starfold, HAYDNsim and more."

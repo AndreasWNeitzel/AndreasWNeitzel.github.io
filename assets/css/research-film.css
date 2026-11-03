@@ -1,0 +1,39 @@
+/* The Research header film: a 16:9 stage placed like the stage plate's video (right-aligned, faded under the title on
+   wide screens, full width above the title on phones), a canvas for the pictures and an HTML layer for the words. */
+@layer pages {
+  .plate--film .plate-media::after { content: none; }
+  .plate--film .rf { position: absolute; inset: 0 0 0 auto; block-size: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #000;
+    mask-image: linear-gradient(90deg, transparent, #000 16%); container-type: inline-size; }
+  .rf > img, .rf > canvas { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; mask-image: none; aspect-ratio: auto; }
+  .rf.is-running > img { visibility: hidden; }
+  .rf::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(0deg, rgb(0 0 0 / .55), transparent 22%); }
+  .rf-ov { position: absolute; inset: 0; z-index: 2; pointer-events: none; font-family: var(--serif); color: #f0eade; }
+  .rf-lines { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; }
+  .rf-lines polyline { fill: none; stroke: rgb(236 230 218 / .8); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .rf-lines polyline.u { stroke: rgb(0 0 0 / .45); stroke-width: 3; }
+  .rf-lines circle { fill: rgb(240 234 222 / .9); }
+  .rf-lab { position: absolute; white-space: nowrap; font: 400 max(13px, 1.45cqi)/1 var(--serif); text-shadow: 0 0 8px rgb(0 0 0 / .85), 0 1px 3px rgb(0 0 0 / .9); transform: translateY(-50%); }
+  .rf-lab.l { transform: translate(-100%, -50%); }
+  .rf-lab.c { transform: translate(-50%, -50%); }
+  .rf-lab.tk { font-size: max(12px, 1.2cqi); color: #d9d4c9; }
+  .rf-lab.dim { color: #aaa498; }
+  .rf-lab.rot { transform: translate(-50%, -50%) rotate(-90deg); }
+  .rf-lab sub { font-size: .72em; }
+  .rf-cap { position: absolute; inset-inline-end: 3.5%; inset-block-end: 2.4%; margin: 0; font: 400 max(17px, 2.35cqi)/1.1 var(--serif); color: #f4eee2; text-shadow: 0 1px 14px rgb(0 0 0 / .6); opacity: 0; }
+  .rf-bar { position: absolute; display: grid; gap: .35em; font: 400 max(12px, 1.15cqi)/1.15 var(--serif); color: #e9e4d8; text-shadow: 0 1px 6px rgb(0 0 0 / .9); }
+  .rf-bar .g { block-size: max(5px, .55cqi); border-radius: 1px; }
+  .rf-bar .ticks { position: relative; block-size: 1.1em; font-size: .9em; color: #cfcabf; }
+  .rf-bar .ticks span { position: absolute; transform: translateX(-50%); }
+  .rf-bar .note { font-size: .9em; color: #cfcabf; }
+  /* the sky and spacecraft credit shows while the missions are on, and whenever it has focus */
+  .plate--film .rf-credit { transition: opacity .5s var(--ease); }
+  .plate--film.rf-quiet .rf-credit:not(:focus-visible) { opacity: 0; }
+  /* labels need room: on a narrow stage only the captions stay */
+  @container (max-width: 560px) { .rf-lines, .rf-labs { display: none; } }
+  @media (max-width: 860px) {
+    .plate--film .rf { inset: 0 0 auto 0; inline-size: 100%; block-size: auto; mask-image: none; }
+  }
+  @media (max-width: 760px) {
+    .plate--film.rf-quiet .rf-credit:not(:focus-visible) { opacity: 1; }   /* on phones the credit sits under the title and stays */
+  }
+}
