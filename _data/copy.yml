@@ -253,7 +253,7 @@ visualisations:
   description: "Renders, animations, figures, dashboards and simulations by Andreas W. Neitzel, made from real data for his research, software and website."
   title: "Visualisations"
   line: "I made these renders, figures and dashboards for my research, my software and this site."
-  header_alt: "The TESS and Kepler spacecraft turning side by side against the Milky Way"
+  header_alt: "A looping video shows a pencil sketch of a star's interior becoming a flat schematic, then a 3D cut-away sphere with red and blue oscillation modes, and finally a rendered star with a glowing cut-away interior."
   intro: "Where a picture shows data, the data are real measurements, and the script behind each render states which parts are schematic. I compared the spacecraft part by part with flight photographs and agency images. Hover or tap a piece for its title and a line about it."
   sections:
     - id: "craft"

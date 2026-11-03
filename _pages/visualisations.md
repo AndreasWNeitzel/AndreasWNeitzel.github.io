@@ -46,8 +46,7 @@ sections:
 ---
 {%- assign C = site.data.copy.visualisations -%}
 {%- assign LC = site.data.home.guide_loop_credits -%}
-{%- assign hc = LC["tess-kepler"] -%}
-{% include plate.html loop="pair" still="/assets/img/heroes/pair.poster.webp" alt=C.header_alt title=C.title line=C.line loop_credit=hc loop_pos="31% 50%" %}
+{% include plate.html stage=true loop="vishead" still="/assets/img/heroes/vishead.poster.webp" alt=C.header_alt title=C.title line=C.line %}
 <div class="wrap vis" data-album>
   <p class="vis-intro">{{ C.intro | missions }}</p>
   {%- for s in page.sections %}{% assign sc = C.sections | where: "id", s.id | first %}
