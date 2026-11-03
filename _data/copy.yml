@@ -191,7 +191,7 @@ software:
   demos_lead: "Larger tools built on real catalogues and stellar models, to explore in the browser."
   demos:
     - id: "starfold-demo"
-      title: "Starfold on 9,242 Milky Way stars"
+      title: "Starfold"
       text: "Inspect any star's APOGEE chemistry and <i>Gaia</i> orbit, and replay the 32 refits."
     - id: "stellar-explorer"
       title: "Stellar Explorer"
