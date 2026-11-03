@@ -182,3 +182,8 @@
     .vis-head p { font-size: 1rem; }
   }
 }
+
+/* the header film is drawn on a warm near-black ground of its own: the plate takes that ground, and the sheet of paper is
+   not shaded at its foot */
+.plate--stage:has(video[poster*="vishead"]) { background: #0c0b0a; }
+.plate--stage:has(video[poster*="vishead"]) .plate-media::after { background: none; }
