@@ -269,7 +269,7 @@ publications:
   - industry-ai
   numbers:
     hosts: 187
-  contribution: Bayesian stellar characterisation runs with PARAM for a subset of the sample.
+  contribution: Bayesian PARAM runs for a subset of the sample.
 presentations:
 - id: pres-2026-10-imas13-oral-janus
   title: 'JANUS: a neural network for APOGEE-like chemistry of the TESS asteroseismic red giants from Gaia XP spectra, with per-star reliability'
