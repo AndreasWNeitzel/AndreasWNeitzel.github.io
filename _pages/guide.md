@@ -15,6 +15,7 @@ cards:
   ariel: /assets/img/heroes/ariel_card.webp
 loop_pos:
   plato: "72% 50%"
+  tess-kepler: "56% 50%"
 loops:
   gaia: gaia
   supercomputers: hall
