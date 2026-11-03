@@ -36,7 +36,7 @@ loops:
     {%- assign vf = nil -%}{% if lp %}{% assign vpath = "/assets/video/" | append: lp | append: ".av1.mp4" %}{% assign vf = site.static_files | where: "path", vpath | first %}{% endif %}
     <article class="row-item k-up">
       <div class="pic">
-        {%- if vf %}{% include loop.html name=lp alt="" pos=page.loop_pos[slug] %}
+        {%- assign lpos = page.loop_pos[slug] -%}{%- if vf %}{% include loop.html name=lp alt="" pos=lpos %}
         {%- elsif ci %}<img src="{{ ci | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">
         {%- elsif g.image and g.image != "" %}<img src="{{ g.image | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% if g.image_credit %}<a class="ccredit" href="{{ g.image_source }}">{{ g.image_credit }}, {{ g.image_licence }}</a>{% endif %}
         {%- elsif g.photo %}<img src="{{ g.photo | relative_url }}" alt="" role="presentation" loading="lazy" decoding="async">{% endif %}
