@@ -14,7 +14,8 @@
 <link rel="preload" href="/assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/fonts.css">
 <link rel="stylesheet" href="/assets/css/site.css">
-<link rel="stylesheet" href="/assets/css/thesis.css"><meta property="og:type" content="article">
+<link rel="stylesheet" href="/assets/css/thesis.css">
+<link rel="stylesheet" href="/assets/css/research-film.css"><meta property="og:type" content="article">
 <meta property="og:title" content="Research">
 <meta property="og:description" content="Research by Andreas W. Neitzel: machine learning, Gaia spectra and stellar oscillations to trace the history of the Milky Way.">
 <meta property="og:url" content="https://andreaswneitzel.github.io/research/">
@@ -89,17 +90,20 @@
 </header>
 
 <main id="main">
-<section class="plate k-scale plate--stage" aria-label="Research">
-  <div class="plate-media"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/pipeline-hd.poster.webp" aria-label="The research pipeline rendered as a scene, from Gaia to the Milky Way">
-  <source src="/assets/video/pipeline-hd.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
-  <source src="/assets/video/pipeline-hd.h264.mp4" type="video/mp4" />
-</video>
-
-  </div>
+<section class="plate k-scale plate--stage plate--film" aria-label="Research">
+  <div class="plate-media">
+    <div class="rf" role="img" aria-label="A looping silent film of astrophysics themes: five spacecraft (Gaia, PLATO, TESS, Kepler, Ariel) against the Milky Way, a Sun-like star cut open, its evolution on a Hertzsprung-Russell diagram, oscillation spectra, dense star fields, galactic maps, neural networks, a manifold unrolled, and a supercomputer hall." data-data="/assets/data/research-film.json" data-video="/assets/video/" data-poster="/assets/img/heroes/">
+      <img class="rf-still" src="/assets/img/heroes/rh-still.poster.webp" alt="" role="presentation" fetchpriority="high" decoding="async" />
+      <canvas class="rf-cv" aria-hidden="true"></canvas>
+      <div class="rf-ov" aria-hidden="true"><svg class="rf-lines" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg><div class="rf-labs"></div><p class="rf-cap"></p></div>
+    </div>
+  </div><a class="plate-credit rf-credit" href="/credits/">Mock-ups after NASA and ESA references; TESS on NASA 3D Resources mesh; sky ESO/S. Brunier, CC BY 4.0</a>
   <div class="plate-text">
     <h1>Research</h1><p class="lede">Explore my work.</p>
   </div>
+  <script type="application/json" class="rf-words">{"alt":"A looping silent film of astrophysics themes: five spacecraft (Gaia, PLATO, TESS, Kepler, Ariel) against the Milky Way, a Sun-like star cut open, its evolution on a Hertzsprung-Russell diagram, oscillation spectra, dense star fields, galactic maps, neural networks, a manifold unrolled, and a supercomputer hall.","captions":{"star":"Stellar Physics","evolution":"Stellar Evolution","seismo":"Asteroseismology","cluster":"Dense Stellar Fields","maps":"Galactic Archaeology","janus":"Deep Learning","starfold":"Manifold Learning","hall":"High-Performance Computing"},"zones":["Core","Radiative zone","Convective envelope","Photosphere","Chromosphere","Corona"],"stations":["Main sequence","Red-giant tip","Red clump","White dwarf"],"axes":{"teff":"Effective temperature (K)","lum":"Luminosity (L<sub>☉</sub>)","freq":"Frequency (μHz)"},"before":"Before","after":"After"}</script>
 </section>
+<script src="/assets/js/research-film.js" defer=""></script>
 
 <div class="wrap">
 <section class="section section--tight">
