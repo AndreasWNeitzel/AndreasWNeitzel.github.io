@@ -122,6 +122,20 @@
     fg.addEventListener("click", () => { held = null; set(null); });
   });
 
+  // ---- the album: on touch screens a tap shows a tile's panel; a second tap, a tap elsewhere or Escape hides it ----
+  const album = document.querySelector("[data-album]");
+  if (album) {
+    const tiles = album.querySelectorAll(".vis-tile");
+    const close = () => tiles.forEach((t) => t.classList.remove("is-open"));
+    tiles.forEach((t) => t.addEventListener("click", (e) => {
+      if (e.target.closest("a") || matchMedia("(hover: hover)").matches) return;
+      const open = !t.classList.contains("is-open");
+      close(); t.classList.toggle("is-open", open); e.stopPropagation();
+    }));
+    document.addEventListener("click", close);
+    album.addEventListener("keydown", (e) => { if (e.key === "Escape") { close(); if (album.contains(document.activeElement)) document.activeElement.blur(); } });
+  }
+
   // ---- the record: one kind at a time; empty years fold away --------------------------
   const buttons = document.querySelectorAll(".filters [data-filter]");
   if (buttons.length) buttons.forEach((b) => b.addEventListener("click", () => {

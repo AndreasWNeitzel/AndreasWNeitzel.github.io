@@ -54,6 +54,7 @@ OWN = [
     "assets/img/figures/janus-gaia.webp",
     "assets/img/guide/paranal-*.webp",
     "assets/img/tellurion/*.webp",
+    "assets/img/visualisations/*.webp",
     "assets/img/papers/neitzel-2022-kippenhahn.webp",
     "assets/video/*.mp4",
     "assets/img/favicon.svg",

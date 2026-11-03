@@ -1,7 +1,7 @@
 {%- comment -%}
 The plate that opens a page: a full-width dark picture (a loop when assets/video/<loop>.av1.mp4 exists, else a still)
 with the title and one line at its lower left. Parameters: loop (name), still (path), alt, title, line, crumb,
-crumb_url, tri (a list of {src, pos} for three panels), pos (object-position for the still), textw (width of the
+crumb_url, tri (a list of {src, pos} for three panels), pos (object-position for the still), loop_pos (the same for the loop), textw (width of the
 text column, to keep it clear of a person in the picture), lift (on phones the picture is
 enlarged and raised, so a person low in the frame stands above the text), stage (a whole 16:9 frame beside the title, for
 loops on black whose subject must not be cropped).
@@ -14,7 +14,7 @@ loops on black whose subject must not be cropped).
 <section class="plate k-scale{% if include.lift %} plate--lift{% endif %}{% if include.stage %} plate--stage{% endif %}" aria-label="{{ include.title | strip_html }}">
   <div class="plate-media">
     {%- if include.tri %}<div class="tri">{% for im in include.tri %}<div{% if im.pos %} style="--pos: {{ im.pos }}"{% endif %}>{% if im.loop %}{% assign lalt = include.alts[forloop.index0] %}{% include loop.html name=im.loop alt=lalt %}{% else %}<img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}>{% endif %}</div>{% endfor %}</div>
-    {%- elsif has_loop %}{% include loop.html name=loop_name alt=include.alt %}
+    {%- elsif has_loop %}{% include loop.html name=loop_name alt=include.alt pos=include.loop_pos %}
     {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}"{% unless include.alt %} role="presentation"{% endunless %} fetchpriority="high" decoding="async"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}>{% endif %}
   </div>
   {%- if include.credit and has_loop == false %}<a class="plate-credit" href="{{ include.credit_url }}">{{ include.credit }}</a>{% endif %}

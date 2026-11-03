@@ -1,5 +1,5 @@
-{%- comment -%} One looping render: AV1 with an H.264 fallback, a poster until it plays, paused off screen by site.js. {%- endcomment -%}
-<video autoplay muted loop playsinline preload="metadata"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}{% if include.name contains "haydn" %} data-start="10.33"{% endif %} poster="{{ '/assets/img/heroes/' | append: include.name | append: '.poster.webp' | relative_url }}" aria-label="{{ include.alt }}">
+{%- comment -%} One looping render: AV1 with an H.264 fallback, a poster until it plays (its own, or include.poster), first shown from include.start seconds when given, paused off screen by site.js. {%- endcomment -%}
+<video autoplay muted loop playsinline preload="metadata"{% if include.pos %} style="object-position: {{ include.pos }}"{% endif %}{% if include.start %} data-start="{{ include.start }}"{% elsif include.name contains "haydn" %} data-start="10.33"{% endif %} poster="{% if include.poster %}{{ include.poster | relative_url }}{% else %}{{ '/assets/img/heroes/' | append: include.name | append: '.poster.webp' | relative_url }}{% endif %}" aria-label="{{ include.alt }}">
   <source src="{{ '/assets/video/' | append: include.name | append: '.av1.mp4' | relative_url }}" type='video/mp4; codecs="av01.0.05M.08"'>
   <source src="{{ '/assets/video/' | append: include.name | append: '.h264.mp4' | relative_url }}" type="video/mp4">
 </video>
