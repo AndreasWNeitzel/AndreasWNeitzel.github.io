@@ -2,8 +2,9 @@ MIT License
 
 Copyright (c) 2026 Andreas W. Neitzel
 
-This licence covers the layout code of this repository (HTML templates, CSS, JavaScript and
-build scripts). Text, figures, photographs and data are not covered; see README.md.
+This licence covers the code of this repository: HTML templates, CSS, build scripts and JavaScript,
+including the playgrounds and Stellar Explorer. Text, figures, photographs, renders and data are not
+covered; see README.md.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,
