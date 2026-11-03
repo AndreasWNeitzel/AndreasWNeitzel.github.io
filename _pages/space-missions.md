@@ -6,10 +6,10 @@ nav_section: Guide
 extra_css: [/assets/css/thesis.css]
 description: The space telescopes behind Andreas W. Neitzel's research, with what each contributes to his work.
 lines:
-  - {id: gaia, loop: gaia, url: /guide/gaia/}
+  - {id: gaia, loop: mcard-gaia, url: /guide/gaia/}
   - {id: plato, loop: plato, url: /guide/plato/}
   - {id: tess, loop: tess, url: /guide/tess-kepler/}
-  - {id: kepler, img: /assets/img/heroes/kepler.webp, url: /guide/tess-kepler/}
+  - {id: kepler, loop: mcard-kepler, url: /guide/tess-kepler/}
   - {id: ariel, loop: ariel, url: /guide/ariel/}
   - {id: haydn, loop: cluster, url: /guide/haydn/}
 ---
