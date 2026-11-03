@@ -16,7 +16,7 @@ cards:
 loop_pos:
   plato: "72% 50%"
   tess-kepler: "77% 50%"
-  ariel: "94% 50%"
+  ariel: "85% 50%"
 loops:
   gaia: gaia
   supercomputers: hall
