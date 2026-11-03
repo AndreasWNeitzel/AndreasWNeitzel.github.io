@@ -1,11 +1,9 @@
-/* FIG 2 on /observing/paranal/, read as a Z: the light path (vlt-lightpath.svg) and the exposure
-   column (espresso-exposure.svg) on top; the night of velocities (espresso-night.svg) and the power
-   spectrum (espresso-spectrum.svg) below. The four SVGs share one scale (grid columns in the ratio
-   of their viewBox widths: 800 + 420 on top, 610 + 610 below), so the data thread, cut at the seams
-   by figures/observing/build_espresso_output.py, joins up. The one-time build comes from site.css. */
+/* The figure on /observing/paranal/: the light path (vlt-lightpath.svg) beside the result
+   (espresso-spectrum.svg). Both SVGs share one scale, so the grid columns follow their viewBox widths
+   and the data thread, cut at the seam by figures/observing/build_espresso_output.py, joins up.
+   The one-time build comes from site.css. */
 @layer pages {
-  .vlt-top { display: grid; grid-template-columns: minmax(0, 800fr) minmax(0, 420fr); }
-  .vlt-bottom { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .vlt-row { display: grid; grid-template-columns: minmax(0, 800fr) minmax(0, 480fr); }
   .blueprint.wide-fig.vlt-fig svg { display: block; inline-size: 100%; block-size: auto; max-block-size: none; }
   .vlt-fig .b-draw { vector-effect: none; stroke-linecap: butt; }
 
@@ -13,17 +11,10 @@
   .vlt-fig .bp-label2 { font-size: 13px; }
   .vlt-fig .bp-tick { font-size: 11.5px; }
   .vlt-fig .eo-title { font: 600 14.5px var(--sans); fill: var(--ink); }
-  .vlt-fig .eo-label { font: 600 13px var(--mono); fill: var(--ink); letter-spacing: 0.02em; }
-  .vlt-fig .eo-value { font: 600 12.5px var(--mono); fill: var(--ink); }
   .vlt-fig .eo-tex { fill: var(--ink); }
-  .vlt-fig .eo-tex-note { fill: var(--muted); }
   .vlt-fig .eo-note, .vlt-fig .eo-num { font: 500 11px var(--mono); fill: var(--muted); }
   .vlt-fig .eo-data { fill: var(--ink-2); }
   .vlt-fig a .eo-data { text-decoration: underline; text-decoration-thickness: 1px; }
-  /* symbols in the serif, as in print: italic nu, upright Delta, "max" as a subscript; in the
-     monospace labels a plain "ν" reads as "v" */
-  .vlt-fig figcaption .sym { font-family: var(--serif); font-size: 1.1em; }
-  .vlt-fig figcaption .sym sub { font-size: 0.72em; }
 
   /* the data thread: the light's moving dash continues as curved links; squares mark each hand-off */
   .vlt-fig .eo-link { fill: none; stroke-width: 1.7; vector-effect: none; }
@@ -37,22 +28,37 @@
   }
 
   /* schematic parts in outline, real data filled */
-  .eo-svg .eo-mark { stroke: var(--accent-2); stroke-width: 1.3; stroke-dasharray: 2 2; }
-  .eo-svg .eo-dim { fill: none; stroke: currentColor; stroke-width: 1; }
-  .eo-svg .eo-dots { fill: none; stroke: var(--accent-2); stroke-width: 2.4; stroke-linecap: round; }
   .eo-svg .eo-power { fill: color-mix(in oklab, var(--accent-2) 42%, transparent); stroke: none; }
   .eo-svg .eo-smooth { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
-  .eo-svg .eo-noise { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
   .eo-svg .eo-numax { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 1 3; }
 
-  /* narrow screens: the light path and the two panels scroll sideways at a legible scale and stack;
-     the thread pieces that cross a seam are hidden */
+  /* narrow screens: the two panels stack at full width, with the labels enlarged to stay legible at
+     the smaller scale; the thread pieces that cross the seam are hidden */
   @media (max-width: 900px) {
-    .vlt-top, .vlt-bottom { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
-    .vlt-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
-    .blueprint.wide-fig.vlt-fig .vlt-scroll--path > svg { min-inline-size: 700px; }
-    .blueprint.wide-fig.vlt-fig .vlt-scroll--series > svg { min-inline-size: 560px; }
+    .vlt-row { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
+    .vlt-svg .eo-title { font-size: 30px; }
+    .eo-svg .eo-title { font-size: 19px; }
+    .eo-svg .eo-note, .eo-svg .eo-num { font-size: 18px; }
     .vlt-fig .eo-seam { display: none; }
   }
 }
 
+
+/* the story in three columns across the page */
+.story-cols { display: grid; gap: clamp(28px, 3.5vw, 56px); }
+.story-cols .prose { max-inline-size: none; align-content: start; }
+@media (min-width: 1000px) { .story-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* the words stand beside him on the platform, on the sky side of the picture */
+@media (min-width: 1000px) {
+  .story-hero::before { background: linear-gradient(180deg, rgb(3 6 12 / 0.05) 30%, rgb(3 6 12 / 0.7)), linear-gradient(270deg, rgb(3 6 12 / 0.62), transparent 58%); }
+  .story-hero .card-body { justify-self: end; inline-size: 50%; }
+}
+/* on a phone the words sit under him, never across him */
+@media (max-width: 640px) {
+  .story-hero { display: block; min-block-size: 0; padding: 0; background: var(--raised); }
+  .story-hero::before { display: none; }
+  .story-hero img { position: static; inline-size: 100%; block-size: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 43% 100% !important; }
+  .story-hero .tag { color: var(--ink); }
+  .story-hero .card-body { padding: 16px; color: var(--ink); }
+  .story-hero .card-body h1, .story-hero .card-body p, .story-hero .card-body .kicker { color: var(--ink) !important; text-shadow: none; }
+}

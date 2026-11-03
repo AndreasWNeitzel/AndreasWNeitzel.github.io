@@ -490,7 +490,7 @@ async function boot(root) {
     const fr = p.frame;
     const [ax, ay] = p.axes;
     ctx.lineWidth = 1;
-    ctx.font = `10.5px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     const label = (a, v) => (a.log ? (10 ** v >= 1000 ? grouped(10 ** v) : String(Number((10 ** v).toPrecision(2)))) : a.j === J.L_z ? grouped(v) : tickText(v));
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
@@ -556,7 +556,7 @@ async function boot(root) {
       const o = S.view === "fit" ? group[i] : outcome(S.refit, i);
       if (o >= 0) groups[o].push(i);
     }
-    ctx.font = `600 11px ${F.sans}`;
+    ctx.font = `600 12px ${F.sans}`;
     ctx.textBaseline = "alphabetic";
     groups.forEach((list, g) => {
       if (list.length < 20) return;
@@ -625,7 +625,7 @@ async function boot(root) {
       ctx.lineWidth = 1;
       line(ctx, x0, y0, x0 + 22, y0);
       line(ctx, x0, y0, x0, y0 - 22);
-      ctx.font = `500 10px ${F.mono}`;
+      ctx.font = `500 12px ${F.mono}`;
       ctx.fillStyle = C.muted;
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
@@ -658,8 +658,9 @@ async function boot(root) {
     else medianMarks(ctx, p);
     if (p.outside) {
       // The note goes in whichever top corner of the plot holds fewer stars.
-      ctx.font = `10px ${F.mono}`;
+      ctx.font = `12px ${F.mono}`;
       const text = `${grouped(p.outside)} beyond the axes`;
+      const clear = 46; // the enlarge control sits in the right corner
       const w = ctx.measureText(text).width + 6;
       let left = 0;
       let right = 0;
@@ -668,12 +669,12 @@ async function boot(root) {
         if (!(y < fr.t + 16)) continue;
         const x = p.xy[2 * i];
         if (x < fr.l + w) left++;
-        else if (x > fr.r - w) right++;
+        else if (x > fr.r - clear - w) right++;
       }
       ctx.fillStyle = C.muted;
       ctx.textBaseline = "top";
       ctx.textAlign = left <= right ? "left" : "right";
-      haloText(ctx, text, left <= right ? fr.l + 5 : fr.r - 3, fr.t + 3, C.muted);
+      haloText(ctx, text, left <= right ? fr.l + 5 : fr.r - clear, fr.t + 3, C.muted);
     }
     p.dirty = false;
   }
@@ -983,7 +984,7 @@ async function boot(root) {
     ui.back.disabled = !on;
     if (!on) {
       ui.refitNow.textContent = "showing the fit on all stars";
-      ui.refitText.textContent = `Each bar is a refit on a random ${Math.round(H.refits.fraction * 100)} percent of the stars, as tall as its agreement with the fit on all stars.`;
+      ui.refitText.textContent = `Each bar is a refit on a random ${Math.round(H.refits.fraction * 100)} per cent of the stars, as tall as its agreement with the fit on all stars.`;
       return;
     }
     const m = H.refits.matches[S.refit];
@@ -1059,7 +1060,7 @@ async function boot(root) {
     if (i < 0) return;
     const id = A.source_id[i].toString();
     const head = document.createElement("b");
-    head.textContent = `Gaia DR3 ${id}`;
+    head.innerHTML = `<i>Gaia</i> DR3 ${id}`;
     const link = document.createElement("a");
     link.href = `https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&Source=${id}`;
     link.textContent = "VizieR";
@@ -1125,7 +1126,9 @@ async function boot(root) {
       const [ax, ay] = p.axes;
       lines.push([...reading(ax.j), ", ", ...reading(ay.j)]);
     }
-    lines.push([`Gaia DR3 ${A.source_id[i].toString()}`]);
+    const gaia = document.createElement("i");
+    gaia.textContent = "Gaia";
+    lines.push([gaia, ` DR3 ${A.source_id[i].toString()}`]);
     if (p.name !== "map" || S.view !== "fit") lines.push([strongGroup(i)]);
     p.tip.replaceChildren(...lines.map((bits, k) => {
       const el = document.createElement(k === 0 ? "b" : "span");
@@ -1198,7 +1201,7 @@ async function boot(root) {
     const want = BigInt(digits);
     const i = A.source_id.indexOf(want);
     if (i < 0) {
-      ui.facts.textContent = `No star with Gaia DR3 source_id ${digits} among the ${grouped(n)}.`;
+      ui.facts.innerHTML = `No star with <i>Gaia</i> DR3 source_id ${digits} among the ${grouped(n)}.`;
       return;
     }
     pin(i);
@@ -1284,8 +1287,9 @@ async function boot(root) {
     const cal = H.calibration;
     const NS = "http://www.w3.org/2000/svg";
     const svg = document.createElementNS(NS, "svg");
-    const w = 240;
-    const h = 34;
+    // drawn at the strip's own pixel width, so the 12 px labels are never scaled down
+    const w = Math.max(160, Math.round(ui.calib.clientWidth));
+    const h = 48;
     svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
     svg.setAttribute("preserveAspectRatio", "xMinYMid meet");
     svg.setAttribute("role", "img");
@@ -1297,9 +1301,9 @@ async function boot(root) {
       svg.append(e);
       return e;
     };
-    el("line", { class: "ax", x1: 4, x2: w - 4, y1: 22.5, y2: 22.5 });
+    el("line", { class: "ax", x1: 4, x2: w - 4, y1: 32.5, y2: 32.5 });
     for (let v = 0; v <= top + 1e-9; v += 0.1) {
-      const t = el("text", { x: sx(v), y: 33, "text-anchor": "middle" });
+      const t = el("text", { x: sx(v), y: 46, "text-anchor": v < 1e-9 ? "start" : "middle" });
       t.textContent = Number(v.toFixed(1)).toString();
     }
     const placed = [];
@@ -1308,11 +1312,11 @@ async function boot(root) {
       let level = 0;
       while (placed.some((q) => q.level === level && Math.abs(q.x - x) < 5.5)) level++;
       placed.push({ x, level });
-      el("circle", { class: v >= cal.observed ? "copy is-up" : "copy", cx: x, cy: 19 - level * 5.5, r: 2.5 });
+      el("circle", { class: v >= cal.observed ? "copy is-up" : "copy", cx: x, cy: 29 - level * 5.5, r: 2.5 });
     });
     const ox = sx(cal.observed);
-    el("line", { class: "obs", x1: ox, x2: ox, y1: 4, y2: 24 });
-    const label = el("text", { class: "obs-t", x: ox - 4, y: 9, "text-anchor": "end" });
+    el("line", { class: "obs", x1: ox, x2: ox, y1: 2, y2: 34 });
+    const label = el("text", { class: "obs-t", x: ox - 5, y: 11, "text-anchor": "end" });
     label.textContent = `table ${cal.observed.toFixed(3)}`;
     const above = cal.copy_values.filter((v) => v >= cal.observed);
     svg.setAttribute("aria-label", `Calibration test: the table's statistic, ${cal.observed.toFixed(3)}, against ${cal.copies} structureless copies; ${above.length} scored at or above it.`);
@@ -1322,6 +1326,7 @@ async function boot(root) {
   // ------------------------------------------------------------ start
   readTheme();
   drawCalibration();
+  if ("ResizeObserver" in window) new ResizeObserver(() => drawCalibration()).observe(ui.calib);
   buildStyles();
   renderKey();
   updateRefitUi();

@@ -40,13 +40,13 @@
 .sfd-title { margin: 0; font: 600 0.88rem/1.3 var(--sans); letter-spacing: -0.005em; color: var(--ink); }
 .sfd-label, .sfd-readout dt, .sfd-note {
   margin: 0;
-  font: 500 0.8rem/1.3 var(--mono);
+  font: 500 0.8125rem/1.3 var(--mono);
   font-variant-caps: all-small-caps;
   letter-spacing: 0.06em;
   color: var(--muted);
 }
-.sfd-small, .sfd-cap { margin: 0; font-size: 0.74rem; line-height: 1.42; color: var(--muted); }
-.sfd-cap .sfd-exact { color: color-mix(in oklab, var(--muted) 82%, var(--surface)); }
+.sfd-small, .sfd-cap { margin: 0; font-size: 0.8125rem; line-height: 1.42; color: var(--muted); }
+.sfd-cap .sfd-exact { color: var(--muted); }
 .sfd sub { font-size: 0.72em; line-height: 0; }
 
 /* plot stages: square cells sized by their panel, capped so the dashboard fits one screen */
@@ -64,7 +64,7 @@
   padding: 7px 9px;
   pointer-events: none;
   white-space: nowrap;
-  font: 0.7rem/1.45 var(--mono);
+  font: 0.8125rem/1.45 var(--mono);
   color: var(--ink-2);
   background: var(--surface);
   border: 1px solid var(--line-strong);
@@ -80,7 +80,7 @@
   border: 0;
   border-block-end: 2px solid transparent;
   background: none;
-  font: 500 0.76rem/1.3 var(--sans);
+  font: 500 0.8125rem/1.3 var(--sans);
   color: var(--muted);
   cursor: pointer;
 }
@@ -97,15 +97,15 @@
   color: var(--ink);
   white-space: nowrap;
 }
-.sfd-and { margin-inline: 0.35em; font: 500 0.74rem var(--mono); letter-spacing: 0; color: var(--muted); }
+.sfd-and { margin-inline: 0.35em; font: 500 0.8125rem var(--mono); letter-spacing: 0; color: var(--muted); }
 .sfd-calib { display: grid; gap: 4px; padding-block-start: 8px; border-block-start: 1px solid var(--line); }
-.sfd-calib-plot { block-size: 30px; }
+.sfd-calib-plot { block-size: 48px; }
 .sfd-calib-plot svg { display: block; inline-size: 100%; block-size: 100%; overflow: visible; }
 .sfd-calib-plot .ax { stroke: var(--line-strong); stroke-width: 1; }
 .sfd-calib-plot .copy { fill: var(--muted); }
 .sfd-calib-plot .copy.is-up { fill: var(--accent-2); }
 .sfd-calib-plot .obs { stroke: var(--ink); stroke-width: 1.5; }
-.sfd-calib-plot text { font: 500 9.5px var(--mono); fill: var(--muted); }
+.sfd-calib-plot text { font: 500 12px var(--mono); fill: var(--muted); }
 .sfd-calib-plot text.obs-t { fill: var(--ink-2); }
 .sfd-flags { display: grid; gap: 1px; padding-block-start: 8px; border-block-start: 1px solid var(--line); }
 .sfd-flags .sfd-label { margin-block-end: 2px; }
@@ -115,7 +115,7 @@
   gap: 7px;
   list-style: none;
   cursor: pointer;
-  font: 500 0.72rem/1.6 var(--mono);
+  font: 500 0.8125rem/1.6 var(--mono);
   color: var(--ink-2);
   overflow-wrap: anywhere;
 }
@@ -131,7 +131,7 @@
 }
 .sfd-flags details[open] > summary::before { transform: rotate(45deg); }
 .sfd-flags details > summary:hover { color: var(--ink); }
-.sfd-flags details p { margin: 0 0 4px 12px; font-size: 0.72rem; line-height: 1.4; color: var(--muted); }
+.sfd-flags details p { margin: 0 0 4px 12px; font-size: 0.8125rem; line-height: 1.4; color: var(--muted); }
 
 /* settings: colour select, key, selection, state */
 .sfd-settings { gap: 8px; }
@@ -166,7 +166,7 @@
 }
 .sfd-select select:hover { border-color: color-mix(in oklab, var(--accent) 55%, var(--line-strong)); }
 .sfd-select select:disabled { cursor: progress; opacity: 0.7; }
-.sfd-select--sm select { min-block-size: 28px; font-size: 0.78rem; }
+.sfd-select--sm select { min-block-size: 28px; font-size: 0.8125rem; }
 
 .sfd-key { display: grid; gap: 1px; }
 .sfd-key button, .sfd-key .sfd-key-row {
@@ -180,19 +180,19 @@
   border-block-end: 1px solid transparent;
   background: none;
   text-align: start;
-  font: 500 0.76rem/1.35 var(--sans);
+  font: 500 0.8125rem/1.35 var(--sans);
   color: var(--ink-2);
 }
 .sfd-key button { cursor: pointer; }
 .sfd-key button:hover { color: var(--ink); }
 .sfd-key button[aria-pressed="true"] { color: var(--ink); border-block-end-color: var(--ink); }
-.sfd-key .n { font: 500 0.72rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.sfd-key .n { font: 500 0.8125rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .sfd-key i { display: block; inline-size: 9px; block-size: 9px; border-radius: 50%; justify-self: center; }
 .sfd-key i.faint { inline-size: 5px; block-size: 5px; }
 .sfd-key .sfd-ramp { grid-column: 1 / -1; block-size: 8px; border-radius: 2px; }
-.sfd-key .sfd-ramp-ends { grid-column: 1 / -1; display: flex; justify-content: space-between; font: 500 0.7rem var(--mono); color: var(--muted); }
-.sfd-key .sfd-key-note { grid-column: 1 / -1; margin: 2px 0 0; font-size: 0.72rem; line-height: 1.4; color: var(--muted); }
-.sfd-sel { margin: 0; font-size: 0.74rem; line-height: 1.42; color: var(--ink-2); }
+.sfd-key .sfd-ramp-ends { grid-column: 1 / -1; display: flex; justify-content: space-between; font: 500 0.8125rem var(--mono); color: var(--muted); }
+.sfd-key .sfd-key-note { grid-column: 1 / -1; margin: 2px 0 0; font-size: 0.8125rem; line-height: 1.4; color: var(--muted); }
+.sfd-sel { margin: 0; font-size: 0.8125rem; line-height: 1.42; color: var(--ink-2); }
 .sfd-link {
   padding: 0;
   border: 0;
@@ -203,13 +203,13 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.sfd-state { margin: 0; font-size: 0.74rem; line-height: 1.42; color: var(--muted); }
+.sfd-state { margin: 0; font-size: 0.8125rem; line-height: 1.42; color: var(--muted); }
 .sfd-state.is-alert { color: var(--ink-2); padding-inline-start: 8px; border-inline-start: 2px solid var(--accent-2); }
 
 /* replay */
 .sfd-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
 .sfd-buttons .sfd-play { min-inline-size: 74px; }
-.sfd-buttons .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.sfd-buttons .btn:disabled { color: var(--muted); background: transparent; border-color: var(--line); cursor: not-allowed; }
 .sfd-buttons .sfd-prev, .sfd-buttons .sfd-next { min-inline-size: 34px; padding-inline: 0; font-size: 1.05rem; }
 .sfd-strip {
   display: grid;
@@ -251,7 +251,7 @@
   inline-size: 172px;
   min-block-size: 28px;
   padding: 0 8px;
-  font: 500 0.74rem var(--mono);
+  font: 500 0.8125rem var(--mono);
   color: var(--ink);
   background: var(--surface-2);
   border: 1px solid var(--line-strong);
@@ -259,7 +259,7 @@
 }
 .sfd-find input::placeholder { color: var(--muted); }
 .sfd-find .btn { min-block-size: 28px; }
-.sfd-facts { margin: 0; font: 0.74rem/1.5 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+.sfd-facts { margin: 0; font: 0.8125rem/1.5 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
 .sfd-facts b { font-weight: 600; color: var(--ink); }
 .sfd-facts a { color: var(--accent); }
 .sfd-history { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; min-block-size: 30px; }
@@ -276,10 +276,10 @@
   margin: 0;
 }
 .sfd-feats > div { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 0 8px; min-inline-size: 0; }
-.sfd-feats dt { margin: 0; font: 500 0.74rem/1.3 var(--sans); color: var(--muted); white-space: nowrap; }
+.sfd-feats dt { margin: 0; font: 500 0.8125rem/1.3 var(--sans); color: var(--muted); white-space: nowrap; }
 .sfd-feats dt i { font-family: var(--sans); }
-.sfd-feats dd { margin: 0; text-align: end; font: 500 0.76rem var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.sfd-feats dd small { font-size: 0.66rem; color: var(--muted); }
+.sfd-feats dd { margin: 0; text-align: end; font: 500 0.8125rem var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sfd-feats dd small { font-size: 0.8125rem; color: var(--muted); }
 .sfd-track { position: relative; grid-column: 1 / -1; block-size: 10px; margin-block-start: 2px; }
 .sfd-track::before { content: ""; position: absolute; inset: 4.5px 0 auto; block-size: 1px; background: var(--line-strong); }
 .sfd-track i { position: absolute; inset-block-start: 1px; inline-size: 2px; block-size: 8px; margin-inline-start: -1px; border-radius: 1px; }
@@ -337,7 +337,8 @@
 @media (min-width: 1000px) { .sfd-tables { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } }
 .sfd-table { margin: 0; display: grid; gap: 8px; align-content: start; min-inline-size: 0; }
 .sfd-table figcaption { font-size: 0.82rem; line-height: 1.45; color: var(--muted); }
-.sfd-table td small, .sfd-table th small { color: var(--muted); font-size: 0.86em; }
+.sfd-table td small, .sfd-table th small { color: var(--muted); font-size: 0.8125rem; }
+.sfd-table code { font-size: 0.8125rem; }
 .sfd-table th[scope="row"] { font-weight: 500; color: var(--ink-2); background: none; }
 .sfd-table td { font-variant-numeric: tabular-nums; }
 .sfd-list { margin: 0; padding-inline-start: 1.1em; display: grid; gap: 5px; font-size: 0.86rem; line-height: 1.45; color: var(--ink-2); }

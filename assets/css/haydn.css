@@ -1,7 +1,7 @@
 /* HAYDNsim page: the pipeline pictograms, how a field is built, and the 47 Tucanae noise budget
    (figures/haydnsim/build_haydn_figures.py). The one-time build comes from site.css ("figure build"). */
 @layer pages {
-  .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .guide-wide { margin-block-end: 28px; padding: 14px 16px 10px; }
   .guide-wide figcaption { padding: 8px 4px 2px; }
   .guide-wide .hy-svg { inline-size: 100%; block-size: auto; }
   .hy-svg .hy-head { font: 600 11px var(--mono); letter-spacing: 0.1em; fill: var(--muted); }

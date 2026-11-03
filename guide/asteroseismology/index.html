@@ -1,23 +1,22 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" id="top">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>What is asteroseismology?, Andreas W. Neitzel</title>
-<meta name="description" content="PhD researcher in astrophysics and machine learning at IA and the University of Porto: neural networks for Gaia spectra, asteroseismology, Galactic archaeology and HPC.">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>What is asteroseismology? | Andreas W. Neitzel</title>
+<meta name="description" content="Asteroseismology measures a star's size and mass, and through models its age, from the way the star vibrates.">
 <link rel="canonical" href="https://andreaswneitzel.github.io/guide/asteroseismology/">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#05070d">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6fa">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131210">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ef">
+<link rel="preload" href="/assets/fonts/geist-serif-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/geist-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/fonts.css">
 <link rel="stylesheet" href="/assets/css/site.css">
-<link rel="stylesheet" href="/assets/vendor/katex/katex.min.css">
-<link rel="alternate" type="application/atom+xml" title="Andreas W. Neitzel" href="/feed.xml"><meta property="og:type" content="article">
+<link rel="stylesheet" href="/assets/vendor/katex/katex.min.css"><meta property="og:type" content="article">
 <meta property="og:title" content="What is asteroseismology?">
-<meta property="og:description" content="PhD researcher in astrophysics and machine learning at IA and the University of Porto: neural networks for Gaia spectra, asteroseismology, Galactic archaeology and HPC.">
+<meta property="og:description" content="Asteroseismology measures a star's size and mass, and through models its age, from the way the star vibrates.">
 <meta property="og:url" content="https://andreaswneitzel.github.io/guide/asteroseismology/">
 <meta property="og:site_name" content="Andreas W. Neitzel">
 <meta property="og:image" content="https://andreaswneitzel.github.io/assets/img/og-talk.jpg">
@@ -59,35 +58,47 @@
   <symbol id="f-denmark" viewBox="0 0 20 14"><rect width="20" height="14" fill="#c8102e"/><rect x="5.6" width="2.2" height="14" fill="#fff"/><rect y="5.9" width="20" height="2.2" fill="#fff"/></symbol>
   <symbol id="f-chile" viewBox="0 0 20 14"><rect width="20" height="7" fill="#fff"/><rect y="7" width="20" height="7" fill="#d52b1e"/><rect width="7" height="7" fill="#0039a6"/><path d="M3.5 1.6l.6 1.8h1.9l-1.5 1.1.6 1.8-1.6-1.1-1.6 1.1.6-1.8-1.5-1.1h1.9z" fill="#fff"/></symbol>
   <symbol id="i-brand" viewBox="0 0 32 32"><g fill="currentColor"><circle cx="19.84" cy="14.29" r="0.42"/><circle cx="20.56" cy="15.75" r="0.62"/><circle cx="20.69" cy="17.85" r="0.77"/><circle cx="19.76" cy="20.16" r="0.92"/><circle cx="17.64" cy="22.03" r="1.04"/><circle cx="14.60" cy="22.82" r="1.15"/><circle cx="11.28" cy="22.13" r="1.22"/><circle cx="8.45" cy="19.99" r="1.25"/><circle cx="6.68" cy="16.84" r="1.23"/><circle cx="6.20" cy="13.31" r="1.16"/><circle cx="6.87" cy="9.99" r="1.06"/><circle cx="12.17" cy="3.78" r="0.58"/><circle cx="13.94" cy="2.92" r="0.42"/><circle cx="15.44" cy="2.41" r="0.42"/><circle cx="16.99" cy="2.08" r="0.42"/><circle cx="18.57" cy="1.92" r="0.42"/><circle cx="12.16" cy="17.71" r="0.42"/><circle cx="11.44" cy="16.25" r="0.62"/><circle cx="11.31" cy="14.15" r="0.77"/><circle cx="17.40" cy="9.18" r="1.15"/><circle cx="20.72" cy="9.87" r="1.22"/><circle cx="23.55" cy="12.01" r="1.25"/><circle cx="25.32" cy="15.16" r="1.23"/><circle cx="25.80" cy="18.69" r="1.16"/><circle cx="25.13" cy="22.01" r="1.06"/><circle cx="23.66" cy="24.76" r="0.92"/><circle cx="21.78" cy="26.82" r="0.76"/><circle cx="19.83" cy="28.22" r="0.58"/><circle cx="18.06" cy="29.08" r="0.42"/><circle cx="16.56" cy="29.59" r="0.42"/><circle cx="15.01" cy="29.92" r="0.42"/><circle cx="13.43" cy="30.08" r="0.42"/><ellipse cx="16" cy="16" rx="3.35" ry="2.2" transform="rotate(-24.0 16 16)"/><circle cx="11.60" cy="8.15" r="2.25" fill="none" stroke="currentColor" stroke-width="1.05"/><circle cx="11.60" cy="8.15" r="0.75"/></g></symbol>
+  <symbol id="i-mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0f1b2e"/><circle cx="16" cy="16" r="13" fill="none" stroke="#c9a45c" stroke-width=".7"/><path d="M27.00,16.00 L26.95,16.00 L26.82,16.01 L26.60,16.04 L26.29,16.10 L25.91,16.19 L25.46,16.32 L24.95,16.51 L24.39,16.74 L23.78,17.03 L23.14,17.38 L22.49,17.78 L21.82,18.23 L21.16,18.74 L20.51,19.30 L19.89,19.89 L19.30,20.51 L18.74,21.16 L18.23,21.82 L17.78,22.49 L17.38,23.14 L17.03,23.78 L16.74,24.39 L16.51,24.95 L16.32,25.46 L16.19,25.91 L16.10,26.29 L16.04,26.60 L16.01,26.82 L16.00,26.95 L16.00,27.00 L16.00,26.95 L15.99,26.82 L15.96,26.60 L15.90,26.29 L15.81,25.91 L15.68,25.46 L15.49,24.95 L15.26,24.39 L14.97,23.78 L14.63,23.14 L14.22,22.49 L13.77,21.82 L13.26,21.16 L12.70,20.51 L12.11,19.89 L11.49,19.30 L10.84,18.74 L10.18,18.23 L9.51,17.78 L8.86,17.38 L8.22,17.03 L7.61,16.74 L7.05,16.51 L6.54,16.32 L6.09,16.19 L5.71,16.10 L5.40,16.04 L5.18,16.01 L5.05,16.00 L5.00,16.00 L5.05,16.00 L5.18,15.99 L5.40,15.96 L5.71,15.90 L6.09,15.81 L6.54,15.68 L7.05,15.49 L7.61,15.26 L8.22,14.97 L8.86,14.63 L9.51,14.22 L10.18,13.77 L10.84,13.26 L11.49,12.70 L12.11,12.11 L12.70,11.49 L13.26,10.84 L13.77,10.18 L14.22,9.51 L14.62,8.86 L14.97,8.22 L15.26,7.61 L15.49,7.05 L15.68,6.54 L15.81,6.09 L15.90,5.71 L15.96,5.40 L15.99,5.18 L16.00,5.05 L16.00,5.00 L16.00,5.05 L16.01,5.18 L16.04,5.40 L16.10,5.71 L16.19,6.09 L16.32,6.54 L16.51,7.05 L16.74,7.61 L17.03,8.22 L17.38,8.86 L17.78,9.51 L18.23,10.18 L18.74,10.84 L19.30,11.49 L19.89,12.11 L20.51,12.70 L21.16,13.26 L21.82,13.77 L22.49,14.22 L23.14,14.63 L23.78,14.97 L24.39,15.26 L24.95,15.49 L25.46,15.68 L25.91,15.81 L26.29,15.90 L26.60,15.96 L26.82,15.99 L26.95,16.00Z" fill="#c9a45c"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></g></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><g class="i-stroke"><path d="M12 5v14M5 12h14"/></g></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><g class="i-stroke"><path d="M5 12h14"/></g></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4.5 9V4.5H9M15 4.5h4.5V9M19.5 15v4.5H15M9 19.5H4.5V15"/></g></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><g class="i-stroke"><path d="M6 6l12 12M18 6L6 18"/></g></symbol>
 </svg>
 
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
+    <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-mark"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
     <nav class="nav" aria-label="Main">
       <a href="/research/">Research</a>
       <a href="/publications/">Publications</a>
       <a href="/software/">Software</a>
+      <a href="/visualisations/">Visualisations</a>
       <a href="/talks/">Talks</a>
       <a href="/guide/" aria-current="page">Guide</a>
       <a href="/about/">About</a>
     </nav>
     <div class="header-actions">
       <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
-      <a class="btn btn--primary btn--sm" href="/assets/pdf/cv_neitzel_academic_summary.pdf"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+      <a class="btn btn--sm cv" href="/assets/pdf/cv_neitzel_academic_summary.pdf"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
     </div>
   </div>
 </header>
 
 <main id="main">
-<div class="wrap">
-  <header class="page-head">
-    <p class="crumbs"><a href="/guide/">Field guide</a></p>
+
+<section class="plate k-scale" aria-label="What is asteroseismology?">
+  <div class="plate-media"><img src="/assets/img/heroes/research_seismo.webp" alt="A Kepler power spectrum of a red giant drawn as filaments of light" fetchpriority="high" decoding="async">
+  </div>
+  <div class="plate-text"><p class="crumbs"><a href="/guide/">Field guide</a></p>
     <h1>What is asteroseismology?</h1><p class="lede">Asteroseismology measures a star's size and mass, and through models its age, from the way the star vibrates.</p>
-  </header>
-  <div class="article-layout">
-    <article class="stack-m">
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="article-layout section section--tight">
+    <article class="stack-m k-up">
       <div class="prose article"><p>Sound waves travel through the interiors of stars like the Sun and make the whole star vibrate at many frequencies at once. The vibrations change the star's brightness and the speed of its surface by tiny amounts, which space telescopes and precise spectrographs can measure. The frequencies depend on the star's density and internal structure, so they give its radius and mass and, with stellar models, its age.</p>
 
 <figure class="sd" id="seismo-demo" data-seismo="">
@@ -111,7 +122,7 @@
 <dl class="sd-read"><div><dt><span class="tex" data-tex="\nu_{\max}">ν<sub>max</sub></span></dt><dd data-numax="">3,090 µHz</dd></div><div><dt><span class="tex" data-tex="\Delta\nu">Δν</span></dt><dd data-dnu="">135.1 µHz</dd></div><div><dt>Strongest mode</dt><dd data-period="">every 5.4 min</dd></div></dl>
 </div>
 <figcaption class="sd-cap">
-<p>A star rings in many tones at once: each tone moves the surface in its own pattern and adds a peak to the spectrum, and a denser star rings faster. The star shows the radial displacement of one mode, red outwards and blue inwards, with the motion exaggerated. The arrow marks the sense of rotation: a mode with positive <i>m</i> travels with it, negative <i>m</i> against it, and <i>m</i> = 0 stands still. The star itself is drawn still, since a real star turns thousands of times more slowly than it rings. The spectrum is a model from the asteroseismic scaling relations, <span class="tex" data-tex="\nu_{\max} \propto M/R^{2}">ν<sub>max</sub> ∝ <i>M</i>/<i>R</i><sup>2</sup></span> and <span class="tex" data-tex="\Delta\nu \propto (M/R^{3})^{1/2}">Δν ∝ (<i>M</i>/<i>R</i><sup>3</sup>)<sup>1/2</sup></span> at the Sun's temperature, not data.</p>
+<p>Each tone moves the star's surface in its own pattern and adds a peak to the spectrum. Red is outward displacement, blue inward, exaggerated. The spectrum is a model from the scaling relations, not data.</p>
 <p class="credit">Scaling relations: <a href="https://arxiv.org/abs/astro-ph/9403015">Kjeldsen and Bedding 1995</a>, <a href="https://doi.org/10.1086/169725">Brown et al. 1991</a>, solar values from <a href="https://doi.org/10.1088/0004-637X/743/2/143">Huber et al. 2011</a>. Envelope, visibilities and peak positions: <a href="https://doi.org/10.1051/0004-6361/201015440">Mosser et al. 2011</a> and <a href="https://doi.org/10.1051/0004-6361/201117352">2012</a>, <a href="https://doi.org/10.1111/j.1745-3933.2009.00672.x">Broomhall et al. 2009</a>. Background: <a href="https://doi.org/10.1051/0004-6361/201424313">Kallinger et al. 2014</a>.</p>
 </figcaption>
 <noscript><p class="sd-noscript">The demonstration needs JavaScript; the caption describes what it shows.</p></noscript>
@@ -126,73 +137,66 @@
 <p>In 2021 and 2022, as an MSc research fellow, I implemented the small-frequency-separation routine in the stellar characterisation code PARAM. My MSc thesis estimated ages and masses of oscillating stars in the <em>Ariel</em> input catalogue. I co-authored the 2024 ESPRESSO detection of oscillations in the K dwarf ε Indi, where I ran the Bayes-factor test in Appendix D, and the 2026 ESPRESSO study of GJ 570 A and GJ 783 A. Since 2022 I have been a member of the red-giant working group of the <em>Kepler</em> Asteroseismic Science Consortium.</p>
 </div>
     </article>
-    <aside class="article-aside">
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">In my record</h2>
-        <ul class="plain stack-s"><li class="small"><span class="kicker">2021</span><br>MSc Research Fellow, BreakStarS project</li><li class="small"><span class="kicker">Dec 2022</span><br>Determination of age and mass for seismic stars in the <i>Ariel</i> input catalog</li><li class="small"><span class="kicker">Mar 2024</span><br>Expanding the frontiers of cool-dwarf asteroseismology with ESPRESSO: detection of solar-like oscillations in the K5 ...</li><li class="small"><span class="kicker">Oct 2026</span><br>EPRV asteroseismology of the K dwarfs GJ 570 A and GJ 783 A with ESPRESSO. Empirical mode-amplitude scaling in tensio...</li><li class="small"><span class="kicker">2022</span><br>Member, <i>Kepler</i> Asteroseismic Science Consortium (KASOC), Red-Giant Oscillations working group</li>
+    <aside class="article-aside k-up">
+      <section><h2 class="zone-title">In my record</h2>
+        <ul class="plain stack-s"><li class="small"><span class="kicker">Sep 2021</span><br>MSc Research Fellow, BreakStarS project</li><li class="small"><span class="kicker">Dec 2022</span><br>Determination of age and mass for seismic stars in the <i>Ariel</i> input catalog</li><li class="small"><span class="kicker">Mar 2024</span><br>Expanding the frontiers of cool-dwarf asteroseismology with ESPRESSO: detection of solar-like oscillations in the K5 dwarf epsilon Indi</li><li class="small"><span class="kicker">Oct 2026</span><br>EPRV asteroseismology of the K dwarfs GJ 570 A and GJ 783 A with ESPRESSO. Empirical mode-amplitude scaling in tension with 3D convection simulations</li><li class="small"><span class="kicker">2022</span><br>Member, <i>Kepler</i> Asteroseismic Science Consortium (KASOC), Red-Giant Oscillations working group</li>
         </ul>
-      </div></section>
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">Sources</h2>
+      </section>
+      <section><h2 class="zone-title">Sources</h2>
         <ol class="sources"><li><a href="https://www.eso.org/public/news/eso0125/">ESO press release eso0125, acoustic oscillations in Alpha Centauri A (2001)</a></li><li><a href="https://doi.org/10.3847/1538-4357/835/2/173">Silva Aguirre et al. 2017, The Astrophysical Journal 835, 173</a></li></ol>
-      </div></section>
-      <section class="card"><div class="card-body">
-        <h2 class="zone-title">More in the guide</h2>
-        <ul class="plain stack-s"><li><a href="/guide/galactic-archaeology/">Galactic archaeology</a></li><li><a href="/guide/gaia/">The Gaia satellite</a></li><li><a href="/guide/eso-vlt/">ESO and the VLT</a></li><li><a href="/guide/inaf/">INAF in Italy</a></li><li><a href="/guide/ia-porto/">IA and FCT</a></li><li><a href="/guide/haydn/">HAYDN mission concept</a></li><li><a href="/guide/supercomputers/">Research supercomputers</a></li><li><a href="/guide/tess-kepler/">TESS and Kepler</a></li><li><a href="/guide/machine-learning-for-stars/">Machine learning for stars</a></li></ul>
-      </div></section>
+      </section>
+      <section><h2 class="zone-title">More in the guide</h2>
+        <ul class="plain stack-s"><li><a href="/guide/galactic-archaeology/">Galactic archaeology</a></li><li><a href="/guide/gaia/">The <i>Gaia</i> satellite</a></li><li><a href="/guide/eso-vlt/">ESO and the VLT</a></li><li><a href="/guide/inaf/">INAF in Italy</a></li><li><a href="/guide/ia-porto/">IA and FCT</a></li><li><a href="/guide/haydn/">HAYDN mission concept</a></li><li><a href="/guide/plato/">PLATO</a></li><li><a href="/guide/ariel/"><i>Ariel</i></a></li><li><a href="/guide/supercomputers/">Research supercomputers</a></li><li><a href="/guide/tess-kepler/">TESS and <i>Kepler</i></a></li><li><a href="/guide/machine-learning-for-stars/">Machine learning for stars</a></li></ul>
+      </section>
     </aside>
   </div>
 </div>
 
 </main>
-<footer class="site-footer">
+<footer class="site-footer tone-deep k-up">
+  <span class="rule" aria-hidden="true"></span>
   <div class="wrap">
-    <div class="footer-id">
-      <a class="brand" href="/"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
-      <p>PhD researcher in astrophysics and machine learning at IA and the University of Porto. Gaia, asteroseismology, neural networks, HPC.</p>
+    <div class="ft">
+      <div class="me"><h2>Andreas W.&nbsp;Neitzel</h2><p>PhD candidate at IA and the University of Porto, working on machine learning for Galactic archaeology.</p><nav class="links" aria-label="Contact and profiles">
+  <a href="mailto:andreaswneitzel@astro.up.pt"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
+  <a href="https://orcid.org/0000-0001-6283-907X" rel="me"><svg class="i" aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</a>
+  <a href="https://scholar.google.com/citations?user=7Pt74F0AAAAJ" rel="me"><svg class="i" aria-hidden="true"><use href="#i-scholar"/></svg>Scholar</a>
+  <a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc"><svg class="i" aria-hidden="true"><use href="#i-ads"/></svg>ADS</a>
+  <a href="https://github.com/AndreasWNeitzel" rel="me"><svg class="i" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+  <a href="https://www.linkedin.com/in/andreaswneitzel" rel="me"><svg class="i" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+</nav>
+</div>
+      <nav aria-label="Work"><h3>Work</h3><ul>
+        <li><a href="/research/">Research</a></li>
+        <li><a href="/publications/">Publications</a></li>
+        <li><a href="/software/">Software</a></li>
+        <li><a href="/talks/">Talks</a></li>
+        <li><a href="/observing/paranal/">Paranal, May 2024</a></li>
+      </ul></nav>
+      <nav aria-label="Guide"><h3>Guide</h3><ul><li><a href="/guide/galactic-archaeology/">Galactic archaeology</a></li><li><a href="/guide/asteroseismology/">Seismology of stars</a></li><li><a href="/guide/gaia/">The <i>Gaia</i> satellite</a></li><li><a href="/guide/eso-vlt/">ESO and the VLT</a></li><li><a href="/guide/inaf/">INAF in Italy</a></li><li><a href="/guide/ia-porto/">IA and FCT</a></li>
+        <li><a href="/guide/">The whole guide</a></li>
+      </ul></nav>
+      <nav aria-label="About"><h3>About</h3><ul>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/about/#record">The record by date</a></li>
+        <li><a href="/cv/">CV</a></li>
+        <li><a href="/assets/pdf/cv_neitzel_academic_summary.pdf">CV (PDF)</a></li>
+        <li><a href="mailto:andreaswneitzel@astro.up.pt">andreaswneitzel@astro.up.pt</a></li>
+      </ul></nav>
     </div>
-    <nav aria-label="Contact">
-      <h2>Contact and profiles</h2>
-      <ul>
-        <li><a href="mailto:andreaswneitzel@gmail.com">Email</a></li>
-        <li><a href="https://orcid.org/0000-0001-6283-907X" rel="me">ORCID</a></li>
-        <li><a href="https://scholar.google.com/citations?user=7Pt74F0AAAAJ" rel="me">Google Scholar</a></li>
-        <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc">NASA ADS</a></li>
-        <li><a href="https://github.com/AndreasWNeitzel" rel="me">GitHub</a></li>
-        <li><a href="https://www.linkedin.com/in/andreaswneitzel" rel="me">LinkedIn</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Site">
-      <h2>On this site</h2>
-      <ul>
-        <li><a href="/research/">Research</a> · <a href="/observing/paranal/">observing</a></li>
-        <li><a href="/publications/">Publications and explainers</a></li>
-        <li><a href="/software/">Software</a> · <a href="/software/#playgrounds">playgrounds</a></li>
-        <li><a href="/talks/">Talks and posters</a></li>
-        <li><a href="/guide/">Field guide</a></li>
-        <li><a href="/about/">About</a> · <a href="/about/#map">map</a> · <a href="/about/#all">timeline</a></li>
-        <li><a href="/cv/">CV</a> · <a href="/assets/pdf/cv_neitzel_academic_summary.pdf">PDF</a></li>
-      </ul>
-    </nav>
-    <div class="footer-ack">
-      <div class="wordmarks">
-        <p><span class="wm-k">Affiliations</span><span><a href="https://www.iastro.pt/">IA</a> · <a href="https://www.up.pt/">U.Porto</a> · <a href="https://www.fc.up.pt/">FCUP</a> · <a href="https://www.oas.inaf.it/">INAF-OAS</a>, visiting 2025 to 2026</span></p>
-        <p><span class="wm-k">Consortia</span><span><i>Ariel</i> Science Consortium (ESA) · KASC · TASOC</span></p>
-        <p><span class="wm-k">Facilities</span><span>ESO Very Large Telescope with ESPRESSO · <i>Gaia</i> (ESA) · <i>TESS</i> and <i>Kepler</i> (NASA) · Deucalion · MareNostrum 5</span></p>
-      </div>
-      <div class="funding">
-        <a class="fct" href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia">
-          <img class="fct-light" src="/assets/img/logos/fct-positive-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-          <img class="fct-dark" src="/assets/img/logos/fct-negative-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-        </a>
-        <p>Funded by FCT, Fundação para a Ciência e a Tecnologia, I.P., through a research fellowship under the project ArqueoGal (2024.15303.PEX) and, from 2025 to 2026, the doctoral fellowship 2025.01843.BD. Computing on Deucalion and MareNostrum 5 through FCT projects 2026.08382.CPCA.A1 and 2026.08362.CPCA.A2.</p>
-      </div>
+    <div class="marks"><span>Funded by</span>
+      <a href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia"><img class="fct on-dark" src="/assets/img/logos/fct-negative-480-trim.png" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"><img class="fct on-light" src="/assets/img/logos/fct-positive-480-trim.png" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"></a>
+      <span>Computing from</span>
+      <a href="https://eurohpc-ju.europa.eu/" aria-label="EuroHPC Joint Undertaking"><img class="ehpc on-dark" src="/assets/img/logos/eurohpc-ju-negative.svg" alt="EuroHPC Joint Undertaking" loading="lazy"><img class="ehpc on-light" src="/assets/img/logos/eurohpc-ju.svg" alt="EuroHPC Joint Undertaking" loading="lazy"></a>
+      <small class="marks-credit">Logos: FCT, EuroHPC JU</small>
     </div>
-    <p class="colophon"><span>Porto, Portugal · Last updated <time datetime="2026-10-27">2026-10-27</time></span></p>
+    <p class="rights">The renders, animations, figures and text on this site are my own work, all rights reserved. <a href="/credits/">Credits and reuse</a></p>
+    <p class="colophon"><span>© 2026 Andreas W. Neitzel</span><span>Instituto de Astrofísica e Ciências do Espaço, Porto</span><span>Updated <time datetime="2026-11-03">November 2026</time></span><a class="top" href="#top">Back to top <svg class="i" aria-hidden="true" style="transform: rotate(-90deg)"><use href="#i-arrow"/></svg></a></p>
   </div>
 </footer>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/lightbox.js" defer></script>
 <script src="/assets/vendor/katex/katex.min.js" defer></script>
 <script src="/assets/js/math.js" defer></script>
 </body>

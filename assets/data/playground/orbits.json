@@ -52,11 +52,11 @@
    "lon_deg": -8.61
   },
   {
-   "id": "moscow",
-   "name": "Moscow",
-   "short_name": "Moscow",
-   "lat_deg": 55.75,
-   "lon_deg": 37.62
+   "id": "santiago",
+   "name": "Santiago",
+   "short_name": "Santiago",
+   "lat_deg": -33.45,
+   "lon_deg": -70.67
   },
   {
    "id": "north",

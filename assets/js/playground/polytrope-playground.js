@@ -4,6 +4,7 @@
 // file reads the controls and draws on canvases with the site's colour tokens, which are read
 // again whenever the theme changes. The data load when the playground nears the viewport.
 import { N_MAX, NODES, ANALYTIC, Grid, model, drawValue, quantile, solveLaneEmden } from "./polytrope-core.js";
+import { StarRender } from "./star-render.js";
 
 const MINUS = "−";
 const SUN = "☉";
@@ -162,7 +163,14 @@ async function boot(root) {
     mainKeys: root.querySelectorAll(".pt-main-key"),
     mainTip: $(".pt-main .pg-tip"),
     curveTip: $(".pt-curve .pg-tip"),
+    starM: document.querySelector(".pt-sr-m"),
+    starR: document.querySelector(".pt-sr-r"),
+    starL: document.querySelector(".pt-sr-l"),
+    starT: document.querySelector(".pt-sr-t"),
   };
+  // the rendered star above the panels: it shows the nominal Sun until the table arrives
+  const starCanvas = document.querySelector("#pt-star canvas");
+  const starView = starCanvas ? StarRender.create(starCanvas) : null;
   const cv = {
     main: surface($(".pt-main canvas")),
     curve: surface($(".pt-curve canvas")),
@@ -246,8 +254,20 @@ async function boot(root) {
     curveData = null;
     updateReadout();
     updateFacts();
+    updateStar();
     for (const key of ["main", "curve", "theta", "eps"]) dirty[key] = true;
     schedule();
+  }
+
+  // The rendered star takes the current M and R with the star's observed luminosity, so its
+  // colour is the effective temperature of the real star (or of the custom M and R at that L).
+  function updateStar() {
+    if (!starView) return;
+    const teff = starView.set({ mass: P.M, radius: P.R, lum: Lobs, X: P.X, Z: P.Z, n });
+    if (ui.starM) ui.starM.textContent = fixed(P.M, 2);
+    if (ui.starR) ui.starR.textContent = fixed(P.R, 2);
+    if (ui.starL) ui.starL.textContent = lumText(Lobs);
+    if (ui.starT) ui.starT.textContent = grouped(teff);
   }
 
   function setSlider(name, value) {
@@ -292,6 +312,7 @@ async function boot(root) {
     updateObs();
     updateReadout();
     updateFacts();
+    updateStar();
     updateKeys();
     markAll();
   }
@@ -360,6 +381,7 @@ async function boot(root) {
       cur = model(grid.solution(n), P);
       updateReadout();
       updateFacts();
+      updateStar();
       dirty.main = dirty.curve = dirty.theta = dirty.eps = dirty.hist = true;
       schedule();
       return;
@@ -521,7 +543,7 @@ async function boot(root) {
     const pr = profiles();
     const L = mainLayout();
     const overlay = overlayOn();
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.lineWidth = 1;
     for (const p of L) {
       const poly = pr[p.key];
@@ -536,10 +558,11 @@ async function boot(root) {
       ctx.fillStyle = C.muted;
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
+      let lastY = Infinity;
       for (const t of decades(lo, hi, 6)) {
         const y = Math.round(Y(t.v)) + 0.5;
         line(ctx, p.x0, y, p.x0 + p.w, y);
-        if (t.label) ctx.fillText(pow10(Math.round(Math.log10(t.v))), p.x0 - 6, y);
+        if (t.label && lastY - y >= 15) { ctx.fillText(pow10(Math.round(Math.log10(t.v))), p.x0 - 6, y); lastY = y; }
       }
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
@@ -565,7 +588,7 @@ async function boot(root) {
       ctx.fillText(p.title, p.x0, p.y0 - 9);
       const tw = ctx.measureText(p.title).width;
       ctx.fillStyle = C.muted;
-      ctx.font = `11px ${F.mono}`;
+      ctx.font = `12px ${F.mono}`;
       ctx.fillText(p.unit, p.x0 + tw + 8, p.y0 - 9);
       ctx.textAlign = "right";
       ctx.fillText("r / R", p.x0 + p.w, p.y0 - 9);
@@ -602,14 +625,6 @@ async function boot(root) {
           ctx.fillStyle = C.accent;
           dot(ctx, p.X(hoverU), Y(poly[i]), 3.2);
         }
-      }
-      if (overlay && p.key === "rho") {
-        ctx.fillStyle = C.muted;
-        ctx.font = `11px ${F.mono}`;
-        ctx.textAlign = "right";
-        ctx.textBaseline = "top";
-        ctx.fillText("convective", p.x0 + p.w - 4, p.y0 + 4);
-        ctx.fillText("in MESA", p.x0 + p.w - 4, p.y0 + 17);
       }
       ctx.textBaseline = "alphabetic";
     }
@@ -695,7 +710,7 @@ async function boot(root) {
     if (!cur || s.w < 80) return;
     const f = curveFrame();
     const data = ensureCurve();
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
@@ -764,7 +779,7 @@ async function boot(root) {
     ctx.restore();
     if (nStar !== null) {
       ctx.fillStyle = C.ink;
-      ctx.font = `500 11px ${F.mono}`;
+      ctx.font = `500 12px ${F.mono}`;
       ctx.textBaseline = "bottom";
       const label = `n = ${fixed(nStar, 3)} at L obs`;
       const lw = ctx.measureText(label).width;
@@ -824,7 +839,7 @@ async function boot(root) {
     const m = { l: 14, r: 14, t: 30, b: 24 };
     const W = s.w - m.l - m.r;
     const H = s.h - m.t - m.b;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.lineWidth = 1;
     const st = mc.stats;
     if (!st) {
@@ -891,7 +906,7 @@ async function boot(root) {
     const xm = Math.round(X(st.median)) + 0.5;
     line(ctx, xm, m.t - 6, xm, base);
     ctx.lineWidth = 1;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 12px ${F.mono}`;
     ctx.textBaseline = "bottom";
     const yl = m.t - 13;
     const medLabel = `median ${fixed(st.median, 3)}`;
@@ -930,7 +945,7 @@ async function boot(root) {
     const xmax = Math.max(4, Math.min(xi1 * 1.04, 25));
     const X = (xi) => m.l + (xi / xmax) * W;
     const Y = (th) => m.t + H - ((th + 0.05) / 1.07) * H;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
@@ -960,7 +975,7 @@ async function boot(root) {
     // analytic references
     ctx.strokeStyle = C.muted;
     ctx.lineWidth = 1;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.textBaseline = "bottom";
     for (const k of [0, 1, 5]) {
       const a = ANALYTIC[k];
@@ -1000,7 +1015,7 @@ async function boot(root) {
     ctx.fillStyle = C.accent;
     dot(ctx, xe, Y(0), 3.2);
     ctx.fillStyle = C.ink;
-    ctx.font = `500 11px ${F.mono}`;
+    ctx.font = `500 12px ${F.mono}`;
     ctx.textBaseline = "bottom";
     if (xi1 > xmax) {
       ctx.textAlign = "right";
@@ -1008,12 +1023,15 @@ async function boot(root) {
     } else {
       // keep clear of the n = 1 label when the two surfaces are close
       const nearOne = xe >= X(ANALYTIC[1].xi1) - 6 && xe - X(ANALYTIC[1].xi1) < 70;
-      ctx.textAlign = "left";
-      ctx.fillText(`n = ${fixed(n, 2)}`, xe + 7, nearOne ? Y(0.2) - 4 : Y(0) - 4);
+      const nText = `n = ${fixed(n, 2)}`;
+      const flip = xe + 7 + ctx.measureText(nText).width > s.w - 2;
+      ctx.textAlign = flip ? "right" : "left";
+      // flipped, it would land on the labels along the axis, so it rises above the n = 5 curve
+      ctx.fillText(nText, flip ? xe - 7 : xe + 7, flip ? Y(0.55) : nearOne ? Y(0.2) - 4 : Y(0) - 4);
     }
     ctx.restore();
     ctx.fillStyle = C.muted;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
     ctx.fillText("θ", 6, m.t + 4);
@@ -1035,17 +1053,19 @@ async function boot(root) {
     const X = (u) => m.l + u * W;
     const Y = (v) => m.t + H - ((Math.log10(v) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo))) * H;
     const Yf = (f) => m.t + H - f * H;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.lineWidth = 1;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
+    let lastY = Infinity;
     for (const t of decades(lo, hi, 6)) {
       const y = Math.round(Y(t.v)) + 0.5;
       ctx.strokeStyle = C.line;
       line(ctx, m.l, y, m.l + W, y);
-      if (t.label) {
+      if (t.label && lastY - y >= 15) {
         ctx.fillStyle = C.muted;
         ctx.fillText(pow10(Math.round(Math.log10(t.v))), m.l - 6, y);
+        lastY = y;
       }
     }
     ctx.textAlign = "left";
@@ -1057,7 +1077,8 @@ async function boot(root) {
       ctx.strokeStyle = C.line;
       line(ctx, x, m.t, x, m.t + H);
       ctx.fillStyle = C.muted;
-      ctx.fillText(String(u), x, m.t + H + 6);
+      // the last two ticks give way to the axis name
+      if (u < 0.75) ctx.fillText(String(u), x, m.t + H + 6);
     }
     ctx.strokeStyle = C.lineStrong;
     line(ctx, m.l, m.t + H + 0.5, m.l + W, m.t + H + 0.5);
@@ -1101,7 +1122,7 @@ async function boot(root) {
     ctx.restore();
     ctx.lineWidth = 1;
     ctx.fillStyle = C.muted;
-    ctx.font = `11px ${F.mono}`;
+    ctx.font = `12px ${F.mono}`;
     ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
     ctx.fillText(`ε (erg g${sup(-1)} s${sup(-1)})`, m.l - 40, m.t - 7);

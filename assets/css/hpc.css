@@ -1,7 +1,7 @@
 /* Field guide, supercomputers: the two machines to scale and one JANUS run
    (figures/hpc/build_hpc_figure.py). The one-time build comes from site.css ("figure build"). */
 @layer pages {
-  .guide-wide { margin-block: 4px 28px; padding: 14px 16px 10px; }
+  .guide-wide { margin-block-end: 28px; padding: 14px 16px 10px; }
   .guide-wide .hpc-svg { inline-size: 100%; block-size: auto; }
   .guide-wide figcaption { padding: 8px 4px 2px; }
   .hpc-svg .b-draw { vector-effect: none; }

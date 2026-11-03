@@ -1,0 +1,19 @@
+/* /credits/: three short terms across the page, then one table per group of sources. */
+.cr-terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); padding-block: clamp(20px, 3vw, 36px); border-block: 1px solid var(--line); }
+.cr-terms h2 { font-size: 1.3rem; margin-block-end: 8px; }
+.cr-terms p { color: var(--ink-2); font-size: 1rem; line-height: 1.55; overflow-wrap: anywhere; }
+.cr-group { margin-block-start: clamp(20px, 2.6vw, 32px); }
+.cr-group h3 { font: 500 0.8125rem/1.4 var(--mono); color: var(--ink-2); margin-block-end: 6px; }
+.cr-table { inline-size: 100%; table-layout: fixed; font-size: 0.95rem; line-height: 1.45; }
+.cr-table th, .cr-table td { padding: 7px 16px 7px 0; text-align: start; vertical-align: baseline; border-block-start: 1px solid var(--line); font-weight: 400; overflow-wrap: anywhere; }
+.cr-table thead th { font: 400 0.8125rem/1.4 var(--mono); color: var(--muted); border-block-start: 0; }
+.cr-table tbody th { inline-size: 42%; color: var(--ink); }
+.cr-table thead th:nth-child(1) { inline-size: 42%; } .cr-table thead th:nth-child(3) { inline-size: 20%; }
+.cr-table td { color: var(--ink-2); }
+@media (max-width: 760px) {
+  .cr-terms { grid-template-columns: minmax(0, 1fr); }
+  .cr-table thead { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
+  .cr-table, .cr-table tbody, .cr-table tr, .cr-table th, .cr-table td { display: block; inline-size: auto; }
+  .cr-table tr { padding-block: 8px; border-block-start: 1px solid var(--line); }
+  .cr-table th, .cr-table td { padding: 0; border: 0; }
+}

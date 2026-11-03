@@ -1,21 +1,20 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" id="top">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Gaussian-process playground, Andreas W. Neitzel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Gaussian-process playground | Andreas W. Neitzel</title>
 <meta name="description" content="Draw random functions from four kernels, pin them down with observations, and fit a quasi-periodic Gaussian process to 223 real HARPS radial velocities of HD 41248 with a Metropolis sampler, in your browser.">
 <link rel="canonical" href="https://andreaswneitzel.github.io/playground/gaussian-processes/">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#05070d">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6fa">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131210">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ef">
+<link rel="preload" href="/assets/fonts/geist-serif-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/geist-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/fonts.css">
 <link rel="stylesheet" href="/assets/css/site.css">
-<link rel="stylesheet" href="/assets/vendor/katex/katex.min.css">
-<link rel="alternate" type="application/atom+xml" title="Andreas W. Neitzel" href="/feed.xml"><meta property="og:type" content="article">
+<link rel="stylesheet" href="/assets/vendor/katex/katex.min.css"><meta property="og:type" content="article">
 <meta property="og:title" content="Gaussian-process playground">
 <meta property="og:description" content="Draw random functions from four kernels, pin them down with observations, and fit a quasi-periodic Gaussian process to 223 real HARPS radial velocities of HD 41248 with a Metropolis sampler, in your browser.">
 <meta property="og:url" content="https://andreaswneitzel.github.io/playground/gaussian-processes/">
@@ -59,141 +58,143 @@
   <symbol id="f-denmark" viewBox="0 0 20 14"><rect width="20" height="14" fill="#c8102e"/><rect x="5.6" width="2.2" height="14" fill="#fff"/><rect y="5.9" width="20" height="2.2" fill="#fff"/></symbol>
   <symbol id="f-chile" viewBox="0 0 20 14"><rect width="20" height="7" fill="#fff"/><rect y="7" width="20" height="7" fill="#d52b1e"/><rect width="7" height="7" fill="#0039a6"/><path d="M3.5 1.6l.6 1.8h1.9l-1.5 1.1.6 1.8-1.6-1.1-1.6 1.1.6-1.8-1.5-1.1h1.9z" fill="#fff"/></symbol>
   <symbol id="i-brand" viewBox="0 0 32 32"><g fill="currentColor"><circle cx="19.84" cy="14.29" r="0.42"/><circle cx="20.56" cy="15.75" r="0.62"/><circle cx="20.69" cy="17.85" r="0.77"/><circle cx="19.76" cy="20.16" r="0.92"/><circle cx="17.64" cy="22.03" r="1.04"/><circle cx="14.60" cy="22.82" r="1.15"/><circle cx="11.28" cy="22.13" r="1.22"/><circle cx="8.45" cy="19.99" r="1.25"/><circle cx="6.68" cy="16.84" r="1.23"/><circle cx="6.20" cy="13.31" r="1.16"/><circle cx="6.87" cy="9.99" r="1.06"/><circle cx="12.17" cy="3.78" r="0.58"/><circle cx="13.94" cy="2.92" r="0.42"/><circle cx="15.44" cy="2.41" r="0.42"/><circle cx="16.99" cy="2.08" r="0.42"/><circle cx="18.57" cy="1.92" r="0.42"/><circle cx="12.16" cy="17.71" r="0.42"/><circle cx="11.44" cy="16.25" r="0.62"/><circle cx="11.31" cy="14.15" r="0.77"/><circle cx="17.40" cy="9.18" r="1.15"/><circle cx="20.72" cy="9.87" r="1.22"/><circle cx="23.55" cy="12.01" r="1.25"/><circle cx="25.32" cy="15.16" r="1.23"/><circle cx="25.80" cy="18.69" r="1.16"/><circle cx="25.13" cy="22.01" r="1.06"/><circle cx="23.66" cy="24.76" r="0.92"/><circle cx="21.78" cy="26.82" r="0.76"/><circle cx="19.83" cy="28.22" r="0.58"/><circle cx="18.06" cy="29.08" r="0.42"/><circle cx="16.56" cy="29.59" r="0.42"/><circle cx="15.01" cy="29.92" r="0.42"/><circle cx="13.43" cy="30.08" r="0.42"/><ellipse cx="16" cy="16" rx="3.35" ry="2.2" transform="rotate(-24.0 16 16)"/><circle cx="11.60" cy="8.15" r="2.25" fill="none" stroke="currentColor" stroke-width="1.05"/><circle cx="11.60" cy="8.15" r="0.75"/></g></symbol>
+  <symbol id="i-mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0f1b2e"/><circle cx="16" cy="16" r="13" fill="none" stroke="#c9a45c" stroke-width=".7"/><path d="M27.00,16.00 L26.95,16.00 L26.82,16.01 L26.60,16.04 L26.29,16.10 L25.91,16.19 L25.46,16.32 L24.95,16.51 L24.39,16.74 L23.78,17.03 L23.14,17.38 L22.49,17.78 L21.82,18.23 L21.16,18.74 L20.51,19.30 L19.89,19.89 L19.30,20.51 L18.74,21.16 L18.23,21.82 L17.78,22.49 L17.38,23.14 L17.03,23.78 L16.74,24.39 L16.51,24.95 L16.32,25.46 L16.19,25.91 L16.10,26.29 L16.04,26.60 L16.01,26.82 L16.00,26.95 L16.00,27.00 L16.00,26.95 L15.99,26.82 L15.96,26.60 L15.90,26.29 L15.81,25.91 L15.68,25.46 L15.49,24.95 L15.26,24.39 L14.97,23.78 L14.63,23.14 L14.22,22.49 L13.77,21.82 L13.26,21.16 L12.70,20.51 L12.11,19.89 L11.49,19.30 L10.84,18.74 L10.18,18.23 L9.51,17.78 L8.86,17.38 L8.22,17.03 L7.61,16.74 L7.05,16.51 L6.54,16.32 L6.09,16.19 L5.71,16.10 L5.40,16.04 L5.18,16.01 L5.05,16.00 L5.00,16.00 L5.05,16.00 L5.18,15.99 L5.40,15.96 L5.71,15.90 L6.09,15.81 L6.54,15.68 L7.05,15.49 L7.61,15.26 L8.22,14.97 L8.86,14.63 L9.51,14.22 L10.18,13.77 L10.84,13.26 L11.49,12.70 L12.11,12.11 L12.70,11.49 L13.26,10.84 L13.77,10.18 L14.22,9.51 L14.62,8.86 L14.97,8.22 L15.26,7.61 L15.49,7.05 L15.68,6.54 L15.81,6.09 L15.90,5.71 L15.96,5.40 L15.99,5.18 L16.00,5.05 L16.00,5.00 L16.00,5.05 L16.01,5.18 L16.04,5.40 L16.10,5.71 L16.19,6.09 L16.32,6.54 L16.51,7.05 L16.74,7.61 L17.03,8.22 L17.38,8.86 L17.78,9.51 L18.23,10.18 L18.74,10.84 L19.30,11.49 L19.89,12.11 L20.51,12.70 L21.16,13.26 L21.82,13.77 L22.49,14.22 L23.14,14.63 L23.78,14.97 L24.39,15.26 L24.95,15.49 L25.46,15.68 L25.91,15.81 L26.29,15.90 L26.60,15.96 L26.82,15.99 L26.95,16.00Z" fill="#c9a45c"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></g></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><g class="i-stroke"><path d="M12 5v14M5 12h14"/></g></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><g class="i-stroke"><path d="M5 12h14"/></g></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4.5 9V4.5H9M15 4.5h4.5V9M19.5 15v4.5H15M9 19.5H4.5V15"/></g></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><g class="i-stroke"><path d="M6 6l12 12M18 6L6 18"/></g></symbol>
 </svg>
 
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
+    <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-mark"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
     <nav class="nav" aria-label="Main">
       <a href="/research/">Research</a>
       <a href="/publications/">Publications</a>
       <a href="/software/">Software</a>
+      <a href="/visualisations/">Visualisations</a>
       <a href="/talks/">Talks</a>
       <a href="/guide/">Guide</a>
       <a href="/about/">About</a>
     </nav>
     <div class="header-actions">
       <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
-      <a class="btn btn--primary btn--sm" href="/assets/pdf/cv_neitzel_academic_summary.pdf"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+      <a class="btn btn--sm cv" href="/assets/pdf/cv_neitzel_academic_summary.pdf"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
     </div>
   </div>
 </header>
 
 <main id="main">
-<div class="wrap">
-  <header class="page-head"><p class="crumbs"><a href="/software/">Software</a></p>
-    <h1>Gaussian-process playground</h1>
-    <p class="lede">Draw random functions from a kernel, pin them down with observations, then fit a quasi-periodic Gaussian process to the real radial velocities of an active star.</p>
-  </header>
-  <link rel="stylesheet" href="/assets/css/playground.css" />
+<div class="wrap pg-wrap">
+<link rel="stylesheet" href="/assets/css/playground.css" />
 
 <link rel="stylesheet" href="/assets/css/gp-playground.css" />
 
 <div class="pg-page">
-<section class="pg gp" id="gp-playground" aria-label="Gaussian-process playground" data-rv="/assets/data/playground/hd41248_harps.json" data-worker="/assets/js/playground/gp-worker.js">
-  <div class="gp-modes">
-    <div class="gp-switch" role="tablist" aria-label="Mode">
-      <button type="button" class="btn btn--sm" role="tab" id="gp-tab-kernels" aria-selected="true" aria-controls="gp-kernels" data-mode="kernels">Kernels</button>
-      <button type="button" class="btn btn--sm" role="tab" id="gp-tab-star" aria-selected="false" aria-controls="gp-star" data-mode="star">A star: HD 41248</button>
-    </div>
-    <p class="gp-mode-text" data-for="kernels">Random functions from four covariance functions, pinned down by observations you add; the marginal likelihood says which length scale and noise the points prefer.</p>
-    <p class="gp-mode-text" data-for="star" hidden="">A quasi-periodic Gaussian process for the activity in 223 HARPS velocities of HD 41248, its four kernel parameters and a jitter sampled by a Metropolis chain.</p>
-  </div>
-
-  <div class="gp-dash" id="gp-kernels" role="tabpanel" aria-labelledby="gp-tab-kernels">
-    <div class="gp-ctrl">
-      <div class="pg-panel pg-run">
-        <div class="pg-buttons">
-          <button type="button" class="btn btn--primary btn--sm gp-k-draw" title="Draw five new random functions">New draws</button>
-          <button type="button" class="btn btn--sm gp-k-clear" title="Remove every observation">Clear points</button>
+<section class="pg pg-app gp" id="gp-playground" aria-label="Gaussian-process playground" data-rv="/assets/data/playground/hd41248_harps.json" data-worker="/assets/js/playground/gp-worker.js">
+  <header class="pg-bar"><p class="crumbs"><a href="/software/">Software</a></p><h1>Gaussian-process playground</h1><div class="gp-switch pg-buttons" role="tablist" aria-label="Mode"><button type="button" class="btn btn--sm" role="tab" id="gp-tab-star" aria-selected="true" aria-controls="gp-star" data-mode="star">HD 41248</button><button type="button" class="btn btn--sm" role="tab" id="gp-tab-kernels" aria-selected="false" aria-controls="gp-kernels" data-mode="kernels">Kernels</button></div><a class="pg-about-link" href="#about">What you are looking at</a></header>
+  <div class="gp-dash" id="gp-star" role="tabpanel" aria-labelledby="gp-tab-star">
+    <div class="pg-top">
+      <div class="pg-rail">
+        <div class="pg-group pg-run">
+          <div class="pg-buttons">
+            <button type="button" class="btn btn--primary gp-s-run" disabled="">Run</button>
+            <button type="button" class="btn gp-s-step" title="Make 100 proposals" disabled="">100 steps</button>
+            <button type="button" class="btn gp-s-reset" title="Start the chain again" disabled="">Reset</button>
+          </div>
+          <div class="pg-live" aria-live="polite" aria-atomic="true">
+            <dl class="pg-readout">
+              <div><dt>Steps</dt><dd><span class="gp-s-steps">0</span></dd></div>
+              <div><dt>Accepted</dt><dd><span class="gp-s-acc">n/a</span></dd></div>
+            </dl>
+            <p class="pg-state gp-s-state">Loading 223 velocities.</p>
+          </div>
         </div>
-        <div class="pg-live" aria-live="polite" aria-atomic="true">
-          <dl class="pg-readout">
-            <div><dt>Observations</dt><dd><span class="gp-k-count">0</span></dd></div>
-            <div><dt>log marginal likelihood</dt><dd><span class="gp-k-lml">n/a</span></dd></div>
-          </dl>
-          <p class="pg-state gp-k-state">Click in the figure to add an observation, and on a point to remove it.</p>
-        </div>
+        <form class="pg-group pg-settings gp-s-settings" aria-label="Sampler settings">
+          <label class="pg-field"><span class="pg-label">Proposal scale</span><span class="pg-select"><select name="scale"><option value="0.25">0.25</option><option value="0.5">0.5</option><option value="1" selected="">1</option><option value="2">2</option><option value="4">4</option></select></span></label>
+          <label class="pg-field"><span class="pg-label">Burn-in discarded</span><span class="pg-select"><select name="burn"><option value="0">none</option><option value="0.1">10%</option><option value="0.25" selected="">25%</option><option value="0.5">50%</option></select></span></label>
+          <label class="pg-field pg-field--wide"><span class="pg-label">Start the chain</span><span class="pg-select"><select name="start"><option value="fixed" selected="">at the fixed point</option><option value="prior">at a random draw from the prior</option></select></span></label>
+          <p class="pg-hint">Scale and burn-in apply at once; the start applies at the next Reset.</p>
+        </form>
+        <section class="pg-group gp-params gp-s-params" aria-label="Parameters, priors and posterior">
+          <table class="gp-table">
+            <thead><tr><th scope="col"><span class="sr-only">Parameter</span></th><th scope="col">Now</th><th scope="col">Posterior</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <p class="gp-s-note">Median and 16 to 84% interval after burn-in; priors below.</p>
+        </section>
       </div>
-      <form class="pg-panel pg-settings gp-k-settings" aria-label="Kernel settings">
-        <label class="pg-field pg-field--wide"><span class="pg-label">Kernel</span><span class="pg-select"><select name="kernel"><option value="se" selected="">Squared exponential</option><option value="per">Periodic</option><option value="qp">Quasi-periodic</option><option value="m32">Matérn 3/2</option></select></span></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="l"><span class="pg-label"><span>Length scale ℓ</span><output name="l-out">1.00</output></span><input type="range" name="l" min="-1" max="1" step="0.02" value="0" aria-label="Length scale, logarithmic" /></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="P" hidden=""><span class="pg-label"><span>Period P</span><output name="P-out">2.0</output></span><input type="range" name="P" min="0.5" max="5" step="0.1" value="2" aria-label="Period" /></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="lam" hidden=""><span class="pg-label"><span>Smoothing λ</span><output name="lam-out">1.00</output></span><input type="range" name="lam" min="-1" max="1" step="0.02" value="0" aria-label="Smoothing within a period, logarithmic" /></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="sf"><span class="pg-label"><span>Amplitude σ<sub>f</sub></span><output name="sf-out">1.00</output></span><input type="range" name="sf" min="-0.6" max="0.6" step="0.02" value="0" aria-label="Amplitude, logarithmic" /></label>
-        <label class="pg-field pg-field--wide gp-range" data-param="sn"><span class="pg-label"><span>Noise σ<sub>n</sub></span><output name="sn-out">0.10</output></span><input type="range" name="sn" min="-2" max="0.3" step="0.02" value="-1" aria-label="Observation noise, logarithmic" /></label>
-        <p class="pg-hint">Length scales, amplitude and noise move on logarithmic scales. The period and the smoothing appear for the periodic kernels.</p>
-      </form>
+      <figure class="pg-plate gp-main gp-s-main">
+        <figcaption class="pg-legend">
+          <span class="pg-title gp-s-title">HD 41248, HARPS velocities</span>
+          <span class="pg-key gp-key--row"><span><i class="k-data"></i>velocity</span><span><i class="k-mean"></i>marginal mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-curve"></i>12 posterior samples</span><span><i class="k-now"></i>current state</span><label class="pg-inline"><span class="pg-label">Window</span><span class="pg-select pg-select--sm"><select class="gp-s-window" aria-label="Part of the series to show"><option>Loading</option></select></span></label></span>
+        </figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Radial velocities of HD 41248 in a 150 day window with the marginalised Gaussian-process prediction, and an overview of the whole series"></canvas><div class="pg-tip" hidden=""></div></div>
+        <p class="pg-foot">Velocities about the mean with their catalogue uncertainties. Click in the strip to move the window.</p>
+      </figure>
     </div>
-    <figure class="pg-panel panel gp-main gp-k-main">
-      <figcaption class="pg-head">
-        <span class="pg-title gp-k-title">Five functions drawn from the prior</span>
-        <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
-      </figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Random functions drawn from the kernel on 0 to 10, with the mean and the 2 sigma band"></canvas><div class="pg-tip" hidden=""></div></div>
-    </figure>
-    <figure class="pg-panel gp-a gp-k-kernel">
-      <figcaption class="pg-head"><span class="pg-title">Covariance against separation</span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="The kernel as a function of the separation between two inputs, from 0 to 10"></canvas></div>
-    </figure>
-    <figure class="pg-panel gp-b gp-k-lml">
-      <figcaption class="pg-head"><span class="pg-title">log marginal likelihood over ℓ and σ<sub>n</sub></span><span class="pg-key">click to set</span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Map of the log marginal likelihood of the observations over the length scale and the noise, with the current values ringed"></canvas><div class="pg-tip" hidden=""></div></div>
-    </figure>
+    <div class="pg-row">
+      <figure class="pg-chart gp-s-trace">
+        <figcaption class="pg-head"><span class="pg-title gp-s-trace-title">Trace</span><span class="pg-key">burn-in shaded</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Trace plots of the two parameters chosen for the pair plot"></canvas></div>
+      </figure>
+      <figure class="pg-chart gp-s-pair">
+        <figcaption class="pg-head"><span class="pg-title gp-s-pair-title">Pair plot</span><span class="gp-axes"><label class="pg-inline"><span class="pg-label">x</span><span class="pg-select pg-select--sm"><select class="gp-s-px" aria-label="Parameter on the x axis"><option value="eta3">η3</option></select></span></label><label class="pg-inline"><span class="pg-label">y</span><span class="pg-select pg-select--sm"><select class="gp-s-py" aria-label="Parameter on the y axis"><option value="eta1">η1</option></select></span></label></span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Scatter of two parameters over the posterior states after burn-in, with marginal histograms"></canvas><div class="pg-tip" hidden=""></div></div>
+      </figure>
+    </div>
   </div>
 
-  <div class="gp-dash" id="gp-star" role="tabpanel" aria-labelledby="gp-tab-star" hidden="">
-    <div class="gp-ctrl">
-      <div class="pg-panel pg-run">
-        <div class="pg-buttons">
-          <button type="button" class="btn btn--primary btn--sm gp-s-run" disabled="">Run</button>
-          <button type="button" class="btn btn--sm gp-s-step" title="Make 100 proposals" disabled="">100 steps</button>
-          <button type="button" class="btn btn--sm gp-s-reset" title="Start the chain again" disabled="">Reset</button>
+  <div class="gp-dash" id="gp-kernels" role="tabpanel" aria-labelledby="gp-tab-kernels" hidden="">
+    <div class="pg-top">
+      <div class="pg-rail">
+        <div class="pg-group pg-run">
+          <div class="pg-buttons">
+            <button type="button" class="btn btn--primary gp-k-draw" title="Draw five new random functions">New draws</button>
+            <button type="button" class="btn gp-k-clear" title="Remove every observation">Clear points</button>
+          </div>
+          <div class="pg-live" aria-live="polite" aria-atomic="true">
+            <dl class="pg-readout">
+              <div><dt>Observations</dt><dd><span class="gp-k-count">0</span></dd></div>
+              <div><dt>log marginal likelihood</dt><dd><span class="gp-k-lml">n/a</span></dd></div>
+            </dl>
+            <p class="pg-state gp-k-state">Click in the figure to add an observation, and on a point to remove it.</p>
+          </div>
         </div>
-        <div class="pg-live" aria-live="polite" aria-atomic="true">
-          <dl class="pg-readout">
-            <div><dt>Steps</dt><dd><span class="gp-s-steps">0</span></dd></div>
-            <div><dt>Accepted</dt><dd><span class="gp-s-acc">n/a</span></dd></div>
-          </dl>
-          <p class="pg-state gp-s-state">Loading 223 velocities.</p>
-        </div>
+        <form class="pg-group pg-settings gp-k-settings" aria-label="Kernel settings">
+          <label class="pg-field pg-field--wide"><span class="pg-label">Kernel</span><span class="pg-select"><select name="kernel"><option value="se" selected="">Squared exponential</option><option value="per">Periodic</option><option value="qp">Quasi-periodic</option><option value="m32">Matérn 3/2</option></select></span></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="l"><span class="pg-label"><span>Length scale ℓ</span><output name="l-out">1.00</output></span><input type="range" name="l" min="-1" max="1" step="0.02" value="0" aria-label="Length scale, logarithmic" /></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="P" hidden=""><span class="pg-label"><span>Period P</span><output name="P-out">2.0</output></span><input type="range" name="P" min="0.5" max="5" step="0.1" value="2" aria-label="Period" /></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="lam" hidden=""><span class="pg-label"><span>Smoothing λ</span><output name="lam-out">1.00</output></span><input type="range" name="lam" min="-1" max="1" step="0.02" value="0" aria-label="Smoothing within a period, logarithmic" /></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sf"><span class="pg-label"><span>Amplitude σ<sub>f</sub></span><output name="sf-out">1.00</output></span><input type="range" name="sf" min="-0.6" max="0.6" step="0.02" value="0" aria-label="Amplitude, logarithmic" /></label>
+          <label class="pg-field pg-field--wide pg-range gp-range" data-param="sn"><span class="pg-label"><span>Noise σ<sub>n</sub></span><output name="sn-out">0.10</output></span><input type="range" name="sn" min="-2" max="0.3" step="0.02" value="-1" aria-label="Observation noise, logarithmic" /></label>
+          <p class="pg-hint">Length scales, amplitude and noise move on logarithmic scales. The period and the smoothing appear for the periodic kernels.</p>
+        </form>
       </div>
-      <form class="pg-panel pg-settings gp-s-settings" aria-label="Sampler settings">
-        <label class="pg-field"><span class="pg-label">Proposal scale</span><span class="pg-select"><select name="scale"><option value="0.25">0.25</option><option value="0.5">0.5</option><option value="1" selected="">1</option><option value="2">2</option><option value="4">4</option></select></span></label>
-        <label class="pg-field"><span class="pg-label">Burn-in discarded</span><span class="pg-select"><select name="burn"><option value="0">none</option><option value="0.1">10%</option><option value="0.25" selected="">25%</option><option value="0.5">50%</option></select></span></label>
-        <label class="pg-field pg-field--wide"><span class="pg-label">Start the chain</span><span class="pg-select"><select name="start"><option value="fixed" selected="">at the fixed point</option><option value="prior">at a random draw from the prior</option></select></span></label>
-        <p class="pg-hint">Scale and burn-in apply at once; the start applies at the next Reset.</p>
-      </form>
-      <section class="pg-panel gp-params gp-s-params" aria-label="Parameters, priors and posterior">
-        <table class="gp-table">
-          <thead><tr><th scope="col"><span class="sr-only">Parameter</span></th><th scope="col">Now</th><th scope="col">Posterior</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <p class="gp-s-note">Median and 16 to 84% interval after burn-in; priors below.</p>
-      </section>
+      <figure class="pg-plate gp-main gp-k-main">
+        <figcaption class="pg-legend">
+          <span class="pg-title gp-k-title">Five functions drawn from the prior</span>
+          <span class="pg-key"><span><i class="k-mean"></i>mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-draw"></i>draws</span><span><i class="k-obs"></i>observation</span></span>
+        </figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Random functions drawn from the kernel on 0 to 10, with the mean and the 2 sigma band"></canvas><div class="pg-tip" hidden=""></div></div>
+      </figure>
     </div>
-    <figure class="pg-panel panel gp-main gp-s-main">
-      <figcaption class="pg-head">
-        <span class="pg-title gp-s-title">HD 41248, HARPS velocities</span>
-        <label class="pg-inline"><span class="pg-label">Window</span><span class="pg-select pg-select--sm"><select class="gp-s-window" aria-label="Part of the series to show"><option>Loading</option></select></span></label>
-        <span class="pg-key gp-key--row"><span><i class="k-data"></i>velocity</span><span><i class="k-mean"></i>marginal mean</span><span><i class="k-band"></i>2<span class="sym">σ</span> band</span><span><i class="k-curve"></i>12 posterior samples</span></span>
-      </figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Radial velocities of HD 41248 in a 150 day window with the marginalised Gaussian-process prediction, and an overview of the whole series"></canvas><div class="pg-tip" hidden=""></div></div>
-      <figcaption class="pg-caption">Velocities about the mean against days since the first observation (31 October 2003), with their catalogue uncertainties. Click in the strip to move the 150 day window; the band is the activity signal alone, without the jitter.</figcaption>
-    </figure>
-    <figure class="pg-panel gp-a gp-s-trace">
-      <figcaption class="pg-head"><span class="pg-title gp-s-trace-title">Trace</span><span class="pg-key">burn-in shaded</span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Trace plots of the two parameters chosen for the pair plot"></canvas></div>
-    </figure>
-    <figure class="pg-panel gp-b gp-s-pair">
-      <figcaption class="pg-head"><span class="pg-title gp-s-pair-title">Pair plot</span><span class="gp-axes"><label class="pg-inline"><span class="pg-label">x</span><span class="pg-select pg-select--sm"><select class="gp-s-px" aria-label="Parameter on the x axis"><option value="eta3">η3</option></select></span></label><label class="pg-inline"><span class="pg-label">y</span><span class="pg-select pg-select--sm"><select class="gp-s-py" aria-label="Parameter on the y axis"><option value="eta1">η1</option></select></span></label></span></figcaption>
-      <div class="pg-stage"><canvas role="img" aria-label="Scatter of two parameters over the posterior states after burn-in, with marginal histograms"></canvas><div class="pg-tip" hidden=""></div></div>
-    </figure>
+    <div class="pg-row">
+      <figure class="pg-chart gp-k-kernel">
+        <figcaption class="pg-head"><span class="pg-title">Covariance against separation</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="The kernel as a function of the separation between two inputs, from 0 to 10"></canvas></div>
+      </figure>
+      <figure class="pg-chart gp-k-lml">
+        <figcaption class="pg-head"><span class="pg-title">log marginal likelihood over ℓ and σ<sub>n</sub></span><span class="pg-key">click to set</span></figcaption>
+        <div class="pg-stage"><canvas role="img" aria-label="Map of the log marginal likelihood of the observations over the length scale and the noise, with the current values ringed"></canvas><div class="pg-tip" hidden=""></div></div>
+      </figure>
+    </div>
   </div>
 
-  <section class="pg-panel gp-details" aria-label="The model">
-    <div class="gp-cols" data-for="kernels">
+  <section class="pg-details gp-details" aria-label="The model">
+    <div class="gp-cols" data-for="kernels" hidden="">
       <div class="gp-col">
         <span class="pg-title">The kernel</span>
         <span class="tex tex-display gp-k-formula" data-tex="k(x, x') = \sigma_f^2 \exp\left(-\frac{(x - x')^2}{2\ell^2}\right)">k(x, x') = σf² exp(−(x − x')² / 2ℓ²)</span>
@@ -206,7 +207,7 @@
         <p>Observations enter with the same noise σ<sub>n</sub>. The log marginal likelihood trades fit against complexity, so the map on the right is where the hyperparameters would be learnt from the points.</p>
       </div>
     </div>
-    <div class="gp-cols" data-for="star" hidden="">
+    <div class="gp-cols" data-for="star">
       <div class="gp-col">
         <span class="pg-title">The model</span>
         <span class="tex tex-display" data-tex="k(t_i, t_j) = \eta_1^2 \exp\left[-\frac{(t_i - t_j)^2}{2\eta_2^2} - \frac{2 \sin^2\left(\pi (t_i - t_j) / \eta_3\right)}{\eta_4^2}\right] + \left(\sigma_i^2 + s^2\right) \delta_{ij}">k(ti, tj) = η1² exp[−(ti − tj)² / 2η2² − 2 sin²(π (ti − tj) / η3) / η4²] + (σi² + s²) δij</span>
@@ -229,14 +230,16 @@
   <noscript><p class="pg-state">The playground needs JavaScript. The data it uses are described below.</p></noscript>
 </section>
 
-<details class="pg-more">
+<section class="pg-about" id="about">
+<details class="pg-more" open="">
   <summary>What you are looking at</summary>
   <div class="prose">
     <p><b>Kernels.</b> The main figure shows five random functions drawn from the chosen kernel on x from 0 to 10, with the mean and the band two standard deviations either side. With no observations that is the prior: the mean is zero and the band has the width of the amplitude. The squared exponential gives smooth functions, Matérn 3/2 rougher ones, the periodic kernel repeats exactly and the quasi-periodic kernel repeats while slowly forgetting, which is the behaviour of spots rotating across a stellar surface.</p>
     <p>Click in the figure to add an observation (up to 40) and the posterior replaces the prior: the mean bends through the points, the band narrows near them and widens again as the function is left to itself. New draws samples five fresh functions from whichever distribution is shown. The small panel plots the kernel against the separation of two inputs, the shape that every column of the covariance matrix shares.</p>
     <p>The map is the log marginal likelihood of the observations over the length scale and the noise, 28 by 28 cells, darker where the points are more probable; the colour runs from the tenth percentile of the map to its maximum, which a cross marks. Short length scales with little noise fit every point but pay for the complexity; long ones explain the points as noise. Click a cell to adopt its values and watch the figure change.</p>
-    <p><b>A star.</b> The second mode fits the quasi-periodic kernel to 223 HARPS velocities of HD 41248 (velocity about the mean against days since the first observation), the activity signal of a star without a confirmed planet. Run starts a Metropolis chain over the five parameters; the readouts give the steps taken and the share of proposals accepted, and the table gives each parameter and the log posterior now, with the median and the 16 to 84 percent interval after burn-in.</p>
+    <p><b>A star.</b> The second mode fits the quasi-periodic kernel to 223 HARPS velocities of HD 41248 (velocity about the mean against days since the first observation), the activity signal of a star without a confirmed planet. Run starts a Metropolis chain over the five parameters; the readouts give the steps taken and the share of proposals accepted, and the table gives each parameter and the log posterior now, with the median and the 16 to 84 per cent interval after burn-in.</p>
     <p>The trace follows the two parameters of the pair plot over the whole chain, with the burn-in shaded. The pair plot is one panel of a corner plot: every state after burn-in, with the marginal histograms along the top and the right and the current state ringed. A proposal scale of 1 accepts about a quarter of the proposals, close to the optimum for a random walk; smaller steps accept more but move less, larger steps stall.</p>
+    <p>While the chain runs, the plot refreshes one of the 32 posterior states per update, and the dashed line is the conditional mean at the chain's current state.</p>
     <p>The band in the main figure is marginalised over the posterior: 32 states are taken at even spacing from the chain after burn-in, the conditional mean and variance of the activity signal are computed for each, and the mixture's mean and spread are drawn, with the conditional means of the first 12. Before the first step the band is the prediction at the starting values. From the fixed point the chain settles within a few thousand steps near η<sub>3</sub> of 25.6 d, η<sub>1</sub> of 2.9 m/s and a jitter of 1.3 m/s (the pilot run below).</p>
   </div>
 </details>
@@ -244,17 +247,19 @@
 <div class="pg-notes">
 <section class="prose pg-credits" aria-labelledby="origin">
   <h2 id="origin">Where it came from</h2>
-  <p>The method on this page is the one I first worked with in AST4000, Data Analysis in Astronomy, in the MSc at the University of Porto (2020/21): prior draws, conditioning on observations, and a Metropolis fit of a quasi-periodic kernel to the velocities of HD 41248. It is written here from the sources named below. The amplitudes enter the covariance squared and the instrumental jitter as its own diagonal term; the chain stores every state, accepted or not, and the acceptance test works in log likelihood; the priors are stated beside the sampler; and the prediction band is marginalised over the posterior rather than drawn at one parameter set. The velocities are the published ones.</p>
+  <p>The method on this page is the one I first worked with in AST4000, Data Analysis in Astronomy, in the MSc at the University of Porto (2020/21): prior draws, conditioning on observations, and a Metropolis fit of a quasi-periodic kernel to the velocities of HD 41248. It is written here from the sources named below.</p>
+  <p>The amplitudes enter the covariance squared and the instrumental jitter as its own diagonal term; the chain stores every state, accepted or not, and the acceptance test works in log likelihood; the priors are stated beside the sampler; and the prediction band is marginalised over the posterior rather than drawn at one parameter set. The velocities are the published ones.</p>
 </section>
 
 <section class="prose pg-credits" aria-labelledby="credits">
   <h2 id="credits">Data and credits</h2>
   <p>The velocities are the 223 HARPS measurements of HD 41248 published with <a href="https://doi.org/10.1088/0004-637X/794/2/110">Jenkins and Tuomi (2014, ApJ 794, 110)</a>, read unchanged from VizieR catalogue <a href="https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/794/110">J/ApJ/794/110</a> (table 1) at the CDS, Strasbourg. They run from 31 October 2003 to 6 December 2013, 3,689 days, with a scatter of 3.76 m/s and a median uncertainty of 1.25 m/s; the page subtracts their mean of 3,528.06 m/s and keeps the catalogue uncertainties. Use of VizieR is acknowledged as the CDS asks (<a href="https://doi.org/10.1051/aas:2000169">Ochsenbein, Bauer and Marcout 2000</a>).</p>
-  <p>HD 41248 is a solar analogue with a contested planetary system. <a href="https://doi.org/10.1088/0004-637X/771/1/41">Jenkins et al. (2013)</a> reported signals of 18.357 and 25.648 days in 62 velocities as super-Earths near a 7:5 resonance; <a href="https://doi.org/10.1051/0004-6361/201423808">Santos et al. (2014)</a> added 162 velocities, tied the 25 day signal to rotation through the activity indicators and could not confirm the 18 day one; Jenkins and Tuomi (2014) kept the planets in all 223. With ESPRESSO, <a href="https://doi.org/10.1051/0004-6361/201936389">Faria et al. (2020, A&amp;A 635, A13)</a> found that a Gaussian process alone explains the data, with a rotation period matching <em>TESS</em> photometry; that rotation is what this page recovers.</p>
-  <p>The quasi-periodic kernel for activity follows <a href="https://doi.org/10.1093/mnras/stu1320">Haywood et al. (2014, MNRAS 443, 2517)</a>; the kernels, conditioning and marginal likelihood are chapters 2, 4 and 5 of <a href="https://gaussianprocess.org/gpml/">Rasmussen and Williams (2006)</a>; the proposal scaling is from <a href="https://doi.org/10.1214/aoap/1034625254">Roberts, Gelman and Gilks (1997)</a>. The pilot run (60,000 steps, the first 8,000 adapted and discarded, 25 percent accepted) gave η<sub>1</sub> 2.9 m/s, η<sub>2</sub> 38 d, η<sub>3</sub> 25.6 d, η<sub>4</sub> 0.67 and s 1.3 m/s as posterior medians.</p>
+  <p>HD 41248 is a solar analogue with a contested planetary system. <a href="https://doi.org/10.1088/0004-637X/771/1/41">Jenkins et al. (2013)</a> reported signals of 18.357 and 25.648 days in 62 velocities as super-Earths near a 7:5 resonance; <a href="https://doi.org/10.1051/0004-6361/201423808">Santos et al. (2014)</a> added 162 velocities, tied the 25 day signal to rotation through the activity indicators and could not confirm the 18 day one; Jenkins and Tuomi (2014) kept the planets in all 223. With ESPRESSO, <a href="https://doi.org/10.1051/0004-6361/201936389">Faria et al. (2020, A&amp;A 635, A13)</a> found that a Gaussian process alone explains the data, with a rotation period matching TESS photometry; that rotation is what this page recovers.</p>
+  <p>The quasi-periodic kernel for activity follows <a href="https://doi.org/10.1093/mnras/stu1320">Haywood et al. (2014, MNRAS 443, 2517)</a>; the kernels, conditioning and marginal likelihood are chapters 2, 4 and 5 of <a href="https://gaussianprocess.org/gpml/">Rasmussen and Williams (2006)</a>; the proposal scaling is from <a href="https://doi.org/10.1214/aoap/1034625254">Roberts, Gelman and Gilks (1997)</a>. The pilot run (60,000 steps, the first 8,000 adapted and discarded, 25 per cent accepted) gave η<sub>1</sub> 2.9 m/s, η<sub>2</sub> 38 d, η<sub>3</sub> 25.6 d, η<sub>4</sub> 0.67 and s 1.3 m/s as posterior medians.</p>
   <p>Download the <a href="/assets/data/playground/hd41248_harps.json">velocities</a> (12 kB), their <a href="/assets/data/playground/hd41248_harps.meta.json">provenance</a>, which records the query, its date and the catalogue ReadMe, and the <a href="/assets/data/playground/hd41248_gp_pilot.json">pilot run</a>. The table remains the authors' and the journal's; it is reproduced here for teaching, with its reference. Everything runs in your browser, and nothing you do here is sent anywhere.</p>
 </section>
 </div>
+</section>
 </div>
 <script src="/assets/js/tokens.js" defer=""></script>
 
@@ -264,54 +269,50 @@
 </div>
 
 </main>
-<footer class="site-footer">
+<footer class="site-footer tone-deep k-up">
+  <span class="rule" aria-hidden="true"></span>
   <div class="wrap">
-    <div class="footer-id">
-      <a class="brand" href="/"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
-      <p>PhD researcher in astrophysics and machine learning at IA and the University of Porto. Gaia, asteroseismology, neural networks, HPC.</p>
+    <div class="ft">
+      <div class="me"><h2>Andreas W.&nbsp;Neitzel</h2><p>PhD candidate at IA and the University of Porto, working on machine learning for Galactic archaeology.</p><nav class="links" aria-label="Contact and profiles">
+  <a href="mailto:andreaswneitzel@astro.up.pt"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
+  <a href="https://orcid.org/0000-0001-6283-907X" rel="me"><svg class="i" aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</a>
+  <a href="https://scholar.google.com/citations?user=7Pt74F0AAAAJ" rel="me"><svg class="i" aria-hidden="true"><use href="#i-scholar"/></svg>Scholar</a>
+  <a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc"><svg class="i" aria-hidden="true"><use href="#i-ads"/></svg>ADS</a>
+  <a href="https://github.com/AndreasWNeitzel" rel="me"><svg class="i" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+  <a href="https://www.linkedin.com/in/andreaswneitzel" rel="me"><svg class="i" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+</nav>
+</div>
+      <nav aria-label="Work"><h3>Work</h3><ul>
+        <li><a href="/research/">Research</a></li>
+        <li><a href="/publications/">Publications</a></li>
+        <li><a href="/software/">Software</a></li>
+        <li><a href="/talks/">Talks</a></li>
+        <li><a href="/observing/paranal/">Paranal, May 2024</a></li>
+      </ul></nav>
+      <nav aria-label="Guide"><h3>Guide</h3><ul><li><a href="/guide/galactic-archaeology/">Galactic archaeology</a></li><li><a href="/guide/asteroseismology/">Seismology of stars</a></li><li><a href="/guide/gaia/">The <i>Gaia</i> satellite</a></li><li><a href="/guide/eso-vlt/">ESO and the VLT</a></li><li><a href="/guide/inaf/">INAF in Italy</a></li><li><a href="/guide/ia-porto/">IA and FCT</a></li>
+        <li><a href="/guide/">The whole guide</a></li>
+      </ul></nav>
+      <nav aria-label="About"><h3>About</h3><ul>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/about/#record">The record by date</a></li>
+        <li><a href="/cv/">CV</a></li>
+        <li><a href="/assets/pdf/cv_neitzel_academic_summary.pdf">CV (PDF)</a></li>
+        <li><a href="mailto:andreaswneitzel@astro.up.pt">andreaswneitzel@astro.up.pt</a></li>
+      </ul></nav>
     </div>
-    <nav aria-label="Contact">
-      <h2>Contact and profiles</h2>
-      <ul>
-        <li><a href="mailto:andreaswneitzel@gmail.com">Email</a></li>
-        <li><a href="https://orcid.org/0000-0001-6283-907X" rel="me">ORCID</a></li>
-        <li><a href="https://scholar.google.com/citations?user=7Pt74F0AAAAJ" rel="me">Google Scholar</a></li>
-        <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc">NASA ADS</a></li>
-        <li><a href="https://github.com/AndreasWNeitzel" rel="me">GitHub</a></li>
-        <li><a href="https://www.linkedin.com/in/andreaswneitzel" rel="me">LinkedIn</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Site">
-      <h2>On this site</h2>
-      <ul>
-        <li><a href="/research/">Research</a> · <a href="/observing/paranal/">observing</a></li>
-        <li><a href="/publications/">Publications and explainers</a></li>
-        <li><a href="/software/">Software</a> · <a href="/software/#playgrounds">playgrounds</a></li>
-        <li><a href="/talks/">Talks and posters</a></li>
-        <li><a href="/guide/">Field guide</a></li>
-        <li><a href="/about/">About</a> · <a href="/about/#map">map</a> · <a href="/about/#all">timeline</a></li>
-        <li><a href="/cv/">CV</a> · <a href="/assets/pdf/cv_neitzel_academic_summary.pdf">PDF</a></li>
-      </ul>
-    </nav>
-    <div class="footer-ack">
-      <div class="wordmarks">
-        <p><span class="wm-k">Affiliations</span><span><a href="https://www.iastro.pt/">IA</a> · <a href="https://www.up.pt/">U.Porto</a> · <a href="https://www.fc.up.pt/">FCUP</a> · <a href="https://www.oas.inaf.it/">INAF-OAS</a>, visiting 2025 to 2026</span></p>
-        <p><span class="wm-k">Consortia</span><span><i>Ariel</i> Science Consortium (ESA) · KASC · TASOC</span></p>
-        <p><span class="wm-k">Facilities</span><span>ESO Very Large Telescope with ESPRESSO · <i>Gaia</i> (ESA) · <i>TESS</i> and <i>Kepler</i> (NASA) · Deucalion · MareNostrum 5</span></p>
-      </div>
-      <div class="funding">
-        <a class="fct" href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia">
-          <img class="fct-light" src="/assets/img/logos/fct-positive-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-          <img class="fct-dark" src="/assets/img/logos/fct-negative-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-        </a>
-        <p>Funded by FCT, Fundação para a Ciência e a Tecnologia, I.P., through a research fellowship under the project ArqueoGal (2024.15303.PEX) and, from 2025 to 2026, the doctoral fellowship 2025.01843.BD. Computing on Deucalion and MareNostrum 5 through FCT projects 2026.08382.CPCA.A1 and 2026.08362.CPCA.A2.</p>
-      </div>
+    <div class="marks"><span>Funded by</span>
+      <a href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia"><img class="fct on-dark" src="/assets/img/logos/fct-negative-480-trim.png" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"><img class="fct on-light" src="/assets/img/logos/fct-positive-480-trim.png" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"></a>
+      <span>Computing from</span>
+      <a href="https://eurohpc-ju.europa.eu/" aria-label="EuroHPC Joint Undertaking"><img class="ehpc on-dark" src="/assets/img/logos/eurohpc-ju-negative.svg" alt="EuroHPC Joint Undertaking" loading="lazy"><img class="ehpc on-light" src="/assets/img/logos/eurohpc-ju.svg" alt="EuroHPC Joint Undertaking" loading="lazy"></a>
+      <small class="marks-credit">Logos: FCT, EuroHPC JU</small>
     </div>
-    <p class="colophon"><span>Porto, Portugal · Last updated <time datetime="2026-10-27">2026-10-27</time></span></p>
+    <p class="rights">The renders, animations, figures and text on this site are my own work, all rights reserved. <a href="/credits/">Credits and reuse</a></p>
+    <p class="colophon"><span>© 2026 Andreas W. Neitzel</span><span>Instituto de Astrofísica e Ciências do Espaço, Porto</span><span>Updated <time datetime="2026-11-03">November 2026</time></span><a class="top" href="#top">Back to top <svg class="i" aria-hidden="true" style="transform: rotate(-90deg)"><use href="#i-arrow"/></svg></a></p>
   </div>
 </footer>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/lightbox.js" defer></script>
 <script src="/assets/vendor/katex/katex.min.js" defer></script>
 <script src="/assets/js/math.js" defer></script>
 </body>

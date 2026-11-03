@@ -1,22 +1,21 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" id="top">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Field guide, Andreas W. Neitzel</title>
-<meta name="description" content="Short explainers of the science, institutions and machines behind my work, from Galactic archaeology to the supercomputers I run on.">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Field guide | Andreas W. Neitzel</title>
+<meta name="description" content="Short explainers of the science, institutions and machines behind the research of Andreas W. Neitzel, from Galactic archaeology to supercomputers.">
 <link rel="canonical" href="https://andreaswneitzel.github.io/guide/">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#05070d">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6fa">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131210">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ef">
+<link rel="preload" href="/assets/fonts/geist-serif-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/geist-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site.css">
-<link rel="alternate" type="application/atom+xml" title="Andreas W. Neitzel" href="/feed.xml"><meta property="og:type" content="article">
+<link rel="stylesheet" href="/assets/css/fonts.css">
+<link rel="stylesheet" href="/assets/css/site.css"><meta property="og:type" content="article">
 <meta property="og:title" content="Field guide">
-<meta property="og:description" content="Short explainers of the science, institutions and machines behind my work, from Galactic archaeology to the supercomputers I run on.">
+<meta property="og:description" content="Short explainers of the science, institutions and machines behind the research of Andreas W. Neitzel, from Galactic archaeology to supercomputers.">
 <meta property="og:url" content="https://andreaswneitzel.github.io/guide/">
 <meta property="og:site_name" content="Andreas W. Neitzel">
 <meta property="og:image" content="https://andreaswneitzel.github.io/assets/img/og-talk.jpg">
@@ -58,166 +57,218 @@
   <symbol id="f-denmark" viewBox="0 0 20 14"><rect width="20" height="14" fill="#c8102e"/><rect x="5.6" width="2.2" height="14" fill="#fff"/><rect y="5.9" width="20" height="2.2" fill="#fff"/></symbol>
   <symbol id="f-chile" viewBox="0 0 20 14"><rect width="20" height="7" fill="#fff"/><rect y="7" width="20" height="7" fill="#d52b1e"/><rect width="7" height="7" fill="#0039a6"/><path d="M3.5 1.6l.6 1.8h1.9l-1.5 1.1.6 1.8-1.6-1.1-1.6 1.1.6-1.8-1.5-1.1h1.9z" fill="#fff"/></symbol>
   <symbol id="i-brand" viewBox="0 0 32 32"><g fill="currentColor"><circle cx="19.84" cy="14.29" r="0.42"/><circle cx="20.56" cy="15.75" r="0.62"/><circle cx="20.69" cy="17.85" r="0.77"/><circle cx="19.76" cy="20.16" r="0.92"/><circle cx="17.64" cy="22.03" r="1.04"/><circle cx="14.60" cy="22.82" r="1.15"/><circle cx="11.28" cy="22.13" r="1.22"/><circle cx="8.45" cy="19.99" r="1.25"/><circle cx="6.68" cy="16.84" r="1.23"/><circle cx="6.20" cy="13.31" r="1.16"/><circle cx="6.87" cy="9.99" r="1.06"/><circle cx="12.17" cy="3.78" r="0.58"/><circle cx="13.94" cy="2.92" r="0.42"/><circle cx="15.44" cy="2.41" r="0.42"/><circle cx="16.99" cy="2.08" r="0.42"/><circle cx="18.57" cy="1.92" r="0.42"/><circle cx="12.16" cy="17.71" r="0.42"/><circle cx="11.44" cy="16.25" r="0.62"/><circle cx="11.31" cy="14.15" r="0.77"/><circle cx="17.40" cy="9.18" r="1.15"/><circle cx="20.72" cy="9.87" r="1.22"/><circle cx="23.55" cy="12.01" r="1.25"/><circle cx="25.32" cy="15.16" r="1.23"/><circle cx="25.80" cy="18.69" r="1.16"/><circle cx="25.13" cy="22.01" r="1.06"/><circle cx="23.66" cy="24.76" r="0.92"/><circle cx="21.78" cy="26.82" r="0.76"/><circle cx="19.83" cy="28.22" r="0.58"/><circle cx="18.06" cy="29.08" r="0.42"/><circle cx="16.56" cy="29.59" r="0.42"/><circle cx="15.01" cy="29.92" r="0.42"/><circle cx="13.43" cy="30.08" r="0.42"/><ellipse cx="16" cy="16" rx="3.35" ry="2.2" transform="rotate(-24.0 16 16)"/><circle cx="11.60" cy="8.15" r="2.25" fill="none" stroke="currentColor" stroke-width="1.05"/><circle cx="11.60" cy="8.15" r="0.75"/></g></symbol>
+  <symbol id="i-mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0f1b2e"/><circle cx="16" cy="16" r="13" fill="none" stroke="#c9a45c" stroke-width=".7"/><path d="M27.00,16.00 L26.95,16.00 L26.82,16.01 L26.60,16.04 L26.29,16.10 L25.91,16.19 L25.46,16.32 L24.95,16.51 L24.39,16.74 L23.78,17.03 L23.14,17.38 L22.49,17.78 L21.82,18.23 L21.16,18.74 L20.51,19.30 L19.89,19.89 L19.30,20.51 L18.74,21.16 L18.23,21.82 L17.78,22.49 L17.38,23.14 L17.03,23.78 L16.74,24.39 L16.51,24.95 L16.32,25.46 L16.19,25.91 L16.10,26.29 L16.04,26.60 L16.01,26.82 L16.00,26.95 L16.00,27.00 L16.00,26.95 L15.99,26.82 L15.96,26.60 L15.90,26.29 L15.81,25.91 L15.68,25.46 L15.49,24.95 L15.26,24.39 L14.97,23.78 L14.63,23.14 L14.22,22.49 L13.77,21.82 L13.26,21.16 L12.70,20.51 L12.11,19.89 L11.49,19.30 L10.84,18.74 L10.18,18.23 L9.51,17.78 L8.86,17.38 L8.22,17.03 L7.61,16.74 L7.05,16.51 L6.54,16.32 L6.09,16.19 L5.71,16.10 L5.40,16.04 L5.18,16.01 L5.05,16.00 L5.00,16.00 L5.05,16.00 L5.18,15.99 L5.40,15.96 L5.71,15.90 L6.09,15.81 L6.54,15.68 L7.05,15.49 L7.61,15.26 L8.22,14.97 L8.86,14.63 L9.51,14.22 L10.18,13.77 L10.84,13.26 L11.49,12.70 L12.11,12.11 L12.70,11.49 L13.26,10.84 L13.77,10.18 L14.22,9.51 L14.62,8.86 L14.97,8.22 L15.26,7.61 L15.49,7.05 L15.68,6.54 L15.81,6.09 L15.90,5.71 L15.96,5.40 L15.99,5.18 L16.00,5.05 L16.00,5.00 L16.00,5.05 L16.01,5.18 L16.04,5.40 L16.10,5.71 L16.19,6.09 L16.32,6.54 L16.51,7.05 L16.74,7.61 L17.03,8.22 L17.38,8.86 L17.78,9.51 L18.23,10.18 L18.74,10.84 L19.30,11.49 L19.89,12.11 L20.51,12.70 L21.16,13.26 L21.82,13.77 L22.49,14.22 L23.14,14.63 L23.78,14.97 L24.39,15.26 L24.95,15.49 L25.46,15.68 L25.91,15.81 L26.29,15.90 L26.60,15.96 L26.82,15.99 L26.95,16.00Z" fill="#c9a45c"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></g></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><g class="i-stroke"><path d="M12 5v14M5 12h14"/></g></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><g class="i-stroke"><path d="M5 12h14"/></g></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><g class="i-stroke"><path d="M4.5 9V4.5H9M15 4.5h4.5V9M19.5 15v4.5H15M9 19.5H4.5V15"/></g></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><g class="i-stroke"><path d="M6 6l12 12M18 6L6 18"/></g></symbol>
 </svg>
 
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
+    <a class="brand" href="/" aria-label="Andreas W. Neitzel, home"><svg class="brand-mark" aria-hidden="true"><use href="#i-mark"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
     <nav class="nav" aria-label="Main">
       <a href="/research/">Research</a>
       <a href="/publications/">Publications</a>
       <a href="/software/">Software</a>
+      <a href="/visualisations/">Visualisations</a>
       <a href="/talks/">Talks</a>
       <a href="/guide/" aria-current="page">Guide</a>
       <a href="/about/">About</a>
     </nav>
     <div class="header-actions">
       <button class="icon-btn theme" type="button" aria-label="Switch colour theme" hidden><svg class="i i-sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true"><use href="#i-moon"/></svg></button>
-      <a class="btn btn--primary btn--sm" href="/assets/pdf/cv_neitzel_academic_summary.pdf"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
+      <a class="btn btn--sm cv" href="/assets/pdf/cv_neitzel_academic_summary.pdf"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>CV</a>
     </div>
   </div>
 </header>
 
 <main id="main">
-<div class="wrap">
-  <header class="page-head">
-    <h1>Field guide</h1>
-    <p class="lede">The science, institutions and machines behind my work, one minute each, with sources and the parts I was involved in.</p>
-  </header>
-  <div class="guide-grid">
-  <a class="card" href="/guide/galactic-archaeology/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/galactic-archaeology.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What is Galactic archaeology?</h3>
-      <p>Galactic archaeology uses the ages, chemistry and orbits of stars to work out how the Milky Way was assembled.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/asteroseismology/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/asteroseismology.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What is asteroseismology?</h3>
-      <p>Asteroseismology measures a star's size and mass, and through models its age, from the way the star vibrates.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/gaia/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/gaia.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What is <i>Gaia</i>?</h3>
-      <p><i>Gaia</i> is an ESA space telescope that mapped where nearly two billion stars are and how they move.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/eso-vlt/" data-spotlight="">
-    <div class="media"><img src="/assets/img/photos/vlt-daylight.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What are ESO and the Very Large Telescope?</h3>
-      <p>ESO is an intergovernmental observatory that builds and runs large telescopes in Chile, among them the Very Large Telescope at Paranal.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/inaf/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/inaf.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What is INAF?</h3>
-      <p>INAF is Italy's national institute for astrophysics, and its research centres include observatories in Bologna and Padova.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/ia-porto/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/ia-porto.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What are IA and FCT?</h3>
-      <p>IA is a Portuguese research institute for astronomy and space science, and FCT is the public agency that funds research in Portugal.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/haydn/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/haydn.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What is <i>HAYDN</i>?</h3>
-      <p><i>HAYDN</i> is a proposed space telescope to measure the vibrations of stars in crowded clusters, where today's missions cannot tell the stars apart.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/supercomputers/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/supercomputers.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What is a supercomputer?</h3>
-      <p>A supercomputer links thousands of processors with a fast network, so that one scientific job can use far more computing power than any single machine.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/tess-kepler/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/tess-kepler.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What are <i>TESS</i> and <i>Kepler</i>?</h3>
-      <p><i>Kepler</i> and <i>TESS</i> are NASA space telescopes that track the brightness of many stars for weeks to years, long enough to see them oscillate.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-  <a class="card" href="/guide/machine-learning-for-stars/" data-spotlight="">
-    <div class="media"><img src="/assets/img/guide/machine-learning-for-stars.webp" alt="" role="presentation" loading="lazy" decoding="async" /></div>
-    <div class="card-body">
-      <h3>What does machine learning do with stars?</h3>
-      <p>Machine learning carries measurements from well-studied stars over to millions of others, and finds groups of stars that nobody labelled.</p>
-      <span class="go">Read</span>
-    </div>
-  </a>
-</div>
+<section class="plate k-scale plate--lift" aria-label="Field guide">
+  <div class="plate-media"><img src="/assets/img/photos/vlt-golden-hour.webp" alt="Me on the VLT platform at Paranal at sunset, with the Unit Telescopes behind me" fetchpriority="high" decoding="async" style="object-position: 50% 100%" />
+  </div>
+  <div class="plate-text" style="--plate-w: 36vw">
+    <h1>Field guide</h1><p class="lede">The science, institutions and machines behind my work, one minute each, with sources.</p>
+  </div>
+</section>
 
+<div class="wrap">
+<section class="section section--tight">
+  <div class="rows">
+    <article class="row-item k-up">
+      <div class="pic"><img src="/assets/img/heroes/research_allsky.webp" alt="" role="presentation" loading="lazy" decoding="async" />
+      </div>
+      <div class="words">
+        <h2><a href="/guide/galactic-archaeology/">What is Galactic archaeology?</a></h2>
+        <p>Galactic archaeology uses the ages, chemistry and orbits of stars to work out how the Milky Way was assembled.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><img src="/assets/img/heroes/research_seismo.webp" alt="" role="presentation" loading="lazy" decoding="async" />
+      </div>
+      <div class="words">
+        <h2><a href="/guide/asteroseismology/">What is asteroseismology?</a></h2>
+        <p>Asteroseismology measures a star's size and mass, and through models its age, from the way the star vibrates.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/gaia.poster.webp" aria-label="">
+  <source src="/assets/video/gaia.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
+  <source src="/assets/video/gaia.h264.mp4" type="video/mp4" />
+</video>
+
+      </div>
+      <div class="words">
+        <h2><a href="/guide/gaia/">What is <i>Gaia</i>?</a></h2>
+        <p><i>Gaia</i> is an ESA space telescope that mapped where nearly two billion stars are and how they move.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><img src="/assets/img/photos/vlt-daylight.webp" alt="" role="presentation" loading="lazy" decoding="async" />
+      </div>
+      <div class="words">
+        <h2><a href="/guide/eso-vlt/">What are ESO and the Very Large Telescope?</a></h2>
+        <p>ESO is an intergovernmental observatory that builds and runs large telescopes in Chile, among them the Very Large Telescope at Paranal.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><img src="/assets/img/guide/inaf.webp" alt="" role="presentation" loading="lazy" decoding="async" /><a class="ccredit" href="https://commons.wikimedia.org/wiki/File:La_Specola_di_Padova_riflessa_sul_Bacchiglione.jpeg">Memi26 / Wikimedia Commons, CC BY-SA 4.0</a>
+      </div>
+      <div class="words">
+        <h2><a href="/guide/inaf/">What is INAF?</a></h2>
+        <p>INAF is Italy's national institute for astrophysics, and its research centres include observatories in Bologna and Padova.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><img src="/assets/img/guide/ia-porto.webp" alt="" role="presentation" loading="lazy" decoding="async" /><a class="ccredit" href="https://commons.wikimedia.org/wiki/File:CAUP.JPG">Ricreis / Wikimedia Commons, CC BY-SA 3.0</a>
+      </div>
+      <div class="words">
+        <h2><a href="/guide/ia-porto/">What are IA and FCT?</a></h2>
+        <p>IA is a Portuguese research institute for astronomy and space science, and FCT is the public agency that funds research in Portugal.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/cluster.poster.webp" aria-label="">
+  <source src="/assets/video/cluster.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
+  <source src="/assets/video/cluster.h264.mp4" type="video/mp4" />
+</video>
+
+      </div>
+      <div class="words">
+        <h2><a href="/guide/haydn/">What is HAYDN?</a></h2>
+        <p>HAYDN is a proposed space telescope to measure the vibrations of stars in crowded clusters, where today's missions cannot tell the stars apart.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 72% 50%" poster="/assets/img/heroes/plato.poster.webp" aria-label="">
+  <source src="/assets/video/plato.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
+  <source src="/assets/video/plato.h264.mp4" type="video/mp4" />
+</video>
+
+      </div>
+      <div class="words">
+        <h2><a href="/guide/plato/">What is PLATO?</a></h2>
+        <p>PLATO is a European space telescope made of 26 cameras that will search more than 200,000 stars for Earth-sized planets and measure those stars through their oscillations.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 85% 50%" poster="/assets/img/heroes/ariel.poster.webp" aria-label="">
+  <source src="/assets/video/ariel.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
+  <source src="/assets/video/ariel.h264.mp4" type="video/mp4" />
+</video>
+
+      </div>
+      <div class="words">
+        <h2><a href="/guide/ariel/">What is <i>Ariel</i>?</a></h2>
+        <p><i>Ariel</i> is a European space telescope that will read the atmospheres of about a thousand planets around other stars, and it needs to know each host star well.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/hall.poster.webp" aria-label="">
+  <source src="/assets/video/hall.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
+  <source src="/assets/video/hall.h264.mp4" type="video/mp4" />
+</video>
+
+      </div>
+      <div class="words">
+        <h2><a href="/guide/supercomputers/">What is a supercomputer?</a></h2>
+        <p>A supercomputer links thousands of processors with a fast network, so that one scientific job can use far more computing power than any single machine.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" style="object-position: 77% 50%" poster="/assets/img/heroes/pair.poster.webp" aria-label="">
+  <source src="/assets/video/pair.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
+  <source src="/assets/video/pair.h264.mp4" type="video/mp4" />
+</video>
+
+      </div>
+      <div class="words">
+        <h2><a href="/guide/tess-kepler/">What are TESS and <i>Kepler</i>?</a></h2>
+        <p><i>Kepler</i> and TESS are NASA space telescopes that track the brightness of many stars for weeks to years, long enough to see them oscillate.</p>
+      </div>
+    </article>
+    <article class="row-item k-up">
+      <div class="pic"><video autoplay="" muted="" loop="" playsinline="" preload="metadata" poster="/assets/img/heroes/ai.poster.webp" aria-label="">
+  <source src="/assets/video/ai.av1.mp4" type="video/mp4; codecs=&quot;av01.0.05M.08&quot;" />
+  <source src="/assets/video/ai.h264.mp4" type="video/mp4" />
+</video>
+
+      </div>
+      <div class="words">
+        <h2><a href="/guide/machine-learning-for-stars/">What does machine learning do with stars?</a></h2>
+        <p>Machine learning carries measurements from well-studied stars over to millions of others, and finds groups of stars that nobody labelled.</p>
+      </div>
+    </article>
+  </div>
+</section>
 </div>
 
 </main>
-<footer class="site-footer">
+<footer class="site-footer tone-deep k-up">
+  <span class="rule" aria-hidden="true"></span>
   <div class="wrap">
-    <div class="footer-id">
-      <a class="brand" href="/"><svg class="brand-mark" aria-hidden="true"><use href="#i-brand"/></svg><span>Andreas W.&nbsp;Neitzel</span></a>
-      <p>PhD researcher in astrophysics and machine learning at IA and the University of Porto. Gaia, asteroseismology, neural networks, HPC.</p>
+    <div class="ft">
+      <div class="me"><h2>Andreas W.&nbsp;Neitzel</h2><p>PhD candidate at IA and the University of Porto, working on machine learning for Galactic archaeology.</p><nav class="links" aria-label="Contact and profiles">
+  <a href="mailto:andreaswneitzel@astro.up.pt"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
+  <a href="https://orcid.org/0000-0001-6283-907X" rel="me"><svg class="i" aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</a>
+  <a href="https://scholar.google.com/citations?user=7Pt74F0AAAAJ" rel="me"><svg class="i" aria-hidden="true"><use href="#i-scholar"/></svg>Scholar</a>
+  <a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc"><svg class="i" aria-hidden="true"><use href="#i-ads"/></svg>ADS</a>
+  <a href="https://github.com/AndreasWNeitzel" rel="me"><svg class="i" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+  <a href="https://www.linkedin.com/in/andreaswneitzel" rel="me"><svg class="i" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+</nav>
+</div>
+      <nav aria-label="Work"><h3>Work</h3><ul>
+        <li><a href="/research/">Research</a></li>
+        <li><a href="/publications/">Publications</a></li>
+        <li><a href="/software/">Software</a></li>
+        <li><a href="/talks/">Talks</a></li>
+        <li><a href="/observing/paranal/">Paranal, May 2024</a></li>
+      </ul></nav>
+      <nav aria-label="Guide"><h3>Guide</h3><ul><li><a href="/guide/galactic-archaeology/">Galactic archaeology</a></li><li><a href="/guide/asteroseismology/">Seismology of stars</a></li><li><a href="/guide/gaia/">The <i>Gaia</i> satellite</a></li><li><a href="/guide/eso-vlt/">ESO and the VLT</a></li><li><a href="/guide/inaf/">INAF in Italy</a></li><li><a href="/guide/ia-porto/">IA and FCT</a></li>
+        <li><a href="/guide/">The whole guide</a></li>
+      </ul></nav>
+      <nav aria-label="About"><h3>About</h3><ul>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/about/#record">The record by date</a></li>
+        <li><a href="/cv/">CV</a></li>
+        <li><a href="/assets/pdf/cv_neitzel_academic_summary.pdf">CV (PDF)</a></li>
+        <li><a href="mailto:andreaswneitzel@astro.up.pt">andreaswneitzel@astro.up.pt</a></li>
+      </ul></nav>
     </div>
-    <nav aria-label="Contact">
-      <h2>Contact and profiles</h2>
-      <ul>
-        <li><a href="mailto:andreaswneitzel@gmail.com">Email</a></li>
-        <li><a href="https://orcid.org/0000-0001-6283-907X" rel="me">ORCID</a></li>
-        <li><a href="https://scholar.google.com/citations?user=7Pt74F0AAAAJ" rel="me">Google Scholar</a></li>
-        <li><a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Neitzel%2C%20A.%20W.%22&amp;sort=date%20desc">NASA ADS</a></li>
-        <li><a href="https://github.com/AndreasWNeitzel" rel="me">GitHub</a></li>
-        <li><a href="https://www.linkedin.com/in/andreaswneitzel" rel="me">LinkedIn</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Site">
-      <h2>On this site</h2>
-      <ul>
-        <li><a href="/research/">Research</a> · <a href="/observing/paranal/">observing</a></li>
-        <li><a href="/publications/">Publications and explainers</a></li>
-        <li><a href="/software/">Software</a> · <a href="/software/#playgrounds">playgrounds</a></li>
-        <li><a href="/talks/">Talks and posters</a></li>
-        <li><a href="/guide/">Field guide</a></li>
-        <li><a href="/about/">About</a> · <a href="/about/#map">map</a> · <a href="/about/#all">timeline</a></li>
-        <li><a href="/cv/">CV</a> · <a href="/assets/pdf/cv_neitzel_academic_summary.pdf">PDF</a></li>
-      </ul>
-    </nav>
-    <div class="footer-ack">
-      <div class="wordmarks">
-        <p><span class="wm-k">Affiliations</span><span><a href="https://www.iastro.pt/">IA</a> · <a href="https://www.up.pt/">U.Porto</a> · <a href="https://www.fc.up.pt/">FCUP</a> · <a href="https://www.oas.inaf.it/">INAF-OAS</a>, visiting 2025 to 2026</span></p>
-        <p><span class="wm-k">Consortia</span><span><i>Ariel</i> Science Consortium (ESA) · KASC · TASOC</span></p>
-        <p><span class="wm-k">Facilities</span><span>ESO Very Large Telescope with ESPRESSO · <i>Gaia</i> (ESA) · <i>TESS</i> and <i>Kepler</i> (NASA) · Deucalion · MareNostrum 5</span></p>
-      </div>
-      <div class="funding">
-        <a class="fct" href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia">
-          <img class="fct-light" src="/assets/img/logos/fct-positive-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-          <img class="fct-dark" src="/assets/img/logos/fct-negative-480.png" width="200" height="113" alt="FCT, Fundação para a Ciência e a Tecnologia" loading="lazy">
-        </a>
-        <p>Funded by FCT, Fundação para a Ciência e a Tecnologia, I.P., through a research fellowship under the project ArqueoGal (2024.15303.PEX) and, from 2025 to 2026, the doctoral fellowship 2025.01843.BD. Computing on Deucalion and MareNostrum 5 through FCT projects 2026.08382.CPCA.A1 and 2026.08362.CPCA.A2.</p>
-      </div>
+    <div class="marks"><span>Funded by</span>
+      <a href="https://www.fct.pt/" aria-label="FCT, Fundação para a Ciência e a Tecnologia"><img class="fct on-dark" src="/assets/img/logos/fct-negative-480-trim.png" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"><img class="fct on-light" src="/assets/img/logos/fct-positive-480-trim.png" width="480" height="270" alt="Fundação para a Ciência e a Tecnologia" loading="lazy"></a>
+      <span>Computing from</span>
+      <a href="https://eurohpc-ju.europa.eu/" aria-label="EuroHPC Joint Undertaking"><img class="ehpc on-dark" src="/assets/img/logos/eurohpc-ju-negative.svg" alt="EuroHPC Joint Undertaking" loading="lazy"><img class="ehpc on-light" src="/assets/img/logos/eurohpc-ju.svg" alt="EuroHPC Joint Undertaking" loading="lazy"></a>
+      <small class="marks-credit">Logos: FCT, EuroHPC JU</small>
     </div>
-    <p class="colophon"><span>Porto, Portugal · Last updated <time datetime="2026-10-27">2026-10-27</time></span></p>
+    <p class="rights">The renders, animations, figures and text on this site are my own work, all rights reserved. <a href="/credits/">Credits and reuse</a></p>
+    <p class="colophon"><span>© 2026 Andreas W. Neitzel</span><span>Instituto de Astrofísica e Ciências do Espaço, Porto</span><span>Updated <time datetime="2026-11-03">November 2026</time></span><a class="top" href="#top">Back to top <svg class="i" aria-hidden="true" style="transform: rotate(-90deg)"><use href="#i-arrow"/></svg></a></p>
   </div>
 </footer>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/lightbox.js" defer></script>
 </body>
 </html>
