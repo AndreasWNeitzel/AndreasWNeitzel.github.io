@@ -304,7 +304,7 @@
   .zone-title { font: 500 0.8125rem var(--mono); color: var(--muted); margin-block-end: 8px; }
 
   .textlinks { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 0.88rem/1.4 var(--sans); }
-  .textlinks a { display: inline-flex; align-items: center; min-block-size: 30px; color: var(--ink-2); background: linear-gradient(var(--flow), var(--flow)) 0 100% / 0 1px no-repeat; transition: background-size .35s var(--ease), color .2s; }
+  .textlinks a { display: inline-block; padding-block: 5px; color: var(--ink-2); background: linear-gradient(var(--flow), var(--flow)) 0 100% / 0 1px no-repeat; transition: background-size .35s var(--ease), color .2s; }
   .textlinks a:hover { text-decoration: none; color: var(--ink); background-size: 100% 1px; }
 
   /* typed entry list (talks, publications, CV) */

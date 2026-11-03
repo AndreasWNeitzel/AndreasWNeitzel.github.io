@@ -5,7 +5,7 @@
 concepts:
   - key: missions
     loop: missions
-    url: /guide/gaia/
+    url: /guide/space-missions/
   - key: ai
     loop: ai
     url: /research/janus/

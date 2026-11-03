@@ -46,6 +46,7 @@ OWN = [
     "assets/img/heroes/ariel.webp",
     "assets/img/heroes/ariel_card.webp",
     "assets/img/heroes/plato.webp",
+    "assets/img/heroes/kepler.webp",
     "assets/img/heroes/plato_card.webp",
     "assets/img/heroes/publications.webp",
     "assets/img/heroes/portal/line_*.webp",
