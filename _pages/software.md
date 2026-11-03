@@ -75,6 +75,26 @@ demos:
     {%- endfor %}
   </div>
 </section>
+<section class="section" id="tools" aria-labelledby="tools-title">
+  <div class="section-head k-up"><h2 id="tools-title">{{ C.tools_title }}</h2><p>{{ C.tools_lead | missions }}</p></div>
+  <div class="rows rows--same">
+    {%- for t in site.data.tools %}
+    {%- assign vpath = "/assets/video/" | append: t.loop | append: ".av1.mp4" -%}{%- assign vf = site.static_files | where: "path", vpath | first -%}
+    {%- unless vf %}{% continue %}{% endunless %}
+    {%- assign turl = "/software/tools/" | append: t.id | append: "/" %}
+    <article class="row-item k-up">
+      <div class="pic">{% include loop.html name=t.loop alt="" pos=t.pos %}</div>
+      <div class="words">
+        <span class="kicker">{{ t.kicker | missions }}</span>
+        <h2><a href="{{ turl | relative_url }}">{{ t.title }}</a></h2>
+        <p class="by">By {{ t.credit | initials }}</p>
+        <p>{{ t.card | missions }}</p>
+        <p class="textlinks"><a href="{{ turl | relative_url }}">How I used it</a>{% for l in t.links %}<a href="{{ l.url }}">{{ l.label | missions }}</a>{% endfor %}</p>
+      </div>
+    </article>
+    {%- endfor %}
+  </div>
+</section>
 <section class="section" aria-labelledby="packages">
   <div class="section-head k-up"><h2 id="packages">{{ C.packages_title }}</h2></div>
   <ol class="entries">

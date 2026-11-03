@@ -1,0 +1,183 @@
+# Tools I use: codes by other people that I have used in my research. One entry makes both the card in the
+# "Tools I use" section of /software/ and the page /software/tools/<id>/ (_plugins/tool_pages.rb, _layouts/tool.html).
+# Order here is the order on the page. Add an entry only when its loop is installed and approved.
+#
+# id          slug of the page, /software/tools/<id>/
+# ledger      the ledger entry (_data/ledger.yml, tools) the facts come from
+# title       the code's name as its authors write it
+# loop        assets/video/<loop>.{av1,h264}.mp4 with assets/img/heroes/<loop>.poster.webp
+# pos         optional object-position for the card crop (the card is 16:10, the loop 16:9)
+# credit      who wrote the code, as printed under the title on the card and the page
+# kicker      where I used it, above the card title
+# card        the card's sentence or two
+# line        the page's one line under the title
+# alt         what the loop shows, for screen readers
+# description the page's meta description (third person)
+# about       paragraphs: what the code does
+# use         paragraphs: how I used it (first person)
+# loop_note   paragraphs: what in the loop is real and what is an illustration
+# papers      the titular papers: {cite, title, doi}
+# links       the official sites: {label, url}
+# loop_data   the public data and papers the loop is built from: {label, url}
+
+- id: param
+  ledger: tool-2021-param
+  title: PARAM
+  loop: tool-param
+  credit: "L. da Silva et al. (2006); T. S. Rodrigues et al. (2014, 2017)"
+  kicker: "MSc thesis, 2021 to 2022"
+  card: "A Bayesian code that compares a star's observed properties with a grid of stellar models and returns distributions of its mass, radius and age. I used it on synthetic stars and on 35 seismic Ariel targets."
+  line: "PARAM is a Bayesian code that infers the mass, radius, surface gravity and age of a star from its observed properties."
+  alt: "A grid of stellar models drawn as strands of beads. One point opens into a comb of oscillation frequencies, the observed temperature and metallicity select matching points, and their weights collect into histograms of mass and age."
+  description: "PARAM, a Bayesian stellar characterisation code by L. da Silva, T. S. Rodrigues and colleagues, and how Andreas W. Neitzel used it in his MSc thesis."
+  about:
+    - "PARAM compares the observed properties of a star with every point of a grid of stellar evolution models. The properties are the effective temperature and metallicity, optionally the large frequency separation and the frequency of maximum oscillation power, and magnitudes or parallax. Each point is weighted by its likelihood times a prior (an initial mass function and a flat star-formation history). The result is a probability distribution for mass, radius, surface gravity and age, and in later versions distance and extinction."
+    - "The method is by L. da Silva and colleagues (2006). T. S. Rodrigues and colleagues (2014, 2017) added the seismic and distance extensions and the use of model frequencies in place of scaling relations. A web interface is hosted by INAF, Osservatorio Astronomico di Padova."
+  use:
+    - "In my MSc thesis on the Ariel input catalogue (Chapters 5 and 6), I used PARAM for consistency tests on synthetic stars, those of a synthetic cluster and those along a single track, and to characterise 35 seismic Ariel targets. I compared the results with those of four other codes: BASTA, ASTFIT, AMP and YMCM. I assembled the model grid PARAM reads, from MESA tracks with GYRE oscillation frequencies, through a conversion toolkit (Sect. 5.2)."
+    - "During my MSc research fellowship in the BreakStarS project (IA Porto, M. Cunha and team; FCT PTDC/FIS-AST/30389/2017), I implemented a routine that computes the small frequency separation from GYRE modes for the PARAM grid. The small separation is the spacing between neighbouring l&nbsp;=&nbsp;0 and l&nbsp;=&nbsp;2 modes, and it is sensitive to the stellar core and so to age."
+  loop_note:
+    - "The grid points come from a public grid of stellar isochrones computed with MESA. It stands in for the grid PARAM reads: PARSEC isochrones in the public web interface, and the MESA plus GYRE grid I assembled for my thesis. The comb is the real GYRE frequencies of one main-sequence model on the 1 solar-mass track behind Stellar Explorer (MESA and GYRE models run by R. Costa, IA Porto). The observed star is the Sun, with its measured temperature and seismic parameters."
+    - "The gold threads mark the small separation, the quantity my routine computed. The camera, the Gaussian envelope, the uncertainties, the prior and the model seismic parameters from scaling relations are drawn for display. The histograms show the method run on this display grid and are not PARAM output."
+  papers:
+    - {cite: "da Silva et al. 2006, A&A 458, 609", title: "Basic physical parameters of a selected sample of evolved stars", doi: "10.1051/0004-6361:20065105"}
+    - {cite: "Rodrigues et al. 2014, MNRAS 445, 2758", title: "Bayesian distances and extinctions for giants observed by Kepler and APOGEE", doi: "10.1093/mnras/stu1907"}
+    - {cite: "Rodrigues et al. 2017, MNRAS 467, 1433", title: "Determining stellar parameters of asteroseismic targets: going beyond the use of scaling relations", doi: "10.1093/mnras/stx120"}
+  links:
+    - {label: "Web interface, INAF Padova", url: "http://stev.oapd.inaf.it/cgi-bin/param"}
+  loop_data:
+    - {label: "Isochrone grid computed with MESA: Choi et al. 2016, ApJ 823, 102", url: "https://doi.org/10.3847/0004-637X/823/2/102"}
+    - {label: "Dotter 2016, ApJS 222, 8", url: "https://doi.org/10.3847/0067-0049/222/1/8"}
+    - {label: "The Sun's oscillations: Huber et al. 2011, ApJ 743, 143", url: "https://doi.org/10.1088/0004-637X/743/2/143"}
+    - {label: "The Sun's temperature: Prša et al. 2016, AJ 152, 41", url: "https://doi.org/10.3847/0004-6256/152/2/41"}
+
+- id: mesa
+  ledger: tool-2021-mesa
+  title: MESA
+  loop: tool-mesa
+  credit: "B. Paxton et al. (2011) and the MESA developers"
+  kicker: "MSc thesis, 2021 to 2022"
+  card: "An open-source code that evolves a star through time by solving the equations of stellar structure. I worked with its evolutionary tracks as the model grid behind PARAM and in my thesis figures."
+  line: "MESA is an open-source stellar evolution code that follows a star through its life."
+  alt: "A star cut open at one octant evolves beside its path on the Hertzsprung-Russell diagram, from the main sequence up the red-giant branch, through core helium burning and the asymptotic giant branch to a white dwarf, then returns to the start."
+  description: "MESA, the open-source stellar evolution code by B. Paxton, the MESA developers and colleagues, and how Andreas W. Neitzel used its tracks in his MSc thesis."
+  about:
+    - "Given an initial mass, composition and input physics (equation of state, opacities, nuclear reaction network, mixing), MESA solves the coupled equations of stellar structure and composition on an adaptive mesh and steps the star through time. It writes a history of global quantities such as temperature, luminosity, radius and age, and profiles of every quantity from centre to surface."
+    - "The code is described in Paxton et al. (2011) and in the instrument papers that followed. It is open source, written and maintained by a distributed team, the MESA developers."
+  use:
+    - "I did not run MESA. I worked with MESA evolutionary tracks as the model grid behind PARAM, and plotted grid tracks for the figures of my MSc thesis (Sect. 2.6 and 5.2)."
+  loop_note:
+    - "The track is a real 1 solar-mass, solar-metallicity MESA track, the one behind Stellar Explorer, from MESA models run by R. Costa (IA Porto). The dot follows that track. The depth of the convective envelope, the burning region, the interior temperature on the cut faces and the surface colour are set at every step from the track's stored interior profiles."
+    - "The star's size on screen (a logarithmic scale), the granulation, the glow and the colours are drawn."
+  papers:
+    - {cite: "Paxton et al. 2011, ApJS 192, 3", title: "Modules for Experiments in Stellar Astrophysics (MESA)", doi: "10.1088/0067-0049/192/1/3"}
+  links:
+    - {label: "Documentation", url: "https://docs.mesastar.org/"}
+    - {label: "Source code", url: "https://github.com/MESAHub/mesa"}
+  loop_data:
+    - {label: "The 1 solar-mass track behind Stellar Explorer, MESA models run by R. Costa (IA Porto)", url: "/stellar-explorer/"}
+
+- id: bccode
+  ledger: tool-2021-bccode
+  title: BCCode
+  loop: tool-bccode
+  credit: "L. Casagrande and D. A. VandenBerg (2014, 2018)"
+  kicker: "MSc thesis, 2021 to 2022"
+  card: "Tables and codes that convert the light a star emits in one filter into its total output, the bolometric correction. I used them for luminosities in my MSc thesis, with Monte Carlo sensitivity tests."
+  line: "BCCode computes bolometric corrections for a star from its temperature, surface gravity, metallicity and reddening."
+  alt: "A spectrum draws itself across wavelength while the Gaia BP, G and RP passbands rise in front of it and the light each collects fills in. The view then moves to a table of corrections over temperature and gravity, where a star drops between four grid nodes that light up."
+  description: "BCCode, bolometric-correction tables and interpolation codes by L. Casagrande and D. A. VandenBerg, and how Andreas W. Neitzel used them in his MSc thesis."
+  about:
+    - "A survey measures the light of a star inside one filter, while the bolometric magnitude counts all of its light. The bolometric correction bridges the two. It depends on the star's spectrum, and so on its temperature, surface gravity, metallicity and reddening."
+    - "L. Casagrande and D. A. VandenBerg computed synthetic photometry from MARCS model spectra through the passbands of many systems, among them Johnson-Cousins, SDSS, 2MASS, HST, Tycho, Hipparcos, Pan-STARRS1, SkyMapper, JWST and Gaia DR2 and DR3. Their codes interpolate the resulting tables to the temperature, gravity, metallicity and reddening of a star."
+  use:
+    - "In my MSc thesis I used BCCode to compute bolometric corrections and luminosities, including Monte Carlo sensitivity tests (Sect. 4.2.1, Figs 4.4 to 4.7)."
+  loop_note:
+    - "The spectrum is an observed one, of the star HD 42256 from the X-shooter Spectral Library. It stands in for the model spectra the tables are computed from. The Gaia DR3 passbands are the real ones, and the correction tables are the real tables of Casagrande and VandenBerg at solar metallicity for four values of reddening."
+    - "Where the star lands, the layout, the colours, the camera and the vertical scale of the surfaces are drawn."
+  papers:
+    - {cite: "Casagrande & VandenBerg 2014, MNRAS 444, 392", title: "Synthetic stellar photometry. I. General considerations and new transformations for broad-band systems", doi: "10.1093/mnras/stu1476"}
+    - {cite: "Casagrande & VandenBerg 2018, MNRAS 475, 5023", title: "Synthetic stellar photometry. II. Testing the bolometric flux scale and tables of bolometric corrections for the Hipparcos/Tycho, Pan-STARRS1, SkyMapper, and JWST systems", doi: "10.1093/mnras/sty149"}
+    - {cite: "Casagrande & VandenBerg 2018, MNRAS 479, L102", title: "On the use of Gaia magnitudes and new tables of bolometric corrections", doi: "10.1093/mnrasl/sly104"}
+  links:
+    - {label: "Source code and tables", url: "https://github.com/casaluca/bolometric-corrections"}
+  loop_data:
+    - {label: "Spectrum of HD 42256: X-shooter Spectral Library DR3, Verro et al. 2022, A&A 660, A34", url: "https://ui.adsabs.harvard.edu/abs/2022A%26A...660A..34V"}
+    - {label: "Gaia DR3 passbands: SVO Filter Profile Service", url: "http://svo2.cab.inta-csic.es/theory/fps/"}
+    - {label: "Bolometric-correction tables: Casagrande & VandenBerg", url: "https://github.com/casaluca/bolometric-corrections"}
+
+- id: ybc
+  ledger: tool-2021-ybc
+  title: YBC
+  loop: tool-ybc
+  credit: "Y. Chen et al. (2019)"
+  kicker: "MSc thesis, 2021 to 2022"
+  card: "A database of bolometric corrections for many photometric systems, made for the PARSEC isochrones. I used it alongside BCCode to turn Gaia magnitudes into luminosities in my MSc thesis."
+  line: "YBC is a database of bolometric corrections for many photometric systems, made for the PARSEC isochrones."
+  alt: "Starlight from a rendered star fans through eight glowing filter panes (Johnson B and V, Gaia BP, G and RP, 2MASS J, H and Ks). Each band's share lands as an orb whose area follows that band's flux."
+  description: "YBC, a database of stellar bolometric corrections by Y. Chen and colleagues, and how Andreas W. Neitzel used it in his MSc thesis."
+  about:
+    - "YBC integrates libraries of stellar spectra (ATLAS9, PHOENIX, MARCS, COMARCS, PoWR and others) through the filter curves of each photometric system, with extinction computed star by star. Given a star's magnitude in any of those filters, it returns the correction to its bolometric magnitude, and so its luminosity."
+    - "The database is by Y. Chen and colleagues (2019) and is hosted by INAF, Osservatorio Astronomico di Padova."
+  use:
+    - "In my MSc thesis I used YBC alongside BCCode to convert Gaia magnitudes into bolometric magnitudes, and from them to derive stellar luminosities (Sect. 4.2.1)."
+  loop_note:
+    - "The orb sizes are real: they are computed from an observed spectrum (of HD 42256, from the X-shooter Spectral Library) through the real passbands. That spectrum belongs to a different star than the rendered one, and YBC itself uses model spectra. The star render, the panes, the halos, the colours and the geometry are drawn."
+  papers:
+    - {cite: "Chen et al. 2019, A&A 632, A105", title: "YBC: a stellar bolometric corrections database with variable extinction coefficients. Application to PARSEC isochrones", doi: "10.1051/0004-6361/201936612"}
+  links:
+    - {label: "YBC database, INAF Padova", url: "http://stev.oapd.inaf.it/YBC/index.html"}
+  loop_data:
+    - {label: "Spectrum of HD 42256: X-shooter Spectral Library DR3, Verro et al. 2022, A&A 660, A34", url: "https://ui.adsabs.harvard.edu/abs/2022A%26A...660A..34V"}
+    - {label: "Johnson, Gaia DR3 and 2MASS passbands: SVO Filter Profile Service", url: "http://svo2.cab.inta-csic.es/theory/fps/"}
+
+- id: mwdust
+  ledger: tool-2021-mwdust
+  title: mwdust
+  loop: tool-mwdust
+  credit: "J. Bovy et al. (2016); dust map by G. M. Green et al. (2019)"
+  kicker: "MSc thesis, 2021 to 2022"
+  card: "A Python package that returns interstellar extinction for a direction on the sky and a distance, from published dust maps. I used it for the extinction of Ariel targets, favouring the 3D map of Green et al. (2019)."
+  line: "mwdust is a Python package that returns the interstellar extinction towards a point on the sky at a given distance."
+  alt: "A column runs from the Sun along one sky pixel, divided into distance bins. Dust clouds fill in and a star lights at the far end. Its light dims and reddens at each cloud, while the cumulative reddening curve below steps up."
+  description: "mwdust, a Python package for Milky Way dust extinction by J. Bovy and colleagues, and how Andreas W. Neitzel used it in his MSc thesis."
+  about:
+    - "mwdust reads published maps of Milky Way dust: the 3D maps of Marshall et al. (2006), Sale et al. (2014) and Green et al. (2015, 2017, 2019), the model of Drimmel et al. (2003), combinations of these, and the 2D map of Schlegel, Finkbeiner and Davis. A 3D map stores, for each pixel of the sky, the reddening as a function of distance, and mwdust interpolates it."
+    - "J. Bovy wrote the package for Bovy et al. (2016), on modelling the density of the Galactic disc with the effect of dust on star counts included. It is open source."
+  use:
+    - "I used mwdust for the extinction of the Ariel targets in my MSc thesis (Sect. 4.1.4), favouring the 3D dust map of Green et al. (2019)."
+  loop_note:
+    - "Everything in the animation is drawn. The positions, sizes and densities of the clouds, the reddening curve and the reddening of the beam illustrate how a 3D map is read. No value from a real map is shown."
+  papers:
+    - {cite: "Bovy et al. 2016, ApJ 818, 130", title: "On Galactic density modeling in the presence of dust extinction", doi: "10.3847/0004-637X/818/2/130"}
+    - {cite: "Green et al. 2019, ApJ 887, 93", title: "A 3D dust map based on Gaia, Pan-STARRS 1, and 2MASS", doi: "10.3847/1538-4357/ab5362"}
+  links:
+    - {label: "Source code", url: "https://github.com/jobovy/mwdust"}
+  loop_data: []
+
+- id: trilegal
+  ledger: tool-2025-trilegal
+  title: TRILEGAL
+  loop: tool-trilegal
+  credit: "L. Girardi et al. (2005)"
+  kicker: "PhD, since 2025"
+  card: "A model of the Galaxy that predicts the stars seen in a given field. I used it to generate synthetic populations of globular clusters for noise forecasts of the proposed HAYDN mission."
+  line: "TRILEGAL is a population synthesis code that simulates the stars seen in any field of view of the Milky Way."
+  alt: "The Galaxy assembles one component at a time as glowing density shapes: halo, thick disc, thin disc and bulge. A line of sight leaves the Sun and stars appear along it, then each star flies to its place on a Hertzsprung-Russell diagram."
+  description: "TRILEGAL, a Milky Way star-count simulation code by L. Girardi, M. A. T. Groenewegen, E. Hatziminaoglou and L. da Costa, and how Andreas W. Neitzel used it in his PhD."
+  about:
+    - "TRILEGAL (TRIdimensional modeL of thE GALaxy) describes the Galaxy as components, each with a density law, a star-formation history and an age-metallicity relation: thin disc, thick disc, halo and bulge, plus an optional extra object such as a cluster or a dwarf galaxy. For a field, it integrates each component along the line of sight, draws stars from isochrones with an initial mass function, and applies extinction."
+    - "It returns a catalogue with each star's age, metallicity, mass, luminosity, temperature, surface gravity, distance, extinction and apparent magnitudes. The code is by L. Girardi, M. A. T. Groenewegen, E. Hatziminaoglou and L. da Costa (2005). The web form is hosted by INAF, Osservatorio Astronomico di Padova."
+  use:
+    - "I used TRILEGAL to generate synthetic stellar populations of multiple globular clusters as part of the HAYDNsim pipeline, for the noise forecasts of the proposed HAYDN space mission, as shown on my TASC10/KASC17 poster (2026)."
+  loop_note:
+    - "The animation illustrates TRILEGAL's method after Girardi et al. (2005). No TRILEGAL run produced it. Each star's temperature, gravity and luminosity are points of a public grid of stellar isochrones computed with MESA, and their Gaia magnitudes come from the Casagrande and VandenBerg tables."
+    - "The density shapes of the components (laws and scales after Girardi et al. 2005, stretched to read), the distances, masses, extinction, the number of stars per component, the field (arbitrary, unrelated to any HAYDN target), the colours and the camera are drawn."
+  papers:
+    - {cite: "Girardi et al. 2005, A&A 436, 895", title: "Star counts in the Galaxy. Simulating from very deep to very shallow photometric surveys with the TRILEGAL code", doi: "10.1051/0004-6361:20042352"}
+  links:
+    - {label: "Web interface, INAF Padova", url: "http://stev.oapd.inaf.it/cgi-bin/trilegal"}
+  loop_data:
+    - {label: "Isochrones computed with MESA: Choi et al. 2016, ApJ 823, 102", url: "https://doi.org/10.3847/0004-637X/823/2/102"}
+    - {label: "Dotter 2016, ApJS 222, 8", url: "https://doi.org/10.3847/0067-0049/222/1/8"}
+    - {label: "Gaia magnitudes: bolometric-correction tables of Casagrande & VandenBerg", url: "https://github.com/casaluca/bolometric-corrections"}

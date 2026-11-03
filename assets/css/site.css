@@ -661,6 +661,8 @@
   .row-item .pic.art { background: var(--alt) linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px, linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px; }
   .row-item .words { display: grid; gap: 12px; align-content: center; }
   .row-item .kicker { color: var(--muted); }
+  .row-item .by, .tool-by { font: 500 0.875rem/1.45 var(--mono); color: var(--ink-2); }
+  .tool-by { padding-block-end: 14px; border-block-end: 1px solid var(--line); }
   .row-item h2 { font-size: clamp(1.6rem, 1.3rem + 1vw, 2.3rem); }
   .row-item h2 a { color: inherit; } .row-item h2 a::after { content: ""; position: absolute; inset: 0; z-index: 1; } .row-item h2 a:hover { text-decoration: none; }
   .row-item:hover h2 a { color: var(--ink); background: linear-gradient(var(--flow), var(--flow)) 0 100% / 100% 1px no-repeat; }

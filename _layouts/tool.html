@@ -1,0 +1,45 @@
+---
+layout: default
+---
+{%- comment -%} A code by other people that I have used: its loop as the plate, then what it does, how I used it and what
+the loop shows, with the authors, the titular papers and the official sites beside. Data: _data/tools.yml. {%- endcomment -%}
+{%- assign t = site.data.tools | where: "id", page.tool | first -%}
+{% include plate.html stage=true loop=t.loop still="" alt=t.alt title=t.title line=t.line crumb="Software" crumb_url="/software/#tools" %}
+<div class="wrap">
+  <div class="article-layout section section--tight">
+    <article class="stack-m k-up">
+      <p class="tool-by">By {{ t.credit | initials }}</p>
+      <div class="prose article">
+        <h2>What it does</h2>
+        {%- for p in t.about %}<p>{{ p | missions }}</p>{% endfor %}
+        <h2>How I used it</h2>
+        {%- for p in t.use %}<p>{{ p | missions }}</p>{% endfor %}
+        <h2>The animation</h2>
+        {%- for p in t.loop_note %}<p>{{ p | missions }}</p>{% endfor %}
+      </div>
+    </article>
+    <aside class="article-aside k-up">
+      <section><h2 class="zone-title">Papers</h2>
+        <ol class="sources">{% for r in t.papers %}<li><a href="https://doi.org/{{ r.doi }}">{{ r.cite | missions }}</a>, {{ r.title | missions }}</li>{% endfor %}</ol>
+      </section>
+      {%- if t.links.size > 0 %}
+      <section><h2 class="zone-title">Official links</h2>
+        <ul class="plain stack-s">{% for l in t.links %}<li class="small"><a href="{{ l.url | relative_url }}">{{ l.label | missions }}</a></li>{% endfor %}</ul>
+      </section>
+      {%- endif %}
+      {%- if t.loop_data.size > 0 %}
+      <section><h2 class="zone-title">Data in the animation</h2>
+        <ul class="plain stack-s">{% for l in t.loop_data %}<li class="small"><a href="{{ l.url | relative_url }}">{{ l.label | missions }}</a></li>{% endfor %}</ul>
+      </section>
+      {%- endif %}
+      <section><h2 class="zone-title">Other tools I use</h2>
+        <ul class="plain stack-s">
+          {%- for o in site.data.tools %}{% if o.id == t.id %}{% continue %}{% endif %}
+          {%- assign vpath = "/assets/video/" | append: o.loop | append: ".av1.mp4" -%}{%- assign vf = site.static_files | where: "path", vpath | first -%}
+          {%- if vf %}<li class="small"><a href="{{ '/software/tools/' | append: o.id | append: '/' | relative_url }}">{{ o.title }}</a></li>{% endif %}
+          {%- endfor %}
+        </ul>
+      </section>
+    </aside>
+  </div>
+</div>

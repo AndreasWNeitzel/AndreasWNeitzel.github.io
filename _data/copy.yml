@@ -222,6 +222,8 @@ software:
       title: "Tellurion"
       text: "My separate website of interactive physics and astronomy simulations, written as a teaching resource."
   packages_title: "Packages and applications"
+  tools_title: "Tools I use"
+  tools_lead: "These are codes written by other people that I have used in my research, each credited to its authors."
 
 talks:
   description: "Conference talks and posters by Andreas W. Neitzel, international and national, with slides and posters on Zenodo."
