@@ -3,6 +3,7 @@ title: "What is PLATO?"
 short: "PLATO"
 lede: "PLATO is a European space telescope made of 26 cameras that will search more than 200,000 stars for Earth-sized planets and measure those stars through their oscillations."
 image: /assets/img/heroes/plato.webp
+plate_pos_m: "80% 50%"
 order: 7.3
 image_alt: "Schematic render of the PLATO spacecraft: its 26 cameras in groups on a bench above a gold-wrapped service module, with a sunshield."
 related:

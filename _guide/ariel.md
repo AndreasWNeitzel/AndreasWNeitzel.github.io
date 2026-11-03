@@ -3,6 +3,7 @@ title: "What is Ariel?"
 short: "Ariel"
 lede: "Ariel is a European space telescope that will read the atmospheres of about a thousand planets around other stars, and it needs to know each host star well."
 image: /assets/img/heroes/ariel.webp
+plate_pos_m: "78% 50%"
 order: 7.6
 image_alt: "Schematic render of Ariel: an off-axis telescope in a curved baffle above three stacked radiator shields and a gold-wrapped service module."
 related:

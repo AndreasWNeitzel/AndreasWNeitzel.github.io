@@ -10,7 +10,7 @@ layout: default
 {%- assign credit = page.image_credit -%}{%- if credit and page.image_licence %}{% assign credit = credit | append: ", " | append: page.image_licence %}{% endif -%}{%- if site.data.home.guide_stills[slug] %}{% assign credit = nil %}{% assign alt = site.data.home.guide_still_alts[slug] %}{% endif -%}
 {%- assign st = false -%}{%- if lp == "gaia" %}{% assign st = true %}{% endif -%}
 {% assign lc = site.data.home.guide_loop_credits[slug] %}
-{% include plate.html loop_credit=lc stage=st loop=lp still=pic alt=alt title=page.title line=page.lede crumb="Field guide" crumb_url="/guide/" credit=credit credit_url=page.image_source pos=page.plate_pos textw=page.plate_textw %}
+{% include plate.html loop_credit=lc stage=st loop=lp still=pic alt=alt title=page.title line=page.lede crumb="Field guide" crumb_url="/guide/" credit=credit credit_url=page.image_source pos=page.plate_pos pos_m=page.plate_pos_m loop_pos_m=page.plate_pos_m textw=page.plate_textw %}
 <div class="wrap">
   {%- if page.wide_figure %}
   <figure class="panel blueprint guide-wide k-up" data-build data-credit="own">

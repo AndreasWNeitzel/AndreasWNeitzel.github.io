@@ -34,8 +34,8 @@ portals:
   - key: talks
     url: /talks/
     images:
-      - {src: /assets/img/heroes/talk_aarhus.webp, pos: "30% 55%"}
-      - {src: /assets/img/heroes/talk_porto.webp, pos: "62% 50%"}
+      - {src: /assets/img/heroes/talk_aarhus.webp, pos: "30% 55%", pos_m: "18% 66%"}
+      - {src: /assets/img/heroes/talk_porto.webp, pos: "62% 50%", pos_m: "68% 62%"}
       - {src: /assets/img/heroes/talk_dfa_wide.webp, pos: "84% 50%"}
 
 # Missions and machines: official marks where the agency's terms allow (assets/img/logos/policy.md),
