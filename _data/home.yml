@@ -93,7 +93,7 @@ guide_loops:
   haydn: cluster
   machine-learning-for-stars: ai
   galactic-archaeology: sky
-  tess-kepler: pair
+  tess-kepler: tess
   plato: plato
 # Sources printed on a guide loop built on someone else's material.
 guide_loop_credits:
