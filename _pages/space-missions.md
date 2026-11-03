@@ -15,7 +15,7 @@ lines:
 ---
 {%- assign M = site.data.copy.home.missions -%}
 {%- assign CP = site.data.copy.plates -%}
-{%- assign mcredit = "Sky ESO/S. Brunier, CC BY 4.0; TESS base mesh NASA 3D Resources" -%}
+{%- assign mcredit = "Mock-ups after NASA and ESA references; TESS on NASA 3D Resources mesh; sky ESO/S. Brunier, CC BY 4.0" -%}
 {% include plate.html stage=true loop="missions" still="/assets/img/heroes/missions.poster.webp" alt="Gaia, PLATO, TESS, Kepler and Ariel turn in turn against the Milky Way" title="Space missions" line=CP.missions loop_credit=mcredit %}
 <div class="wrap">
 <section class="section section--tight">

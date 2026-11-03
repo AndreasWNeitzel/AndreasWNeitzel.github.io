@@ -162,6 +162,10 @@ groups:
   - id: sources
     title: Sources inside my renders and figures
     items:
+      - what: "Spacecraft renders of Gaia, PLATO, TESS, Kepler and Ariel: illustrative reconstructions"
+        credit: "Built by me after public NASA and ESA images, photographs and dimensions; no official imagery. Only TESS uses a NASA mesh"
+        licence: "Mine, all rights reserved; not agency imagery"
+        link: ""
       - what: "Copernicus DEM GLO-30, terrain of the Paranal renders"
         credit: "© DLR e.V. 2010 to 2014 and © Airbus Defence and Space GmbH 2014 to 2018, provided under COPERNICUS by the European Union and ESA"
         licence: "Copernicus DEM licence"

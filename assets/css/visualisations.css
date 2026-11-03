@@ -1,67 +1,123 @@
-/* Visualisations: the album. One irregular grid of tiles of different sizes, packed tight with thin gutters, the way
-   a Mondrian composition is: the composition is the borrowed part, the colours are the site's own. The grid's row
-   height follows its column width (container units), so every tile keeps its proportion at any width. Hovering or
-   focusing a tile fades the others and raises a dark glass panel with the tile's title and one line; a tap toggles
-   it on touch screens (site.js). */
+/* Visualisations: the album, in four sections. Each section is an irregular grid of tiles of different sizes, packed
+   tight with thin gutters, the way a Mondrian composition is: the composition is the borrowed part, the colours are the
+   site's own. Every section sits on one 12-column grid whose seams fall only after column 5 or column 7, and its
+   heading and intro sit on the same seam, so text and pictures share their edges. The large cell alternates sides from
+   section to section. Row height follows column width (container units), so every tile keeps its proportion at any
+   width. Hovering or focusing a tile fades the others of its section and raises a dark glass panel with the tile's
+   title and one line; a tap toggles it on touch screens (site.js). */
 
 @layer pages {
-  .vis { container-type: inline-size; }
-  .vis-grid {
-    --vg: 4px;                                                   /* the gutter */
-    --cols: 12;
+  .vis { container-type: inline-size; --vg: 4px; --cols: 12;
     --col: calc((100cqi - (var(--cols) - 1) * var(--vg)) / var(--cols));
-    display: grid; gap: var(--vg);
+    padding-block: clamp(36px, 5vw, 72px) clamp(56px, 8vw, 120px); }
+
+  /* the page intro: one paragraph in the serif, over the first seven columns */
+  .vis-intro { font: 400 clamp(1.15rem, 1.02rem + 0.5vw, 1.4rem)/1.5 var(--serif); color: var(--ink);
+    max-inline-size: min(100%, calc(7 * var(--col) + 6 * var(--vg)), 46rem); text-wrap: pretty; }
+
+  /* a section: a hairline, the heading over five columns, the intro over the other seven */
+  .vis-sec { margin-block-start: clamp(56px, 7.5vw, 112px); }
+  .vis-head { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--vg); row-gap: 10px;
+    align-items: baseline; border-block-start: 1px solid var(--line); padding-block-start: clamp(16px, 1.8vw, 24px);
+    margin-block-end: clamp(20px, 2.4vw, 32px); }
+  .vis-head h2 { grid-column: 1 / 6; font: 300 clamp(1.7rem, 1.3rem + 1.2vw, 2.5rem)/1.08 var(--serif); letter-spacing: -0.015em;
+    text-wrap: balance; padding-inline-end: 24px; }
+  .vis-head p { grid-column: 6 / -1; color: var(--ink-2); font-size: 1.0625rem; line-height: 1.55; max-inline-size: 62ch; text-wrap: pretty; }
+
+  .vis-grid { display: grid; gap: var(--vg);
     grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     grid-auto-rows: calc(var(--col) * 2 / 3);
-    grid-template-areas:
-      "pipeline pipeline pipeline pipeline pipeline pipeline pipeline pipeline gaia gaia gaia gaia"
-      "pipeline pipeline pipeline pipeline pipeline pipeline pipeline pipeline gaia gaia gaia gaia"
-      "pipeline pipeline pipeline pipeline pipeline pipeline pipeline pipeline gaia gaia gaia gaia"
-      "pipeline pipeline pipeline pipeline pipeline pipeline pipeline pipeline tellurion tellurion tellurion tellurion"
-      "pipeline pipeline pipeline pipeline pipeline pipeline pipeline pipeline tellurion tellurion tellurion tellurion"
-      "pipeline pipeline pipeline pipeline pipeline pipeline pipeline pipeline tellurion tellurion tellurion tellurion"
-      "hall hall hall hall starfold starfold starfold starfold starfold starfold starfold starfold"
-      "hall hall hall hall starfold starfold starfold starfold starfold starfold starfold starfold"
-      "hall hall hall hall starfold starfold starfold starfold starfold starfold starfold starfold"
-      "hall hall hall hall starfold starfold starfold starfold starfold starfold starfold starfold"
-      "hall hall hall hall starfold starfold starfold starfold starfold starfold starfold starfold"
-      "hall hall hall hall starfold starfold starfold starfold starfold starfold starfold starfold"
-      "plato plato plato plato plato seismo seismo seismo janus janus janus janus"
-      "plato plato plato plato plato seismo seismo seismo janus janus janus janus"
-      "plato plato plato plato plato seismo seismo seismo janus janus janus janus"
-      "plato plato plato plato plato seismo seismo seismo janus janus janus janus"
-      "unroll unroll unroll unroll ariel ariel ariel ariel ariel explorer explorer explorer"
-      "unroll unroll unroll unroll ariel ariel ariel ariel ariel explorer explorer explorer"
-      "unroll unroll unroll unroll ariel ariel ariel ariel ariel explorer explorer explorer"
-      "unroll unroll unroll unroll ariel ariel ariel ariel ariel explorer explorer explorer"
-      "field field field field field field field field field field field field"
-      "field field field field field field field field field field field field"
-      "field field field field field field field field field field field field"
-      "field field field field field field field field field field field field"
-      "field field field field field field field field field field field field"
-      "allsky allsky allsky allsky allsky allsky sky sky sky travel travel travel"
-      "allsky allsky allsky allsky allsky allsky sky sky sky travel travel travel"
-      "allsky allsky allsky allsky allsky allsky sky sky sky travel travel travel"
-      "allsky allsky allsky allsky allsky allsky sky sky sky travel travel travel"
-      "allsky allsky allsky allsky allsky allsky sky sky sky travel travel travel";
-    border-radius: var(--radius); overflow: hidden;
-  }
+    border-radius: var(--radius); overflow: hidden; }
+
+  /* areas: the strongest piece of each section takes seven columns (six rows; the dashboard five, to keep its whole
+     width); seams after column 5 or 7 */
+  .vis-grid--craft { grid-template-areas:
+    "gaia gaia gaia gaia gaia gaia gaia plato plato plato plato plato"
+    "gaia gaia gaia gaia gaia gaia gaia plato plato plato plato plato"
+    "gaia gaia gaia gaia gaia gaia gaia plato plato plato plato plato"
+    "gaia gaia gaia gaia gaia gaia gaia plato plato plato plato plato"
+    "gaia gaia gaia gaia gaia gaia gaia plato plato plato plato plato"
+    "gaia gaia gaia gaia gaia gaia gaia plato plato plato plato plato"
+    "kepler kepler kepler ariel ariel ariel ariel tess tess tess tess tess"
+    "kepler kepler kepler ariel ariel ariel ariel tess tess tess tess tess"
+    "kepler kepler kepler ariel ariel ariel ariel tess tess tess tess tess"
+    "kepler kepler kepler ariel ariel ariel ariel tess tess tess tess tess"
+    "kepler kepler kepler ariel ariel ariel ariel tess tess tess tess tess"
+    "kepler kepler kepler ariel ariel ariel ariel tess tess tess tess tess"; }
+  .vis-grid--stars { grid-template-areas:
+    "seismo seismo seismo seismo seismo pipeline pipeline pipeline pipeline pipeline pipeline pipeline"
+    "seismo seismo seismo seismo seismo pipeline pipeline pipeline pipeline pipeline pipeline pipeline"
+    "seismo seismo seismo seismo seismo pipeline pipeline pipeline pipeline pipeline pipeline pipeline"
+    "seismo seismo seismo seismo seismo pipeline pipeline pipeline pipeline pipeline pipeline pipeline"
+    "seismo seismo seismo seismo seismo pipeline pipeline pipeline pipeline pipeline pipeline pipeline"
+    "seismo seismo seismo seismo seismo pipeline pipeline pipeline pipeline pipeline pipeline pipeline"
+    "allsky allsky allsky allsky allsky allsky allsky sky sky sky sky sky"
+    "allsky allsky allsky allsky allsky allsky allsky sky sky sky sky sky"
+    "allsky allsky allsky allsky allsky allsky allsky sky sky sky sky sky"
+    "allsky allsky allsky allsky allsky allsky allsky sky sky sky sky sky"
+    "allsky allsky allsky allsky allsky allsky allsky sky sky sky sky sky"
+    "field field field field field field field field field field field field"
+    "field field field field field field field field field field field field"
+    "field field field field field field field field field field field field"
+    "field field field field field field field field field field field field"
+    "field field field field field field field field field field field field"; }
+  .vis-grid--data { grid-template-areas:
+    "starfold starfold starfold starfold starfold starfold starfold hall hall hall hall hall"
+    "starfold starfold starfold starfold starfold starfold starfold hall hall hall hall hall"
+    "starfold starfold starfold starfold starfold starfold starfold hall hall hall hall hall"
+    "starfold starfold starfold starfold starfold starfold starfold hall hall hall hall hall"
+    "starfold starfold starfold starfold starfold starfold starfold hall hall hall hall hall"
+    "unroll unroll unroll unroll unroll janus janus janus janus janus janus janus"
+    "unroll unroll unroll unroll unroll janus janus janus janus janus janus janus"
+    "unroll unroll unroll unroll unroll janus janus janus janus janus janus janus"
+    "unroll unroll unroll unroll unroll janus janus janus janus janus janus janus"; }
+  .vis-grid--tools { grid-template-areas:
+    "explorer explorer explorer explorer explorer travel travel travel travel travel travel travel"
+    "explorer explorer explorer explorer explorer travel travel travel travel travel travel travel"
+    "explorer explorer explorer explorer explorer travel travel travel travel travel travel travel"
+    "tellurion tellurion tellurion tellurion tellurion travel travel travel travel travel travel travel"
+    "tellurion tellurion tellurion tellurion tellurion travel travel travel travel travel travel travel"
+    "tellurion tellurion tellurion tellurion tellurion travel travel travel travel travel travel travel"
+    "nn nn nn nn nn gp gp gp gp gp gp gp"
+    "nn nn nn nn nn gp gp gp gp gp gp gp"
+    "nn nn nn nn nn gp gp gp gp gp gp gp"
+    "nn nn nn nn nn gp gp gp gp gp gp gp"
+    "polytropes polytropes polytropes polytropes polytropes polytropes polytropes orbits orbits orbits orbits orbits"
+    "polytropes polytropes polytropes polytropes polytropes polytropes polytropes orbits orbits orbits orbits orbits"
+    "polytropes polytropes polytropes polytropes polytropes polytropes polytropes orbits orbits orbits orbits orbits"
+    "polytropes polytropes polytropes polytropes polytropes polytropes polytropes orbits orbits orbits orbits orbits"; }
 
   .vis-tile { grid-area: var(--area); position: relative; overflow: hidden; background: #0d0c0b; color: #ecebe6; outline: none;
     transition: opacity .2s ease-out, filter .2s ease-out; }
   .vis-media { position: absolute; inset: 0; }
   .vis-media > img, .vis-media > video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
 
+  /* a craft loop framed on the craft: the video is sized from the tile's height and placed so the craft's centre sits at
+     the tile's centre (the loops are 2.4 to 1; --vz, --cx, --cy from the page) */
+  .vis-media--fit { container-type: size; overflow: hidden; }
+  .vis-media--fit > video { inset: auto; object-fit: fill; max-inline-size: none; max-block-size: none;
+    block-size: calc(var(--vz) * 100cqh); inline-size: calc(var(--vz) * 240cqh);
+    inset-inline-start: calc(50cqw - var(--cx) * var(--vz) * 240cqh); inset-block-start: calc(50cqh - var(--cy) * var(--vz) * 100cqh); }
+
+  /* a credit shared by a whole section, under its grid */
+  .vis-credit { margin-block-start: 10px; text-align: end; font: 500 0.8125rem/1.3 var(--mono); }
+  .vis-credit a { color: var(--ink-2); }
+
   /* the figure tile is a plane of the page's own paper, with a hairline */
   .vis-tile--fig { background: var(--raised); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
-  .vis-tile--fig .vis-media { display: grid; place-items: center; padding: clamp(8px, 1.6cqi, 24px); }
+  .vis-tile--fig .vis-media { display: grid; place-items: center; padding: clamp(12px, 2.4cqi, 36px); }
   .vis-tile--fig .vis-media > svg { inline-size: 100%; block-size: 100%; max-block-size: 100%; }
 
-  /* the rest fade and lose some colour while one tile is shown */
+  /* the rest of the section step back while one tile is shown: on the dark page they fade into it, on the light page
+     the lights go down on them (a translucent dark tile on paper turns a muddy grey); the paper figure always fades */
+  .vis { --fade-o: .35; --fade-f: saturate(.45); }
+  :root[data-theme="light"] .vis { --fade-o: 1; --fade-f: saturate(.35) brightness(.4); }
+  @media (prefers-color-scheme: light) { :root:not([data-theme]) .vis { --fade-o: 1; --fade-f: saturate(.35) brightness(.4); } }
+  .vis-tile--fig { --fade-o: .35; --fade-f: none; }
   @media (hover: hover) {
-    .vis-grid:has(.vis-tile:hover) .vis-tile:not(:hover) { opacity: .35; filter: saturate(.45); }
+    .vis-grid:has(.vis-tile:hover) .vis-tile:not(:hover) { opacity: var(--fade-o); filter: var(--fade-f); }
   }
-  .vis-grid:has(.vis-tile:is(:focus-visible, :has(:focus-visible), .is-open)) .vis-tile:not(:focus-visible, :has(:focus-visible), .is-open) { opacity: .35; filter: saturate(.45); }
+  .vis-grid:has(.vis-tile:is(:focus-visible, :has(:focus-visible), .is-open)) .vis-tile:not(:focus-visible, :has(:focus-visible), .is-open) { opacity: var(--fade-o); filter: var(--fade-f); }
   .vis-tile:focus-visible { box-shadow: inset 0 0 0 2px var(--flow); }
 
   /* the glass: dark, translucent, blurred; text 16 px and up, 4.5:1 on the brightest tile */
@@ -72,7 +128,7 @@
     -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
     opacity: 0; transform: translateY(6px); pointer-events: none;
     transition: opacity .2s ease-out, transform .25s var(--ease); }
-  .vis-glass h2 { font: 400 1.3rem/1.15 var(--serif); letter-spacing: -0.01em; color: #f4f2ed; text-wrap: balance; }
+  .vis-glass h3 { font: 400 1.3rem/1.15 var(--serif); letter-spacing: -0.01em; color: #f4f2ed; text-wrap: balance; }
   .vis-glass p { font: 400 1rem/1.45 var(--sans); color: #e6e3dd; max-inline-size: 52ch; }
   @media (hover: hover) { .vis-tile:hover .vis-glass { opacity: 1; transform: none; pointer-events: auto; } }
   .vis-tile:is(:focus-visible, :has(:focus-visible), .is-open) .vis-glass { opacity: 1; transform: none; pointer-events: auto; }
@@ -85,56 +141,44 @@
     .vis-glass { transform: none; }
   }
 
-  /* tablet: six columns, the large pieces full width, the rest in pairs */
+  /* tablet: six columns; the heading over the intro, the large piece full width, the rest in pairs */
   @media (max-width: 1100px) {
-    .vis-grid {
-      --cols: 6;
-      grid-template-areas:
-        "pipeline pipeline pipeline pipeline pipeline pipeline"
-        "pipeline pipeline pipeline pipeline pipeline pipeline"
-        "pipeline pipeline pipeline pipeline pipeline pipeline"
-        "pipeline pipeline pipeline pipeline pipeline pipeline"
-        "gaia gaia gaia tellurion tellurion tellurion"
-        "gaia gaia gaia tellurion tellurion tellurion"
-        "gaia gaia gaia tellurion tellurion tellurion"
-        "starfold starfold starfold starfold starfold starfold"
-        "starfold starfold starfold starfold starfold starfold"
-        "starfold starfold starfold starfold starfold starfold"
-        "starfold starfold starfold starfold starfold starfold"
-        "hall hall hall plato plato plato"
-        "hall hall hall plato plato plato"
-        "hall hall hall plato plato plato"
-        "hall hall hall ariel ariel ariel"
-        "hall hall hall ariel ariel ariel"
-        "hall hall hall ariel ariel ariel"
-        "janus janus janus unroll unroll unroll"
-        "janus janus janus unroll unroll unroll"
-        "janus janus janus unroll unroll unroll"
-        "field field field field field field"
-        "field field field field field field"
-        "field field field field field field"
-        "allsky allsky allsky allsky allsky allsky"
-        "allsky allsky allsky allsky allsky allsky"
-        "allsky allsky allsky allsky allsky allsky"
-        "allsky allsky allsky allsky allsky allsky"
-        "seismo seismo seismo explorer explorer explorer"
-        "seismo seismo seismo explorer explorer explorer"
-        "seismo seismo seismo explorer explorer explorer"
-        "sky sky sky travel travel travel"
-        "sky sky sky travel travel travel"
-        "sky sky sky travel travel travel";
-    }
+    .vis { --cols: 6; }
+    .vis-intro { max-inline-size: 46rem; }
+    .vis-head h2, .vis-head p { grid-column: 1 / -1; }
+    .vis-grid--craft { grid-template-areas:
+      "gaia gaia gaia gaia gaia gaia" "gaia gaia gaia gaia gaia gaia" "gaia gaia gaia gaia gaia gaia" "gaia gaia gaia gaia gaia gaia" "gaia gaia gaia gaia gaia gaia"
+      "plato plato plato tess tess tess" "plato plato plato tess tess tess" "plato plato plato tess tess tess" "plato plato plato tess tess tess"
+      "kepler kepler kepler ariel ariel ariel" "kepler kepler kepler ariel ariel ariel" "kepler kepler kepler ariel ariel ariel" "kepler kepler kepler ariel ariel ariel"; }
+    .vis-grid--stars { grid-template-areas:
+      "pipeline pipeline pipeline pipeline pipeline pipeline" "pipeline pipeline pipeline pipeline pipeline pipeline" "pipeline pipeline pipeline pipeline pipeline pipeline" "pipeline pipeline pipeline pipeline pipeline pipeline" "pipeline pipeline pipeline pipeline pipeline pipeline"
+      "seismo seismo seismo sky sky sky" "seismo seismo seismo sky sky sky" "seismo seismo seismo sky sky sky" "seismo seismo seismo sky sky sky"
+      "allsky allsky allsky allsky allsky allsky" "allsky allsky allsky allsky allsky allsky" "allsky allsky allsky allsky allsky allsky" "allsky allsky allsky allsky allsky allsky"
+      "field field field field field field" "field field field field field field" "field field field field field field" "field field field field field field"; }
+    .vis-grid--data { grid-template-areas:
+      "starfold starfold starfold starfold starfold starfold" "starfold starfold starfold starfold starfold starfold" "starfold starfold starfold starfold starfold starfold" "starfold starfold starfold starfold starfold starfold"
+      "hall hall hall janus janus janus" "hall hall hall janus janus janus" "hall hall hall janus janus janus"
+      "hall hall hall unroll unroll unroll" "hall hall hall unroll unroll unroll" "hall hall hall unroll unroll unroll"; }
+    .vis-grid--tools { grid-template-areas:
+      "travel travel travel travel travel travel" "travel travel travel travel travel travel" "travel travel travel travel travel travel" "travel travel travel travel travel travel" "travel travel travel travel travel travel"
+      "explorer explorer explorer tellurion tellurion tellurion" "explorer explorer explorer tellurion tellurion tellurion" "explorer explorer explorer tellurion tellurion tellurion"
+      "nn nn nn gp gp gp" "nn nn nn gp gp gp" "nn nn nn gp gp gp"
+      "polytropes polytropes polytropes orbits orbits orbits" "polytropes polytropes polytropes orbits orbits orbits" "polytropes polytropes polytropes orbits orbits orbits"; }
   }
 
-  /* phone: one column, each piece at its own proportion */
+  /* phone: one column, each piece at a proportion that suits it; the strongest piece of each section first */
   @media (max-width: 640px) {
-    .vis-grid { grid-template-columns: 1fr; grid-template-areas: none; grid-auto-rows: auto; }
+    .vis-grid { grid-template-columns: 1fr; grid-template-areas: none !important; grid-auto-rows: auto; }
     .vis-tile { grid-area: auto; aspect-ratio: 16 / 10; }
+    .vis-grid--stars [data-id="pipeline"], .vis-grid--tools [data-id="travel"] { order: -1; }
+    .vis-tile:is([data-id="plato"], [data-id="ariel"], [data-id="tess"], [data-id="kepler"]) { aspect-ratio: 4 / 3; }
     .vis-tile:is([data-id="hall"], [data-id="seismo"]) { aspect-ratio: 4 / 3; }
     .vis-tile[data-id="starfold"] { aspect-ratio: 1 / 1; }
+    .vis-tile[data-id="allsky"] { aspect-ratio: 2 / 1; }
     .vis-tile--fig { aspect-ratio: 1140 / 460; }
     .vis-tile--fig .vis-media { padding: 6px; }
     .vis-glass { inset-inline-start: 10px; inset-block-end: 10px; max-inline-size: calc(100% - 20px); max-block-size: calc(100% - 20px); padding: 12px 14px; }
-    .vis-glass h2 { font-size: 1.15rem; }
+    .vis-glass h3 { font-size: 1.15rem; }
+    .vis-head p { font-size: 1rem; }
   }
 }
