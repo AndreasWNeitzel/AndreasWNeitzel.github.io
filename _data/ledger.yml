@@ -128,6 +128,27 @@ publications:
   audiences:
   - academic
   contribution: Carried out the GJ 570 A ESPRESSO observations at Paranal (visitor mode, May 2024).
+- id: pub-2026-janus-methods-inprep
+  title: 'JANUS: calibrated stellar parameters and abundances of red giants from Gaia XP spectra'
+  tagline: 'First-author paper on JANUS: red-giant parameters and abundances from Gaia XP spectra, in preparation.'
+  kind: in-preparation
+  role: first-author
+  venue: In preparation
+  date: '2026'
+  people:
+  - A. W. Neitzel
+  - et al.
+  summary: Describes JANUS and its calibrated per-star parameters and abundances for red giants from Gaia XP spectra, in preparation.
+  tags:
+  - gaia
+  - apogee
+  - red-giants
+  - machine-learning
+  - in-preparation
+  weight: 5
+  audiences:
+  - academic
+  status: in-preparation
 - id: pub-2026-haydnsim-inprep
   title: 'HAYDNsim: an end-to-end stellar-field and photometric-noise simulation framework for the HAYDN mission concept'
   tagline: First-author paper on the HAYDNsim pipeline and the HAYDN crowded-field noise requirement, in preparation.
@@ -499,7 +520,8 @@ funding:
   kind: computing
   role: principal investigator
   venue: Deucalion (Minho Advanced Computing Centre)
-  date: 2026-10
+  date: '2026-11-11'
+  end_date: '2027-11-10'
   people:
   - T. L. Campante (co-responsible investigator)
   identifiers:
@@ -531,7 +553,8 @@ funding:
   kind: computing
   role: principal investigator
   venue: MareNostrum 5 (Barcelona Supercomputing Center)
-  date: 2026-10
+  date: '2026-11-11'
+  end_date: '2027-11-10'
   people:
   - T. L. Campante (co-responsible investigator)
   identifiers:

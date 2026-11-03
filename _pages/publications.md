@@ -25,6 +25,15 @@ extra_css: [/assets/css/thesis.css]
   <div class="section-head k-up"><h2 id="co">Co-author</h2></div>
   <div class="bib-list">{% bibliography --query @*[lead=co] %}</div>
 </section>
+{%- assign inprep = L.publications | where: "kind", "in-preparation" -%}
+{%- if inprep.size > 0 %}
+<section class="section" aria-labelledby="inprep">
+  <div class="section-head k-up"><h2 id="inprep">In preparation</h2></div>
+  <ol class="entries">
+    {%- for e in inprep %}{% include ledger_entry.html e=e category="publications" label="in preparation" when="2026" %}{% endfor %}
+  </ol>
+</section>
+{%- endif %}
 {%- assign other = L.publications | where_exp: "e", "e.kind == 'data' or e.kind == 'thesis'" -%}
 {%- if other.size > 0 %}
 <section class="section" aria-labelledby="other">
