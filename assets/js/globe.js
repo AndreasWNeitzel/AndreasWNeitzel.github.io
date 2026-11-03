@@ -38,7 +38,7 @@
     const W = svg.clientWidth, H = svg.clientHeight, R = Math.min(W, H) * 0.42, dpr = Math.min(2, devicePixelRatio || 1);
     cv.width = W * dpr; cv.height = H * dpr;
     const ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const proj = d3.geoOrthographic().translate([W / 2, H / 2]).clipAngle(90).precision(0), path = d3.geoPath(proj, ctx);
+    const proj = d3.geoOrthographic().translate([W / 2, H / 2]).clipAngle(90).precision(0.5), path = d3.geoPath(proj, ctx);
     svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.innerHTML = "";
     const dots = el("g");
     // each country keeps its centre and angular radius, so a zoomed view projects only what can be seen;
@@ -53,6 +53,15 @@
     const nearIds = near ? new Set(near.features.map((f) => f.id)) : new Set();
     const N = near ? mk(near).concat(M.filter((q) => !nearIds.has(q.f.id))) : M;
     const MIDS = new Set(M.map((q) => q.f.id)), NIDS = new Set(N.map((q) => q.f.id));
+    // the boxes the regional files were cut to (figures/map/build_globe_regions.py), each as a sphere polygon whose
+    // parallels are traced degree by degree and wound so d3 reads its inside; a hair inside the cut, so no seam opens
+    const boxPoly = ([w, s, e, n]) => {
+      w += .02; s += .02; e -= .02; n -= .02;
+      const ring = [...d3.range(s, n, 1).map((t) => [w, t]), ...d3.range(w, e, 1).map((l) => [l, n]), ...d3.range(n, s, -1).map((t) => [e, t]), ...d3.range(e, w, -1).map((l) => [l, s]), [w, s]];
+      const g = { type: "Polygon", coordinates: [ring] };
+      return d3.geoArea(g) > 2 * Math.PI ? { type: "Polygon", coordinates: [ring.slice().reverse()] } : g;
+    };
+    const MBOX = [[-32, 24, 46, 72], [-85, -50, -50, -5]].map(boxPoly), NBOX = [[-26, 24, 20, 53]].map(boxPoly);
     const inBox = (b, l, t) => l > b[0] && l < b[2] && t > b[1] && t < b[3];
     const segs = ROUTES.map(([a, b]) => { const A = P[a], B = P[b], ip = d3.geoInterpolate([A.lon, A.lat], [B.lon, B.lat]); return { b, pts: d3.range(0, 1.0001, 1 / 64).map(ip) }; });
     const marks = PLACES.map((p) => {
@@ -74,9 +83,18 @@
         ctx.beginPath(); seen.forEach((q) => path(q.f)); ctx.fillStyle = colour("--land"); ctx.fill(); if (edge) { ctx.strokeStyle = colour("--land-edge"); ctx.lineWidth = .5; ctx.stroke(); }
         ctx.beginPath(); seen.filter((q) => q.v).forEach((q) => path(q.f)); ctx.fillStyle = colour("--visit-fill"); ctx.fill(); if (edge) { ctx.strokeStyle = colour("--visit"); ctx.lineWidth = .7; ctx.stroke(); }
       };
-      // the whole world first, then the regional detail over it, so the view never ends at a region's edge;
-      // countries the detail redraws are left out of the coarse pass, or its looser coastline shows past the fine one
-      if (m !== coarse) { const ids = m === N ? NIDS : MIDS; layer(coarse.filter((q) => !ids.has(q.f.id)), false); layer(m, true); } else layer(m, true);
+      // the whole world first, then the regional detail over it, so the view never ends at a region's edge. Inside the
+      // boxes the detail was cut to, the coarse countries it redraws are masked out, or their looser coastline shows past
+      // the fine one; outside the boxes they stay, since the detail stops at the box edge
+      if (m !== coarse) {
+        const masked = (ids, boxes) => { ctx.save(); boxes.forEach((b) => { ctx.beginPath(); ctx.rect(0, 0, W, H); path(b); ctx.clip("evenodd"); }); layer(coarse.filter((q) => ids.has(q.f.id)), false); ctx.restore(); };
+        const fromMid = m === N ? new Set([...MIDS].filter((i) => !nearIds.has(i))) : MIDS;
+        layer(coarse.filter((q) => !NIDS.has(q.f.id) && !MIDS.has(q.f.id)), false);
+        // only the box under the view centre: a box near the horizon clips into a degenerate shape that hides land elsewhere
+        masked(fromMid, [MBOX[inBox([-80, -45, -55, -10], view.lon, view.lat) ? 1 : 0]]);
+        if (m === N) masked(nearIds, NBOX);
+        layer(m, true);
+      } else layer(m, true);
       const sr = R * view.k, g = ctx.createRadialGradient(W / 2 - sr * .25, H / 2 - sr * .3, sr * .55, W / 2, H / 2, sr);
       g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.38)"); ctx.beginPath(); path({ type: "Sphere" }); ctx.fillStyle = g; ctx.fill();
       ctx.strokeStyle = colour("--flow"); ctx.lineWidth = 1.8; ctx.lineCap = "round";
