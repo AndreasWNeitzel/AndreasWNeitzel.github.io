@@ -52,8 +52,8 @@ lines:
       - {label: "The paper, explained", url: /papers/campante-2026-gj570a/}
       - {label: "ESO and the VLT, in a minute", url: /guide/eso-vlt/}
   - id: haydn
-    loop: haydn
-    img: /assets/img/heroes/software_haydn.webp
+    loop: cluster
+    img: /assets/img/heroes/cluster.poster.webp
     url: /software/haydnsim/
     links:
       - {label: "The pipeline", url: /software/haydnsim/}
