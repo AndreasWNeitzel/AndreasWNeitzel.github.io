@@ -1,6 +1,7 @@
 // Stellar Explorer. One star of the Sun's mass and metallicity, computed with MESA and GYRE, read
 // from an HDF5 file in the browser. Every panel draws from the selected model's own stored profile
 // and mode list. Plots are canvases drawn at device resolution; axis titles are KaTeX over them.
+// The star itself is drawn by star-gl.js; colours follow the site's light and dark themes.
 (() => {
   "use strict";
 
@@ -10,26 +11,55 @@
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const lerp = (a, b, t) => a + (b - a) * t;
   const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const PERIOD = 6; // seconds per oscillation cycle on screen
+  const AMP = 0.045; // displacement at the peak of the normalised eigenfunction, in units of R
 
+  // phase colours [light, dark], from the site's categorical set
   const PHASE = {
-    PMS: ["#c084fc", "pre-main sequence"],
-    ZAMS: ["#dff3ff", "zero-age main sequence"],
-    MS: ["#67e8f9", "main sequence"],
-    SGB: ["#fde68a", "subgiant branch"],
-    RGB: ["#f87171", "red giant branch"],
-    HeFlash: ["#ffffff", "helium flash"],
-    HeCB: ["#fb7185", "core helium burning"],
-    RC: ["#facc15", "red clump"],
-    AGB: ["#fb923c", "asymptotic giant branch"],
-    postAGB: ["#e2e8f0", "post-AGB"],
-    WD: ["#94a3b8", "white dwarf"],
+    PMS: [["#5f6f6d", "#94a4a2"], "pre-main sequence"],
+    ZAMS: [["#23797e", "#92dadd"], "zero-age main sequence"],
+    MS: [["#2f6fb8", "#5aa2e6"], "main sequence"],
+    SGB: [["#7d7034", "#c9bb7c"], "subgiant branch"],
+    RGB: [["#b5300f", "#ec6446"], "red giant branch"],
+    HeFlash: [["#1c1a18", "#ebe8e3"], "helium flash"],
+    HeCB: [["#b45309", "#f08a3c"], "core helium burning"],
+    RC: [["#946c00", "#f2bd45"], "red clump"],
+    AGB: [["#8a5242", "#c9927f"], "asymptotic giant branch"],
+    postAGB: [["#7a2fa8", "#bb8cf0"], "post-AGB"],
+    WD: [["#5d626e", "#a3a9b5"], "white dwarf"],
   };
-  const ELL_COLOR = ["#dff3ff", "#ad93ff", "#5be8c4"];
-  const CONV = "#7fdcff";
-  const BURN = "#ff7a3d";
-  const INK = { grid: "rgba(180,180,210,0.10)", axis: "rgba(180,180,210,0.35)", tick: "#b4b4ca", faint: "#74748c" };
-  const MONO = "'Share Tech Mono', monospace";
-  const UI = "'Rajdhani', sans-serif";
+  const SANS = "Geist, ui-sans-serif, system-ui, sans-serif";
+  const MONO = "'Geist Mono', ui-monospace, monospace";
+
+  // ------------------------------------------------------------------ theme: resolved colours
+  const C = {};
+  let DARK = true;
+  function readTheme() {
+    const root = document.documentElement;
+    DARK = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    const probe = document.createElement("i");
+    probe.style.display = "none";
+    document.body.append(probe);
+    const get = (v) => { probe.style.color = `var(${v})`; return getComputedStyle(probe).color; };
+    for (const [k, v] of Object.entries({ ink: "--ink", ink2: "--ink-2", muted: "--muted", line: "--line", lineS: "--line-strong", fig: "--fig", mark: "--mark", flow: "--flow", raised: "--raised" })) C[k] = get(v);
+    probe.remove();
+    const pick = (pair) => pair[DARK ? 1 : 0];
+    C.grid = DARK ? "rgba(205,201,195,0.07)" : "rgba(40,38,34,0.075)";
+    C.axis = DARK ? "rgba(205,201,195,0.32)" : "rgba(40,38,34,0.38)";
+    C.fill = DARK ? "rgba(255,255,255,0.012)" : "rgba(40,38,34,0.012)";
+    C.conv = pick(["#2f6fb8", "#7cb8ff"]);
+    C.convA = DARK ? 0.11 : 0.09;
+    C.burn = pick(["#c2410c", "#ff8a4c"]);
+    C.burnA = DARK ? 0.13 : 0.10;
+    C.ell = [pick(["#1b5fd6", "#7cb8ff"]), pick(["#2f7f52", "#6fd59b"]), pick(["#7a2fa8", "#c79cf2"])];
+    C.y2 = pick(["#8a6a1f", "#d8b768"]);
+    C.phase = (p) => (PHASE[p] ? pick(PHASE[p][0]) : C.ink);
+  }
+  const alpha = (col, a) => {
+    const m = col.match(/\d+(\.\d+)?/g);
+    if (col.startsWith("#")) { const v = parseInt(col.slice(1), 16); return `rgba(${(v >> 16) & 255},${(v >> 8) & 255},${v & 255},${a})`; }
+    return m ? `rgba(${m[0]},${m[1]},${m[2]},${a})` : col;
+  };
 
   // ------------------------------------------------------------------ formatting
   const SUP = { "-": "⁻", 0: "⁰", 1: "¹", 2: "²", 3: "³", 4: "⁴", 5: "⁵", 6: "⁶", 7: "⁷", 8: "⁸", 9: "⁹" };
@@ -56,6 +86,7 @@
     if (s < 86400 * 400) return `${(s / 86400).toFixed(1)} d`;
     return `${(s / 86400 / 365.25).toFixed(1)} yr`;
   }
+  const fnu = (nu) => (nu >= 100 ? nu.toFixed(1) : nu.toPrecision(3));
   const tex = (el, s) => { if (el && window.katex) katex.render(s, el, { throwOnError: false }); else if (el) el.textContent = s; };
 
   // ------------------------------------------------------------------ canvas surfaces and axes
@@ -117,22 +148,23 @@
     return out;
   }
   const ticksFor = (sc, n) => (sc.type === "log" ? logTicks(sc.lo, sc.hi, n) : linTicks(sc.lo, sc.hi, n));
+  const TICK = `12px ${MONO}`, LABEL = `13px ${SANS}`;
 
   // Draw a frame with ticks; box = {x0, y0, x1, y1}; X, Y are scales mapping data to pixels.
   function frame(c, box, X, Y, opt = {}) {
     const { x0, y0, x1, y1 } = box;
-    c.fillStyle = opt.fill || "rgba(255,255,255,0.015)";
+    c.fillStyle = C.fill;
     c.fillRect(x0, y0, x1 - x0, y1 - y0);
-    c.font = `11px ${MONO}`;
+    c.font = TICK;
     c.textBaseline = "middle";
     const tx = opt.xTicks || ticksFor(X, opt.nx || 5);
     const ty = opt.yTicks || ticksFor(Y, opt.ny || 4);
-    c.strokeStyle = INK.grid;
+    c.strokeStyle = C.grid;
     for (const t of tx) { const p = X.f(t.v); if (p < x0 - 0.5 || p > x1 + 0.5 || !t.major) continue; c.beginPath(); c.moveTo(p, y0); c.lineTo(p, y1); c.stroke(); }
     for (const t of ty) { const p = Y.f(t.v); if (p < y0 - 0.5 || p > y1 + 0.5 || !t.major) continue; c.beginPath(); c.moveTo(x0, p); c.lineTo(x1, p); c.stroke(); }
-    c.strokeStyle = INK.axis;
+    c.strokeStyle = C.axis;
     c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0, y1); c.lineTo(x1, y1); c.stroke();
-    c.fillStyle = INK.tick;
+    c.fillStyle = C.ink2;
     c.textAlign = "center";
     let lastX = -1e9;
     const inOrder = tx.map((t) => ({ ...t, p: X.f(t.v) })).sort((a, b) => a.p - b.p);
@@ -141,8 +173,8 @@
       c.beginPath(); c.moveTo(p, y1); c.lineTo(p, y1 + (t.major ? 4 : 2)); c.stroke();
       if (!t.label || !opt.xLabels) continue;
       const w = c.measureText(t.label).width;
-      if (p - w / 2 < lastX + 6 || p + w / 2 > x1 + 10) continue;
-      c.fillText(t.label, p, y1 + 12); lastX = p + w / 2;
+      if (p - w / 2 < lastX + 8 || p + w / 2 > x1 + 8) continue;
+      c.fillText(t.label, p, y1 + 13); lastX = p + w / 2;
     }
     c.textAlign = "right";
     let lastY = 1e9;
@@ -150,7 +182,7 @@
       const p = Y.f(t.v); if (p < y0 - 0.5 || p > y1 + 0.5) continue;
       c.beginPath(); c.moveTo(x0 - (t.major ? 4 : 2), p); c.lineTo(x0, p); c.stroke();
       if (!t.label) continue;
-      if (p > lastY - 13) continue;
+      if (p > lastY - 15) continue;
       c.fillText(t.label, x0 - 6, p); lastY = p;
     }
   }
@@ -181,6 +213,20 @@
     else if (ell === 1) { c.moveTo(x, y - r * 1.2); c.lineTo(x + r * 1.1, y + r * 0.75); c.lineTo(x - r * 1.1, y + r * 0.75); c.closePath(); }
     else c.rect(x - r * 0.9, y - r * 0.9, r * 1.8, r * 1.8);
     if (filled) c.fill(); else c.stroke();
+  }
+  // a row of legend entries drawn inside a plot, left to right
+  function legendRow(c, x, y, items) {
+    c.font = LABEL; c.textBaseline = "middle"; c.textAlign = "left";
+    let wsum = 0;
+    for (const it of items) wsum += (it.mark !== undefined ? 12 : 16) + c.measureText(it.label).width + 14;
+    c.fillStyle = alpha(C.raised, 0.86); c.fillRect(x - 6, y - 10, wsum, 20);
+    for (const it of items) {
+      c.fillStyle = it.col; c.strokeStyle = it.col; c.lineWidth = 2;
+      if (it.mark !== undefined) { c.lineWidth = 1.3; marker(c, x + 4, y, it.mark, 3.6, it.filled !== false); x += 12; }
+      else { c.beginPath(); c.moveTo(x, y); c.lineTo(x + 12, y); c.stroke(); x += 16; }
+      c.fillStyle = it.text || it.col; c.fillText(it.label, x, y); x += c.measureText(it.label).width + 14;
+    }
+    c.lineWidth = 1;
   }
 
   // ------------------------------------------------------------------ data
@@ -268,6 +314,9 @@
   function updateStats() {
     const i = S.i;
     const set = (id, v) => { $(id).textContent = v; };
+    const ph = T.phase[i];
+    set("#s-phase", PHASE[ph] ? PHASE[ph][1].replace(/^./, (ch) => ch.toUpperCase()) : ph);
+    $("#st-phase").style.setProperty("--phase", C.phase(ph));
     set("#s-model", T.model ? T.model[i] : i + 1);
     const [a, au] = age(T.age[i]); set("#s-age", a); $("#s-age-u").textContent = au;
     set("#s-teff", Math.round(10 ** T.logTeff[i]).toLocaleString("en-GB"));
@@ -280,10 +329,6 @@
     const nm = T.numax[i], dn = T.dnu[i];
     set("#s-numax", nm >= 100 ? nm.toFixed(0) : nm >= 1 ? nm.toFixed(1) : sci(nm, 2));
     set("#s-dnu", dn >= 100 ? dn.toFixed(0) : dn >= 1 ? dn.toFixed(2) : sci(dn, 2));
-    const ph = T.phase[i], [col, name] = PHASE[ph] || ["#fff", ph];
-    const tag = $("#phase-tag");
-    tag.textContent = name;
-    tag.style.color = col; tag.style.borderColor = col; tag.style.background = col + "1f";
   }
 
   // ------------------------------------------------------------------ HR diagram
@@ -291,7 +336,12 @@
   function drawHR() {
     const c = hr.s.begin();
     const { w, h } = hr.s;
-    const box = { x0: 46, y0: 26, x1: w - 60, y1: h - 40 };
+    const axw = $("#hr-body .ax-x").offsetWidth;
+    c.font = LABEL;
+    const legendW = [...new Set(T.phase)].filter((p) => PHASE[p]).reduce((a, p) => a + 18 + c.measureText(p).width, 0);
+    const two = legendW > w - 58;
+    const box = { x0: 50, y0: 30, x1: w - axw - 24, y1: h - (two ? 68 : 50) };
+    $("#hr-body .ax-x").style.bottom = `${two ? 46 : 28}px`;
     hr.box = box;
     const lo = Math.min(...HIST.logTeff) - 0.02, hi = Math.max(...HIST.logTeff) + 0.02;
     const Llo = Math.min(...HIST.logL) - 0.15, Lhi = Math.max(...HIST.logL) + 0.15;
@@ -306,44 +356,46 @@
     frame(c, box, X, Y, { xTicks, yTicks, xLabels: true });
     c.save(); clipBox(c, box);
     // lines of constant radius: log L = 2 log R + 4 (log T - log 5772)
-    c.strokeStyle = "rgba(180,180,210,0.16)"; c.setLineDash([3, 4]); c.font = `10px ${MONO}`; c.fillStyle = INK.faint; c.textAlign = "left";
+    c.strokeStyle = alpha(C.muted, 0.35); c.setLineDash([3, 4]); c.font = TICK; c.fillStyle = C.muted; c.textAlign = "left"; c.textBaseline = "middle";
     for (const Rk of [0.01, 0.1, 1, 10, 100]) {
       const lT = (t) => 2 * Math.log10(Rk) + 4 * (t - Math.log10(5772));
       c.beginPath(); c.moveTo(X.f(hi), Y.f(lT(hi))); c.lineTo(X.f(lo), Y.f(lT(lo))); c.stroke();
-      // label where the line meets the top or the right edge
-      let tl = hi + (Lhi - lT(hi)) / 4; // temperature at which it hits the top
+      const tl = hi + (Lhi - lT(hi)) / 4; // temperature at which it meets the top
       let px, py;
-      if (tl < hi && tl > lo) { px = X.f(tl); py = box.y0 + 10; } else { px = X.f(lo) - 34; py = Y.f(lT(lo)) - 6; }
-      if (py > box.y0 && py < box.y1 && px > box.x0 && px < box.x1 - 30) c.fillText(`${Rk} R☉`, px + 3, py);
+      if (tl < hi && tl > lo) { px = X.f(tl); py = box.y0 + 11; } else { px = X.f(lo) - 52; py = Y.f(lT(lo)) - 8; }
+      if (py > box.y0 && py < box.y1 && px > box.x0 && px < box.x1 - 50) c.fillText(`${Rk} R☉`, px + 4, py);
     }
     c.setLineDash([]);
     // the whole history
-    c.strokeStyle = "rgba(232,232,242,0.5)"; c.lineWidth = 1;
+    c.strokeStyle = alpha(C.fig, 0.55); c.lineWidth = 1.1;
     polyline(c, HIST.logTeff, HIST.logL, X, Y);
     // the stored models
     for (let i = 0; i < T.n; i++) {
-      c.fillStyle = (PHASE[T.phase[i]] || ["#fff"])[0];
-      c.beginPath(); c.arc(X.f(T.logTeff[i]), Y.f(T.logL[i]), i === S.i ? 4.5 : 3, 0, TAU); c.fill();
+      c.fillStyle = C.phase(T.phase[i]);
+      c.beginPath(); c.arc(X.f(T.logTeff[i]), Y.f(T.logL[i]), 3.2, 0, TAU); c.fill();
     }
     if (S.hover !== null && S.hover !== S.i) {
-      c.strokeStyle = "#fff"; c.beginPath(); c.arc(X.f(T.logTeff[S.hover]), Y.f(T.logL[S.hover]), 6, 0, TAU); c.stroke();
+      c.strokeStyle = C.ink; c.lineWidth = 1.2; c.beginPath(); c.arc(X.f(T.logTeff[S.hover]), Y.f(T.logL[S.hover]), 6.5, 0, TAU); c.stroke();
     }
     const sx = X.f(T.logTeff[S.i]), sy = Y.f(T.logL[S.i]);
-    c.strokeStyle = "rgba(223,243,255,0.45)"; c.setLineDash([2, 4]);
+    c.strokeStyle = alpha(C.ink, 0.45); c.lineWidth = 1; c.setLineDash([2, 4]);
     c.beginPath(); c.moveTo(box.x0, sy); c.lineTo(sx, sy); c.lineTo(sx, box.y1); c.stroke();
     c.setLineDash([]);
-    c.strokeStyle = "#fff"; c.lineWidth = 1.5; c.beginPath(); c.arc(sx, sy, 8, 0, TAU); c.stroke();
+    c.fillStyle = C.phase(T.phase[S.i]); c.beginPath(); c.arc(sx, sy, 4.6, 0, TAU); c.fill();
+    c.strokeStyle = C.ink; c.lineWidth = 1.6; c.beginPath(); c.arc(sx, sy, 9, 0, TAU); c.stroke();
     c.restore();
-    // phase legend along the bottom
+    // phase legend along the bottom, on two rows when one does not hold it
     const present = [...new Set(T.phase)].filter((p) => PHASE[p]);
-    c.font = `11px ${UI}`; c.textAlign = "left"; c.textBaseline = "middle";
-    let lx = box.x0;
-    for (const p of present) {
-      c.fillStyle = PHASE[p][0]; c.beginPath(); c.arc(lx + 4, h - 12, 3, 0, TAU); c.fill();
-      c.fillStyle = INK.tick; c.fillText(p, lx + 11, h - 12);
-      lx += 18 + c.measureText(p).width;
-      if (lx > box.x1 - 40) break;
-    }
+    c.font = LABEL; c.textAlign = "left"; c.textBaseline = "middle";
+    const widths = present.map((p) => 18 + c.measureText(p).width);
+    const rows = widths.reduce((a, b) => a + b, 0) > w - box.x0 - 8 ? 2 : 1;
+    let lx = box.x0, ly = h - (rows === 2 ? 30 : 13);
+    present.forEach((p, k) => {
+      if (lx + widths[k] > w - 6) { lx = box.x0; ly += 18; }
+      c.fillStyle = C.phase(p); c.beginPath(); c.arc(lx + 4, ly, 3.6, 0, TAU); c.fill();
+      c.fillStyle = C.ink2; c.fillText(p, lx + 12, ly);
+      lx += widths[k];
+    });
   }
   function hrNearest(px, py) {
     let best = 12, bi = null;
@@ -355,305 +407,192 @@
   }
 
   // ------------------------------------------------------------------ timeline strip
-  const strip = { s: null, X: null, Y: null, top: 18, bottom: 0 };
+  const strip = { s: null, X: null, Y: null, x0: 40 };
   function drawStrip() {
     const c = strip.s.begin();
     const { w, h } = strip.s;
-    const x0 = 34, x1 = w - 6, y0 = strip.top, y1 = h - 4;
-    strip.bottom = y1;
+    const x0 = strip.x0, x1 = w - 8, y0 = 22, y1 = h - 4;
     const X = (i) => x0 + (i / T.n) * (x1 - x0);
     const Y = S.xlog ? scale("log", 1e-3, 1, y1, y0) : scale("lin", 0, 1, y1, y0);
     strip.X = X; strip.Y = Y;
-    c.fillStyle = "rgba(255,255,255,0.03)"; c.fillRect(x0, y0, x1 - x0, y1 - y0);
-    // phase runs
-    c.font = `10.5px ${UI}`; c.textBaseline = "middle"; c.textAlign = "left";
+    c.fillStyle = C.fill; c.fillRect(x0, y0, x1 - x0, y1 - y0);
+    // phase runs: a coloured rule and the name where it fits
+    c.font = `500 13px ${SANS}`; c.textBaseline = "middle"; c.textAlign = "left";
     for (let i = 0; i < T.n;) {
       let j = i; while (j < T.n && T.phase[j] === T.phase[i]) j++;
-      const col = (PHASE[T.phase[i]] || ["#fff"])[0];
-      c.fillStyle = col; c.fillRect(X(i), y0 - 5, X(j) - X(i) - 1, 2);
+      const col = C.phase(T.phase[i]);
+      c.fillStyle = col; c.fillRect(X(i), y0 - 4, X(j) - X(i) - 1, 2);
       const label = T.phase[i];
       const tw = c.measureText(label).width;
-      if (X(j) - X(i) > tw + 6) c.fillText(label, X(i) + 2, y0 - 11);
+      if (X(j) - X(i) > tw + 8) { c.fillStyle = C.ink2; c.fillText(label, X(i) + 1, y0 - 13); }
       i = j;
     }
     const wcol = X(1) - X(0);
     for (let i = 0; i < T.n; i++) {
       const px = X(i);
       const z = ZONES[i];
-      c.fillStyle = CONV; c.globalAlpha = 0.6;
+      c.fillStyle = C.conv; c.globalAlpha = DARK ? 0.55 : 0.45;
       for (const [a, b] of z.conv) {
         const pa = Y.f(Math.max(a, Y.lo)), pb = Y.f(Math.max(b, Y.lo));
         c.fillRect(px, Math.min(pa, pb), wcol + 0.5, Math.max(1, Math.abs(pa - pb)));
       }
-      c.fillStyle = BURN; c.globalAlpha = 0.95;
+      c.fillStyle = C.burn; c.globalAlpha = 0.95;
       for (const [a, b] of z.burn) {
         const pa = Y.f(Math.max(a, Y.lo)), pb = Y.f(Math.max(b, Y.lo));
         c.fillRect(px, Math.min(pa, pb) - 0.5, wcol + 0.5, Math.max(1.5, Math.abs(pa - pb)));
       }
       c.globalAlpha = 1;
     }
-    // y ticks: 0, 0.5, 1 or decades
-    c.fillStyle = INK.faint; c.font = `10px ${MONO}`; c.textAlign = "right"; c.strokeStyle = INK.axis;
+    // y ticks at the ends: 0 and 1, or the decades
+    c.fillStyle = C.muted; c.font = TICK; c.textAlign = "right"; c.strokeStyle = C.axis;
     const yt = S.xlog ? [1e-3, 1e-2, 1e-1, 1] : [0, 0.5, 1];
-    yt.forEach((v, k) => { const p = Y.f(v); c.beginPath(); c.moveTo(x0 - 3, p); c.lineTo(x0, p); c.stroke(); if (k === 0 || k === yt.length - 1) c.fillText(S.xlog ? pow10(Math.round(Math.log10(v))) : String(v), x0 - 5, clamp(p, y0 + 5, y1 - 5)); });
-    if (S.hover !== null) { c.fillStyle = "rgba(255,255,255,0.10)"; c.fillRect(X(S.hover), y0, wcol, y1 - y0); }
+    yt.forEach((v, k) => { const p = Y.f(v); c.beginPath(); c.moveTo(x0 - 3, p); c.lineTo(x0, p); c.stroke(); if (k === 0 || k === yt.length - 1) c.fillText(S.xlog ? pow10(Math.round(Math.log10(v))) : String(v), x0 - 5, clamp(p, y0 + 6, y1 - 6)); });
+    if (S.hover !== null) { c.fillStyle = alpha(C.ink, 0.12); c.fillRect(X(S.hover), y0, wcol, y1 - y0); }
     const cx = X(S.i) + wcol / 2;
-    c.strokeStyle = "#fff"; c.lineWidth = 1.2; c.beginPath(); c.moveTo(cx, y0 - 2); c.lineTo(cx, y1); c.stroke();
-    c.fillStyle = "#fff"; c.beginPath(); c.moveTo(cx - 4, y0 - 7); c.lineTo(cx + 4, y0 - 7); c.lineTo(cx, y0 - 2); c.closePath(); c.fill();
+    c.strokeStyle = C.ink; c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx, y0 - 1); c.lineTo(cx, y1); c.stroke();
+    c.fillStyle = C.ink; c.beginPath(); c.moveTo(cx - 4.5, y0 - 7); c.lineTo(cx + 4.5, y0 - 7); c.lineTo(cx, y0 - 1); c.closePath(); c.fill();
   }
-  const stripIndex = (px) => clamp(Math.floor(((px - 34) / (strip.s.w - 40)) * T.n), 0, T.n - 1);
+  const stripIndex = (px) => clamp(Math.floor(((px - strip.x0) / (strip.s.w - strip.x0 - 8)) * T.n), 0, T.n - 1);
 
   // ------------------------------------------------------------------ interior
-  const int_ = { s: null, shells: null, cells: null, t0: 0, raf: null };
-  function surfRGB(i) { const v = T.rgb[i]; return [(v >> 16) & 255, (v >> 8) & 255, v & 255]; }
-  function thermal(t, srgb) {
-    const stops = [[srgb, 0], [[255, 196, 120], 0.3], [[255, 236, 196], 0.68], [[255, 255, 250], 1]];
-    let k = 0; while (k < stops.length - 2 && t > stops[k + 1][1]) k++;
-    const [c0, t0] = stops[k], [c1, t1] = stops[k + 1];
-    const f = clamp((t - t0) / (t1 - t0), 0, 1);
-    return `rgb(${Math.round(lerp(c0[0], c1[0], f))},${Math.round(lerp(c0[1], c1[1], f))},${Math.round(lerp(c0[2], c1[2], f))})`;
+  const int_ = { gl: null, s: null, raf: null, t0: 0, visible: true, inset: 0, layout: null, xi: null };
+  const surfRGB = (i) => { const v = T.rgb[i]; return [(v >> 16) & 255, (v >> 8) & 255, v & 255]; };
+
+  // the selected mode's displacement on the profile grid, for the renderer
+  function modeOnProfile() {
+    if (!S.mode) return null;
+    const xi = eigen(S.i, S.mode), xg = S.mode.xg, x = M.p.x;
+    let k = 0;
+    return x.map((r) => {
+      while (k < xg.length - 2 && xg[k + 1] < r) k++;
+      const t = xg[k + 1] !== xg[k] ? clamp((r - xg[k]) / (xg[k + 1] - xg[k]), 0, 1) : 0;
+      return lerp(xi[k], xi[k + 1], t);
+    });
   }
   function prepareInterior() {
-    const p = M.p, n = p.x.length;
-    const step = Math.max(1, Math.floor(n / 110));
-    const idx = []; for (let k = 0; k < n; k += step) idx.push(k); if (idx[idx.length - 1] !== n - 1) idx.push(n - 1);
-    const lc = p.logT[0], ls = p.logT[n - 1], srgb = surfRGB(S.i);
-    int_.shells = idx.map((k) => ({ x: p.x[k], col: thermal((p.logT[k] - ls) / (lc - ls || 1), srgb), eps: p.eps[k], k }));
-    int_.srgb = srgb;
-    int_.innerRGB = null;
+    const p = M.p;
     // a magnified view of the centre when the structure there is too small to see
     const burnOut = p.burn.zones.length ? Math.max(...p.burn.zones.map((z) => z[1])) : 0;
     const inner = (p.burn.peak > 0 && burnOut < 0.08) || (p.conv.length && p.conv[0][1] < 0.1 && p.conv[0][0] < 0.05);
     let xin = Math.max(2.5 * burnOut, p.conv.length && p.conv[0][1] < 0.1 ? 3 * p.conv[0][1] : 0, 0.002);
-    const steps = [0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2];
-    xin = steps.find((v) => v >= xin) || 0.2;
+    xin = [0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2].find((v) => v >= xin) || 0.2;
     int_.inset = inner ? xin : 0;
-    int_.cellPhase = Math.random() * TAU;
-    // the pulsation: xi_r of the selected mode interpolated onto the shells
-    int_.xi = null;
-    if (S.mode) {
-      const xi = eigen(S.i, S.mode), xg = S.mode.xg;
-      const v = int_.shells.map((sh) => {
-        let k = 0; while (k < xg.length - 2 && xg[k + 1] < sh.x) k++;
-        const t = xg[k + 1] !== xg[k] ? (sh.x - xg[k]) / (xg[k + 1] - xg[k]) : 0;
-        return lerp(xi[k], xi[k + 1], clamp(t, 0, 1));
-      });
-      const peak = Math.max(...v.map(Math.abs)) || 1;
-      int_.xi = v.map((q) => q / peak);
-    }
+    int_.xi = modeOnProfile();
+    if (int_.gl) int_.gl.setModel(p, int_.xi, { rgb: surfRGB(S.i), teff: 10 ** T.logTeff[S.i], logg: T.logg ? T.logg[S.i] : 4.44, ell: S.mode ? S.mode.l : 0 });
   }
-  const legendre = (l, c) => (l === 0 ? 1 : l === 1 ? c : 0.5 * (3 * c * c - 1));
-  // The star is drawn as a sphere with the octant toward the viewer removed, so the three cut
-  // faces show the shells. Camera at +x, +y, +z; z is up on screen.
-  const AZ = Math.PI / 4, EL = Math.PI / 6;
-  const E1 = [Math.cos(AZ), -Math.sin(AZ), 0], E2 = [Math.sin(AZ) * Math.sin(EL), Math.cos(AZ) * Math.sin(EL), -Math.cos(EL)];
-  const FACES = [
-    { u: [1, 0, 0], v: [0, 0, 1], shade: 0.84 }, // the plane y = 0, to the right
-    { u: [0, 1, 0], v: [0, 0, 1], shade: 0.94 }, // the plane x = 0, to the left
-    { u: [1, 0, 0], v: [0, 1, 0], shade: 1.0 }, // the plane z = 0, the top
-  ];
-  const NA = 32; // vertices per quarter arc
-  const dir3 = (f, a) => [f.u[0] * Math.cos(a) + f.v[0] * Math.sin(a), f.u[1] * Math.cos(a) + f.v[1] * Math.sin(a), f.u[2] * Math.cos(a) + f.v[2] * Math.sin(a)];
-  const sxy = (d) => [d[0] * E1[0] + d[1] * E1[1] + d[2] * E1[2], d[0] * E2[0] + d[1] * E2[1] + d[2] * E2[2]];
-  for (const f of FACES) {
-    f.dirs = Array.from({ length: NA + 1 }, (_, i) => dir3(f, (Math.PI / 2) * (i / NA)));
-    f.scr = f.dirs.map(sxy);
-  }
-  // the silhouette: directions perpendicular to the view, by screen angle
-  const NS = 96;
-  const SIL = Array.from({ length: NS + 1 }, (_, i) => { const ph = (i / NS) * TAU; return { s: [Math.cos(ph), Math.sin(ph)], z: -Math.cos(EL) * Math.sin(ph) }; });
-  const shade = (rgb, f) => `rgb(${rgb.map((v) => Math.round(clamp(v * f + (f > 1 ? (f - 1) * 90 : 0), 0, 255))).join(",")})`;
-
-  // One cut sphere of the shells with x <= xmax, drawn at k pixels per unit x about (cx, cy).
-  // amp is the pulsation factor of this frame; xi (per shell) and ell describe the mode.
-  function drawCutaway(c, cx, cy, k, xmax, p, tsec, amp, xi, ell) {
-    const sh = int_.shells;
-    const last = sh.length - 1;
-    const defo = (i, cosTheta) => (amp && xi ? amp * xi[i] * legendre(ell, cosTheta) : 0);
-    // the body: the silhouette polygon, shaded toward the light
-    const [sr, sg, sb] = int_.srgb;
-    const g = c.createRadialGradient(cx - 0.3 * xmax * k, cy - 0.3 * xmax * k, 0, cx, cy, xmax * k);
-    g.addColorStop(0, shade([sr, sg, sb], 1.22)); g.addColorStop(0.7, shade([sr, sg, sb], 0.95)); g.addColorStop(1, shade([sr, sg, sb], 0.45));
-    c.beginPath();
-    for (let i = 0; i <= NS; i++) {
-      const r = xmax * k * (1 + defo(last, SIL[i].z));
-      const px = cx + r * SIL[i].s[0], py = cy + r * SIL[i].s[1];
-      if (i) c.lineTo(px, py); else c.moveTo(px, py);
+  // The star takes the largest radius that clears the legend, the ruler under it and, for a giant,
+  // the detail circle in the top right corner with its label; computed once per size.
+  function interiorLayout() {
+    const { w, h } = int_.s;
+    const key = `${w}x${h}:${int_.inset}`;
+    if (int_.layout && int_.layout.key === key) return int_.layout;
+    const lg = $("#int-legend");
+    const leg = { x0: 0, y0: h - lg.offsetHeight - 22, x1: lg.offsetWidth + 26, y1: h };
+    const out = { key };
+    const obstacles = [];
+    if (int_.inset) {
+      out.Ri = Math.max(40, Math.min(h * 0.2, w * 0.17));
+      out.ix = w - out.Ri - 20; out.iy = out.Ri + 20;
+      obstacles.push({ c: [out.ix, out.iy], r: out.Ri * 1.04 + 14 });
+      obstacles.push({ rect: { x0: out.ix - 60, y0: out.iy + out.Ri + 4, x1: out.ix + 60, y1: out.iy + out.Ri + 30 } });
     }
-    c.closePath(); c.fillStyle = g; c.fill();
-    // the three faces, shells from the outside in, each a quarter sector
-    const sector = (f, i, r0) => {
-      c.beginPath(); c.moveTo(cx, cy);
-      for (let q = 0; q <= NA; q++) {
-        const r = r0 * (1 + defo(i, f.dirs[q][2]));
-        c.lineTo(cx + r * f.scr[q][0], cy + r * f.scr[q][1]);
-      }
-      c.closePath();
+    const clearRect = (cx, cy, r, q) => {
+      const dx = Math.max(q.x0 - cx, 0, cx - q.x1), dy = Math.max(q.y0 - cy, 0, cy - q.y1);
+      return Math.hypot(dx, dy) > r;
     };
-    for (const f of FACES) {
-      for (let i = last; i >= 0; i--) {
-        if (sh[i].x > xmax) continue;
-        const r0 = sh[i].x * k; if (r0 < 0.5) break;
-        sector(f, i, r0); c.fillStyle = sh[i].col; c.fill();
-        if (f.shade < 1) { c.fillStyle = `rgba(0,0,0,${(1 - f.shade).toFixed(2)})`; c.fill(); }
-        if (p.burn.peak > 0) { const fr = sh[i].eps / p.burn.peak; if (fr >= 0.01) { c.fillStyle = `rgba(255,90,30,${(0.6 * Math.sqrt(fr)).toFixed(3)})`; c.fill(); } }
+    const fits = (cx, cy, R) => {
+      const glow = R * 1.06;
+      if (cx - glow < 8 || cx + glow > w - 8 || cy - glow < 8) return false;
+      if (cy + R * 1.06 + 40 > h) return false; // the ruler and its labels
+      if (!clearRect(cx, cy, glow, leg)) return false;
+      for (const o of obstacles) {
+        if (o.c && Math.hypot(cx - o.c[0], cy - o.c[1]) < glow + o.r) return false;
+        if (o.rect && !clearRect(cx, cy, glow, o.rect)) return false;
+      }
+      return true;
+    };
+    for (let R = Math.min(h * 0.4, w * 0.36); R > 30; R *= 0.97) {
+      for (const fx of [0.5, 0.46, 0.42, 0.38, 0.34, 0.3]) for (const fy of [0.46, 0.5, 0.54, 0.42]) {
+        if (fits(w * fx, h * fy, R)) return (int_.layout = Object.assign(out, { R, cx: w * fx, cy: h * fy }));
       }
     }
-    // zone marks on the faces: radial hairlines where energy goes by radiation, circulating cells where it goes by convection
-    const rad = [];
-    let a = 0;
-    for (const [c0, c1] of p.conv) { if (c0 > a) rad.push([a, c0]); a = c1; }
-    if (a < 1) rad.push([a, 1]);
-    const onFace = (f, r, ang) => { const d = dir3(f, ang); const s = sxy(d); return [cx + r * s[0], cy + r * s[1]]; };
-    c.lineWidth = 0.8; c.strokeStyle = "rgba(0,0,0,0.14)";
-    c.beginPath();
-    for (const [r0, r1] of rad) {
-      const a0 = Math.max(r0, 0.5 / k), a1 = Math.min(r1, xmax);
-      if ((a1 - a0) * k < 4) continue;
-      for (const f of FACES) for (let d = 4; d < 90; d += 6) {
-        const ang = (d * Math.PI) / 180;
-        const [x0, y0] = onFace(f, (a0 + (a1 - a0) * 0.06) * k, ang), [x1, y1] = onFace(f, (a1 - (a1 - a0) * 0.06) * k, ang);
-        c.moveTo(x0, y0); c.lineTo(x1, y1);
-      }
-    }
-    c.stroke();
-    const rings = [];
-    for (const [r0, r1] of p.conv) {
-      let top = Math.min(r1, xmax);
-      while (top > r0) {
-        let bottom = Math.max(r0, top - clamp(0.3 * top, 0.03, 0.16));
-        if (bottom - r0 < 0.02) bottom = r0;
-        rings.push([bottom, top]); top = bottom;
-      }
-    }
-    let ring = 0;
-    for (const [a0, a1] of rings) {
-      ring++;
-      const thick = (a1 - a0) * k; if (thick < 1) continue;
-      const rm = ((a0 + a1) / 2) * k;
-      if (thick < 5) {
-        c.fillStyle = CONV; c.globalAlpha = 0.7;
-        for (const f of FACES) for (let d = 2; d < 90; d += 3) { const [x, y] = onFace(f, rm, (d * Math.PI) / 180); c.beginPath(); c.arc(x, y, 0.9, 0, TAU); c.fill(); }
-        c.globalAlpha = 1; continue;
-      }
-      const rr = ((a1 - a0) / 2) * k * 0.72;
-      const n = clamp(Math.round(((Math.PI / 2) * rm) / (thick * 1.15)), 1, 20);
-      const half = (Math.PI / 2 / n) * 0.42, off = ring % 2 ? 0 : Math.PI / 2 / n / 2;
-      c.strokeStyle = "rgba(10,60,95,0.6)"; c.lineWidth = 1.1;
-      c.beginPath();
-      for (const f of FACES) for (let j = 0; j < n; j++) {
-        const ac = ((j + 0.5) / n) * (Math.PI / 2) + off;
-        if (ac > Math.PI / 2 - half * 0.2) continue;
-        for (let q = 0; q <= 24; q++) {
-          const tau = (q / 24) * TAU;
-          const [x, y] = onFace(f, rm + rr * Math.cos(tau), ac + half * Math.sin(tau));
-          if (q) c.lineTo(x, y); else c.moveTo(x, y);
-        }
-      }
-      c.stroke();
-      c.lineWidth = 1; c.fillStyle = "#0b3e5e";
-      for (const f of FACES) for (let j = 0; j < n; j++) {
-        const ac = ((j + 0.5) / n) * (Math.PI / 2) + off, dirn = j % 2 ? 1 : -1;
-        if (ac > Math.PI / 2 - half * 0.2) continue;
-        for (let q = 0; q < 2; q++) {
-          const tau = dirn * TAU * (tsec / 7 + q / 2 + j * 0.37);
-          const [x, y] = onFace(f, rm + rr * Math.cos(tau), ac + half * Math.sin(tau));
-          c.beginPath(); c.arc(x, y, 1.3, 0, TAU); c.fill();
-        }
-      }
-    }
-    // the boundaries as hairline arcs on the faces, and the three cut edges
-    c.strokeStyle = "rgba(0,0,0,0.4)"; c.lineWidth = 1;
-    c.beginPath();
-    for (const b of p.conv.flat()) {
-      if (b <= 0 || b >= xmax) continue;
-      for (const f of FACES) for (let q = 0; q <= NA; q++) { const [x, y] = [cx + b * k * f.scr[q][0], cy + b * k * f.scr[q][1]]; if (q) c.lineTo(x, y); else c.moveTo(x, y); }
-    }
-    c.stroke();
-    c.strokeStyle = "rgba(255,255,255,0.35)";
-    c.beginPath();
-    for (const d of [[1, 0, 0], [0, 1, 0], [0, 0, 1]]) { const s = sxy(d); c.moveTo(cx, cy); c.lineTo(cx + xmax * k * s[0], cy + xmax * k * s[1]); }
-    c.stroke();
-    // the photosphere outline, in the mode colour while it pulsates
-    c.strokeStyle = amp && xi ? ELL_COLOR[ell] : "rgba(255,255,255,0.35)"; c.lineWidth = 1;
-    c.beginPath();
-    for (let i = 0; i <= NS; i++) {
-      const r = xmax * k * (1 + defo(last, SIL[i].z));
-      const px = cx + r * SIL[i].s[0], py = cy + r * SIL[i].s[1];
-      if (i) c.lineTo(px, py); else c.moveTo(px, py);
-    }
-    c.closePath(); c.stroke();
+    return (int_.layout = Object.assign(out, { R: 30, cx: w / 2, cy: h / 2 }));
   }
-
   function drawInterior(tsec) {
     const s = int_.s, c = s.begin();
     const { w, h } = s;
+    const L = interiorLayout();
+    const pulse = S.pulsate && int_.xi && !REDUCED ? AMP * Math.cos((TAU * tsec) / PERIOD) : 0;
+    if (int_.gl) {
+      const views = [{ cx: L.cx, cy: L.cy, R: L.R, scale: 1, pulse }];
+      if (int_.inset) views.push({ cx: L.ix, cy: L.iy, R: L.Ri, scale: int_.inset, pulse: 0 });
+      int_.gl.draw(views, REDUCED ? 0 : tsec);
+    } else drawFallback(c, L);
     const p = M.p;
-    // with a detail circle the star gives up room: to the right on wide panels, downward on narrow ones
-    const narrow = w < h * 1.25;
-    const R = Math.min(w, h) * (int_.inset ? (narrow ? 0.31 : 0.38) : 0.40);
-    const cx = int_.inset ? (narrow ? w * 0.42 : w / 2 - w * 0.09) : w / 2;
-    const cy = int_.inset && narrow ? h * 0.56 : h / 2;
-    const amp = S.pulsate && int_.xi ? 0.055 * Math.cos(TAU * (tsec / 4)) : 0;
-    const ell = S.mode ? S.mode.l : 0;
-    const [sr, sg, sb] = int_.srgb;
-    const glow = c.createRadialGradient(cx, cy, R * 0.98, cx, cy, R * 1.25);
-    glow.addColorStop(0, `rgba(${sr},${sg},${sb},0.28)`); glow.addColorStop(1, `rgba(${sr},${sg},${sb},0)`);
-    c.fillStyle = glow; c.beginPath(); c.arc(cx, cy, R * 1.25, 0, TAU); c.fill();
-    drawCutaway(c, cx, cy, R, 1, p, tsec, amp, int_.xi, ell);
+    const ink = "rgba(233,229,222,0.92)", faint = "rgba(233,229,222,0.45)";
     // ruler under the star, at true scale, ticks at the zone boundaries
     const bounds = [...new Set([...p.conv.flat(), 1].map((v) => +v.toFixed(3)))].filter((v) => v > 0).sort((a, b) => a - b);
-    const ry = cy + R + 18, rx = cx - R * 0.5;
-    c.strokeStyle = INK.axis; c.fillStyle = INK.tick; c.font = `11px ${MONO}`; c.textAlign = "center"; c.textBaseline = "top";
-    c.beginPath(); c.moveTo(rx, ry); c.lineTo(rx + R, ry); c.moveTo(rx, ry - 3); c.lineTo(rx, ry + 3); c.stroke();
+    const ry = L.cy + L.R * 1.06 + 12, rx = L.cx - L.R * 0.5;
+    c.strokeStyle = faint; c.fillStyle = ink; c.font = TICK; c.textAlign = "center"; c.textBaseline = "top"; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(rx, ry); c.lineTo(rx + L.R, ry); c.moveTo(rx, ry - 3); c.lineTo(rx, ry + 3); c.stroke();
     c.fillText("0", rx, ry + 6);
     let lastTick = rx;
     for (const b of bounds) {
-      const px = rx + b * R;
+      const px = rx + b * L.R;
       c.beginPath(); c.moveTo(px, ry - 3); c.lineTo(px, ry + 3); c.stroke();
-      if (px - lastTick > 26) { c.fillText(b === 1 ? "1 R" : b < 0.01 ? b.toFixed(3) : b.toFixed(2), px, ry + 6); lastTick = px; }
+      const lab = b === 1 ? "1 R" : b < 0.01 ? b.toFixed(3) : b.toFixed(2);
+      if (px - lastTick > 30 || (b === 1 && px - lastTick > 18)) { c.fillText(lab, px, ry + 6); lastTick = px; }
     }
     // scale bar: a round number of solar radii
     const Rstar = 10 ** T.logR[S.i];
     let Ls = 10 ** Math.floor(Math.log10(Rstar / 3));
     for (const m of [5, 2, 1]) if (m * Ls <= Rstar / 3) { Ls *= m; break; }
-    const Lpx = (Ls / Rstar) * R;
-    const bx = w - 14 - Lpx, by = h - 16;
-    c.strokeStyle = INK.tick; c.beginPath(); c.moveTo(bx, by); c.lineTo(bx + Lpx, by); c.moveTo(bx, by - 4); c.lineTo(bx, by + 4); c.moveTo(bx + Lpx, by - 4); c.lineTo(bx + Lpx, by + 4); c.stroke();
-    c.textAlign = "right"; c.textBaseline = "bottom"; c.fillText(`${Ls} R☉`, w - 14, by - 5);
-    // detail view of the centre: the inner ball cut open the same way
+    const Lpx = (Ls / Rstar) * L.R;
+    const bx = w - 16 - Lpx, by = h - 14;
+    c.strokeStyle = ink; c.beginPath(); c.moveTo(bx, by); c.lineTo(bx + Lpx, by); c.moveTo(bx, by - 4); c.lineTo(bx, by + 4); c.moveTo(bx + Lpx, by - 4); c.lineTo(bx + Lpx, by + 4); c.stroke();
+    c.textAlign = "right"; c.textBaseline = "bottom"; c.fillText(`${Ls} R☉`, w - 16, by - 6);
+    // the detail circle: the inner ball cut open the same way, tied to where it sits
     if (int_.inset) {
-      const Ri = Math.min(w, h) * (narrow ? 0.17 : 0.21), ix = w - Ri - 18, iy = Ri + 18;
-      const k = Ri / int_.inset;
-      c.strokeStyle = INK.axis; c.setLineDash([3, 4]);
-      c.beginPath(); c.arc(cx, cy, Math.max(2, int_.inset * R), 0, TAU); c.stroke();
-      const ang = Math.atan2(iy - cy, ix - cx);
+      const r0 = Math.max(2.5, int_.inset * L.R);
+      c.strokeStyle = faint; c.setLineDash([3, 4]);
+      c.beginPath(); c.arc(L.cx, L.cy, r0, 0, TAU); c.stroke();
+      const ang = Math.atan2(L.iy - L.cy, L.ix - L.cx);
       for (const d of [-1, 1]) {
-        const a = ang + d * Math.PI / 2;
-        c.beginPath(); c.moveTo(cx + Math.max(2, int_.inset * R) * Math.cos(a), cy + Math.max(2, int_.inset * R) * Math.sin(a)); c.lineTo(ix + Ri * Math.cos(a), iy + Ri * Math.sin(a)); c.stroke();
+        const a = ang + (d * Math.PI) / 2;
+        c.beginPath(); c.moveTo(L.cx + r0 * Math.cos(a), L.cy + r0 * Math.sin(a)); c.lineTo(L.ix + L.Ri * 1.04 * Math.cos(a), L.iy + L.Ri * 1.04 * Math.sin(a)); c.stroke();
       }
       c.setLineDash([]);
-      c.beginPath(); c.arc(ix, iy, Ri * 1.02, 0, TAU); c.fillStyle = "#0a0a0d"; c.fill();
-      drawCutaway(c, ix, iy, k, int_.inset, p, tsec, 0, null, 0);
-      c.fillStyle = INK.tick; c.font = `11px ${MONO}`; c.textAlign = "center"; c.textBaseline = "top";
-      c.fillText(`r < ${int_.inset} R`, ix, iy + Ri + 8);
+      c.strokeStyle = faint; c.beginPath(); c.arc(L.ix, L.iy, L.Ri * 1.04, 0, TAU); c.stroke();
+      c.fillStyle = ink; c.font = TICK; c.textAlign = "center"; c.textBaseline = "top";
+      c.fillText(`r < ${int_.inset} R`, L.ix, L.iy + L.Ri + 10);
+    }
+  }
+  // without WebGL: the cut as concentric shells coloured by temperature
+  function drawFallback(c, L) {
+    const p = M.p, n = p.x.length, lc = p.logT[0], ls = p.logT[n - 1];
+    for (let k = n - 1; k >= 0; k -= 2) {
+      const t = ((p.logT[k] - ls) / (lc - ls || 1)) ** 2.2;
+      const v = [[128, 38, 13], [189, 77, 23], [227, 135, 51], [242, 189, 107], [252, 232, 189], [255, 252, 245]];
+      const f = clamp(t, 0, 1) * 5, j = Math.min(4, Math.floor(f)), u = f - j;
+      c.fillStyle = `rgb(${v[j].map((q, m) => Math.round(lerp(q, v[j + 1][m], u))).join(",")})`;
+      c.beginPath(); c.arc(L.cx, L.cy, p.x[k] * L.R, 0, TAU); c.fill();
     }
   }
   function updateModeCard() {
-    const el = $("#int-mode");
-    if (!S.mode) { el.innerHTML = M.modes.length ? "" : "no GYRE output for this model"; return; }
+    const el = $("#int-readout");
+    if (!S.mode) { el.textContent = M.modes.length ? "" : "no GYRE output for this model"; return; }
     const m = S.mode;
-    el.innerHTML = `<span class="k"></span><br>ν = ${m.nu >= 100 ? m.nu.toFixed(1) : m.nu.toPrecision(3)} μHz, P = ${period(m.nu)}`;
+    el.innerHTML = `<span class="k"></span><span class="rd-sep">·</span>ν = ${fnu(m.nu)} μHz<span class="rd-sep">·</span>P = ${period(m.nu)}`;
     tex($(".k", el), `\\ell = ${m.l},\\ n_{pg} = ${m.npg}${m.type && m.type !== "p" ? `\\ (${m.type === "g" ? "g" : "mixed"})` : ""}`);
   }
   function animate(ts) {
     int_.raf = null;
     if (!int_.t0) int_.t0 = ts;
-    const t = (ts - int_.t0) / 1000;
-    drawInterior(t);
-    if (!REDUCED && !document.hidden) int_.raf = requestAnimationFrame(animate);
+    drawInterior((ts - int_.t0) / 1000);
+    if (!REDUCED && !document.hidden && int_.visible) int_.raf = requestAnimationFrame(animate);
   }
-  function startAnim() { if (int_.raf === null) int_.raf = requestAnimationFrame(animate); }
+  function startAnim() { if (int_.raf === null && !REDUCED) int_.raf = requestAnimationFrame(animate); }
+  const redrawInterior = () => drawInterior(int_.t0 ? (performance.now() - int_.t0) / 1000 : 0);
 
   // ------------------------------------------------------------------ profiles (six small multiples)
   const PROF = [
@@ -666,15 +605,18 @@
   ];
   const prof = { s: {}, hoverX: null };
   const xScale = (box) => (S.xlog ? scale("log", 1e-3, 1, box.x0, box.x1) : scale("lin", 0, 1, box.x0, box.x1));
-  function drawProfiles() {
-    for (const q of PROF) drawProfile(q);
-  }
+  const isBig = (s) => s.canvas.parentElement.classList.contains("is-max");
+  // the plot ends where the x-axis title begins, so the last tick label never runs under it
+  const plotBox = (s) => {
+    const ax = s.canvas.parentElement.querySelector(".ax-x");
+    const right = ax ? ax.offsetWidth + 22 : 16;
+    return { x0: isBig(s) ? 66 : 54, y0: 30, x1: s.w - right, y1: s.h - 24 };
+  };
+  function drawProfiles() { for (const q of PROF) drawProfile(q); }
   function drawProfile(q) {
     const s = prof.s[q.id]; if (!s || !s.canvas.clientWidth) return;
     const c = s.begin();
-    const { w, h } = s;
-    const big = s.canvas.parentElement.classList.contains("is-max");
-    const box = { x0: big ? 64 : 50, y0: 26, x1: w - 40, y1: h - 22 };
+    const box = plotBox(s);
     const p = M.p;
     const ys = q.y(p), ys2 = q.y2 ? q.y2(p) : null;
     const X = xScale(box);
@@ -687,19 +629,20 @@
     } else {
       const [a, b] = q.lim; Y = scale("lin", a, b, box.y1, box.y0);
     }
+    const big = isBig(s);
     frame(c, box, X, Y, { xLabels: true, nx: big ? 8 : 4, ny: big ? 7 : 4 });
     c.save(); clipBox(c, box);
-    shadeZones(c, box, X, p.conv, "rgba(127,220,255,0.10)");
-    shadeZones(c, box, X, p.burn.zones, "rgba(255,122,61,0.12)");
-    c.lineWidth = 1.6; c.strokeStyle = q.y2 ? ELL_COLOR[0] : "#ad93ff";
+    shadeZones(c, box, X, p.conv, alpha(C.conv, C.convA));
+    shadeZones(c, box, X, p.burn.zones, alpha(C.burn, C.burnA));
+    c.lineWidth = 1.7; c.strokeStyle = C.mark;
     polyline(c, p.x, ys, X, Y, (x, y) => (q.log ? y > 0 : isFinite(y)));
-    if (ys2) { c.strokeStyle = "#5be8c4"; polyline(c, p.x, ys2, X, Y); }
+    if (ys2) { c.strokeStyle = C.y2; polyline(c, p.x, ys2, X, Y); }
     if (prof.hoverX !== null) {
       const px = X.f(prof.hoverX);
-      c.strokeStyle = "rgba(255,255,255,0.5)"; c.setLineDash([2, 3]); c.beginPath(); c.moveTo(px, box.y0); c.lineTo(px, box.y1); c.stroke(); c.setLineDash([]);
+      c.strokeStyle = alpha(C.ink, 0.5); c.setLineDash([2, 3]); c.beginPath(); c.moveTo(px, box.y0); c.lineTo(px, box.y1); c.stroke(); c.setLineDash([]);
     }
     c.restore();
-    if (q.y2) { c.font = `11px ${UI}`; c.textBaseline = "middle"; c.textAlign = "left"; c.fillStyle = ELL_COLOR[0]; c.fillText("X", box.x0 + 8, box.y0 + 10); c.fillStyle = "#5be8c4"; c.fillText("Y", box.x0 + 22, box.y0 + 10); }
+    if (q.y2) legendRow(c, box.x0 + 10, box.y0 + 12, [{ col: C.mark, label: "X" }, { col: C.y2, label: "Y" }]);
     const val = $(`#sm-${q.id} .sm-val`);
     if (prof.hoverX !== null) {
       const k = nearestX(p.x, prof.hoverX);
@@ -710,16 +653,14 @@
 
   // ------------------------------------------------------------------ oscillations (four small multiples)
   const osc = { s: {}, hit: [] };
-  function drawOsc() {
-    drawProp(); drawEchelle(); drawInertia(); drawEigen();
-  }
+  function drawOsc() { drawProp(); drawEchelle(); drawInertia(); drawEigen(); }
   function noteFor(id, text) {
     const n = $(`#sm-${id} .sm-note`); n.textContent = text || ""; n.style.display = text ? "flex" : "none";
   }
+  function dashedRule(c, x0, y0, x1, y1) { c.strokeStyle = alpha(C.ink, 0.42); c.lineWidth = 1; c.setLineDash([3, 4]); c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke(); c.setLineDash([]); }
   function drawProp() {
-    const s = osc.s.prop, c = s.begin(); const { w, h } = s; const p = M.p;
-    const big = s.canvas.parentElement.classList.contains("is-max");
-    const box = { x0: big ? 64 : 52, y0: 26, x1: w - 64, y1: h - 22 };
+    const s = osc.s.prop, c = s.begin(); const p = M.p;
+    const box = plotBox(s);
     const X = xScale(box);
     const toUHz = (sq) => (sq > 0 ? (Math.sqrt(sq) / TAU) * 1e6 : NaN);
     const N = p.N2.map(toUHz), S1 = p.Sl1sq.map(toUHz), S2 = p.Sl1sq.map((v) => toUHz(3 * v));
@@ -729,14 +670,15 @@
     let lo = Math.min(...all), hi = Math.max(...all);
     if (nus.length) { lo = Math.max(lo, Math.min(...nus) / 30); hi = Math.min(hi, Math.max(...nus) * 30); }
     const Y = scale("log", lo, hi, box.y1, box.y0);
-    frame(c, box, X, Y, { xLabels: true, nx: big ? 8 : 4, ny: big ? 7 : 4 });
+    const big = isBig(s);
+    frame(c, box, X, Y, { xLabels: true, nx: big ? 8 : 5, ny: big ? 7 : 4 });
     c.save(); clipBox(c, box);
-    shadeZones(c, box, X, p.conv, "rgba(127,220,255,0.08)");
+    shadeZones(c, box, X, p.conv, alpha(C.conv, C.convA * 0.8));
     // cavities of the selected mode: where it propagates as a p mode (above N and S_l) or a g mode (below both)
     if (S.mode) {
       const Sl = S.mode.l === 0 ? null : S.mode.l === 1 ? S1 : S2;
       const nu = S.mode.nu;
-      c.fillStyle = `${ELL_COLOR[S.mode.l]}22`;
+      c.fillStyle = alpha(C.ell[S.mode.l], DARK ? 0.14 : 0.11);
       for (let i = 0; i < p.x.length - 1; i++) {
         const nN = N[i] || 0, sl = Sl ? Sl[i] : 0;
         const pc = nu > nN && nu > sl, gc = Sl && nu < nN && nu < sl;
@@ -744,52 +686,50 @@
         const a = X.f(Math.max(p.x[i], X.lo)), b = X.f(Math.max(p.x[i + 1], X.lo));
         c.fillRect(a, box.y0, Math.max(0.5, b - a), box.y1 - box.y0);
       }
-      c.strokeStyle = ELL_COLOR[S.mode.l]; c.lineWidth = 1.2; c.beginPath(); c.moveTo(box.x0, Y.f(nu)); c.lineTo(box.x1, Y.f(nu)); c.stroke();
+      c.strokeStyle = C.ell[S.mode.l]; c.lineWidth = 1.4; c.beginPath(); c.moveTo(box.x0, Y.f(nu)); c.lineTo(box.x1, Y.f(nu)); c.stroke();
     }
-    c.lineWidth = 1.5;
-    c.strokeStyle = "#ffc45c"; polyline(c, p.x, N, X, Y, (x, y) => y > 0);
-    c.strokeStyle = ELL_COLOR[1]; polyline(c, p.x, S1, X, Y, (x, y) => y > 0);
-    c.strokeStyle = ELL_COLOR[2]; polyline(c, p.x, S2, X, Y, (x, y) => y > 0);
-    if (nm > 0) { c.strokeStyle = "rgba(255,255,255,0.4)"; c.setLineDash([3, 4]); c.beginPath(); c.moveTo(box.x0, Y.f(nm)); c.lineTo(box.x1, Y.f(nm)); c.stroke(); c.setLineDash([]); }
+    c.lineWidth = 1.6;
+    c.strokeStyle = C.y2; polyline(c, p.x, N, X, Y, (x, y) => y > 0);
+    c.strokeStyle = C.ell[1]; polyline(c, p.x, S1, X, Y, (x, y) => y > 0);
+    c.strokeStyle = C.ell[2]; polyline(c, p.x, S2, X, Y, (x, y) => y > 0);
+    if (nm > 0) dashedRule(c, box.x0, Y.f(nm), box.x1, Y.f(nm));
     c.restore();
-    c.font = `11px ${UI}`; c.textBaseline = "middle"; c.textAlign = "left";
-    const items = [["N", "#ffc45c"], ["S₁", ELL_COLOR[1]], ["S₂", ELL_COLOR[2]], ["νmax", "rgba(255,255,255,0.6)"]];
-    let lx = box.x0 + 8;
-    for (const [t, col] of items) { c.fillStyle = col; c.fillText(t, lx, box.y0 + 10); lx += c.measureText(t).width + 12; }
+    legendRow(c, box.x0 + 10, box.y0 + 12, [{ col: C.y2, label: "N" }, { col: C.ell[1], label: "S₁" }, { col: C.ell[2], label: "S₂" }, { col: alpha(C.ink, 0.55), label: "νmax", text: C.ink2 }]);
   }
   function modeStyle(c, m) {
-    c.fillStyle = ELL_COLOR[m.l] || "#fff"; c.strokeStyle = c.fillStyle;
+    c.fillStyle = C.ell[m.l] || C.ink; c.strokeStyle = c.fillStyle;
     return m.type === "p" || m.type === "g";
   }
+  function selRing(c, x, y) { c.strokeStyle = C.ink; c.lineWidth = 1.6; c.beginPath(); c.arc(x, y, 8.5, 0, TAU); c.stroke(); c.lineWidth = 1.3; }
   function drawEchelle() {
-    const s = osc.s.echelle, c = s.begin(); const { w, h } = s;
-    const big = s.canvas.parentElement.classList.contains("is-max");
-    const box = { x0: big ? 64 : 52, y0: 26, x1: w - 64, y1: h - 22 };
+    const s = osc.s.echelle, c = s.begin();
+    const box = plotBox(s);
     const dn = T.dnu[S.i], modes = M.modes;
     osc.hit = osc.hit.filter((q) => q.panel !== "echelle");
+    $("#sm-echelle .sm-val").textContent = "";
     if (!modes.length || !(dn > 0)) { noteFor("echelle", "no GYRE output for this model"); return; }
     noteFor("echelle", "");
     const nus = modes.map((m) => m.nu);
     const lo = Math.min(...nus), hi = Math.max(...nus);
     const pad = Math.max(dn, (hi - lo) * 0.08);
     const X = scale("lin", 0, dn, box.x0, box.x1), Y = scale("lin", lo - pad, hi + pad, box.y1, box.y0);
-    frame(c, box, X, Y, { xLabels: true, nx: big ? 6 : 3, ny: big ? 7 : 4 });
+    const big = isBig(s);
+    frame(c, box, X, Y, { xLabels: true, nx: big ? 6 : 3, ny: big ? 7 : 5 });
     const nm = T.numax[S.i];
-    if (nm > lo - pad && nm < hi + pad) { c.strokeStyle = "rgba(255,255,255,0.4)"; c.setLineDash([3, 4]); c.beginPath(); c.moveTo(box.x0, Y.f(nm)); c.lineTo(box.x1, Y.f(nm)); c.stroke(); c.setLineDash([]); }
+    if (nm > lo - pad && nm < hi + pad) dashedRule(c, box.x0, Y.f(nm), box.x1, Y.f(nm));
     c.lineWidth = 1.3;
     for (const m of modes) {
       const px = X.f(m.nu % dn), py = Y.f(m.nu);
       const filled = modeStyle(c, m);
       marker(c, px, py, m.l, big ? 5 : 4, filled);
       osc.hit.push({ panel: "echelle", x: px, y: py, m });
-      if (m === S.mode) { c.strokeStyle = "#fff"; c.beginPath(); c.arc(px, py, 8, 0, TAU); c.stroke(); }
+      if (m === S.mode) selRing(c, px, py);
     }
     $("#sm-echelle .sm-val").textContent = `Δν = ${dn >= 10 ? dn.toFixed(1) : dn.toPrecision(3)} μHz`;
   }
   function drawInertia() {
-    const s = osc.s.inertia, c = s.begin(); const { w, h } = s;
-    const big = s.canvas.parentElement.classList.contains("is-max");
-    const box = { x0: big ? 64 : 52, y0: 26, x1: w - 64, y1: h - 22 };
+    const s = osc.s.inertia, c = s.begin();
+    const box = plotBox(s);
     const modes = M.modes;
     osc.hit = osc.hit.filter((q) => q.panel !== "inertia");
     if (!modes.length) { noteFor("inertia", "no GYRE output for this model"); return; }
@@ -797,10 +737,11 @@
     const nus = modes.map((m) => m.nu), Es = modes.map((m) => m.E).filter((v) => v > 0);
     const lo = Math.min(...nus), hi = Math.max(...nus), pad = (hi - lo) * 0.08 || lo * 0.2;
     const X = scale("lin", lo - pad, hi + pad, box.x0, box.x1);
-    const Y = scale("log", Math.min(...Es) / 2, Math.max(...Es) * 2, box.y1, box.y0);
-    frame(c, box, X, Y, { xLabels: true, nx: big ? 7 : 4, ny: big ? 6 : 3 });
+    const Y = scale("log", Math.min(...Es) / 2, Math.max(...Es) * 6, box.y1, box.y0);
+    const big = isBig(s);
+    frame(c, box, X, Y, { xLabels: true, nx: big ? 7 : 3, ny: big ? 6 : 3 });
     const nm = T.numax[S.i];
-    if (nm > X.lo && nm < X.hi) { c.strokeStyle = "rgba(255,255,255,0.4)"; c.setLineDash([3, 4]); c.beginPath(); c.moveTo(X.f(nm), box.y0); c.lineTo(X.f(nm), box.y1); c.stroke(); c.setLineDash([]); }
+    if (nm > X.lo && nm < X.hi) dashedRule(c, X.f(nm), box.y0, X.f(nm), box.y1);
     c.lineWidth = 1.3;
     for (const m of modes) {
       if (!(m.E > 0)) continue;
@@ -808,33 +749,31 @@
       const filled = modeStyle(c, m);
       marker(c, px, py, m.l, big ? 5 : 4, filled);
       osc.hit.push({ panel: "inertia", x: px, y: py, m });
-      if (m === S.mode) { c.strokeStyle = "#fff"; c.beginPath(); c.arc(px, py, 8, 0, TAU); c.stroke(); }
+      if (m === S.mode) selRing(c, px, py);
     }
-    // legend of degrees
-    c.font = `11px ${UI}`; c.textBaseline = "middle"; c.textAlign = "left";
-    let lx = box.x0 + 8;
-    for (const l of [0, 1, 2]) { c.fillStyle = ELL_COLOR[l]; c.strokeStyle = ELL_COLOR[l]; marker(c, lx + 4, box.y0 + 10, l, 3.5, true); c.fillText(`ℓ=${l}`, lx + 12, box.y0 + 10); lx += 40; }
-    c.fillStyle = INK.tick; c.strokeStyle = INK.tick; marker(c, lx + 4, box.y0 + 10, 0, 3.5, false); c.fillText("mixed", lx + 12, box.y0 + 10);
+    const items = [0, 1, 2].map((l) => ({ col: C.ell[l], label: `ℓ=${l}`, mark: l }));
+    if (modes.some((m) => m.type !== "p" && m.type !== "g")) items.push({ col: C.ink2, label: "mixed", mark: 0, filled: false });
+    legendRow(c, box.x0 + 8, box.y0 + 12, items);
   }
   function drawEigen() {
-    const s = osc.s.eigen, c = s.begin(); const { w, h } = s; const p = M.p;
-    const big = s.canvas.parentElement.classList.contains("is-max");
-    const box = { x0: big ? 64 : 52, y0: 26, x1: w - 64, y1: h - 22 };
+    const s = osc.s.eigen, c = s.begin(); const p = M.p;
+    const box = plotBox(s);
     if (!S.mode) { noteFor("eigen", M.modes.length ? "" : "no GYRE output for this model"); $("#sm-eigen .sm-val").textContent = ""; return; }
     noteFor("eigen", "");
     const m = S.mode, xi0 = eigen(S.i, m);
     // weighted by r sqrt(rho): the quantity whose square integrates to the mode energy
     const xi = xi0.map((v, k) => v * m.xg[k] * Math.sqrt(10 ** p.logRho[k]));
     const peak = Math.max(...xi.map(Math.abs)) || 1;
-    const X = xScale(box), Y = scale("lin", -1.1, 1.1, box.y1, box.y0);
-    frame(c, box, X, Y, { xLabels: true, nx: big ? 8 : 4, ny: big ? 5 : 3 });
+    const X = xScale(box), Y = scale("lin", -1.15, 1.15, box.y1, box.y0);
+    const big = isBig(s);
+    frame(c, box, X, Y, { xLabels: true, nx: big ? 8 : 5, ny: big ? 5 : 2 });
     c.save(); clipBox(c, box);
-    shadeZones(c, box, X, p.conv, "rgba(127,220,255,0.08)");
-    c.strokeStyle = INK.axis; c.beginPath(); c.moveTo(box.x0, Y.f(0)); c.lineTo(box.x1, Y.f(0)); c.stroke();
-    c.strokeStyle = ELL_COLOR[m.l]; c.lineWidth = 1.6;
+    shadeZones(c, box, X, p.conv, alpha(C.conv, C.convA * 0.8));
+    c.strokeStyle = C.axis; c.beginPath(); c.moveTo(box.x0, Y.f(0)); c.lineTo(box.x1, Y.f(0)); c.stroke();
+    c.strokeStyle = C.ell[m.l]; c.lineWidth = 1.7;
     polyline(c, m.xg, xi.map((v) => v / peak), X, Y);
     c.restore();
-    $("#sm-eigen .sm-val").textContent = `ℓ=${m.l}  n=${m.npg}  ν=${m.nu >= 100 ? m.nu.toFixed(1) : m.nu.toPrecision(3)} μHz`;
+    $("#sm-eigen .sm-val").textContent = `ℓ=${m.l}  n=${m.npg}  ν=${fnu(m.nu)} μHz`;
   }
 
   // ------------------------------------------------------------------ selection
@@ -854,13 +793,13 @@
     }
     updateStats();
     drawHR(); drawStrip();
-    prepareInterior(); updateModeCard(); drawInterior(0); startAnim();
+    prepareInterior(); updateModeCard(); redrawInterior(); startAnim();
     drawProfiles(); drawOsc();
-    history.replaceState(null, "", `#m${T.model ? T.model[i] : i}`);
+    history.replaceState(null, "", `${location.search}#m${T.model ? T.model[i] : i}`);
   }
   function selectMode(m) {
     S.mode = m;
-    prepareInterior(); updateModeCard(); drawInterior(0); startAnim();
+    prepareInterior(); updateModeCard(); redrawInterior(); startAnim();
     drawOsc();
   }
   function stepMode(d) {
@@ -868,26 +807,38 @@
     const k = M.modes.indexOf(S.mode);
     selectMode(M.modes[clamp(k + d, 0, M.modes.length - 1)]);
   }
+  function redrawAll() {
+    readTheme();
+    updateStats(); drawHR(); drawStrip(); redrawInterior(); drawProfiles(); drawOsc();
+  }
 
   // ------------------------------------------------------------------ wiring
   function wire() {
+    readTheme();
     hr.s = surface($("#hr-canvas"));
     strip.s = surface($("#strip-canvas"));
     int_.s = surface($("#int-canvas"));
+    int_.gl = window.SEStar ? window.SEStar.create($("#int-gl")) : null;
+    if (int_.gl && !int_.gl.supported) int_.gl = null;
     for (const q of PROF) prof.s[q.id] = surface($(`#sm-${q.id} canvas`));
     for (const id of ["prop", "echelle", "inertia", "eigen"]) osc.s[id] = surface($(`#sm-${id} canvas`));
 
     const ro = new ResizeObserver((entries) => {
+      if (!M) return;
       for (const e of entries) {
         const el = e.target;
         if (el.id === "hr-body") drawHR();
         else if (el.id === "strip") drawStrip();
-        else if (el.id === "int-body") drawInterior(0);
+        else if (el.id === "int-body") redrawInterior();
         else if (el.id === "prof-grid") drawProfiles();
         else if (el.id === "osc-grid") drawOsc();
       }
     });
     for (const id of ["hr-body", "strip", "int-body", "prof-grid", "osc-grid"]) ro.observe($("#" + id));
+    // the star moves only while it is on screen
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((es) => { int_.visible = es.some((e) => e.isIntersecting); if (int_.visible) startAnim(); }).observe($("#int-body"));
+    }
 
     // HR: hover and click on models
     const hrc = $("#hr-canvas");
@@ -917,12 +868,10 @@
 
     // profiles: synced crosshair
     for (const q of PROF) {
-      const cv = prof.s[q.id].canvas;
+      const s = prof.s[q.id], cv = s.canvas;
       cv.addEventListener("pointermove", (e) => {
         const r = cv.getBoundingClientRect();
-        const big = cv.parentElement.classList.contains("is-max");
-        const box = { x0: big ? 64 : 50, x1: r.width - 40 };
-        const X = xScale(box);
+        const X = xScale(plotBox(s));
         const v = X.inv(e.clientX - r.left);
         prof.hoverX = v >= X.lo && v <= X.hi ? v : null;
         drawProfiles();
@@ -933,8 +882,8 @@
     // oscillation panels: click a mode
     for (const id of ["echelle", "inertia"]) {
       const cv = osc.s[id].canvas;
-      const near = (e) => { const r = cv.getBoundingClientRect(); const px = e.clientX - r.left, py = e.clientY - r.top; let best = 10, bm = null; for (const q of osc.hit) { if (q.panel !== id) continue; const d = Math.hypot(q.x - px, q.y - py); if (d < best) { best = d; bm = q.m; } } return bm; };
-      cv.addEventListener("pointermove", (e) => { const m = near(e); cv.style.cursor = m ? "pointer" : "default"; $("#osc-readout").textContent = m ? `ℓ=${m.l}  n=${m.npg}  ν=${m.nu >= 100 ? m.nu.toFixed(1) : m.nu.toPrecision(3)} μHz  E=${sci(m.E, 2)}${m.type !== "p" ? `  ${m.type === "g" ? "g" : "mixed"}` : ""}` : ""; });
+      const near = (e) => { const r = cv.getBoundingClientRect(); const px = e.clientX - r.left, py = e.clientY - r.top; let best = 12, bm = null; for (const q of osc.hit) { if (q.panel !== id) continue; const d = Math.hypot(q.x - px, q.y - py); if (d < best) { best = d; bm = q.m; } } return bm; };
+      cv.addEventListener("pointermove", (e) => { const m = near(e); cv.style.cursor = m ? "pointer" : "default"; $("#osc-readout").textContent = m ? `ℓ=${m.l}  n=${m.npg}  ν=${fnu(m.nu)} μHz  E=${sci(m.E, 2)}${m.type !== "p" ? `  ${m.type === "g" ? "g" : "mixed"}` : ""}` : ""; });
       cv.addEventListener("pointerleave", () => { $("#osc-readout").textContent = ""; });
       cv.addEventListener("click", (e) => { const m = near(e); if (m) selectMode(m); });
     }
@@ -951,6 +900,8 @@
     // header controls
     $("#btn-prev").addEventListener("click", () => select(S.i - 1, true));
     $("#btn-next").addEventListener("click", () => select(S.i + 1, true));
+    $("#btn-mprev").addEventListener("click", () => stepMode(-1));
+    $("#btn-mnext").addEventListener("click", () => stepMode(1));
     let playTimer = null;
     const setPlay = (on) => {
       S.playing = on; $("#btn-play").setAttribute("aria-pressed", on);
@@ -959,13 +910,22 @@
       if (on) playTimer = setInterval(() => { if (S.i >= T.n - 1) setPlay(false); else select(S.i + 1, true); }, 900);
     };
     $("#btn-play").addEventListener("click", () => setPlay(!S.playing));
-    $("#btn-pulse").addEventListener("click", () => { S.pulsate = !S.pulsate; $("#btn-pulse").setAttribute("aria-pressed", S.pulsate); drawInterior(0); startAnim(); });
+    $("#btn-pulse").addEventListener("click", () => { S.pulsate = !S.pulsate; $("#btn-pulse").setAttribute("aria-pressed", S.pulsate); redrawInterior(); startAnim(); });
     $("#btn-pulse").setAttribute("aria-pressed", S.pulsate);
+    if (REDUCED) $("#btn-pulse").disabled = true;
     for (const b of $$("[data-xaxis]")) b.addEventListener("click", () => {
       S.xlog = b.dataset.xaxis === "log";
       $$("[data-xaxis]").forEach((x) => x.classList.toggle("on", x === b));
       drawStrip(); drawProfiles(); drawOsc();
     });
+    // theme: the same choice as the rest of the site, kept in localStorage under "theme"
+    $("#btn-theme").addEventListener("click", () => {
+      const next = DARK ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem("theme", next); } catch (e) { /* storage unavailable */ }
+      redrawAll();
+    });
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (!document.documentElement.dataset.theme) redrawAll(); });
     $("#btn-info").addEventListener("click", () => $("#info").classList.toggle("open"));
     $("#info .close").addEventListener("click", () => $("#info").classList.remove("open"));
     $("#info").addEventListener("click", (e) => { if (e.target === $("#info")) $("#info").classList.remove("open"); });
@@ -975,7 +935,7 @@
       else if (e.key === "ArrowRight") { select(S.i + 1, true); e.preventDefault(); }
       else if (e.key === "[") stepMode(-1);
       else if (e.key === "]") stepMode(1);
-      else if (e.key === " ") { e.preventDefault(); $("#btn-pulse").click(); }
+      else if (e.key === " " && !e.target.matches("button")) { e.preventDefault(); $("#btn-pulse").click(); }
       else if (e.key === "Escape") $("#info").classList.remove("open");
     });
     document.addEventListener("visibilitychange", () => { if (!document.hidden) startAnim(); });
@@ -990,6 +950,7 @@
     ]) tex($(sel), s);
     for (const q of PROF) tex($(`#sm-${q.id} .ax-y`), q.title);
     for (const el of $$(".ax-x.rr")) tex(el, "r/R");
+    for (const el of $$(".tx[data-tex]")) tex(el, el.dataset.tex);
   }
   function readoutFor(i) {
     const [a, u] = age(T.age[i]);
@@ -1015,8 +976,8 @@
       msg("reading the track");
       await new Promise((r) => setTimeout(r, 30));
       loadTrack(buf.buffer);
-      wire();
       $("#app").classList.add("visible");
+      wire();
       $("#overlay").classList.add("hidden");
       const want = (location.hash.match(/^#m(\d+)$/) || [])[1], wantI = (location.hash.match(/^#i(\d+)$/) || [])[1];
       let start = Math.floor(T.n * 0.06);
