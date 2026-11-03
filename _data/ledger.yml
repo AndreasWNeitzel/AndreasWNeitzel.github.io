@@ -94,8 +94,8 @@ positions:
   kind: research
   institution: IA/CAUP
   location: Porto, Portugal
-  date: '2021'
-  end_date: '2022'
+  date: 2021-09
+  end_date: 2022-03
   identifiers:
     reference: CIAAUP-08/2021-BI-M
   summary: Implemented the small-frequency-separation routine in the stellar characterisation code PARAM.
@@ -719,14 +719,15 @@ funding:
   funder: Fundação para a Ciência e a Tecnologia
   status: ended
 - id: fund-2021-fct-msc-research-grant
-  title: FCT MSc Research Grant, BreakStarS project
+  title: MSc research fellowship, BreakStarS project
   tagline: FCT-funded MSc research grant on the BreakStarS stellar-evolution project.
   kind: scholarship
   role: fellow
-  date: '2021'
-  end_date: '2022'
+  date: 2021-09
+  end_date: 2022-03
   identifiers:
     reference: CIAAUP-08/2021-BI-M
+  summary: Research fellowship "Study of the small separation as a constraint in the modelling of red giant stars" (CIAAUP-08/2021-BI-M), in the FCT project BreakStarS at IA Porto (PTDC/FIS-AST/30389/2017).
   weight: 5
   audiences:
   - academic
@@ -1186,3 +1187,144 @@ skills:
   - industry-ai
   - industry-tech
   - quant
+tools:
+- id: tool-2025-trilegal
+  title: TRILEGAL
+  tagline: Population-synthesis code that simulates the stars along a line of sight in the Milky Way.
+  kind: third-party
+  role: user
+  date: 2025-09
+  people:
+  - L. Girardi et al. (2005)
+  identifiers:
+    doi: 10.1051/0004-6361:20042352
+    url: http://stev.oapd.inaf.it/cgi-bin/trilegal
+  summary: Galaxy model that synthesises the stellar populations in a field, giving star counts, magnitudes and stellar parameters.
+  details:
+  - Used in the HAYDNsim pipeline to synthesise the stellar populations of the target clusters and fields for the HAYDN noise forecasts, as shown on the TASC10/KASC17 poster.
+  weight: 3
+  audiences:
+  - academic
+- id: tool-2025-hne
+  title: HAYDN Noise Estimator (HNE)
+  tagline: Instrument noise model for the proposed HAYDN mission, returning per-star noise-to-signal and contamination.
+  kind: third-party
+  role: user
+  date: 2025-09
+  people:
+  - R. Samadi (LIRA, Observatoire de Paris)
+  summary: Per-star photometric noise model for the proposed HAYDN mission, including the light of neighbouring stars; reconfigurable to PLATO.
+  details:
+  - Ran the HNE on Deucalion with inputs prepared by the HAYDNsim pipeline, for HAYDN target fields and, in its PLATO configuration, for three PLATO Guest Observer proposals.
+  weight: 3
+  audiences:
+  - academic
+- id: tool-2021-param
+  title: PARAM
+  tagline: Bayesian code that infers stellar ages, masses and radii from observables and a model grid.
+  kind: third-party
+  role: user
+  date: 2021-09
+  people:
+  - L. da Silva et al. (2006)
+  - T. S. Rodrigues et al. (2014, 2017)
+  - BreakStarS project, IA Porto (M. Cunha and team)
+  identifiers:
+    doi: 10.1093/mnras/stx120
+    reference: da Silva et al. 2006, doi:10.1051/0004-6361:20065105; Rodrigues et al. 2014, doi:10.1093/mnras/stu1907; Rodrigues et al. 2017, doi:10.1093/mnras/stx120
+  summary: 'Bayesian stellar characterisation code: it compares observed parameters with a grid of stellar evolution models and returns probability distributions of age, mass and radius.'
+  details:
+  - 'Used in the MSc thesis on the Ariel input catalogue (Chapters 5 and 6): consistency tests on synthetic stars and the characterisation of seismic Ariel targets.'
+  - Assembled the model grid PARAM reads, from MESA tracks with GYRE frequencies, through a conversion toolkit (thesis Sect. 5.2).
+  - During his MSc research fellowship in the BreakStarS project (IA Porto, M. Cunha and team; FCT PTDC/FIS-AST/30389/2017), implemented a routine that computes the small frequency separation from GYRE modes for the PARAM grid.
+  weight: 3
+  audiences:
+  - academic
+- id: tool-2021-mesa
+  title: MESA (Modules for Experiments in Stellar Astrophysics)
+  tagline: Stellar evolution code whose tracks underlie the PARAM model grid.
+  kind: third-party
+  role: user
+  date: '2021'
+  people:
+  - B. Paxton et al. (2011) and the MESA collaboration
+  identifiers:
+    doi: 10.1088/0067-0049/192/1/3
+    url: https://docs.mesastar.org/
+  summary: Open-source stellar evolution code that computes the structure and evolution of stars of given initial mass and composition.
+  details:
+  - Worked with MESA evolutionary tracks as the model grid behind PARAM and for the MSc thesis figures (Sect. 2.6 and 5.2); did not run MESA himself.
+  weight: 3
+  audiences:
+  - academic
+- id: tool-2021-gyre
+  title: GYRE
+  tagline: Stellar oscillation code that adds mode frequencies to evolutionary models.
+  kind: third-party
+  role: user
+  date: '2021'
+  people:
+  - R. H. D. Townsend and S. A. Teitler (2013)
+  identifiers:
+    doi: 10.1093/mnras/stt1533
+    url: https://gyre.readthedocs.io/
+    repo: https://github.com/rhdtownsend/gyre
+  summary: Open-source oscillation code that computes the frequencies of stellar pulsation modes, so that asteroseismic constraints can be applied to model grids.
+  details:
+  - Worked with GYRE mode frequencies in the PARAM grid, from which the global seismic parameters were derived (thesis Sect. 3.4, 5.1, 5.2); did not run GYRE himself.
+  weight: 3
+  audiences:
+  - academic
+- id: tool-2021-mwdust
+  title: mwdust
+  tagline: Python package that returns Milky Way dust extinction from 2D and 3D dust maps.
+  kind: third-party
+  role: user
+  date: '2021'
+  people:
+  - J. Bovy et al. (2016); dust map by G. M. Green et al. (2019)
+  identifiers:
+    doi: 10.3847/0004-637X/818/2/130
+    repo: https://github.com/jobovy/mwdust
+    reference: Bovy et al. 2016; Green et al. 2019, doi:10.3847/1538-4357/ab5362
+  summary: Python package that gives interstellar extinction along a line of sight and distance from published Milky Way dust maps.
+  details:
+  - Used for the extinction of Ariel targets in the MSc thesis (Sect. 4.1.4), favouring the 3D dust map of Green et al. (2019).
+  weight: 3
+  audiences:
+  - academic
+- id: tool-2021-bccode
+  title: BCCode (bolometric corrections)
+  tagline: Code that computes bolometric corrections from synthetic stellar spectra.
+  kind: third-party
+  role: user
+  date: '2021'
+  people:
+  - L. Casagrande and D. A. VandenBerg (2014, 2018)
+  identifiers:
+    doi: 10.1093/mnras/stu1476
+    repo: https://github.com/casaluca/bolometric-corrections
+    reference: Casagrande & VandenBerg 2014, doi:10.1093/mnras/stu1476; 2018, doi:10.1093/mnras/sty149; 2018, doi:10.1093/mnrasl/sly104
+  summary: Code that interpolates synthetic stellar photometry to give bolometric corrections for a star of given temperature, gravity, metallicity and reddening.
+  details:
+  - Used in the MSc thesis to compute bolometric corrections and luminosities, including Monte Carlo sensitivity tests (Sect. 4.2.1, Figs 4.4 to 4.7).
+  weight: 3
+  audiences:
+  - academic
+- id: tool-2021-ybc
+  title: YBC
+  tagline: Database of bolometric corrections with variable extinction coefficients.
+  kind: third-party
+  role: user
+  date: '2021'
+  people:
+  - Y. Chen et al. (2019)
+  identifiers:
+    doi: 10.1051/0004-6361/201936612
+    url: http://stev.oapd.inaf.it/YBC/index.html
+  summary: Bolometric-correction database for many photometric systems, built for the PARSEC isochrones.
+  details:
+  - Used in the MSc thesis, alongside BCCode, to convert Gaia magnitudes into bolometric magnitudes and from them derive stellar luminosities (Sect. 4.2.1).
+  weight: 3
+  audiences:
+  - academic
