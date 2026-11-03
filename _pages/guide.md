@@ -16,6 +16,7 @@ cards:
 loop_pos:
   plato: "72% 50%"
   tess-kepler: "77% 50%"
+  ariel: "94% 50%"
 loops:
   gaia: gaia
   supercomputers: hall
@@ -23,6 +24,7 @@ loops:
   machine-learning-for-stars: ai
   plato: plato
   tess-kepler: pair
+  ariel: ariel
 ---
 {%- assign CP = site.data.copy.plates -%}
 {% include plate.html loop="paranal" still="/assets/img/photos/vlt-golden-hour.webp" alt="Me on the VLT platform at Paranal at sunset, with the Unit Telescopes behind me" title="Field guide" line=CP.guide pos="50% 100%" textw="36vw" lift=true %}

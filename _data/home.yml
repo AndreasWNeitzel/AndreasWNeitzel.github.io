@@ -95,6 +95,7 @@ guide_loops:
   galactic-archaeology: sky
   tess-kepler: pair
   plato: plato
+  ariel: ariel
 # Sources printed on a guide loop built on someone else's material.
 guide_loop_credits:
   tess-kepler: "TESS base mesh NASA 3D Resources; sky ESO/S. Brunier, CC BY 4.0"
