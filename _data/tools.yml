@@ -114,7 +114,7 @@
   kicker: "MSc thesis, 2021 to 2022"
   card: "A database of bolometric corrections for many photometric systems, made for the PARSEC isochrones. I used it alongside BCCode to turn Gaia magnitudes into luminosities in my MSc thesis."
   line: "YBC is a database of bolometric corrections for many photometric systems, made for the PARSEC isochrones."
-  alt: "Starlight from a rendered star fans through eight glowing filter panes (Johnson B and V, Gaia BP, G and RP, 2MASS J, H and Ks). Each band's share lands as an orb whose area follows that band's flux."
+  alt: An HR diagram of about 95,000 isochrone points, each region coloured by its atmosphere library, while a glowing band sweeps from ultraviolet to infrared and stars brighten as the band reaches them.
   description: "YBC, a database of stellar bolometric corrections by Y. Chen and colleagues, and how Andreas W. Neitzel used it in his MSc thesis."
   about:
     - "YBC integrates libraries of stellar spectra (ATLAS9, PHOENIX, MARCS, COMARCS, PoWR and others) through the filter curves of each photometric system, with extinction computed star by star. Given a star's magnitude in any of those filters, it returns the correction to its bolometric magnitude, and so its luminosity."
@@ -122,14 +122,20 @@
   use:
     - "In my MSc thesis I used YBC alongside BCCode to convert Gaia magnitudes into bolometric magnitudes, and from them to derive stellar luminosities (Sect. 4.2.1)."
   loop_note:
-    - "The orb sizes are real: they are computed from an observed spectrum (of HD 42256, from the X-shooter Spectral Library) through the real passbands. That spectrum belongs to a different star than the rendered one, and YBC itself uses model spectra. The star render, the panes, the halos, the colours and the geometry are drawn."
+  - 'The points are real: about 95,000 isochrone points at two metallicities from the public MESA grid (Choi et al. 2016, Dotter 2016). Each point''s library follows the selection rules of Chen et al. (2019),
+    section 3.10, applied to its own temperature, gravity, surface composition and mass loss. The library colours, the band''s shape and the brightness response are drawn; the response uses blackbody shares
+    as a stand-in for the library spectra.'
   papers:
     - {cite: "Chen et al. 2019, A&A 632, A105", title: "YBC: a stellar bolometric corrections database with variable extinction coefficients. Application to PARSEC isochrones", doi: "10.1051/0004-6361/201936612"}
   links:
     - {label: "YBC database, INAF Padova", url: "http://stev.oapd.inaf.it/YBC/index.html"}
   loop_data:
-    - {label: "Spectrum of HD 42256: X-shooter Spectral Library DR3, Verro et al. 2022, A&A 660, A34", url: "https://ui.adsabs.harvard.edu/abs/2022A%26A...660A..34V"}
-    - {label: "Johnson, Gaia DR3 and 2MASS passbands: SVO Filter Profile Service", url: "http://svo2.cab.inta-csic.es/theory/fps/"}
+  - label: 'Isochrone points: Choi et al. 2016, ApJ 823, 102'
+    url: https://doi.org/10.3847/0004-637X/823/2/102
+  - label: 'Isochrone points: Dotter 2016, ApJS 222, 8'
+    url: https://doi.org/10.3847/0067-0049/222/1/8
+  - label: 'Library selection rules: Chen et al. 2019, A&A 632, A105, section 3.10'
+    url: https://doi.org/10.1051/0004-6361/201936612
 
 - id: mwdust
   ledger: tool-2021-mwdust
