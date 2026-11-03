@@ -27,6 +27,6 @@ An atmosphere measurement is only as good as the knowledge of the star behind it
 
 ## Where I come in
 
-I have been a member of the *Ariel* Science Consortium since 2021, in the Stellar Characterisation working group, in the sub-group that works on stellar age, mass and radius. My MSc dissertation at the University of Porto, defended in 2022, determined the ages and masses of oscillating stars in the *Ariel* input catalogue, and I implemented the small-frequency-separation routine in the stellar characterisation code PARAM for it.
+I have been a member of the *Ariel* Science Consortium since 2021, in the Stellar Characterisation working group, in the sub-group that works on stellar age, mass and radius. My MSc dissertation at the University of Porto, defended in 2022, determined the ages and masses of oscillating stars in the *Ariel* input catalogue, and I implemented a routine that computes the small frequency separation for the grid of the stellar characterisation code PARAM.
 
 I also contributed to Magrini et al. (2022), the first paper of the working group's series, which derives homogeneous stellar parameters for 187 planet-host stars on the *Ariel* target list. My part was the Bayesian stellar characterisation runs with PARAM for a subset of the sample. In 2022 I presented this work in Portuguese at DFA Week in Porto, as a talk at the national physics conference FÍSICA 2022, and as a poster at the national astronomy meeting ENAA XXXII in Lisbon.
