@@ -15,7 +15,7 @@ extra_css: [/assets/css/haydn.css]
 </figure>
 
 <figure class="panel blueprint guide-wide" data-build data-credit="own">
-  {% include figures/haydn-field.svg %}
+  <div class="hy-field-svg">{% include figures/haydn-field.svg %}</div>
 </figure>
 
 <section class="section" aria-labelledby="what">

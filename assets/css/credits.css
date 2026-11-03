@@ -15,5 +15,5 @@
   .cr-table thead { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
   .cr-table, .cr-table tbody, .cr-table tr, .cr-table th, .cr-table td { display: block; inline-size: auto; }
   .cr-table tr { padding-block: 8px; border-block-start: 1px solid var(--line); }
-  .cr-table th, .cr-table td { padding: 0; border: 0; }
+  .cr-table th, .cr-table td, .cr-table tbody th { padding: 0; border: 0; inline-size: auto; }
 }

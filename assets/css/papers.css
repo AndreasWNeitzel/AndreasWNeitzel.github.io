@@ -42,5 +42,5 @@
   .nw-svg .nw-band { fill: color-mix(in oklab, var(--accent) 22%, transparent); }
   .nw-svg .nw-bar { fill: color-mix(in oklab, var(--accent) 55%, transparent); }
   .nw-svg .nw-diag { fill: color-mix(in oklab, var(--accent) 38%, transparent); }
-  @media (max-width: 760px) { .paper-wide { overflow-x: auto; } .paper-wide .nw-svg { min-inline-size: 900px; } }
+  @media (max-width: 760px) { .paper-wide { overflow-x: auto; } .paper-wide .nw-svg { min-inline-size: 1230px; } }
 }
