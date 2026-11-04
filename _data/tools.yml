@@ -77,6 +77,32 @@
   loop_data:
     - {label: "The 1 solar-mass track behind Stellar Explorer, MESA models run by R. Costa (IA Porto)", url: "/stellar-explorer/"}
 
+- id: gyre
+  ledger: tool-2021-gyre
+  title: GYRE
+  loop: tool-gyre
+  credit: "R. H. D. Townsend and S. A. Teitler (2013)"
+  kicker: "MSc thesis, 2021 to 2022"
+  card: "In my MSc thesis I worked with GYRE mode frequencies in the PARAM grid, from which the global seismic parameters were derived. I did not run GYRE myself."
+  line: "An open-source code that computes the oscillation modes of a stellar model."
+  alt: "A cut-open solar-mass model of translucent shells, coloured by temperature, while a scanning marker finds zeros in three rows and 26 modes lock into a frequency comb."
+  description: "Andreas W. Neitzel worked with GYRE mode frequencies in the PARAM grid during his MSc thesis; GYRE is an open-source stellar oscillation code by Townsend and Teitler."
+  about:
+    - "GYRE computes the oscillation modes of a stellar model. It reads the model's structure on a radial mesh, including density, pressure, sound speed and buoyancy frequency, and solves the linear oscillation equations. It searches for the frequencies at which the equations and their boundary conditions are satisfied, and returns each mode's eigenfunction along with its frequency. Each frequency belongs to a standing wave inside the star, labelled by its degree and radial order."
+    - "GYRE was written by R. H. D. Townsend and S. A. Teitler and published in 2013. It is open source, with its documentation and code available online."
+  use:
+    - "I worked with GYRE mode frequencies in the PARAM grid, from which the global seismic parameters were derived (thesis Sect. 3.4, 5.1, 5.2). I did not run GYRE myself."
+  loop_note:
+    - "The input file GYRE read for this model is real: the mesh, density, pressure, sound speed, buoyancy frequency and temperature, from MESA and GYRE models run by R. Costa (IA Porto). The frequencies are GYRE's own output, and the peaks in the comb and the zeros in the rows sit at them. The shells are drawn at the model's real mesh radii, every 8th zone of the 770-zone mesh."
+    - "The curves in the rows illustrate the root search and are separate from GYRE's internal function. The displacement bands use an eigenfunction reconstructed from the model, which is an approximation of GYRE's own eigenfunction output. Colours, timing and the shell spacing shown are drawn."
+  papers:
+    - {cite: "Townsend & Teitler 2013, MNRAS 435, 3406", title: "GYRE: an open-source stellar oscillation code based on a new Magnus Multiple Shooting scheme", doi: "10.1093/mnras/stt1533"}
+  links:
+    - {label: "Documentation", url: "https://gyre.readthedocs.io/"}
+    - {label: "Source code", url: "https://github.com/rhdtownsend/gyre"}
+  loop_data:
+    - {label: "The 1 solar-mass model behind Stellar Explorer, MESA and GYRE models run by R. Costa (IA Porto)", url: "/stellar-explorer/"}
+
 - id: bccode
   ledger: tool-2021-bccode
   title: BCCode
