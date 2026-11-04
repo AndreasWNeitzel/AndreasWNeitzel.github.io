@@ -166,7 +166,7 @@
   title: TRILEGAL
   loop: tool-trilegal
   credit: "L. Girardi et al. (2005)"
-  kicker: "PhD, since 2025"
+  kicker: "HAYDNsim, 2025 to 2026"
   card: "A model of the Galaxy that predicts the stars seen in a given field. I used it to generate synthetic populations of globular clusters for noise forecasts of the proposed HAYDN mission."
   line: "TRILEGAL is a population synthesis code that simulates the stars seen in any field of view of the Milky Way."
   alt: "The Galaxy assembles one component at a time as glowing density shapes: halo, thick disc, thin disc and bulge. A line of sight leaves the Sun and stars appear along it, then each star flies to its place on a Hertzsprung-Russell diagram."
@@ -187,3 +187,88 @@
     - {label: "Isochrones computed with MESA: Choi et al. 2016, ApJ 823, 102", url: "https://doi.org/10.3847/0004-637X/823/2/102"}
     - {label: "Dotter 2016, ApJS 222, 8", url: "https://doi.org/10.3847/0067-0049/222/1/8"}
     - {label: "Gaia magnitudes: bolometric-correction tables of Casagrande & VandenBerg", url: "https://github.com/casaluca/bolometric-corrections"}
+
+- id: hne
+  ledger: tool-2025-hne
+  title: "HAYDN Noise Estimator"
+  loop: tool-hne
+  credit: "R. Samadi (LIRA, Observatoire de Paris)"
+  kicker: "HAYDNsim, 2025 to 2026"
+  card: "A per-star photometric noise model for the proposed HAYDN mission. I ran it on a supercomputer for HAYDN target fields and, reconfigured, for three PLATO Guest Observer proposals."
+  line: "The HAYDN Noise Estimator is a photometric noise model that returns, for each star, its noise-to-signal ratio and the contamination by neighbouring stars."
+  alt: "The globular cluster M13 lies far along the telescope's line of sight. The light of the stars in one small field runs as rays through the optics onto a detector plate whose pixels glow with the light they collect. One target star's mask, a cross of its 13 brightest pixels, outlines itself in blue. In a close-up of the pixels around it the target's light blooms white and two neighbours' light blooms gold and spills into the mask. A bar fills with the mask's light as two streams, white for the target and gold for the neighbours, and a light curve forms whose scatter grows with the gold share. The same follows for a star far out in the cluster's halo, with no neighbour light in its mask, a white bar and a clean light curve."
+  description: "The HAYDN Noise Estimator, a photometric noise model for the proposed HAYDN mission by R. Samadi (LIRA, Observatoire de Paris), and how Andreas W. Neitzel used it in his PhD."
+  about:
+    - "The HAYDN Noise Estimator (HNE) is a per-star photometric noise model for the proposed HAYDN space mission. For each star it returns the noise-to-signal ratio and the contamination by the light of neighbouring stars. It can be reconfigured for PLATO."
+    - "The light of each star spreads over the detector pixels through the point spread function. The star's photometric mask is the set of pixels that collect most of its own light. Light from neighbouring stars that falls in the same mask adds to the light measured and to the noise. The share of the mask's light that is not the target's is what the model returns, star by star, alongside the noise."
+    - "The HAYDN Noise Estimator was developed by R. Samadi (LIRA, Observatoire de Paris). No paper describes it and it has no public page."
+  use:
+    - "I ran the HNE on Deucalion, a supercomputer, with inputs prepared by the HAYDNsim pipeline, for HAYDN target fields and, in its PLATO configuration, for three PLATO Guest Observer proposals."
+  loop_note:
+    - "The positions and brightnesses of the stars are Gaia measurements of real members of the globular cluster M13. The masks and the split of each mask's light follow from those positions and brightnesses with the rules of the crowding figure on my HAYDNsim page: one point spread function for every star, and the mask as the pixels collecting most of the target's light."
+    - "The pixel size and the point spread function (no instrument's values), the stars' depth along the line of sight, the optics, the colours and the light curves are drawn. Each light curve is a stylised oscillation plus noise sized by the neighbours' share, in arbitrary units. No numbers appear."
+  papers: []
+  links: []
+  loop_data:
+    - {label: "Gaia DR3 members of the globular cluster M13", url: "https://www.cosmos.esa.int/web/gaia/dr3"}
+    - {label: "The crowding figure on the HAYDNsim page", url: "/software/haydnsim/"}
+
+- id: galpy
+  ledger: ""   # no ledger entry yet (Academy owns the ledger); loop tool-galpy, job 809-seq
+  title: galpy
+  credit: "J. Bovy (2015)"
+  kicker: "PhD"
+  card: "A Python package for Galactic dynamics that integrates the orbit of a star through a model of the Galaxy. I use it for orbit parameters in work in preparation and in my ArqueoGal data repository."
+  line: "galpy is a Python package for Galactic dynamics that returns the path a star follows through the Galaxy and the conserved quantities that label it."
+  alt: "The camera starts close on a star and pulls back until it is a point of light in the Milky Way, a glowing disc and bulge. The orbit of the star traces itself in three dimensions, a rosette in the plane that rises above and falls through the disc. A faint translucent ring lights around the orbit, then the camera returns to the star."
+  description: "galpy, a Python package for Galactic dynamics by J. Bovy, and how Andreas W. Neitzel uses it in his PhD for orbit parameters."
+  about:
+    - "galpy provides gravitational potentials for the Milky Way, among them MWPotential2014 and McMillan17 (McMillan 2017), and integrates orbits in them with Python and C integrators. It computes action-angle coordinates and orbit parameters such as the eccentricity, the maximum height above the plane (z_max), the pericentre and the apocentre, among them through the Stäckel approximation (Binney 2012)."
+    - "Given a star's position, distance, proper motion and radial velocity, it returns the path the star follows through the Galaxy and the conserved quantities that label it. galpy is written by J. Bovy (2015) and is open source."
+  use:
+    - "I use galpy for orbit parameters (the Stäckel approximation, in the McMillan17 potential) in work in preparation. I also use it in my ArqueoGal data repository, which assembles extinction, distances and galpy kinematics for Gaia DR3 and APOGEE DR19 stars, for the FCT ArqueoGal project."
+  loop_note:
+    - "The star is Gaia DR3 5474633394457737216, a red giant chosen at random from the Gaia archive. Its position, parallax, proper motion and radial velocity are the Gaia DR3 values, with the distance taken as the inverse of the parallax. The orbit is integrated with galpy 1.12.1 in McMillan17 over 1.2 billion years. The ring is built from the same orbit integrated over 10 billion years. The shapes of the disc and bulge light follow McMillan (2017)."
+    - "The brightness of the Galaxy, the colours and the camera are drawn. The scattered disc stars are visual texture only and stand for no Gaia star or catalogue. The look of the star is that of the site's rendered star, which stands in for the surface of this giant, and its size against the Galaxy is a jump in scale."
+  loop: tool-galpy
+  papers:
+    - {cite: "Bovy 2015, ApJS 216, 29", title: "galpy: A python library for Galactic dynamics", doi: "10.1088/0067-0049/216/2/29"}
+    - {cite: "McMillan 2017, MNRAS 465, 76", title: "The mass distribution and gravitational potential of the Milky Way", doi: "10.1093/mnras/stw2759"}
+    - {cite: "Binney 2012, MNRAS 426, 1324", title: "Actions for axisymmetric potentials", doi: "10.1111/j.1365-2966.2012.21757.x"}
+  links:
+    - {label: "Documentation", url: "https://galpy.readthedocs.io/"}
+    - {label: "Source code", url: "https://github.com/jobovy/galpy"}
+  loop_data:
+    - {label: "Gaia DR3: Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1", url: "https://doi.org/10.1051/0004-6361/202243940"}
+    - {label: "Gaia DR3 radial velocities: Katz et al. 2023, A&A 674, A5", url: "https://doi.org/10.1051/0004-6361/202244220"}
+    - {label: "Potential: McMillan 2017, MNRAS 465, 76", url: "https://doi.org/10.1093/mnras/stw2759"}
+
+- id: gaiaxpy
+  ledger: ""   # no ledger entry yet (Academy owns the ledger); loop tool-gaiaxpy, job 810-seq
+  title: GaiaXPy
+  credit: "Gaia DPAC (CU5/DU14)"
+  kicker: "PhD"
+  card: "A Python package that turns the coefficients Gaia DR3 publishes for its BP/RP spectra into calibrated spectra. I use it to calibrate Gaia XP coefficients in work in preparation."
+  line: "GaiaXPy is a Python package that turns the Gaia DR3 BP/RP spectral coefficients into spectra and synthetic photometry."
+  alt: "Bars rise one per coefficient, blue for BP on the left and red for RP on the right. Each unfurls into its weighted Hermite function and steps back in depth, a waterfall of curves. The layers slide forward and add up into the BP and RP spectra, which are calibrated and joined into one absolute spectrum that lights in the colours of its wavelengths."
+  description: "GaiaXPy, the Gaia DPAC package for Gaia DR3 BP/RP spectra, and how Andreas W. Neitzel uses it in his PhD."
+  about:
+    - "Gaia DR3 publishes the mean BP and RP spectra of a star (together XP spectra) as 55 plus 55 coefficients of a continuous representation on Hermite functions (Carrasco et al. 2021; De Angeli et al. 2023). GaiaXPy turns those coefficients into usable products. The function convert samples the internally calibrated BP and RP spectra in pseudo-wavelength. The function calibrate returns the externally calibrated, absolute spectrum on a wavelength grid from about 336 to 1020 nm."
+    - "In calibrate, BP and RP are joined into one spectrum by weights across their overlap (Montegriffo et al. 2023). The package also produces synthetic photometry. GaiaXPy is written by the Gaia Data Processing and Analysis Consortium (CU5/DU14) and is open source."
+  use:
+    - "I use GaiaXPy calibrate to turn Gaia XP coefficients into calibrated spectra in work in preparation."
+  loop_note:
+    - "The star is Gaia DR3 5474633394457737216, the star of the galpy card, a red giant chosen at random from the Gaia archive. The 110 coefficients are those published in the Gaia archive. Every weighted Hermite function and every running sum comes from GaiaXPy 2.1.5 convert. The absolute spectrum and the join of BP and RP come from GaiaXPy calibrate."
+    - "The heights of the bars are compressed so that the small coefficients show. The small curves in the waterfall are compressed so that their shapes read, and return to their true height as they join the sum. The colours follow the hue of each wavelength, with a dim floor at both ends so that the violet and the near infrared, invisible to the eye, still show. The camera is drawn."
+  loop: tool-gaiaxpy
+  papers:
+    - {cite: "Montegriffo et al. 2023, A&A 674, A3", title: "Gaia Data Release 3. External calibration of BP/RP low-resolution spectroscopic data", doi: "10.1051/0004-6361/202243880"}
+    - {cite: "De Angeli et al. 2023, A&A 674, A2", title: "Gaia Data Release 3. Processing and validation of BP/RP low-resolution spectral data", doi: "10.1051/0004-6361/202243680"}
+    - {cite: "Carrasco et al. 2021, A&A 652, A86", title: "Internal calibration of Gaia BP/RP low-resolution spectra", doi: "10.1051/0004-6361/202141249"}
+  links:
+    - {label: "Homepage", url: "https://gaia-dpci.github.io/GaiaXPy-website/"}
+    - {label: "GaiaXPy 2.1.5 release, Zenodo", url: "https://doi.org/10.5281/zenodo.23400597"}
+    - {label: "Source code", url: "https://github.com/gaia-dpci/GaiaXPy"}
+  loop_data:
+    - {label: "XP coefficients: Gaia DR3, Gaia Collaboration, Vallenari et al. 2023, A&A 674, A1", url: "https://doi.org/10.1051/0004-6361/202243940"}
+    - {label: "Gaia archive", url: "https://gea.esac.esa.int/archive/"}
