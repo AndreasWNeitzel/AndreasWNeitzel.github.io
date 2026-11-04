@@ -54,6 +54,7 @@ uniform float uLimb;
 uniform float uCells;      // granules across the disc
 uniform float uMinCell;    // smallest drawn cell in units of R
 uniform float uDetail;     // 0 where granules are too small to resolve, 1 where they are resolved
+uniform float uSoft;       // 0 for a dwarf's many small granules, 1 for a giant's few huge cells
 uniform vec3 uPlate;
 uniform sampler2D uProf;
 
@@ -218,7 +219,7 @@ vec3 photosphere(vec3 P, vec2 s) {
   vec3 rn = vec3(ca * n.x - sa * n.y, sa * n.x + ca * n.y, n.z);
   vec3 g3 = rn * (uCells * 0.5);
   float warp = snoise(g3 * 0.33 + vec3(17.0, 0.0, uTime * 0.012));
-  vec3 gp = g3 + vec3(warp * 0.5, -warp * 0.4, warp * 0.3);
+  vec3 gp = g3 + vec3(warp * 0.5, -warp * 0.4, warp * 0.3) * (1.0 + 1.2 * uSoft);
   // whole-disc scale: a soft mottle; where a granule spans more than about 12 device pixels the
   // cells fade in with their lanes (the approach of the Build a star page)
   float mottle = 0.5 + 0.45 * snoise(gp * 1.1 + vec3(0.0, 0.0, uTime * 0.05)) + 0.2 * snoise(gp * 2.3 + vec3(3.0, 8.0, uTime * 0.07));
@@ -227,6 +228,10 @@ vec3 photosphere(vec3 P, vec2 s) {
     vec2 w = cellular(gp, uTime * 0.6);
     float e = w.y - w.x;
     float cell = smoothstep(0.0, 0.42, e) * (0.82 + 0.18 * exp(-3.0 * w.x * w.x));
+    // a giant's few cells: bright centres falling off gradually, edges blurred, no hard lanes,
+    // with the mottle kept over them so the disc reads as gas rather than paving
+    float blob = 0.4 * smoothstep(0.0, 0.9, e) + 0.6 * exp(-2.2 * w.x * w.x);
+    cell = mix(cell, mix(blob, mottle, 0.2), uSoft);
     g = mix(mottle, cell, uDetail);
   }
   float vis = smoothstep(0.0, 0.3, mu) * mix(0.4, 1.0, mu);
@@ -237,9 +242,17 @@ vec3 photosphere(vec3 P, vec2 s) {
   // the blue and green channels fall a little faster toward it
   vec3 base = pow(uSurf, vec3(2.4 + 1.0 * (1.0 - mu)));
   // the intensity goes to the screen value linearly, so the limb shows at 1 - u of the centre
-  float contrast = mix(0.07, 0.12, uDetail);
+  float contrast = mix(0.07, 0.12 + 0.06 * uSoft, uDetail);
   vec3 disp = base * ld * (1.0 - 2.0 * contrast * vis * (0.62 - g)) * (1.0 + bump);
   return toLin(disp);
+}
+
+// convective cells at a fixed size 2^k (in units of R), each octave on its own offset lattice
+float convCells(vec3 Ps, float k) {
+  vec3 cp = Ps / exp2(k) + vec3(7.31, 3.17, -5.23) * k;
+  float wv = snoise(cp * 0.45 + vec3(3.0, 1.0, uTime * 0.03));
+  vec2 w = cellular(cp + 0.6 * vec3(wv, -wv, 0.5 * wv), uTime * 0.35);
+  return smoothstep(0.02, 0.5 + 0.25 * uSoft, w.y - w.x);
 }
 
 vec3 face(vec3 P, int k) {
@@ -260,13 +273,15 @@ vec3 face(vec3 P, int k) {
   vec3 col = toLin(ramp(t));
   float conv = smoothstep(0.25, 0.75, pr.y);
   // convective cells sized by the local pressure scale height, never finer than a few pixels
+  // The size changes steeply with depth near the base of a giant's envelope; a lattice scaled by it
+  // continuously would be squeezed along the radius into streaks. So the cells are drawn at fixed
+  // octaves of size and the two octaves around the local size are blended, each one undistorted.
   if (conv > 0.0) {
     float hp = pow(10.0, p2.x * 4.0 - 4.0);
     float size = clamp(hp * 1.2, uMinCell, 0.22);
-    vec3 cp = P * uScale / size;
-    float wv = snoise(cp * 0.45 + vec3(3.0, 1.0, uTime * 0.03));
-    vec2 w = cellular(cp + 0.6 * vec3(wv, -wv, 0.5 * wv), uTime * 0.35);
-    float up = smoothstep(0.02, 0.5, w.y - w.x);
+    float ls = log2(size);
+    float k0 = floor(ls);
+    float up = mix(convCells(P * uScale, k0), convCells(P * uScale, k0 + 1.0), smoothstep(0.0, 1.0, ls - k0));
     float vigour = 0.55 + 0.45 * p2.y;
     col *= mix(1.0, 0.62 + 0.62 * up, conv * vigour);
   }
@@ -342,7 +357,7 @@ void main() {
       return { supported: false };
     }
     gl.useProgram(prog);
-    for (const n of ["uCentre", "uRadius", "uRight", "uUp", "uView", "uScale", "uTime", "uPulse", "uEll", "uXiSurf", "uSurf", "uLimb", "uCells", "uMinCell", "uDetail", "uPlate", "uProf"]) U[n] = gl.getUniformLocation(prog, n);
+    for (const n of ["uCentre", "uRadius", "uRight", "uUp", "uView", "uScale", "uTime", "uPulse", "uEll", "uXiSurf", "uSurf", "uLimb", "uCells", "uMinCell", "uDetail", "uSoft", "uPlate", "uProf"]) U[n] = gl.getUniformLocation(prog, n);
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
@@ -440,6 +455,9 @@ void main() {
         gl.uniform1f(U.uCells, cells);
         const cellPx = (2 * R) / cells, emerge = Math.min(1, Math.max(0, (cellPx - 9) / 6));
         gl.uniform1f(U.uDetail, emerge * emerge * (3 - 2 * emerge));
+        // fewer than about 40 granules across the disc: a giant's surface, soft-edged
+        const soft = Math.min(1, Math.max(0, (40 - cells) / 26));
+        gl.uniform1f(U.uSoft, soft * soft * (3 - 2 * soft));
         gl.uniform2f(U.uCentre, v.cx * dpr, H - v.cy * dpr);
         gl.uniform1f(U.uRadius, R);
         gl.uniform1f(U.uScale, v.scale);

@@ -241,9 +241,12 @@ canvas { display: block; width: 100%; height: 100%; }
 #mnav { display: none; }
 
 /* ---------------------------------------------------------------- narrower desktops */
+@media (max-width: 1500px) {
+  .stat { padding: 0 9px; }
+}
 @media (max-width: 1400px) {
   .header-sub { display: none; }
-  .stat { padding: 0 10px; }
+  .stat { padding: 0 8px; }
 }
 
 /* ---------------------------------------------------------------- tablets and phones: one column that scrolls */
@@ -283,8 +286,26 @@ canvas { display: block; width: 100%; height: 100%; }
 }
 @media (max-width: 480px) {
   .logo { font-size: 18px; }
-  .header-nav { gap: 4px; }
-  .btn { min-width: 34px; height: 34px; padding: 0 8px; }
-  .seg .btn { height: 32px; padding: 0 8px; }
+}
+
+/* ---------------------------------------------------------------- phones: every tap target 44 px or more.
+   The header's controls join the header's own flex line (display: contents) and break into two rows:
+   the name with theme and help, then the radius axis, pulsation and model stepping. */
+@media (max-width: 760px) {
+  #header { row-gap: 0; padding: 4px 10px 8px; }
+  .header-nav { display: contents; }
+  .logo { order: 0; display: inline-flex; align-items: center; min-height: 44px; }
+  #btn-theme { order: 1; margin-left: auto; }
+  #btn-info { order: 1; }
+  #header::after { content: ""; order: 2; flex-basis: 100%; height: 0; }
+  .header-nav > :not(#btn-theme, #btn-info) { order: 3; }
+  .header-nav > .seg, .header-nav > .btn { margin-top: 2px; }
   .sep { display: none; }
+  .btn, .btn-s { min-width: 44px; height: 44px; padding: 0 10px; }
+  .seg .btn { height: 44px; min-width: 44px; padding: 0 10px; }
+  .pctl { gap: 6px; }
+  #app #main .phead .lb-ctl { inline-size: 44px; block-size: 44px; }
+  .sm-zoom { width: 44px; height: 44px; right: 0; bottom: 16px; }
+  #mnav a { padding: 0 4px; min-height: 48px; display: flex; align-items: center; justify-content: center; }
+  .sheet .close { margin: -12px -14px 0 0; }
 }
