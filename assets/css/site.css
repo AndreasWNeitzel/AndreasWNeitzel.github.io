@@ -142,8 +142,7 @@
   .header-actions { display: flex; align-items: center; gap: 10px; }
   .home .site-header { position: fixed; left: 0; right: 0; background: transparent; box-shadow: none; color: #ecebe6; }
   .home .site-header[data-scrolled] { background: color-mix(in oklab, var(--base) 96%, transparent); color: var(--ink); box-shadow: 0 1px 0 var(--line); }
-  .home .site-header:not([data-scrolled]):not([data-menu]) :is(.theme, .menu-btn) { border-color: rgb(236 235 230 / .4); background: rgb(19 18 16 / .35); color: #ecebe6; }
-  .home .site-header:not([data-scrolled]):not([data-menu]) .cv { background: #ecebe6; color: #131210; border-color: #ecebe6; }
+  /* the header buttons over the photograph: unlayered, near the end of this file */
   @media (max-width: 860px) {
     .site-header .wrap { gap: 10px; }
     .nav { gap: 14px; overflow-x: auto; scrollbar-width: none; padding-block: 2px; }
@@ -633,6 +632,12 @@
     .plate-text .lede { font-size: 1.08rem; line-height: 1.5; }
   }
   @media (max-width: 760px) { :is(img, video)[style*="--pos-m"] { object-position: var(--pos-m) !important; } .tri > div[style*="--pos-m"] > :is(img, video) { object-position: var(--pos-m) !important; } }
+  /* phones: a plate of three slices can show one of them alone (tri_m), full width and cropped by tri_m_pos */
+  @media (max-width: 760px) {
+    .plate-media .tri:is(.tri--m1, .tri--m2, .tri--m3) { grid-template-columns: 1fr; gap: 0; }
+    .tri--m1 > div:not(:nth-child(1)), .tri--m2 > div:not(:nth-child(2)), .tri--m3 > div:not(:nth-child(3)) { display: none; }
+    .tri[style*="--solo-pos"] > div > :is(img, video) { object-position: var(--solo-pos) !important; }
+  }
   .plate--article { block-size: clamp(360px, 46vh, 520px); }
   .plate--article .plate-media img.contain { object-fit: contain; padding: 24px; background: #0d0c0b; }
 
@@ -1022,8 +1027,10 @@
 /* a title card's loop: fills its panel, and on the home page fades in over the still while hovered */
 .tri video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
 .portal .tri video { opacity: 0; transition: opacity .4s var(--ease); } .portal .tri video.on { opacity: 1; }
-/* phones: over the photograph the header buttons keep the stage's dark-on-light pairing in both themes */
+/* over the photograph the CV button stays light in both themes, at every width; on phones the theme and menu
+   buttons turn to the stage's dark glass too. Outside the layers, since the components layer's .cv and
+   .icon-btn would otherwise win over the layout rules. */
+.home .site-header:not([data-scrolled]):not([data-menu]) .cv { background: #ecebe6; color: #131210; border-color: #ecebe6; }
 @media (max-width: 760px) {
   .home .site-header:not([data-scrolled]):not([data-menu]) :is(.theme, .menu-btn) { border-color: rgb(236 235 230 / .4); background: rgb(19 18 16 / .35); color: #ecebe6; }
-  .home .site-header:not([data-scrolled]):not([data-menu]) .cv { background: #ecebe6; color: #131210; border-color: #ecebe6; }
 }
