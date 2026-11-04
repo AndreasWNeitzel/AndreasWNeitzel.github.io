@@ -355,16 +355,11 @@
     for (let k = Math.ceil(Llo); k <= Math.floor(Lhi); k++) yTicks.push({ v: k, label: pow10(k), major: true });
     frame(c, box, X, Y, { xTicks, yTicks, xLabels: true });
     c.save(); clipBox(c, box);
-    // lines of constant radius: log L = 2 log R + 4 (log T - log 5772)
-    c.strokeStyle = alpha(C.muted, 0.35); c.setLineDash([3, 4]); c.font = TICK; c.fillStyle = C.muted; c.textAlign = "left"; c.textBaseline = "middle";
-    for (const Rk of [0.01, 0.1, 1, 10, 100]) {
-      const lT = (t) => 2 * Math.log10(Rk) + 4 * (t - Math.log10(5772));
-      c.beginPath(); c.moveTo(X.f(hi), Y.f(lT(hi))); c.lineTo(X.f(lo), Y.f(lT(lo))); c.stroke();
-      const tl = hi + (Lhi - lT(hi)) / 4; // temperature at which it meets the top
-      let px, py;
-      if (tl < hi && tl > lo) { px = X.f(tl); py = box.y0 + 11; } else { px = X.f(lo) - 52; py = Y.f(lT(lo)) - 8; }
-      if (py > box.y0 && py < box.y1 && px > box.x0 && px < box.x1 - 50) c.fillText(`${Rk} R☉`, px + 4, py);
-    }
+    // lines of constant radius: log L = 2 log R + 4 (log T - log 5772); each label sits on its line
+    // where it stays clear of the track, the stored models and the other labels
+    c.strokeStyle = alpha(C.muted, 0.35); c.setLineDash([3, 4]);
+    const RK = [0.01, 0.1, 1, 10, 100], lT = (Rk, t) => 2 * Math.log10(Rk) + 4 * (t - Math.log10(5772));
+    for (const Rk of RK) { c.beginPath(); c.moveTo(X.f(hi), Y.f(lT(Rk, hi))); c.lineTo(X.f(lo), Y.f(lT(Rk, lo))); c.stroke(); }
     c.setLineDash([]);
     // the whole history
     c.strokeStyle = alpha(C.fig, 0.55); c.lineWidth = 1.1;
@@ -381,9 +376,18 @@
     c.strokeStyle = alpha(C.ink, 0.45); c.lineWidth = 1; c.setLineDash([2, 4]);
     c.beginPath(); c.moveTo(box.x0, sy); c.lineTo(sx, sy); c.lineTo(sx, box.y1); c.stroke();
     c.setLineDash([]);
+    // the radius labels over the guides, under the selected model
+    c.font = RLAB; c.textAlign = "center"; c.textBaseline = "middle";
+    for (const L of radiusLabels(c, box, X, Y, lo, hi, RK, lT, Lhi)) {
+      if (L.out) continue;
+      c.fillStyle = C.raised; c.fillRect(L.x - L.w / 2 - 3, L.y - 9, L.w + 6, 18);
+      c.fillStyle = C.muted; c.fillText(L.text, L.x, L.y);
+    }
     c.fillStyle = C.phase(T.phase[S.i]); c.beginPath(); c.arc(sx, sy, 4.6, 0, TAU); c.fill();
     c.strokeStyle = C.ink; c.lineWidth = 1.6; c.beginPath(); c.arc(sx, sy, 9, 0, TAU); c.stroke();
     c.restore();
+    c.font = RLAB; c.textAlign = "center"; c.textBaseline = "middle"; c.fillStyle = C.muted;
+    for (const L of radiusLabels(c, box, X, Y, lo, hi, RK, lT, Lhi)) if (L.out) c.fillText(L.text, L.x, L.y);
     // phase legend along the bottom, on two rows when one does not hold it
     const present = [...new Set(T.phase)].filter((p) => PHASE[p]);
     c.font = LABEL; c.textAlign = "left"; c.textBaseline = "middle";
@@ -396,6 +400,59 @@
       c.fillStyle = C.ink2; c.fillText(p, lx + 12, ly);
       lx += widths[k];
     });
+  }
+  // Label placement on a 4 px occupancy grid: the track and the model dots are marked once per size,
+  // then every label tries points along its line from the hot end and keeps the first clear one.
+  const RLAB = `13px ${MONO}`;
+  let rlCache = { key: "", labels: [] };
+  function radiusLabels(c, box, X, Y, lo, hi, RK, lT, Lhi_) {
+    const key = `${box.x0},${box.y0},${box.x1},${box.y1},${S.xlog}`;
+    if (rlCache.key === key) return rlCache.labels;
+    const G = 4, gw = Math.ceil((box.x1 - box.x0) / G) + 1, gh = Math.ceil((box.y1 - box.y0) / G) + 1;
+    const occ = new Uint8Array(gw * gh);
+    const mark = (x, y, r) => {
+      const i0 = Math.max(0, Math.floor((x - r - box.x0) / G)), i1 = Math.min(gw - 1, Math.floor((x + r - box.x0) / G));
+      const j0 = Math.max(0, Math.floor((y - r - box.y0) / G)), j1 = Math.min(gh - 1, Math.floor((y + r - box.y0) / G));
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) occ[j * gw + i] = 1;
+    };
+    let px = null, py = null;
+    for (let k = 0; k < HIST.logTeff.length; k++) {
+      const x = X.f(HIST.logTeff[k]), y = Y.f(HIST.logL[k]);
+      if (px !== null) {
+        const n = Math.ceil(Math.hypot(x - px, y - py) / 2);
+        for (let q = 1; q <= n; q++) mark(px + ((x - px) * q) / n, py + ((y - py) * q) / n, 3);
+      } else mark(x, y, 3);
+      px = x; py = y;
+    }
+    for (let i = 0; i < T.n; i++) mark(X.f(T.logTeff[i]), Y.f(T.logL[i]), 6);
+    const free = (x, y, w) => {
+      const x0 = x - w / 2 - 4, x1 = x + w / 2 + 4, y0 = y - 10, y1 = y + 10;
+      if (x0 < box.x0 + 2 || x1 > box.x1 - 2 || y0 < box.y0 + 2 || y1 > box.y1 - 2) return false;
+      for (let j = Math.floor((y0 - box.y0) / G); j <= Math.floor((y1 - box.y0) / G); j++)
+        for (let i = Math.floor((x0 - box.x0) / G); i <= Math.floor((x1 - box.x0) / G); i++) if (occ[j * gw + i]) return false;
+      return true;
+    };
+    const labels = [];
+    for (const Rk of RK) {
+      const text = `${Rk} R☉`, w = c.measureText(text).width;
+      // walk the line from its hot, upper end; where the line itself is crowded, try just beside it
+      let found = null;
+      for (const [dx, dy] of [[0, 0], [0, -14], [0, 14], [-w / 2 - 6, -10], [w / 2 + 6, 10]]) {
+        for (let q = 0; q <= 120 && !found; q++) {
+          const t = hi - ((hi - lo) * q) / 120, x = X.f(t) + dx, y = Y.f(lT(Rk, t)) + dy;
+          if (free(x, y, w)) found = { text, x, y, w };
+        }
+        if (found) break;
+      }
+      if (!found) {
+        const tl = Math.log10(5772) + (Lhi_ - 2 * Math.log10(Rk)) / 4; // where the line meets the top
+        const x = clamp(X.f(tl), box.x0 + w / 2 + 4, box.x1 - w / 2 - 4);
+        if (tl > lo && tl < hi) labels.push({ text, x, y: box.y0 - 10, w, out: true });
+      }
+      if (found) { labels.push(found); mark(found.x, found.y, w / 2 + 8); mark(found.x - w / 2, found.y, 10); mark(found.x + w / 2, found.y, 10); }
+    }
+    rlCache = { key, labels };
+    return labels;
   }
   function hrNearest(px, py) {
     let best = 12, bi = null;
@@ -946,7 +1003,7 @@
       ["#sm-prop .ax-y", "\\nu\\ [\\mu\\mathrm{Hz}]"], ["#sm-echelle .ax-y", "\\nu\\ [\\mu\\mathrm{Hz}]"], ["#sm-echelle .ax-x", "\\nu \\bmod \\Delta\\nu"],
       ["#sm-inertia .ax-y", "E_{\\mathrm{norm}}"], ["#sm-inertia .ax-x", "\\nu\\ [\\mu\\mathrm{Hz}]"], ["#sm-eigen .ax-y", "\\xi_r\\, r\\sqrt{\\rho}\\ (\\mathrm{normalised})"],
       ["#st-age .stat-lbl", "t"], ["#st-teff .stat-lbl", "T_{\\mathrm{eff}}"], ["#st-l .stat-lbl", "L"], ["#st-r .stat-lbl", "R"], ["#st-logg .stat-lbl", "\\log g"],
-      ["#st-xc .stat-lbl", "X_c"], ["#st-yc .stat-lbl", "Y_c"], ["#st-mhe .stat-lbl", "M_{\\mathrm{He}}"], ["#st-numax .stat-lbl", "\\nu_{\\max}"], ["#st-dnu .stat-lbl", "\\Delta\\nu"],
+      ["#st-xc .stat-lbl", "X_c"], ["#st-yc .stat-lbl", "Y_c"], ["#st-mhe .stat-lbl", "M_{\\mathrm{He}}"], ["#st-numax .stat-lbl", "\\nu_{\\mathrm{max}}"], ["#st-dnu .stat-lbl", "\\Delta\\nu"],
     ]) tex($(sel), s);
     for (const q of PROF) tex($(`#sm-${q.id} .ax-y`), q.title);
     for (const el of $$(".ax-x.rr")) tex(el, "r/R");
