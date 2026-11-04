@@ -613,7 +613,7 @@
   const clock = (nu) => `One cycle takes ${fmt(1 / fShow(nu, S.star.numax), 1)} s here and ${periodOf(nu, true)} in the star.`;
   function describe() {
     const v = voice;
-    if (v.kind === "mix") return `${v.comps.length} modes near <span class="tex" data-tex="\\nu_{\\max}">ν<sub>max</sub></span> at once, each excited and damped by convection, so the pattern never repeats. ${clock(S.star.numax)}`;
+    if (v.kind === "mix") return `${v.comps.length} modes near <span class="tex" data-tex="\\nu_{\\mathrm{max}}">ν<sub>max</sub></span> at once, each excited and damped by convection, so the pattern never repeats. ${clock(S.star.numax)}`;
     let s = `${NAMES[v.l]} mode (<span class="tex" data-tex="\\ell = ${v.l},\\ m = ${v.m > 0 ? "+" : ""}${v.m}"><i>l</i> = ${v.l}, <i>m</i> = ${signed(v.m)}</span>): `;
     if (v.l === 0) s += "the whole star swells and shrinks, with no nodal lines.";
     else {
