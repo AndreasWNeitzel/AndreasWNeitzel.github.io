@@ -1,7 +1,7 @@
 {%- comment -%}
 The plate that opens a page: a full-width dark picture (a loop when assets/video/<loop>.av1.mp4 exists, else a still)
 with the title and one line at its lower left. Parameters: loop (name), still (path), alt, title, line, crumb,
-crumb_url, tri (a list of {src, pos} for three panels), pos (object-position for the still), loop_pos (the same for the loop), pos_m and loop_pos_m (their phone crops, and pos_m in each tri entry), textw (width of the
+crumb_url, tri (a list of {src, pos} for three panels; tri_m, 1 to 3, shows only that panel on phones, cropped by tri_m_pos), pos (object-position for the still), loop_pos (the same for the loop), pos_m and loop_pos_m (their phone crops, and pos_m in each tri entry), textw (width of the
 text column, to keep it clear of a person in the picture), stage (a whole 16:9 frame beside the title, for
 loops on black whose subject must not be cropped).
 {%- endcomment -%}
@@ -14,7 +14,7 @@ loops on black whose subject must not be cropped).
 {%- assign hdposter = "/assets/img/heroes/" | append: loop_name | append: ".poster.webp" -%}{%- assign hp = site.static_files | where: "path", hdposter | first -%}{%- unless hp %}{% assign loop_poster = "/assets/img/heroes/" | append: include.loop | append: ".poster.webp" %}{% endunless -%}{%- endif -%}
 <section class="plate k-scale{% if include.stage %} plate--stage{% endif %}" aria-label="{{ include.title | strip_html }}">
   <div class="plate-media">
-    {%- if include.tri %}<div class="tri">{% for im in include.tri %}<div{% if im.pos or im.pos_m %} style="{% if im.pos %}--pos: {{ im.pos }};{% endif %}{% if im.pos_m %} --pos-m: {{ im.pos_m }}{% endif %}"{% endif %}>{% if im.loop %}{% assign lalt = include.alts[forloop.index0] %}{% include loop.html name=im.loop alt=lalt pos_m=im.pos_m %}{% else %}<img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}>{% endif %}</div>{% endfor %}</div>
+    {%- if include.tri %}<div class="tri{% if include.tri_m %} tri--m{{ include.tri_m }}{% endif %}"{% if include.tri_m_pos %} style="--solo-pos: {{ include.tri_m_pos }}"{% endif %}>{% for im in include.tri %}<div{% if im.pos or im.pos_m %} style="{% if im.pos %}--pos: {{ im.pos }};{% endif %}{% if im.pos_m %} --pos-m: {{ im.pos_m }}{% endif %}"{% endif %}>{% if im.loop %}{% assign lalt = include.alts[forloop.index0] %}{% include loop.html name=im.loop alt=lalt pos_m=im.pos_m %}{% else %}<img src="{{ im.src | relative_url }}" alt="{{ include.alts[forloop.index0] | default: im.alt | default: '' }}" loading="eager" decoding="async"{% if im.pos %} style="object-position: {{ im.pos }}"{% endif %}>{% endif %}</div>{% endfor %}</div>
     {%- elsif has_loop %}{% include loop.html name=loop_name alt=include.alt pos=include.loop_pos pos_m=include.loop_pos_m poster=loop_poster %}
     {%- else %}<img src="{{ include.still | relative_url }}" alt="{{ include.alt | default: '' }}"{% unless include.alt %} role="presentation"{% endunless %} fetchpriority="high" decoding="async"{% if include.pos or include.pos_m %} style="{% if include.pos %}object-position: {{ include.pos }};{% endif %}{% if include.pos_m %} --pos-m: {{ include.pos_m }}{% endif %}"{% endif %}>{% endif %}
   </div>
