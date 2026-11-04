@@ -3,14 +3,6 @@ layout: default
 permalink: /software/
 title: Software and demos
 copy: software
-tri:
-  - {src: /assets/img/heroes/line_janus.webp, pos: "50% 50%", loop: ai}
-  - {src: /assets/img/heroes/software_starfold.webp, pos: "42% 50%", loop: starfold}
-  - {src: /assets/img/heroes/software_haydn.webp, pos: "100% 45%", loop: haydn}
-tri_alts:
-  - "Light passing through the layers of the JANUS networks"
-  - "A sheet of real stars from the Starfold run unrolls, and two groups appear as it flattens"
-  - "HAYDNsim's noisy light curve leads to an oscillation spectrum that rises out of the noise"
 extra_links:
   sw-2026-starfold:
     - {label: Interactive demo, url: /software/starfold-demo/}
@@ -32,7 +24,7 @@ demos:
 {%- assign L = site.data.ledger -%}
 {%- assign C = site.data.copy.software -%}
 {%- assign CP = site.data.copy.plates -%}
-{% include plate.html tri=page.tri alts=page.tri_alts alt="" title="Software" line=CP.software %}
+{% include plate.html stage=true loop="softhead" still="/assets/img/heroes/softhead.poster.webp" alt=site.data.copy.software.header_alt title="Software" line=CP.software loop_start="11" %}
 <div class="wrap">
 <section class="section section--tight" id="codes" aria-labelledby="codes-title">
   <div class="section-head k-up"><h2 id="codes-title">{{ C.codes_title }}</h2></div>

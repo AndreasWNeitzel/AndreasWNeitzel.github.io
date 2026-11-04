@@ -614,6 +614,8 @@
   .plate--stage { background: #000; }
   .plate--stage .plate-media video, .plate--stage .plate-media img { inset: 0 0 0 auto; inline-size: auto; aspect-ratio: 16 / 9; object-fit: contain; mask-image: linear-gradient(90deg, transparent, #000 16%); }
   .plate--stage .plate-media::after { background: linear-gradient(0deg, rgb(0 0 0 / .55), transparent 22%); }
+  /* the Software header film is drawn on the warm near-black of the site's renders; the plate takes that ground */
+  .plate--stage:has(video[poster*="softhead"]) { background: #0c0b0a; }
   @media (max-width: 860px) {
     .plate--stage { block-size: auto; min-block-size: 420px; }
     .plate--stage .plate-media video, .plate--stage .plate-media img { inset: 0 0 auto 0; inline-size: 100%; block-size: auto; mask-image: none; }

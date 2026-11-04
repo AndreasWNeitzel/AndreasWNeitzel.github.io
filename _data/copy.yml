@@ -180,6 +180,7 @@ research:
     after: "After"
 
 software:
+  header_alt: "A looping video glides low over a dark page of code drawn as short coloured bars. Four cards fold up from the page while the code beneath glows gold, showing falling curves, looping orbits around the Milky Way, glowing layered blue panels, and a table of stars separating into two groups."
   description: "Research software, browser apps and interactive demos by Andreas W. Neitzel: JANUS, Starfold, HAYDNsim and more."
   lede: "I write research software for stellar astrophysics and build browser apps that let you run the methods on real data."
   codes_title: "Research codes"
