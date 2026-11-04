@@ -340,7 +340,7 @@ visualisations:
       alt: "An isometric drawing of a globular cluster, the column of sky through it, the detector and the pixel mask of one target star"
     - id: "allsky"
       title: "The sky in red giants"
-      line: "160,000 Gaia DR3 giants from Andrae et al. 2023, with colour marking metallicity."
+      line: "160,000 Gaia DR3 giants from Andrae et al. 2023, with colour marking metallicity from Ardern-Arentsen et al. 2025."
       alt: "The all-sky map of Gaia red giants"
     - id: "sky"
       title: "The Milky Way over Paranal"
